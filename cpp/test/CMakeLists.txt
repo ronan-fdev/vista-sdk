@@ -14,16 +14,16 @@ include(GoogleTest)
 
 # --- Test source files ---
 set(TEST_SOURCES
-	CodebookTests.cpp
-	CodebooksTests.cpp
-	GmodPathTests.cpp
-	GmodTests.cpp
-	GmodVersioningTests.cpp
-	ImoNumberTests.cpp
-	ISOStringTests.cpp
-	LocalIdTests.cpp
-	LocationsTests.cpp
-	UniversalIdTests.cpp
+	Codebook.cpp
+	Codebooks.cpp
+	Gmod.cpp
+	GmodPath.cpp
+	GmodVersioning.cpp
+	ImoNumber.cpp
+	ISOString.cpp
+	LocalId.cpp
+	Locations.cpp
+	UniversalId.cpp
 )
 
 if(VISTA_SDK_CPP_BUILD_SMOKE_TESTS)

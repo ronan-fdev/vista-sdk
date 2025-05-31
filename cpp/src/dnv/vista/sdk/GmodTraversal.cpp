@@ -101,56 +101,81 @@ namespace dnv::vista::sdk
 			const GmodNode& to,
 			std::vector<const GmodNode*>& remainingParents )
 		{
+			// Clear output parameter - mirror C# behavior
 			remainingParents.clear();
-			const GmodNode* lastAssetFunction = nullptr;
 
+			// Find lastAssetFunction - EXACT C# MIRROR
+			const GmodNode* lastAssetFunction = nullptr;
 			for ( auto it = fromPath.rbegin(); it != fromPath.rend(); ++it )
 			{
-				if ( ( *it ) && Gmod::isAssetFunctionNode( ( *it )->metadata() ) )
+				if ( ( *it )->isAssetFunctionNode() )
 				{
 					lastAssetFunction = *it;
 					break;
 				}
 			}
 
+			// Create PathExistsContext - MIRROR C# state
+			struct PathExistsContext
+			{
+				const GmodNode& to;
+				std::vector<const GmodNode*> remainingParents_result;
+				std::vector<const GmodNode*> fromPath_copy;
+
+				PathExistsContext( const GmodNode& toNode, const std::vector<const GmodNode*>& fromPathInput )
+					: to( toNode ), fromPath_copy( fromPathInput ) {}
+			};
+
 			PathExistsContext context( to, fromPath );
 
+			// EXACT C# LAMBDA MIRROR - NO O(n²) DISASTERS!
 			TraverseHandlerWithState<PathExistsContext> handler =
-				[]( PathExistsContext& ctx, const std::vector<const GmodNode*>& currentTraversalParents, const GmodNode& currentNode ) -> TraversalHandlerResult {
-				if ( currentNode.code() != ctx.toNode.code() )
-				{
+				[]( PathExistsContext& state, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+				// EXACT C# CHECK: if (node.Code != state.To.Code)
+				if ( node.code() != state.to.code() )
 					return TraversalHandlerResult::Continue;
-				}
 
-				std::vector<const GmodNode*> absolutePathToCurrentNodeParent = currentTraversalParents;
-				if ( !absolutePathToCurrentNodeParent.empty() && !absolutePathToCurrentNodeParent[0]->isRoot() )
+				// MIRROR C# LOGIC: List<GmodNode>? actualParents = null;
+				std::vector<const GmodNode*> actualParents;
+				bool needsActualParents = false;
+
+				// Create working copy of parents for modification
+				std::vector<const GmodNode*> workingParents = parents;
+
+				// EXACT C# WHILE LOOP: while (!parents[0].IsRoot)
+				while ( !workingParents.empty() && !workingParents[0]->isRoot() )
 				{
-					std::vector<const GmodNode*> prefixPath;
-					const GmodNode* head = absolutePathToCurrentNodeParent[0];
-					while ( head && !head->isRoot() )
+					// MIRROR C#: if (actualParents is null)
+					if ( !needsActualParents )
 					{
-						if ( head->parents().empty() )
-							break;
-						if ( head->parents().size() != 1 )
-							throw std::runtime_error( "Invalid state - expected one parent during path reconstruction for PathExistsBetween" );
-						head = head->parents()[0];
-						if ( head )
-							prefixPath.insert( prefixPath.begin(), head );
-						else
-							break;
+						// MIRROR C#: actualParents = [.. parents];
+						actualParents = workingParents;
+						workingParents = actualParents; // Work on the copy
+						needsActualParents = true;
 					}
-					absolutePathToCurrentNodeParent.insert( absolutePathToCurrentNodeParent.begin(), prefixPath.begin(), prefixPath.end() );
+
+					// MIRROR C#: var parent = parents[0];
+					const GmodNode* parent = workingParents[0];
+
+					// MIRROR C#: if (parent.Parents.Count != 1)
+					if ( parent->parents().size() != 1 )
+						throw std::runtime_error( "Invalid state - expected one parent" );
+
+					// MIRROR C#: actualParents.Insert(0, parent.Parents[0]);
+					const GmodNode* grandParent = parent->parents()[0];
+					workingParents.insert( workingParents.begin(), grandParent );
 				}
 
-				if ( absolutePathToCurrentNodeParent.size() < ctx.fromPathList.size() )
-				{
+				// EXACT C# VALIDATION: if (parents.Count < state.FromPath.Count)
+				if ( workingParents.size() < state.fromPath_copy.size() )
 					return TraversalHandlerResult::Continue;
-				}
 
+				// EXACT C# MATCH LOGIC: Must have same start order
 				bool match = true;
-				for ( size_t i = 0; i < ctx.fromPathList.size(); ++i )
+				for ( size_t i = 0; i < state.fromPath_copy.size(); i++ )
 				{
-					if ( absolutePathToCurrentNodeParent[i]->code() != ctx.fromPathList[i]->code() )
+					// MIRROR C#: if (parents[i].Code != state.FromPath[i].Code)
+					if ( workingParents[i]->code() != state.fromPath_copy[i]->code() )
 					{
 						match = false;
 						break;
@@ -159,24 +184,53 @@ namespace dnv::vista::sdk
 
 				if ( match )
 				{
-					ctx.remainingParents_list.clear();
-					for ( size_t i = ctx.fromPathList.size(); i < absolutePathToCurrentNodeParent.size(); ++i )
+					// MIRROR C#: state.RemainingParents = parents.Where(p => !state.FromPath.Any(pp => pp.Code == p.Code)).ToArray();
+					state.remainingParents_result.clear();
+
+					for ( size_t i = 0; i < workingParents.size(); i++ )
 					{
-						ctx.remainingParents_list.push_back( absolutePathToCurrentNodeParent[i] );
+						const GmodNode* parent = workingParents[i];
+
+						// Check if this parent is NOT in fromPath
+						bool foundInFromPath = false;
+						for ( const GmodNode* fromPathNode : state.fromPath_copy )
+						{
+							if ( parent->code() == fromPathNode->code() )
+							{
+								foundInFromPath = true;
+								break;
+							}
+						}
+
+						if ( !foundInFromPath )
+						{
+							state.remainingParents_result.push_back( parent );
+						}
 					}
 
 					return TraversalHandlerResult::Stop;
 				}
+
 				return TraversalHandlerResult::Continue;
 			};
 
-			bool traversalCompletedNaturally = GmodTraversal::traverse<PathExistsContext>(
-				context,
-				( lastAssetFunction ? *lastAssetFunction : gmodInstance.rootNode() ),
-				handler );
+			// EXACT C# TRAVERSE CALL MIRROR
 
-			remainingParents = context.remainingParents_list;
-			return !traversalCompletedNaturally;
+			// FIXED traverse call (Lines 215-222):
+
+			const GmodNode* startNode = lastAssetFunction ? lastAssetFunction : &gmodInstance.rootNode();
+
+			bool reachedEnd = GmodTraversal::traverse<PathExistsContext>(
+				context,	// ← Argument 1: PathExistsContext& state
+				*startNode, // ← Argument 2: const GmodNode& rootNode
+				handler );	// ← Argument 3: TraverseHandlerWithState<PathExistsContext>
+			// ← Argument 4 (optional): TraversalOptions defaults to {}
+
+			// MIRROR C#: remainingParents = state.RemainingParents;
+			remainingParents = std::move( context.remainingParents_result );
+
+			// EXACT C# RETURN: return !reachedEnd;
+			return !reachedEnd;
 		}
 	}
 }

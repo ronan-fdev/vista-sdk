@@ -14,12 +14,15 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 include(Dependencies.cmake)
 
 # --- Build options ---
-option(VISTA_SDK_CPP_BUILD_TESTS           "Build tests"                                               ON     )
-option(VISTA_SDK_CPP_BUILD_SMOKE_TESTS     "Build smoke tests"                                         ON     )
-option(VISTA_SDK_CPP_COPY_RESOURCES        "Copy resources to build directory"                         ON     )
-option(VISTA_SDK_CPP_BUILD_SAMPLES         "Build vista-sdk-cpp samples"                               OFF    )
-option(VISTA_SDK_CPP_BUILD_DOCUMENTATION   "Build vista-sdk-cpp doxygen documentation"                 OFF    )
-option(CI_FORCE_DEBUG_SPDLOG_WARN          "For CI Debug builds, force SPDLOG_ACTIVE_LEVEL to WARN"    ON     )
+set(VISTA_SDK_CPP_BUILD_TESTS           ON      CACHE BOOL "Build tests"                                            FORCE)
+set(VISTA_SDK_CPP_BUILD_SMOKE_TESTS     OFF     CACHE BOOL "Build smoke tests"                                      FORCE)
+set(VISTA_SDK_CPP_RUN_TESTS             OFF     CACHE BOOL "Run tests after build"                                  FORCE)
+set(VISTA_SDK_CPP_BUILD_BENCHMARKS      ON      CACHE BOOL "Build benchmarks"                                       FORCE)
+set(VISTA_SDK_CPP_RUN_BENCHMARKS        OFF      CACHE BOOL "Run benchmarks after build"                             FORCE)
+set(VISTA_SDK_CPP_COPY_RESOURCES        ON      CACHE BOOL "Copy resources to build directory"                      FORCE)
+set(VISTA_SDK_CPP_BUILD_SAMPLES         OFF     CACHE BOOL "Build vista-sdk-cpp samples"                            FORCE)
+set(VISTA_SDK_CPP_BUILD_DOCUMENTATION   OFF     CACHE BOOL "Build vista-sdk-cpp doxygen documentation"              FORCE)
+set(CI_FORCE_DEBUG_SPDLOG_WARN          ON      CACHE BOOL "For CI Debug builds, force SPDLOG_ACTIVE_LEVEL to WARN" FORCE)
 
 # --- Platform specific settings ---
 if(MSVC)
@@ -112,9 +115,10 @@ if(VISTA_SDK_CPP_BUILD_SAMPLES)
 endif()
 
 # --- Tests subdirectory ---
-if(VISTA_SDK_CPP_BUILD_TESTS)
-	add_subdirectory(${VISTA_SDK_CPP_TEST_DIR} test)
-endif()
+add_subdirectory(${VISTA_SDK_CPP_TEST_DIR} test)
+
+# --- Benchmark subdirectory ---
+#add_subdirectory(${VISTA_SDK_CPP_BENCHMARK_DIR} benchmark)
 
 # --- Doxygen documentation subdirectory ---
 if(VISTA_SDK_CPP_BUILD_DOCUMENTATION)
@@ -152,6 +156,10 @@ message(STATUS "C++ Standard        : ${CMAKE_CXX_STANDARD}")
 
 message(STATUS "--------- Build Options ---------")
 message(STATUS "Build Tests         : ${VISTA_SDK_CPP_BUILD_TESTS}")
+message(STATUS "Build Smoke Tests   : ${VISTA_SDK_CPP_BUILD_SMOKE_TESTS}")
+message(STATUS "Run Tests           : ${VISTA_SDK_CPP_RUN_TESTS}")
+message(STATUS "Build Benchmarks    : ${VISTA_SDK_CPP_BUILD_BENCHMARKS}")
+message(STATUS "Run Benchmarks      : ${VISTA_SDK_CPP_RUN_BENCHMARKS}")
 message(STATUS "Build Samples       : ${VISTA_SDK_CPP_BUILD_SAMPLES}")
 message(STATUS "Build Documentation : ${VISTA_SDK_CPP_BUILD_DOCUMENTATION}")
 message(STATUS "Copy Resources      : ${VISTA_SDK_CPP_COPY_RESOURCES}")
@@ -217,12 +225,17 @@ if(TARGET GTest::gtest)
 	get_target_property(GTEST_VERSION GTest::gtest VERSION)
 endif()
 
+if(TARGET benchmark::benchmark)
+	get_target_property(BENCHMARK_VERSION benchmark::benchmark VERSION)
+endif()
+
 message(STATUS "spdlog Version      : ${SPDLOG_VERSION}")
 message(STATUS "nlohmann_json       : ${NLOHMANN_VERSION}")
 message(STATUS "fmt Version         : ${FMT_VERSION}")
 message(STATUS "zlib Version        : ${ZLIB_VERSION}")
 message(STATUS "libcpuid Version    : ${CPUID_VERSION}")
 message(STATUS "GoogleTest Version  : ${GTEST_VERSION}")
+message(STATUS "GoogleTest Benchmark: ${BENCHMARK_VERSION}")
 
 if(CCACHE_PROGRAM)
 	message(STATUS "--------- ccache Statistics ---------")

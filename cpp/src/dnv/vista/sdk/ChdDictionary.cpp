@@ -53,6 +53,11 @@ namespace dnv::vista::sdk
 		// Public static methods
 		//----------------------------
 
+		uint32_t Hashing::larssonHash( uint32_t hash, uint8_t ch )
+		{
+			return 37 * hash + ch;
+		}
+
 		uint32_t Hashing::fnv1a( uint32_t hash, uint8_t ch )
 		{
 			auto result{ ( ch ^ hash ) * FNV_PRIME };

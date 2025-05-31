@@ -10,7 +10,7 @@
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/VIS.h"
 
-namespace dnv::vista::sdk
+namespace dnv::vista::sdk::tests
 {
 	namespace
 	{

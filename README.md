@@ -180,6 +180,10 @@ It follows the same patterns and design principles as the C# implementation whil
 
 > **📖 For detailed information about the C++ SDK, including implementation status, architecture details, and advanced features, see the [C++ SDK README](cpp/README.md).**
 
+#### Performance analysis
+
+See [C++ Benchmarking Documentation](cpp/benchmark/BENCHMARK.md) for detailed results.
+
 #### Dependencies
 
 The C++ SDK uses CMake and its [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) module to manage external dependencies directly during the build configuration phase. The required libraries are fetched from their respective sources (primarily GitHub):
@@ -190,6 +194,7 @@ The C++ SDK uses CMake and its [FetchContent](https://cmake.org/cmake/help/lates
 -   [libcpuid](https://github.com/anrieff/libcpuid): For CPU feature detection
 -   [{fmt}](https://fmt.dev/): Formatting library
 -   [GoogleTest](https://github.com/google/googletest): For unit testing framework
+-   [Google Benchmark](https://github.com/google/benchmark): For performance benchmarking
 
 #### Building with CMake
 
@@ -203,36 +208,64 @@ To build the C++ SDK, ensure you have a C++20 compliant compiler (e.g., MSVC, GC
     ```
 
 2.  **Configure CMake:**
-    Run CMake from the root of the repository to configure the build. The C++ build artifacts will typically be placed in `vista-sdk/cpp/build`.
+    Run CMake from the root of the repository to configure the build. The C++ build artifacts will typically be placed in `vista-sdk/build`.
     You can specify various options using `-D<OPTION>=<VALUE>`:
 
     -   `VISTA_SDK_CPP_BUILD_TESTS=ON` (Build unit tests, default is `ON`)
-    -   `VISTA_SDK_CPP_BUILD_SAMPLES=ON` (Build sample applications, default is `ON`)
-    -   `VISTA_SDK_CPP_BUILD_DOCUMENTATION=ON` (Build Doxygen documentation, default is `OFF`. Requires Doxygen and Graphviz.)
+    -   `VISTA_SDK_CPP_BUILD_SMOKE_TESTS=OFF` (Build smoke tests, default is `OFF`)
+    -   `VISTA_SDK_CPP_RUN_TESTS=ON` (Run tests automatically after build, default is `OFF`)
+    -   `VISTA_SDK_CPP_BUILD_BENCHMARKS=ON` (Build performance benchmarks, default is `ON`)
+    -   `VISTA_SDK_CPP_RUN_BENCHMARKS=ON` (Run benchmarks automatically after build, default is `OFF`)
+    -   `VISTA_SDK_CPP_BUILD_SAMPLES=OFF` (Build sample applications, default is `OFF`)
+    -   `VISTA_SDK_CPP_BUILD_DOCUMENTATION=OFF` (Build Doxygen documentation, default is `OFF`. Requires Doxygen and Graphviz.)
+    -   `VISTA_SDK_CPP_COPY_RESOURCES=ON` (Copy resources to build directory, default is `ON`)
     -   `CMAKE_BUILD_TYPE=Release` (Or `Debug`, `RelWithDebInfo`, etc.)
 
-    Example configuration (e.g., for Ninja, adjust generator as needed):
+    Example configuration for Visual Studio (Windows):
 
     ```bash
-    cmake -B cpp/build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release -DVISTA_SDK_CPP_BUILD_TESTS=ON
+    cmake -B build -S . -G "Visual Studio 17 2022" -A x64 -DVISTA_SDK_CPP_BUILD_TESTS=ON -DVISTA_SDK_CPP_BUILD_BENCHMARKS=ON
     ```
 
-    For Visual Studio, you might omit `-G Ninja` if MSVC is your default generator:
+    Example configuration for Ninja (cross-platform):
 
     ```bash
-    cmake -B cpp/build -S . -DCMAKE_BUILD_TYPE=Release -DVISTA_SDK_CPP_BUILD_TESTS=ON
+    cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release -DVISTA_SDK_CPP_BUILD_TESTS=ON -DVISTA_SDK_CPP_BUILD_BENCHMARKS=ON
     ```
 
 3.  **Build the SDK:**
-    Use CMake's build tool mode to compile the C++ library and any enabled components (like tests or samples).
+    Use CMake's build tool mode to compile the C++ library and any enabled components.
 
     ```bash
-    cmake --build cpp/build --config Release
+    cmake --build build --config Release
     ```
 
-4.  **Run Tests (Optional):**
-    If tests were enabled (`VISTA_SDK_CPP_BUILD_TESTS=ON`), navigate to the C++ build directory and run CTest:
+4.  **Run Tests (Automatic):**
+    If `VISTA_SDK_CPP_RUN_TESTS=ON` (default), tests will run automatically after building.
+    Test results are saved to `build/bin/Release/test_results/` with timestamps.
+
+    To run tests manually:
+
     ```bash
-    cd cpp/build
-    ctest -C Release
+    cmake --build build --config Release --target tests
+    ```
+
+5.  **Run Benchmarks (Automatic):**
+    If `VISTA_SDK_CPP_RUN_BENCHMARKS=ON` (default), benchmarks will run automatically after building.
+    Benchmark results are saved to `build/bin/Release/benchmark_results/` with timestamps.
+
+    To run benchmarks manually:
+
+    ```bash
+    # Windows
+    .\build\bin\Release\BM_CodebooksLookup.exe
+    .\build\bin\Release\BM_GmodLoad.exe
+    .\build\bin\Release\BM_GmodLookup.exe
+    ...
+
+    # Linux/macOS
+    ./build/bin/Release/BM_CodebooksLookup
+    ./build/bin/Release/BM_GmodLoad
+    ./build/bin/Release/BM_GmodLookup
+    ...
     ```

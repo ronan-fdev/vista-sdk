@@ -8,6 +8,16 @@ This directory contains the C++ implementation of the Vista SDK, a native librar
 > This C++ SDK is currently under active development, aiming for feature parity and API alignment with the established C# SDK.
 > While core functionalities are being implemented and refined, some features might be missing or under further development.
 
+The C++ SDK currently implements:
+
+-   ✅ **Generic product model (GMOD)** - Complete with optimization focus
+-   ✅ **Codebooks (metadata tags)** - Complete with performance improvements needed
+-   ✅ **Locations** - Complete implementation
+-   ✅ **Universal ID & Local ID** - Core functionality implemented
+-   ⏳ **DataChannelList & TimeSeriesData** - Planned
+-   ⏳ **Product model (PMOD)** - Planned
+-   ✅ **Comprehensive benchmarking suite** - Cross-platform performance validation
+
 ## Progress Towards C# Parity
 
 -   **Implemented:**
@@ -160,7 +170,8 @@ Comprehensive test coverage using GoogleTest:
 
 Test suites include:
 
--   `CodebookTests` and `CodebooksTests`
+-   `CodebookTests`
+-   `CodebooksTests`
 -   `GmodPathTests`
 -   `GmodTests`
 -   `GmodVersioningTests`
@@ -198,10 +209,12 @@ Test suites include:
     -   Investigate C++20 heterogeneous lookup for `std::unordered_map` instances.
     -   Further optimize string handling to minimize temporary allocations.
     -   Consider configurable hash functions in `ChdDictionary`.
+    -   **Critical**: Optimize CHD implementation - currently 7.7x slower in Codebooks and 11.1x slower in GMOD lookup vs C#.
 
 -   **Benchmarking:**
 
-    -   Develop a comprehensive benchmarking suite comparable to the C# SDK.
+    -   **Comprehensive benchmarking suite implemented** with cross-platform comparison capabilities.
+    -   **Performance analysis:** see [BENCHMARK.md](benchmark/BENCHMARK.md) for detailed results.
 
 -   **Documentation:**
 
@@ -211,6 +224,11 @@ Test suites include:
 -   **Core Implementation:**
 
     -   Implement MQTT-specific aspects for `LocalId` (parsing from topics, builder methods, topic validation).
+
+## Benchmarking
+
+Comprehensive performance benchmarking suite implemented comparing C++ and C# implementations across key operations.
+See [BENCHMARK.md](benchmark/BENCHMARK.md) for detailed results.
 
 ## Build Requirements
 

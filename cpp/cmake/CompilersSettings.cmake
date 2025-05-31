@@ -5,6 +5,9 @@
 include(CheckCXXSourceCompiles)
 
 if(MSVC)
+	# ============================================================================
+	# Basic compiler settings
+	# ============================================================================
 	add_compile_options(/std:c++20)
 	add_compile_options(/MP)
 	add_compile_options(/W4)
@@ -21,6 +24,28 @@ if(MSVC)
 	#add_compile_options(/analyze:external-)
 	#add_compile_options(/analyze)
 
+	# ============================================================================
+	# Optimization settings by build configuration
+	# ============================================================================
+	add_compile_options($<$<CONFIG:Release>:/O2>)        # Maximum speed optimization
+	add_compile_options($<$<CONFIG:Release>:/Oi>)        # Enable intrinsic functions
+	add_compile_options($<$<CONFIG:Release>:/Ot>)        # Favor fast code over small code
+	#add_compile_options($<$<CONFIG:Release>:/GL>)        # ENABLE Whole program optimization
+	#add_compile_options($<$<CONFIG:Release>:/Gy>)        # Enable Function-Level Linking
+	add_compile_options($<$<CONFIG:Release>:/DNDEBUG>)   # Disable debug assertions
+
+	# Add linker optimizations for Release
+	#add_link_options($<$<CONFIG:Release>:/LTCG>)         # Link Time Code Generation
+	#add_link_options($<$<CONFIG:Release>:/OPT:REF>)      # Remove unreferenced functions
+	#add_link_options($<$<CONFIG:Release>:/OPT:ICF>)      # Identical COMDAT folding
+
+	# Architecture optimizations
+	add_compile_options(/arch:AVX)
+	add_compile_options(/arch:AVX2)
+
+	# ============================================================================
+	# Warning suppressions
+	# ============================================================================
 	#add_compile_options(/wd4061) # switch not handled
 	#add_compile_options(/wd4100) # unreferenced formal parameter
 	#add_compile_options(/wd4189) # local variable is initialized but not referenced
@@ -45,9 +70,6 @@ if(MSVC)
 	#add_compile_options(/wd6246) # local declaration of 'variable' hides declaration of same name in outer scope
 	#add_compile_options(/wd6326) # potential comparison of a constant with another constant
 	#add_compile_options(/wd6387) # this does not adhere to the specification for the function
-
-	add_compile_options(/arch:AVX)
-	add_compile_options(/arch:AVX2)
 else() # GCC / Clang
 	add_compile_options(-Wall)
 	add_compile_options(-Wextra)

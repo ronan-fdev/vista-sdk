@@ -44,159 +44,83 @@ namespace dnv::vista::sdk
 	Gmod::Gmod( VisVersion version, const GmodDto& dto )
 		: m_visVersion{ version },
 		  m_rootNode{ nullptr },
-		  m_nodeMap{ [&dto, version]() {
-			  std::vector<std::pair<std::string, GmodNode>> nodePairs;
-			  nodePairs.reserve( dto.items().size() );
-			  for ( const auto& nodeDto : dto.items() )
-			  {
-				  nodePairs.emplace_back( nodeDto.code(), GmodNode( version, nodeDto ) );
-			  }
-			  return ChdDictionary<GmodNode>( std::move( nodePairs ) );
-		  }() }
+		  m_nodeMap{}
 	{
-		SPDLOG_TRACE( "Gmod constructor: Starting for VIS version {}", dto.visVersion() );
+		const size_t nodeCount = dto.items().size();
 
 		std::vector<std::pair<std::string, GmodNode>> nodePairs;
-		nodePairs.reserve( dto.items().size() );
+		nodePairs.reserve( nodeCount );
+
 		for ( const auto& nodeDto : dto.items() )
 		{
 			nodePairs.emplace_back( nodeDto.code(), GmodNode( version, nodeDto ) );
 		}
 
-		SPDLOG_INFO( "Gmod constructor: Created {} initial GmodNode objects for VIS version {}.", nodePairs.size(), VisVersionExtensions::toVersionString( version ) );
-		SPDLOG_INFO( "Gmod constructor: ChdDictionary m_nodeMap constructed with {} items.", m_nodeMap.size() );
+		m_nodeMap = ChdDictionary<GmodNode>( std::move( nodePairs ) );
 
-		if ( ( m_nodeMap.begin() == m_nodeMap.end() ) && !dto.items().empty() )
+		if ( m_nodeMap.isEmpty() && !dto.items().empty() )
 		{
-			SPDLOG_ERROR( "Gmod constructor: m_nodeMap is empty after construction despite non-empty DTO items for VIS version {}. Aborting further GMOD initialization.", VisVersionExtensions::toVersionString( version ) );
 			return;
 		}
 
-		SPDLOG_INFO( "Gmod constructor: Starting pointer fix-up for children and parents within m_nodeMap..." );
-		for ( const auto& relation : dto.relations() )
+		const auto& relations = dto.relations();
+		for ( const auto& relation : relations )
 		{
-			if ( relation.size() >= 2 )
-			{
-				const std::string& parentCode = relation[0];
-				const std::string& childCode = relation[1];
+			if ( relation.size() < 2 )
+				continue;
 
-				try
-				{
-					GmodNode& parentNode = m_nodeMap[parentCode];
-					try
-					{
-						GmodNode& childNode = m_nodeMap[childCode];
+			const std::string& parentCode = relation[0];
+			const std::string& childCode = relation[1];
 
-						parentNode.addChild( &childNode );
-						childNode.addParent( &parentNode );
-					}
-					catch ( [[maybe_unused]] const std::out_of_range& oorChild )
-					{
-						SPDLOG_WARN( "Gmod constructor (linking): Child node '{}' (for parent '{}') not found in m_nodeMap. Relation skipped. Error: {}", childCode, parentCode, oorChild.what() );
-					}
-					catch ( [[maybe_unused]] const std::exception& exChildOrLink )
-					{
-						SPDLOG_ERROR( "Gmod constructor (linking): Exception while processing child '{}' or linking for parent '{}'. Error: {}", childCode, parentCode, exChildOrLink.what() );
-					}
-				}
-				catch ( [[maybe_unused]] const std::out_of_range& oorParent )
-				{
-					SPDLOG_WARN( "Gmod constructor (linking): Parent node '{}' (for child '{}') not found in m_nodeMap. Relation skipped. Error: {}", parentCode, childCode, oorParent.what() );
-				}
-				catch ( [[maybe_unused]] const std::exception& exParent )
-				{
-					SPDLOG_ERROR( "Gmod constructor (linking): Exception while processing parent '{}' for relation with child '{}'. Error: {}", parentCode, childCode, exParent.what() );
-				}
-			}
-			else
+			const GmodNode* parentPtr = nullptr;
+			const GmodNode* childPtr = nullptr;
+
+			if ( m_nodeMap.tryGetValue( parentCode, parentPtr ) &&
+				 m_nodeMap.tryGetValue( childCode, childPtr ) &&
+				 parentPtr && childPtr )
 			{
-				SPDLOG_WARN( "Gmod constructor (linking): Relation with insufficient size ({}) encountered. Skipping.", relation.size() );
+				GmodNode* parentNode = const_cast<GmodNode*>( parentPtr );
+				GmodNode* childNode = const_cast<GmodNode*>( childPtr );
+
+				parentNode->addChild( childNode );
+				childNode->addParent( parentNode );
 			}
 		}
 
 		if ( !m_nodeMap.isEmpty() )
 		{
-			std::vector<std::string> nodeKeysToTrim;
-			nodeKeysToTrim.reserve( m_nodeMap.size() );
-
-			for ( const auto& [key, node] : m_nodeMap )
+			for ( auto& [key, node] : m_nodeMap )
 			{
-				nodeKeysToTrim.push_back( key );
-			}
-
-			for ( const auto& key : nodeKeysToTrim )
-			{
-				try
-				{
-					m_nodeMap[key].trim();
-				}
-				catch ( [[maybe_unused]] const std::exception& ex )
-				{
-					SPDLOG_ERROR( "Gmod constructor (trimming): Exception while trimming node '{}'. Error: {}", key, ex.what() );
-				}
+				const_cast<GmodNode&>( node ).trim();
 			}
 		}
 
-		try
+		const GmodNode* rootPtr = nullptr;
+		if ( m_nodeMap.tryGetValue( "VE", rootPtr ) && rootPtr )
 		{
-			m_rootNode = &m_nodeMap["VE"];
-
-			SPDLOG_INFO( "Gmod constructor: m_rootNode initialized from m_nodeMap, code: '{}'", m_rootNode->code() );
-		}
-		catch ( [[maybe_unused]] const std::out_of_range& oor )
-		{
-			SPDLOG_ERROR( "Gmod constructor: Root node 'VE' not found in m_nodeMap for VIS version {}. GMOD is likely invalid. Error: {}", VisVersionExtensions::toVersionString( version ), oor.what() );
-		}
-		catch ( [[maybe_unused]] const std::exception& ex )
-		{
-			SPDLOG_ERROR( "Gmod constructor: Exception while initializing m_rootNode from m_nodeMap for VIS version {}. Error: {}", VisVersionExtensions::toVersionString( version ), ex.what() );
+			m_rootNode = const_cast<GmodNode*>( rootPtr );
 		}
 	}
 
 	Gmod::Gmod( VisVersion version, const std::unordered_map<std::string, GmodNode>& nodeMap )
 		: m_visVersion{ version },
 		  m_rootNode{ nullptr },
-		  m_nodeMap{ [&nodeMap]() {
-			  std::vector<std::pair<std::string, GmodNode>> pairs;
-			  pairs.reserve( nodeMap.size() );
-			  for ( const auto& [code, node] : nodeMap )
-			  {
-				  pairs.emplace_back( code, node );
-			  }
-			  return ChdDictionary<GmodNode>( std::move( pairs ) );
-		  }() }
+		  m_nodeMap{}
 	{
-		SPDLOG_CRITICAL( "Creating Gmod from existing map with {} nodes for VIS version {}.", nodeMap.size(), VisVersionExtensions::toVersionString( version ) );
+		std::vector<std::pair<std::string, GmodNode>> pairs;
+		pairs.reserve( nodeMap.size() );
 
-		try
+		for ( const auto& [code, node] : nodeMap )
 		{
-			m_rootNode = &m_nodeMap["VE"];
-		}
-		catch ( [[maybe_unused]] const std::out_of_range& oor )
-		{
-			SPDLOG_ERROR( "Gmod constructor from map: Root node 'VE' not found in internal m_nodeMap for VIS version {}. Error: {}", VisVersionExtensions::toVersionString( version ), oor.what() );
-		}
-		catch ( [[maybe_unused]] const std::exception& ex )
-		{
-			SPDLOG_ERROR( "Gmod constructor from map: Exception while initializing m_rootNode from internal m_nodeMap for VIS version {}. Error: {}", VisVersionExtensions::toVersionString( version ), ex.what() );
+			pairs.emplace_back( code, node );
 		}
 
-		if ( m_rootNode == nullptr && nodeMap.count( "VE" ) )
-		{
-			SPDLOG_ERROR( "Failed to correctly initialize root node from provided map for VIS version {}. m_rootNode is null but VE existed in input.", VisVersionExtensions::toVersionString( version ) );
-		}
-		else if ( m_rootNode != nullptr && m_rootNode->code() != "VE" )
-		{
-			SPDLOG_ERROR( "m_rootNode code is '{}', expected 'VE'.", m_rootNode->code() );
-		}
+		m_nodeMap = ChdDictionary<GmodNode>( std::move( pairs ) );
 
-		if ( m_nodeMap.isEmpty() && !nodeMap.empty() )
+		const GmodNode* rootPtr = nullptr;
+		if ( m_nodeMap.tryGetValue( "VE", rootPtr ) && rootPtr )
 		{
-			SPDLOG_ERROR( "Failed to initialize node dictionary from provided map for VIS version {}. m_nodeMap is empty.", VisVersionExtensions::toVersionString( version ) );
-		}
-		if ( !m_nodeMap.isEmpty() && m_nodeMap.size() != nodeMap.size() )
-		{
-			SPDLOG_WARN( "Gmod constructor from map: m_nodeMap size ({}) does not match input nodeMap size ({}).", m_nodeMap.size(), nodeMap.size() );
+			m_rootNode = const_cast<GmodNode*>( rootPtr );
 		}
 	}
 
@@ -239,35 +163,7 @@ namespace dnv::vista::sdk
 
 	bool Gmod::tryGetNode( std::string_view code, const GmodNode*& node ) const
 	{
-		node = nullptr;
-		try
-		{
-			if ( code.empty() )
-			{
-				SPDLOG_WARN( "TryGetNode: Attempted to look up empty node code" );
-				return false;
-			}
-
-			if ( !m_nodeMap.tryGetValue( code, node ) )
-			{
-				SPDLOG_WARN( "TryGetNode: Node '{}' not found in GMOD", code );
-				return false;
-			}
-
-			if ( node == nullptr )
-			{
-				SPDLOG_ERROR( "TryGetNode: m_nodeMap.tryGetValue succeeded but outNodePtr is null for code '{}'", code );
-				return false;
-			}
-
-			return true;
-		}
-		catch ( [[maybe_unused]] const std::exception& ex )
-		{
-			SPDLOG_ERROR( "Exception in TryGetNode for '{}': {}", code, ex.what() );
-			node = nullptr;
-			return false;
-		}
+		return m_nodeMap.tryGetValue( code, node );
 	}
 
 	//----------------------------------------------
