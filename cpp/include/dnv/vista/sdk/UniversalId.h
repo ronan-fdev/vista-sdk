@@ -61,7 +61,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Copy assignment operator */
-		UniversalId& operator=( const UniversalId& ) = default;
+		UniversalId& operator=( const UniversalId& ) = delete;
 
 		/** @brief Move assignment operator */
 		UniversalId& operator=( UniversalId&& ) noexcept = default;

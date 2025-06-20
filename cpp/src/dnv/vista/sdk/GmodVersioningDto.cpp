@@ -77,8 +77,6 @@ namespace dnv::vista::sdk
 
 	std::optional<GmodVersioningAssignmentChangeDto> GmodVersioningAssignmentChangeDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		try
 		{
 			if ( !json.is_object() )
@@ -89,9 +87,6 @@ namespace dnv::vista::sdk
 			}
 
 			GmodVersioningAssignmentChangeDto dto = json.get<GmodVersioningAssignmentChangeDto>();
-
-			auto duration = std::chrono::duration_cast<std::chrono::microseconds>( std::chrono::steady_clock::now() - startTime );
-			SPDLOG_DEBUG( "Parsed assignment change: {} → {} in {} µs", dto.oldAssignment(), dto.currentAssignment(), duration.count() );
 
 			return std::optional<GmodVersioningAssignmentChangeDto>{ std::move( dto ) };
 		}
@@ -192,8 +187,6 @@ namespace dnv::vista::sdk
 
 	std::optional<GmodNodeConversionDto> GmodNodeConversionDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		try
 		{
 			if ( !json.is_object() )
@@ -204,9 +197,6 @@ namespace dnv::vista::sdk
 			}
 
 			GmodNodeConversionDto dto = json.get<GmodNodeConversionDto>();
-
-			auto duration = std::chrono::duration_cast<std::chrono::microseconds>( std::chrono::steady_clock::now() - startTime );
-			SPDLOG_DEBUG( "Parsed node conversion: source={}, target={}, operations={} in {} µs", dto.source(), dto.target(), dto.operations().size(), duration.count() );
 
 			return std::optional<GmodNodeConversionDto>{ std::move( dto ) };
 		}
@@ -242,11 +232,7 @@ namespace dnv::vista::sdk
 
 	nlohmann::json GmodNodeConversionDto::toJson() const
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		nlohmann::json j = *this;
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>( std::chrono::steady_clock::now() - startTime );
-		SPDLOG_DEBUG( "Serialized node conversion in {} µs", duration.count() );
 		return j;
 	}
 
@@ -391,8 +377,6 @@ namespace dnv::vista::sdk
 
 	std::optional<GmodVersioningDto> GmodVersioningDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		try
 		{
 			if ( !json.is_object() )
@@ -403,9 +387,6 @@ namespace dnv::vista::sdk
 			}
 
 			GmodVersioningDto dto = json.get<GmodVersioningDto>();
-
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-			SPDLOG_DEBUG( "GMOD versioning parsing completed in {} ms ({} items)", duration.count(), dto.items().size() );
 
 			return std::optional<GmodVersioningDto>{ std::move( dto ) };
 		}
@@ -486,10 +467,7 @@ namespace dnv::vista::sdk
 
 	nlohmann::json GmodVersioningDto::toJson() const
 	{
-		auto startTime = std::chrono::steady_clock::now();
 		nlohmann::json j = *this;
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-		SPDLOG_DEBUG( "Successfully serialized GMOD versioning data for VIS {} in {} ms", m_visVersion, duration.count() );
 		return j;
 	}
 
@@ -562,22 +540,13 @@ namespace dnv::vista::sdk
 			}
 
 			dto.m_items.reserve( itemCount );
-			size_t successCount = 0;
-			size_t emptyOperationsCount = 0;
-			auto parseStartTime = std::chrono::steady_clock::now();
 
 			for ( const auto& [key, value] : itemsObj.items() )
 			{
 				try
 				{
 					GmodNodeConversionDto nodeDto = value.get<GmodNodeConversionDto>();
-					auto& emplaced = dto.m_items.emplace( key, std::move( nodeDto ) ).first->second;
-					successCount++;
-
-					if ( emplaced.operations().empty() )
-					{
-						emptyOperationsCount++;
-					}
+					(void)dto.m_items.emplace( key, std::move( nodeDto ) ).first->second;
 				}
 				catch ( [[maybe_unused]] const nlohmann::json::exception& ex )
 				{
@@ -588,37 +557,10 @@ namespace dnv::vista::sdk
 					SPDLOG_ERROR( "Standard exception parsing conversion item '{}': {}", key, ex.what() );
 				}
 			}
-
-			auto parseEndTime = std::chrono::steady_clock::now();
-			auto parseDuration = std::chrono::duration_cast<std::chrono::milliseconds>( parseEndTime - parseStartTime );
-
-			if ( parseDuration.count() > 0 )
-			{
-				[[maybe_unused]] double parseRatePerSecond = static_cast<double>( successCount ) * 1000.0 / static_cast<double>( parseDuration.count() );
-				SPDLOG_DEBUG( "Successfully parsed {}/{} node conversion items ({} with empty operations), rate: {:.1f} items/sec",
-					successCount, itemCount, emptyOperationsCount, parseRatePerSecond );
-			}
-			else if ( itemCount > 0 )
-			{
-				SPDLOG_DEBUG( "Successfully parsed {}/{} node conversion items ({} with empty operations) very quickly.",
-					successCount, itemCount, emptyOperationsCount );
-			}
-
-			if ( successCount > 0 && static_cast<double>( successCount ) < static_cast<double>( itemCount ) * 0.9 )
-			{
-				SPDLOG_DEBUG( "Optimizing memory usage after parsing {} of {} items", successCount, itemCount );
-				dto.m_items.rehash( static_cast<size_t>( static_cast<double>( successCount ) * 1.25 ) );
-			}
 		}
 		else
 		{
 			SPDLOG_WARN( "No '{}' object found in GMOD versioning data for VIS version {}", ITEMS_KEY, dto.m_visVersion );
-		}
-
-		if ( dto.m_items.size() > 1000 )
-		{
-			[[maybe_unused]] size_t approxMemoryBytes = dto.m_items.size() * ( sizeof( GmodNodeConversionDto ) + sizeof( std::string ) * 4 + 32 );
-			SPDLOG_DEBUG( "Large versioning dataset loaded: {} items, ~{} MB estimated memory", dto.m_items.size(), approxMemoryBytes / ( 1024 * 1024 ) );
 		}
 	}
 }

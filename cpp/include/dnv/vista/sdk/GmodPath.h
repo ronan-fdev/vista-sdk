@@ -5,6 +5,8 @@
  *          along with helper classes for parsing, validation, iteration, and modification of path segments.
  */
 
+#include "GmodNode.h"
+
 #pragma once
 
 namespace dnv::vista::sdk
@@ -14,7 +16,6 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	class Gmod;
-	class GmodNode;
 	class GmodParsePathResult;
 	class GmodIndividualizableSet;
 	class Location;
@@ -54,22 +55,35 @@ namespace dnv::vista::sdk
 		class Enumerator;
 
 		//----------------------------------------------
-		// Construction / destruction
+		// Construction
 		//----------------------------------------------
 
-		GmodPath( const Gmod& gmod, GmodNode* node, std::vector<GmodNode*> parents = {} );
+		GmodPath( const Gmod& gmod, GmodNode node, std::vector<GmodNode> parents = {} );
 
+		/** @brief Default constructor. */
 		GmodPath();
+
+		/** @brief Copy constructor */
 		GmodPath( const GmodPath& other );
+
+		/** @brief Move constructor */
 		GmodPath( GmodPath&& other ) noexcept;
 
-		~GmodPath();
+		//----------------------------------------------
+		// Destruction
+		//----------------------------------------------
+
+		/** @brief Destructor */
+		~GmodPath() = default;
 
 		//----------------------------------------------
 		// Assignment operators
 		//----------------------------------------------
 
+		/** @brief Copy assignment operator */
 		GmodPath& operator=( const GmodPath& other );
+
+		/** @brief Move assignment operator */
 		GmodPath& operator=( GmodPath&& other ) noexcept;
 
 		//----------------------------------------------
@@ -83,49 +97,182 @@ namespace dnv::vista::sdk
 		// Lookup operators
 		//----------------------------------------------
 
-		[[nodiscard]] inline GmodNode* operator[]( size_t index ) const;
-		[[nodiscard]] inline GmodNode*& operator[]( size_t index );
+		[[nodiscard]] inline const GmodNode& operator[]( size_t index ) const;
+		[[nodiscard]] inline GmodNode& operator[]( size_t index );
 
 		//----------------------------------------------
 		// Accessors
 		//----------------------------------------------
 
+		/**
+		 * @brief Get the VIS version associated with these codebooks.
+		 * @return The `VisVersion` enum value.
+		 */
 		[[nodiscard]] inline VisVersion visVersion() const noexcept;
 		[[nodiscard]] inline const Gmod* gmod() const noexcept;
-		[[nodiscard]] inline GmodNode* node() const noexcept;
-		[[nodiscard]] inline const std::vector<GmodNode*>& parents() const noexcept;
+		[[nodiscard]] inline const GmodNode& node() const;
+		[[nodiscard]] inline const std::vector<GmodNode>& parents() const noexcept;
 		[[nodiscard]] inline size_t length() const noexcept;
+
+		/**
+		 * @brief Gets all individualizable sets in this path
+		 * @return Vector of individualizable sets that can be modified independently
+		 */
 		[[nodiscard]] std::vector<GmodIndividualizableSet> individualizableSets() const;
+
+		/**
+		 * @brief Gets the normal assignment name for a node at specified depth
+		 * @param nodeDepth The depth of the node to get assignment name for (0-based index)
+		 * @return Optional assignment name, nullopt if not found
+		 */
 		[[nodiscard]] std::optional<std::string> normalAssignmentName( size_t nodeDepth ) const;
+
+		/**
+		 * @brief Gets common names for all function nodes in the path
+		 * @return Vector of pairs containing depth and common name
+		 */
 		[[nodiscard]] std::vector<std::pair<size_t, std::string>> commonNames() const;
+
+		/**
+		 * @brief Calculates a hash code for this GmodPath.
+		 * @details The hash code is based on the path's target node, parents hierarchy, and locations.
+		 *          Paths that are equal according to `operator==` must produce the same hash code.
+		 * @return A `size_t` hash code value suitable for use in hash-based containers.
+		 */
 		[[nodiscard]] inline size_t hashCode() const noexcept;
 
 		//----------------------------------------------
-		// Utility methods
+		// State inspection methods
 		//----------------------------------------------
 
+		/**
+		 * @brief Validates the hierarchical relationship between parents and target node
+		 * @param parents Vector of parent nodes in hierarchical order
+		 * @param node The target node to validate
+		 * @return True if the path is valid, false otherwise
+		 */
 		[[nodiscard]] static bool isValid( const std::vector<GmodNode*>& parents, const GmodNode& node );
+
+		/**
+		 * @brief Validates path and identifies where the hierarchy breaks
+		 * @param parents Vector of parent nodes in hierarchical order
+		 * @param node The target node to validate
+		 * @param missingLinkAt [out] Index where validation failed (-1 if valid)
+		 * @return True if the path is valid, false otherwise
+		 */
 		[[nodiscard]] static bool isValid( const std::vector<GmodNode*>& parents, const GmodNode& node, int& missingLinkAt );
+
+		/**
+		 * @brief Checks if this path can be mapped to physical locations
+		 * @return True if the target node is mappable, false otherwise
+		 */
 		[[nodiscard]] bool isMappable() const;
 
-		[[nodiscard]] std::string toString() const;
-		[[nodiscard]] std::string toStringDump() const;
+		/**
+		 * @brief Checks if this path contains individualizable nodes
+		 * @return True if any nodes can be individualized, false otherwise
+		 */
+		[[nodiscard]] bool isIndividualizable() const;
+
+		//----------------------------------------------
+		// String conversion methods
+		//----------------------------------------------
+
+		/**
+		 * @brief Converts the path to its short string representation
+		 * @return Short path string showing only leaf nodes and target
+		 */
+		[[nodiscard]] inline std::string toString() const;
+
+		/**
+		 * @brief Writes the path's string representation to a generic output iterator.
+		 * @tparam OutputIt The type of the output iterator.
+		 * @param out The output iterator to write to.
+		 * @param separator Character to use between path segments (default: '/').
+		 * @return An iterator pointing to the end of the written output.
+		 */
+		template <typename OutputIt>
+		inline OutputIt toString( OutputIt out, char separator = '/' ) const;
+
+		/**
+		 * @brief Converts the path to full hierarchical string representation
+		 * @return Complete path string from root to target
+		 */
 		[[nodiscard]] std::string toFullPathString() const;
 
-		void toString( std::stringstream& builder, char separator = '/' ) const;
-		void toStringDump( std::stringstream& builder ) const;
-		void toFullPathString( std::stringstream& builder ) const;
+		/**
+		 * @brief Writes the path's full hierarchical string representation to a generic output iterator.
+		 * @tparam OutputIt The type of the output iterator.
+		 * @param out The output iterator to write to.
+		 * @return An iterator pointing to the end of the written output.
+		 */
+		template <typename OutputIt>
+		inline OutputIt toFullPathString( OutputIt out ) const;
 
+		/**
+		 * @brief Creates detailed debug representation of the path
+		 * @return Detailed string with codes, names, and assignment names
+		 */
+		[[nodiscard]] inline std::string toStringDump() const;
+
+		/**
+		 * @brief Writes the path's detailed debug representation to a generic output iterator.
+		 * @tparam OutputIt The type of the output iterator.
+		 * @param out The output iterator to write to.
+		 * @return An iterator pointing to the end of the written output.
+		 */
+		template <typename OutputIt>
+		inline OutputIt toStringDump( OutputIt out ) const;
+
+		//----------------------------------------------
+		// Path manipulation methods
+		//----------------------------------------------
+
+		/**
+		 * @brief Creates a copy of this path with all location information removed
+		 * @return New GmodPath instance without any location data
+		 */
 		[[nodiscard]] GmodPath withoutLocations() const;
 
 		//----------------------------------------------
-		// Public static parsing methods
+		// Path enumeration methods
 		//----------------------------------------------
 
+		/**
+		 * @brief Gets the full hierarchical path with all intermediate nodes
+		 * @return Enumerator for the complete path from root to target
+		 */
+		Enumerator fullPath() const;
+
+		/**
+		 * @brief Gets the full hierarchical path starting from a specific depth
+		 * @param fromDepth The depth to start enumeration from (0 = root, -1 = from beginning)
+		 * @return Enumerator starting from the specified depth
+		 */
+		Enumerator fullPathFrom( size_t fromDepth ) const;
+
+		//----------------------------------------------
+		// Parsing methods
+		//----------------------------------------------
+
+		/**
+		 * @brief Parses a path string using specified VIS version
+		 * @param item The path string to parse
+		 * @param visVersion The VIS version to use for parsing
+		 * @return Parsed GmodPath instance
+		 * @throws std::invalid_argument if parsing fails
+		 */
 		[[nodiscard]] static GmodPath parse( std::string_view item, VisVersion visVersion );
 		[[nodiscard]] static GmodPath parse( std::string_view item, const Gmod& gmod, const Locations& locations );
 		[[nodiscard]] static GmodPath parseFullPath( std::string_view item, VisVersion visVersion );
 
+		/**
+		 * @brief Attempts to parse a path string, returning success/failure
+		 * @param item The path string to parse
+		 * @param visVersion The VIS version to use for parsing
+		 * @param outPath [out] The parsed path if successful
+		 * @return True if parsing succeeded, false otherwise
+		 */
 		[[nodiscard]] static bool tryParse( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath );
 		[[nodiscard]] static bool tryParse( std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath );
 
@@ -145,18 +292,32 @@ namespace dnv::vista::sdk
 
 		VisVersion m_visVersion;
 		const Gmod* m_gmod;
-		GmodNode* m_node;
-		std::vector<GmodNode*> m_parents;
-		std::vector<GmodNode*> m_ownedNodes;
+		std::optional<GmodNode> m_node;
+		std::vector<GmodNode> m_parents;
 
 	private:
 		//----------------------------------------------
 		// Private static parsing methods
 		//----------------------------------------------
 
+		/**
+		 * @brief Internal helper for parsing partial path strings with traversal
+		 * @param item The path string to parse (allows partial paths)
+		 * @param gmod The GMOD instance for node lookup and traversal
+		 * @param locations The locations instance for location parsing
+		 * @return Parse result with either success path or error message
+		 * @details Uses GMOD traversal to find complete hierarchical path from partial input
+		 */
 		static std::unique_ptr<GmodParsePathResult> parseInternal(
 			std::string_view item, const Gmod& gmod, const Locations& locations );
 
+		/**
+		 * @brief Internal helper for parsing full path strings
+		 * @param item The path string to parse
+		 * @param gmod The GMOD instance for node lookup
+		 * @param locations The locations instance for location parsing
+		 * @return Parse result with either success path or error message
+		 */
 		static std::unique_ptr<GmodParsePathResult> parseFullPathInternal(
 			std::string_view item, const Gmod& gmod, const Locations& locations );
 
@@ -175,11 +336,11 @@ namespace dnv::vista::sdk
 			//----------------------------
 
 			/** @brief Represents a single path element entry. */
-			using PathElement = std::pair<size_t, GmodNode*>;
+			using PathElement = std::pair<size_t, const GmodNode*>;
 
 		private:
 			//----------------------------
-			// Construction / destruction
+			// Construction
 			//----------------------------
 
 			/**
@@ -198,6 +359,10 @@ namespace dnv::vista::sdk
 
 			/** @brief Move constructor */
 			Enumerator( Enumerator&& ) noexcept = default;
+
+			//----------------------------
+			// Destruction
+			//----------------------------
 
 			/** @brief Destructor */
 			~Enumerator() = default;
@@ -230,7 +395,7 @@ namespace dnv::vista::sdk
 			inline const PathElement& current() const;
 
 			/**
-			 * @brief Resets the enumerator to its initial position.
+			 * @brief Resets the enumerator to its initial position before first element
 			 */
 			inline void reset();
 
@@ -253,7 +418,7 @@ namespace dnv::vista::sdk
 	{
 	public:
 		//----------------------------------------------
-		// Construction / destruction
+		// Construction
 		//----------------------------------------------
 
 		GmodIndividualizableSet( const std::vector<int>& nodeIndices, const GmodPath& sourcePath );
@@ -262,6 +427,10 @@ namespace dnv::vista::sdk
 		GmodIndividualizableSet( const GmodIndividualizableSet& ) = delete;
 		GmodIndividualizableSet( GmodIndividualizableSet&& ) noexcept = default;
 
+		//----------------------------------------------
+		// Destruction
+		//----------------------------------------------
+
 		~GmodIndividualizableSet() = default;
 
 		//----------------------------------------------
@@ -269,7 +438,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		GmodIndividualizableSet& operator=( const GmodIndividualizableSet& ) = delete;
-		GmodIndividualizableSet& operator=( GmodIndividualizableSet&& ) noexcept = delete;
+		GmodIndividualizableSet& operator=( GmodIndividualizableSet&& ) noexcept = default;
 
 		//----------------------------------------------
 		// Build

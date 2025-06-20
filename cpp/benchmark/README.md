@@ -43,18 +43,18 @@ cmake --build build --target BM_CodebooksLookup
 
 ## Summary
 
-| Operation Category           | C++ vs C# Performance            | Status | Key Findings                        |
-| :--------------------------- | :------------------------------- | :----: | :---------------------------------- |
-| **Hash Table Operations**    | **1.06-2.35x faster**            |   ✅   | C++ shows performance advantage     |
-| **Codebook Access (Direct)** | **1.008x faster** vs C# baseline |   ✅   | Performance parity                  |
-| **Codebook Access (API)**    | **1,200x slower** vs C# baseline |   ⚠️   | Expected method call overhead       |
-| **String Hashing (Short)**   | **1.04-1.29x slower**            |   ✅   | C# implementation more efficient    |
-| **String Hashing (Long)**    | **1.07x faster to 1.74x faster** |   ✅   | C++ shows performance advantage     |
-| **GMOD Loading**             | **1.29x faster**                 |   ✅   | Good performance with less memory   |
-| **GMOD Lookup**              | **1.06-2.35x faster**            |   ✅   | C++ shows performance advantage     |
-| **GMOD Traversal**           | **1.52x slower**                 |   ❌   | **Optimization opportunity**        |
-| **Path Parsing**             | **1.32-31.7x slower**            |  ❌❌  | **Significant optimization needed** |
-| **Version Path Conversion**  | **142x slower**                  | ❌❌❌ | **Critical performance gap**        |
+| Operation Category           | C++ vs C# Performance            | Status | Key Findings                                   |
+| :--------------------------- | :------------------------------- | :----: | :--------------------------------------------- |
+| **Hash Table Operations**    | **0.97-2.15x faster**            |   ✅   | C++ shows performance advantage                |
+| **Codebook Access (Direct)** | **0.99x faster** vs C# baseline  |   ✅   | Performance parity                             |
+| **Codebook Access (API)**    | **1,219x slower** vs C# baseline |   ⚠️   | Expected method call overhead                  |
+| **String Hashing (Short)**   | **1.04-1.29x slower**            |   ✅   | C# implementation more efficient               |
+| **String Hashing (Long)**    | **1.02x slower to 1.74x faster** |   ✅   | Mixed results, C++ advantage on longer strings |
+| **GMOD Loading**             | **1.29x faster**                 |   ✅   | Good performance with less memory              |
+| **GMOD Lookup**              | **1.21-2.15x faster**            |   ✅   | C++ shows performance advantage                |
+| **GMOD Traversal**           | **1.73x slower**                 |   ❌   | **Optimization opportunity**                   |
+| **Path Parsing**             | **9.38-20.5x slower**            |  ❌❌  | **Significant optimization needed**            |
+| **Version Path Conversion**  | **162x slower**                  | ❌❌❌ | **Critical performance gap**                   |
 
 ---
 
@@ -116,7 +116,7 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 | **Array Lookup**      | 1.62 ns     |  **2.35x**   | _TBD_     |    _TBD_    | ⚡ Fast baseline operation              |
 | **Vector Lookup**     | 1.80 ns     |  **2.62x**   | _TBD_     |    _TBD_    | 🔥 Very fast linear search              |
 | **Hash Table Lookup** | 2.11 ns     |  **3.07x**   | _TBD_     |    _TBD_    | 🔥 Excellent hash performance           |
-| **Tree Lookup**       | 3.44 ns     |  **5.00x**   | _TBD_     |    _TBD_    | ⚠️ Red-black tree overhead              |
+| **Tree Lookup**       | 7.13 ns     |  **10.36x**  | _TBD_     |    _TBD_    | ⚠️ Red-black tree overhead              |
 | **SDK API Method**    | 826 ns      |  **1,200x**  | _TBD_     |    _TBD_    | ⚠️ **Expected method call overhead**    |
 | **VIS Singleton**     | 125,614 ns  | **182,574x** | _TBD_     |    _TBD_    | ⚠️ **Expected initialization overhead** |
 
@@ -127,7 +127,7 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 | **Array**        | 1.62 ns | `std::array` linear search          | **Baseline**         | ✅     | ⚡ Fastest for 3 elements       |
 | **Vector**       | 1.80 ns | `std::vector` linear search         | **1.11x slower**     | ✅     | 🔥 Minimal overhead             |
 | **UnorderedMap** | 2.11 ns | `std::unordered_map::find()`        | **1.30x slower**     | ✅     | 🔥 Excellent hash performance   |
-| **Map**          | 3.44 ns | `std::map::find()` (red-black tree) | **2.12x slower**     | ✅     | Tree overhead for small dataset |
+| **Map**          | 7.13 ns | `std::map::find()` (red-black tree) | **4.60x slower**     | ❌     | Tree overhead for small dataset |
 
 #### Vista SDK Access Performance
 
@@ -147,7 +147,7 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 | **BM_Array**              | **1.62 ns**    | **1.62 ns**    | 8.4B       | ⚡ **Fast**                |
 | **BM_Vector**             | **1.80 ns**    | **1.80 ns**    | 7.6B       | ⚡ **Fast**                |
 | **BM_UnorderedMap**       | **2.11 ns**    | **2.11 ns**    | 6.7B       | ⚡ **Fast**                |
-| **BM_Map**                | **3.44 ns**    | **3.44 ns**    | 4.0B       | ⚠️ **Slow**                |
+| **BM_Map**                | **7.13 ns**    | **7.11 ns**    | 1.9B       | ⚠️ **Slow**                |
 | **BM_CodebooksAPI**       | **826 ns**     | **826 ns**     | 16.9M      | ❌ **Expected: slow**      |
 | **BM_CodebooksVISCall**   | **125,614 ns** | **125,558 ns** | 112K       | ❌ **Expected: very slow** |
 
@@ -191,27 +191,27 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 ## GMOD Lookup
 
-| Operation             | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Notes                    |
-| :-------------------- | :---------- | :---------: | :-------- | :---------: | :----------------------- |
-| **Frozen Dictionary** | 14.3 ns     |  **1.00x**  | _TBD_     |    _TBD_    | ⚡ Fastest lookup method |
-| **Hash Table Lookup** | 16.3 ns     |  **1.14x**  | _TBD_     |    _TBD_    | 🔥 Slightly slower       |
-| **GMOD API Lookup**   | 61.0.ns     |  **4.27x**  | _TBD_     |    _TBD_    | 🐌 Needs optimization    |
+| Operation             | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Notes                            |
+| :-------------------- | :---------- | :---------: | :-------- | :---------: | :------------------------------- |
+| **Frozen Dictionary** | 18.4 ns     |  **1.00x**  | _TBD_     |    _TBD_    | ⚡ Baseline lookup method        |
+| **Hash Table Lookup** | 17.8 ns     |  **0.97x**  | _TBD_     |    _TBD_    | 🚀 Slightly faster               |
+| **GMOD API Lookup**   | 22.2 ns     |  **1.21x**  | _TBD_     |    _TBD_    | ✅ Expected method call overhead |
 
 ### GMOD Lookup Performance (Windows)
 
 | C++ Method     | C++ Time | C++ Implementation            | C# Method      | C# Time  | C# Implementation                | Performance Ratio   |
 | :------------- | :------- | :---------------------------- | :------------- | :------- | :------------------------------- | :------------------ |
-| **frozenDict** | 14.3 ns  | `std::unordered_map` (frozen) | **FrozenDict** | 15.21 ns | `FrozenDictionary.TryGetValue()` | ✅ **1.06x faster** |
-| **dict**       | 16.3 ns  | `std::unordered_map::find()`  | **Dict**       | 38.34 ns | `Dictionary.TryGetValue()`       | ✅ **2.35x faster** |
-| **gmod**       | 61.0 ns  | CHD implementation lookup     | **Gmod**       | 15.62 ns | Native GMOD API access           | ❌ **3.91x slower** |
+| **dict**       | 17.8 ns  | `std::unordered_map::find()`  | **Dict**       | 38.34 ns | `Dictionary.TryGetValue()`       | ✅ **2.15x faster** |
+| **frozenDict** | 18.4 ns  | `std::unordered_map` (frozen) | **FrozenDict** | 15.21 ns | `FrozenDictionary.TryGetValue()` | ❌ **1.21x slower** |
+| **gmod**       | 22.2 ns  | CHD implementation lookup     | **Gmod**       | 15.62 ns | Native GMOD API access           | ❌ **1.42x slower** |
 
 #### Detailed C++ Results (Windows)
 
 | Benchmark      | Time    | CPU     | Iterations |
 | :------------- | :------ | :------ | :--------- |
-| **Dict**       | 16.3 ns | 16.3 ns | 887M       |
-| **FrozenDict** | 14.3 ns | 14.3 ns | 974M       |
-| **Gmod**       | 61.0 ns | 60.3 ns | 235M       |
+| **Dict**       | 17.8 ns | 17.9 ns | 786M       |
+| **FrozenDict** | 18.4 ns | 18.4 ns | 766M       |
+| **Gmod**       | 22.2 ns | 22.1 ns | 627M       |
 
 #### Detailed C# Results (Windows)
 
@@ -229,30 +229,30 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 | Operation                          | Windows C++ | Linux C++ | Status | Notes |
 | :--------------------------------- | :---------- | :-------- | :----: | :---- |
-| **TryParse**                       | 4.45 μs     | _TBD_     |        |       |
-| **TryParseFullPath**               | 18.1 μs     | _TBD_     |        |       |
-| **TryParseIndividualized**         | 3.48 μs     | _TBD_     |        |       |
-| **TryParseFullPathIndividualized** | 18.9 μs     | _TBD_     |        |       |
+| **TryParse**                       | 31.5 μs     | _TBD_     |        |       |
+| **TryParseFullPath**               | 8.67 μs     | _TBD_     |        |       |
+| **TryParseIndividualized**         | 30.5 μs     | _TBD_     |        |       |
+| **TryParseFullPathIndividualized** | 8.72 μs     | _TBD_     |        |       |
 
 ### GMOD Path Parsing Performance (Windows)
 
 Performance comparison between C++ and C# implementations for GMOD path parsing operations:
 
-| Operation                          | C++ (Google Benchmark) | C# (BenchmarkDotNet) | Performance Ratio | Status | Notes                         |
-| :--------------------------------- | :--------------------- | :------------------- | :---------------- | :----: | :---------------------------- |
-| **TryParse**                       | 4.45 μs                | 3.36 μs              | **1.32x slower**  |   ⚠️   | C++ path parsing overhead     |
-| **TryParseFullPath**               | 18.1 μs                | 571 ns               | **31.7x slower**  | ❌❌❌ | Critical performance issue    |
-| **TryParseIndividualized**         | 3.48 μs                | 1.49 μs              | **2.34x slower**  |   ❌   | C++ location parsing overhead |
-| **TryParseFullPathIndividualized** | 18.9 μs                | 694 ns               | **27.2x slower**  | ❌❌❌ | Critical performance issue    |
+| Operation                          | C++ (Google Benchmark) | C# (BenchmarkDotNet) | Performance Ratio | Status | Notes                      |
+| :--------------------------------- | :--------------------- | :------------------- | :---------------- | :----: | :------------------------- |
+| **TryParse**                       | 31.5 μs                | 3.36 μs              | **9.38x slower**  |  ❌❌  | Critical performance issue |
+| **TryParseFullPath**               | 8.67 μs                | 571 ns               | **15.2x slower**  |  ❌❌  | Critical performance issue |
+| **TryParseIndividualized**         | 30.5 μs                | 1.49 μs              | **20.5x slower**  |  ❌❌  | Critical performance issue |
+| **TryParseFullPathIndividualized** | 8.72 μs                | 694 ns               | **12.6x slower**  |  ❌❌  | Critical performance issue |
 
 #### Detailed C++ Results (Windows)
 
 | Benchmark                          | Time    | CPU     | Iterations |
 | :--------------------------------- | :------ | :------ | :--------- |
-| **tryParse**                       | 4.45 μs | 4.45 μs | 3.2M       |
-| **tryParseFullPath**               | 18.1 μs | 18.1 μs | 772K       |
-| **tryParseIndividualized**         | 3.48 μs | 3.48 μs | 4.0M       |
-| **tryParseFullPathIndividualized** | 18.9 μs | 18.9 μs | 747K       |
+| **tryParse**                       | 31.5 μs | 31.6 μs | 448K       |
+| **tryParseFullPath**               | 8.67 μs | 8.67 μs | 1.61M      |
+| **tryParseIndividualized**         | 30.5 μs | 30.5 μs | 459K       |
+| **tryParseFullPathIndividualized** | 8.72 μs | 8.71 μs | 1.61M      |
 
 #### Detailed C# Results (Windows)
 
@@ -271,7 +271,7 @@ Performance comparison between C++ and C# implementations for GMOD path parsing 
 
 | Operation          | Windows C++ | Linux C++ | Status | Notes |
 | :----------------- | :---------- | :-------- | :----: | :---- |
-| **Full Traversal** | 266 ms      | _TBD_     |        |       |
+| **Full Traversal** | 282 ms      | _TBD_     |        |       |
 
 ### GMOD Traversal Performance (Windows)
 
@@ -279,13 +279,13 @@ Performance comparison between C++ and C# implementations for GMOD node lookup o
 
 | Operation          | C++ (Google Benchmark) | C# (BenchmarkDotNet) | Performance Ratio | Status | Notes                                |
 | :----------------- | :--------------------- | :------------------- | :---------------- | :----: | :----------------------------------- |
-| **Full Traversal** | 248 ms                 | 162.9 ms             | **1.52x slower**  |   ❌   | Significant optimization opportunity |
+| **Full Traversal** | 282 ms                 | 162.9 ms             | **1.73x slower**  |   ❌   | Significant optimization opportunity |
 
 #### Detailed C++ Results (Windows)
 
 | Benchmark         | Time   | CPU    | Iterations |
 | :---------------- | :----- | :----- | :--------- |
-| **FullTraversal** | 248 ms | 266 ms | 50-51      |
+| **FullTraversal** | 282 ms | 266 ms | 50-51      |
 
 #### Detailed C# Results (Windows)
 
@@ -301,7 +301,7 @@ Performance comparison between C++ and C# implementations for GMOD node lookup o
 
 | Operation        | Windows C++ | Linux C++ | Status | Notes |
 | :--------------- | :---------- | :-------- | :----: | :---- |
-| **Convert Path** | 212 μs      | _TBD_     |        |       |
+| **Convert Path** | 241 μs      | _TBD_     |        |       |
 
 ### GMOD Versioning Path Conversion Performance (Windows)
 
@@ -309,13 +309,13 @@ Performance comparison between C++ and C# implementations for GMOD version path 
 
 | Operation        | C++ (Google Benchmark) | C# (BenchmarkDotNet) | Performance Ratio | Status | Notes            |
 | :--------------- | :--------------------- | :------------------- | :---------------- | :----: | :--------------- |
-| **Convert Path** | 212 μs                 | 1.489 μs             | **142x slower**   | ❌❌❌ | **CATASTROPHIC** |
+| **Convert Path** | 241 μs                 | 1.489 μs             | **162x slower**   | ❌❌❌ | **CATASTROPHIC** |
 
 #### Detailed C++ Results (Windows)
 
 | Benchmark       | Time   | CPU    | Iterations |
 | :-------------- | :----- | :----- | :--------- |
-| **convertPath** | 212 μs | 219 μs | 64,000     |
+| **convertPath** | 241 μs | 219 μs | 64,000     |
 
 #### Detailed C# Results (Windows)
 
@@ -401,4 +401,4 @@ Performance comparison between C++ and C# implementations for hash function oper
 
 ---
 
-_Last updated: June 19, 2025_
+_Last updated: June 21, 2025_

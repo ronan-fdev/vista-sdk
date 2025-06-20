@@ -5,7 +5,7 @@
 
 namespace dnv::vista::sdk
 {
-	namespace internal
+	namespace
 	{
 		//=====================================================================
 		// Internal helper components
@@ -159,7 +159,7 @@ namespace dnv::vista::sdk
 				for ( const auto& k : subKeys )
 				{
 					/* Calculate final position using secondary hash with current seed */
-					auto finalHash{ internal::Hashing::seed( currentSeedValue, k.second, size ) };
+					auto finalHash{ Hashing::seed( currentSeedValue, k.second, size ) };
 					bool slotOccupied = indices[finalHash] != 0;
 					bool entryClaimedThisTry = entries.count( finalHash ) != 0;
 
@@ -237,7 +237,7 @@ namespace dnv::vista::sdk
 	{
 		if ( isEmpty() )
 		{
-			internal::ThrowHelper::throwKeyNotFoundException( key );
+			ThrowHelper::throwKeyNotFoundException( key );
 		}
 
 		const TValue* outValue = nullptr;
@@ -246,7 +246,7 @@ namespace dnv::vista::sdk
 			return const_cast<TValue&>( *outValue );
 		}
 
-		internal::ThrowHelper::throwKeyNotFoundException( key );
+		ThrowHelper::throwKeyNotFoundException( key );
 	}
 
 	//----------------------------------------------
@@ -258,7 +258,7 @@ namespace dnv::vista::sdk
 	{
 		if ( isEmpty() )
 		{
-			internal::ThrowHelper::throwKeyNotFoundException( key );
+			ThrowHelper::throwKeyNotFoundException( key );
 		}
 
 		const TValue* outValue = nullptr;
@@ -267,7 +267,7 @@ namespace dnv::vista::sdk
 			return *outValue;
 		}
 
-		internal::ThrowHelper::throwKeyNotFoundException( key );
+		ThrowHelper::throwKeyNotFoundException( key );
 	}
 
 	//----------------------------------------------
@@ -321,7 +321,7 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			const uint32_t finalHash = internal::Hashing::seed(
+			const uint32_t finalHash = Hashing::seed(
 				static_cast<uint32_t>( seed ),
 				hashValue,
 				tableSize );
@@ -386,14 +386,14 @@ namespace dnv::vista::sdk
 	template <typename TValue>
 	inline uint32_t ChdDictionary<TValue>::hash( std::string_view key ) noexcept
 	{
-		uint32_t hashValue = internal::FNV_OFFSET_BASIS;
+		uint32_t hashValue = FNV_OFFSET_BASIS;
 
 		if ( key.empty() )
 		{
 			return hashValue;
 		}
 
-		static bool hasSSE42 = internal::hasSSE42Support();
+		static bool hasSSE42 = hasSSE42Support();
 
 		if ( hasSSE42 )
 		{
@@ -403,16 +403,16 @@ namespace dnv::vista::sdk
 			while ( length >= 4 )
 			{
 				/* Process 4 low bytes at once */
-				hashValue = internal::Hashing::crc32( hashValue, static_cast<uint8_t>( data[0] ) );
-				hashValue = internal::Hashing::crc32( hashValue, static_cast<uint8_t>( data[1] ) );
-				hashValue = internal::Hashing::crc32( hashValue, static_cast<uint8_t>( data[2] ) );
-				hashValue = internal::Hashing::crc32( hashValue, static_cast<uint8_t>( data[3] ) );
+				hashValue = Hashing::crc32( hashValue, static_cast<uint8_t>( data[0] ) );
+				hashValue = Hashing::crc32( hashValue, static_cast<uint8_t>( data[1] ) );
+				hashValue = Hashing::crc32( hashValue, static_cast<uint8_t>( data[2] ) );
+				hashValue = Hashing::crc32( hashValue, static_cast<uint8_t>( data[3] ) );
 
 				/* Process 4 high bytes (UTF-16 simulation - all zeros for ASCII) */
-				hashValue = internal::Hashing::crc32( hashValue, 0 );
-				hashValue = internal::Hashing::crc32( hashValue, 0 );
-				hashValue = internal::Hashing::crc32( hashValue, 0 );
-				hashValue = internal::Hashing::crc32( hashValue, 0 );
+				hashValue = Hashing::crc32( hashValue, 0 );
+				hashValue = Hashing::crc32( hashValue, 0 );
+				hashValue = Hashing::crc32( hashValue, 0 );
+				hashValue = Hashing::crc32( hashValue, 0 );
 
 				data += 4;
 				length -= 4;
@@ -420,17 +420,17 @@ namespace dnv::vista::sdk
 
 			for ( size_t i = 0; i < length; ++i )
 			{
-				hashValue = internal::Hashing::crc32( hashValue, static_cast<uint8_t>( data[i] ) );
+				hashValue = Hashing::crc32( hashValue, static_cast<uint8_t>( data[i] ) );
 				/* UTF-16 high byte */
-				hashValue = internal::Hashing::crc32( hashValue, 0 );
+				hashValue = Hashing::crc32( hashValue, 0 );
 			}
 		}
 		else
 		{
 			for ( char ch : key )
 			{
-				hashValue = ( static_cast<uint8_t>( ch ) ^ hashValue ) * internal::FNV_PRIME;
-				hashValue = ( 0 ^ hashValue ) * internal::FNV_PRIME;
+				hashValue = ( static_cast<uint8_t>( ch ) ^ hashValue ) * FNV_PRIME;
+				hashValue = ( 0 ^ hashValue ) * FNV_PRIME;
 			}
 		}
 
@@ -562,7 +562,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_table || m_index == SIZE_MAX || m_index >= m_table->size() )
 		{
-			internal::ThrowHelper::throwInvalidOperationException();
+			ThrowHelper::throwInvalidOperationException();
 		}
 
 		return ( *m_table )[m_index];

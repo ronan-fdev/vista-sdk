@@ -15,15 +15,12 @@ namespace dnv::vista::sdk
 {
 	namespace internal
 	{
-		//--------------------------------------------------------------------------
-		// LocationSetsVisitor
-		//--------------------------------------------------------------------------
-
 		struct LocationSetsVisitor
 		{
 			size_t currentParentStart;
 
-			LocationSetsVisitor() : currentParentStart( std::numeric_limits<size_t>().max() ) {}
+			LocationSetsVisitor()
+				: currentParentStart{ std::numeric_limits<size_t>().max() } {}
 
 			std::optional<std::tuple<size_t, size_t, std::optional<Location>>> visit(
 				const GmodNode& node,
@@ -37,9 +34,13 @@ namespace dnv::vista::sdk
 				if ( currentParentStart == std::numeric_limits<size_t>().max() )
 				{
 					if ( isParent )
+					{
 						currentParentStart = i;
+					}
 					if ( node.isIndividualizable( isTargetNode ) )
+					{
 						return std::make_tuple( i, i, node.location() );
+					}
 				}
 				else
 				{
@@ -64,7 +65,10 @@ namespace dnv::vista::sdk
 								if ( !setNode->isIndividualizable( j == pathParents.size(), true ) )
 								{
 									if ( nodes.has_value() )
+									{
 										skippedOne = j;
+									}
+
 									continue;
 								}
 
@@ -77,10 +81,14 @@ namespace dnv::vista::sdk
 								}
 
 								if ( skippedOne != std::numeric_limits<size_t>().max() )
+								{
 									throw std::runtime_error( "Can't skip in the middle of individualizable set" );
+								}
 
 								if ( setNode->isFunctionComposition() )
+								{
 									hasComposition = true;
+								}
 
 								auto location = nodes.has_value() && std::get<2>( nodes.value() ).has_value() ? std::get<2>( nodes.value() ) : setNode->location();
 								size_t start = nodes.has_value() ? std::get<0>( nodes.value() ) : j;
@@ -89,7 +97,9 @@ namespace dnv::vista::sdk
 							}
 
 							if ( nodes.has_value() && std::get<0>( nodes.value() ) == std::get<1>( nodes.value() ) && hasComposition )
+							{
 								nodes = std::nullopt;
+							}
 						}
 
 						currentParentStart = i;
@@ -116,209 +126,14 @@ namespace dnv::vista::sdk
 					}
 
 					if ( isTargetNode && node.isIndividualizable( isTargetNode ) )
+					{
 						return std::make_tuple( i, i, node.location() );
+					}
 				}
 
 				return std::nullopt;
 			}
 		};
-
-		//--------------------------------------------------------------------------
-		// Parsing
-		//--------------------------------------------------------------------------
-
-		struct PathNode
-		{
-			std::string code;
-			std::optional<Location> location;
-		};
-
-		struct ParseContext
-		{
-			std::deque<PathNode> partsQueue;
-			PathNode toFind;
-			std::optional<std::unordered_map<std::string, Location>> nodeLocations;
-			std::optional<GmodPath> resultingPath;
-			const Gmod& gmod;
-			std::vector<GmodNode*> ownedNodesForCurrentPath;
-
-			ParseContext( std::deque<PathNode> initialParts, const Gmod& g, PathNode firstToFind )
-				: partsQueue( std::move( initialParts ) ), toFind( std::move( firstToFind ) ), gmod( g )
-			{
-			}
-
-			ParseContext( const ParseContext& ) = delete;
-			ParseContext( ParseContext&& ) noexcept = delete;
-			ParseContext& operator=( const ParseContext& ) = delete;
-			ParseContext& operator=( ParseContext&& ) noexcept = delete;
-		};
-
-		TraversalHandlerResult parseInternalTraversalHandler(
-			ParseContext& context,
-			const std::vector<const GmodNode*>& traversedParents,
-			const GmodNode& currentNode )
-		{
-			bool foundCurrentToFind = ( currentNode.code() == context.toFind.code );
-
-			if ( !foundCurrentToFind && Gmod::isLeafNode( currentNode.metadata() ) )
-			{
-				return TraversalHandlerResult::SkipSubtree;
-			}
-
-			if ( !foundCurrentToFind )
-			{
-				return TraversalHandlerResult::Continue;
-			}
-
-			if ( context.toFind.location.has_value() )
-			{
-				if ( !context.nodeLocations.has_value() )
-				{
-					context.nodeLocations.emplace();
-				}
-				context.nodeLocations->emplace( std::string( context.toFind.code ), context.toFind.location.value() );
-			}
-
-			if ( !context.partsQueue.empty() )
-			{
-				context.toFind = context.partsQueue.front();
-				context.partsQueue.pop_front();
-
-				return TraversalHandlerResult::Continue;
-			}
-
-			std::vector<GmodNode*> pathParents;
-			pathParents.reserve( traversedParents.size() + 1 );
-
-			for ( const GmodNode* parent : traversedParents )
-			{
-				if ( !parent )
-					continue;
-
-				if ( context.nodeLocations.has_value() )
-				{
-					auto it = context.nodeLocations->find( std::string( parent->code() ) );
-					if ( it != context.nodeLocations->end() )
-					{
-						GmodNode* newNode = new GmodNode( parent->withLocation( it->second ) );
-						context.ownedNodesForCurrentPath.push_back( newNode );
-						pathParents.push_back( newNode );
-
-						continue;
-					}
-				}
-				pathParents.push_back( const_cast<GmodNode*>( parent ) );
-			}
-
-			GmodNode* endNode;
-			if ( context.toFind.location.has_value() )
-			{
-				GmodNode* newNode = new GmodNode( currentNode.withLocation( context.toFind.location.value() ) );
-				context.ownedNodesForCurrentPath.push_back( newNode );
-				endNode = newNode;
-			}
-			else
-			{
-				endNode = const_cast<GmodNode*>( &currentNode );
-			}
-
-			GmodNode* startNode = nullptr;
-			if ( !pathParents.empty() && !pathParents[0]->parents().empty() && pathParents[0]->parents().size() == 1 )
-			{
-				startNode = const_cast<GmodNode*>( pathParents[0]->parents()[0] );
-			}
-			else if ( !endNode->parents().empty() && endNode->parents().size() == 1 )
-			{
-				startNode = const_cast<GmodNode*>( endNode->parents()[0] );
-			}
-
-			while ( startNode && startNode->parents().size() == 1 )
-			{
-				pathParents.insert( pathParents.begin(), startNode );
-				startNode = const_cast<GmodNode*>( startNode->parents()[0] );
-			}
-
-			if ( pathParents.empty() || pathParents[0] != &context.gmod.rootNode() )
-			{
-				pathParents.insert( pathParents.begin(), const_cast<GmodNode*>( &context.gmod.rootNode() ) );
-			}
-
-			internal::LocationSetsVisitor locationSetsVisitor;
-			for ( size_t i = 0; i < pathParents.size() + 1; ++i )
-			{
-				GmodNode* nodeInPath = ( i < pathParents.size() ) ? pathParents[i] : endNode;
-				if ( !nodeInPath )
-					continue;
-
-				std::optional<std::tuple<size_t, size_t, std::optional<Location>>> setDetails =
-					locationSetsVisitor.visit( *nodeInPath, i, pathParents, *endNode );
-
-				if ( setDetails.has_value() )
-				{
-					const auto& setTuple = setDetails.value();
-					size_t setStartIdx = std::get<0>( setTuple );
-					size_t setEndIdx = std::get<1>( setTuple );
-					const std::optional<Location>& setCommonLocation = std::get<2>( setTuple );
-
-					if ( setStartIdx == setEndIdx )
-						continue;
-
-					if ( setCommonLocation.has_value() )
-					{
-						for ( size_t k = setStartIdx; k <= setEndIdx; ++k )
-						{
-							GmodNode** nodesToUpdateInPath;
-							if ( k < pathParents.size() )
-							{
-								nodesToUpdateInPath = &pathParents[k];
-							}
-							else
-							{
-								nodesToUpdateInPath = &endNode;
-							}
-							GmodNode* currentNodeInSet = *nodesToUpdateInPath;
-
-							bool needsNewNode = true;
-							if ( currentNodeInSet->location().has_value() && setCommonLocation.has_value() &&
-								 currentNodeInSet->location().value() == setCommonLocation.value() )
-							{
-								needsNewNode = false;
-							}
-							else if ( !currentNodeInSet->location().has_value() && !setCommonLocation.has_value() )
-							{
-								needsNewNode = false;
-							}
-
-							if ( needsNewNode )
-							{
-								GmodNode* newNodeWithSetLocation = new GmodNode( currentNodeInSet->tryWithLocation( setCommonLocation ) );
-								context.ownedNodesForCurrentPath.push_back( newNodeWithSetLocation );
-								*nodesToUpdateInPath = newNodeWithSetLocation;
-							}
-						}
-					}
-				}
-				else
-				{
-					if ( nodeInPath->location().has_value() )
-					{
-						SPDLOG_ERROR( "parseInternalTraversalHandler: Node '{}' has a location but was not processed by set logic. Path invalid.", nodeInPath->code().data() );
-						return TraversalHandlerResult::Stop;
-					}
-				}
-			}
-
-			GmodPath pathObject;
-			pathObject.m_gmod = &context.gmod;
-			pathObject.m_parents = pathParents;
-			pathObject.m_node = endNode;
-			pathObject.m_visVersion = endNode->visVersion();
-			pathObject.m_ownedNodes = std::move( context.ownedNodesForCurrentPath );
-			context.ownedNodesForCurrentPath.clear();
-
-			context.resultingPath.emplace( std::move( pathObject ) );
-			return TraversalHandlerResult::Stop;
-		}
 	}
 
 	//=====================================================================
@@ -326,165 +141,61 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	//----------------------------------------------
-	// Construction / destruction
+	// Construction
 	//----------------------------------------------
 
-	GmodPath::GmodPath( const Gmod& gmod, GmodNode* node, std::vector<GmodNode*> parents )
-		: m_gmod{ &gmod },
-		  m_node{ node },
+	GmodPath::GmodPath( const Gmod& gmod, GmodNode node, std::vector<GmodNode> parents )
+		: m_visVersion{ node.visVersion() },
+		  m_gmod{ &gmod },
+		  m_node{ std::move( node ) },
 		  m_parents{ std::move( parents ) }
 	{
-		if ( !m_node )
+		if ( !m_gmod )
 		{
-			throw std::invalid_argument( "GmodPath constructor: node cannot be null." );
+			throw std::invalid_argument( "GmodPath constructor: gmod reference is null" );
 		}
 
-		m_visVersion = m_node->visVersion();
+		if ( !m_node.has_value() )
+		{
+			throw std::invalid_argument( "GmodPath constructor: node is not valid" );
+		}
 
 		if ( m_parents.empty() )
 		{
-			if ( m_node != &m_gmod->rootNode() )
-			{
-				std::string nodeCode = std::string( m_node->code() );
-				std::string rootCode = std::string( m_gmod->rootNode().code() );
-				throw std::invalid_argument( fmt::format( "Invalid GMOD path - no parents, and node '{}' is not the GMOD root '{}'.", nodeCode, rootCode ) );
-			}
-		}
-		else
-		{
-			if ( m_parents.front() == nullptr )
-			{
-				throw std::invalid_argument( "Invalid GMOD path: first parent is null." );
-			}
-
-			if ( m_parents.front() != &m_gmod->rootNode() )
-			{
-				std::string firstParentCode = std::string( m_parents.front()->code() );
-				std::string rootCode = std::string( m_gmod->rootNode().code() );
-				throw std::invalid_argument( fmt::format( "Invalid GMOD path - first parent '{}' should be GMOD root '{}'.", firstParentCode, rootCode ) );
-			}
-
-			for ( size_t i = 0; i < m_parents.size(); ++i )
-			{
-				GmodNode* currentParentNode = m_parents[i];
-				GmodNode* childNodeToCheck = ( i + 1 < m_parents.size() ) ? m_parents[i + 1] : m_node;
-
-				if ( !currentParentNode )
-				{
-					throw std::invalid_argument( fmt::format( "Invalid GMOD path: null parent encountered in parents list at index {}.", i ) );
-				}
-				if ( !childNodeToCheck )
-				{
-					throw std::invalid_argument( fmt::format( "Invalid GMOD path: child node (or final node) is null for parent at index {}.", i ) );
-				}
-
-				if ( !currentParentNode->isChild( *childNodeToCheck ) )
-				{
-					std::string childCode = std::string( childNodeToCheck->code() );
-					std::string parentCode = std::string( currentParentNode->code() );
-					throw std::invalid_argument( fmt::format( "Invalid GMOD path - node '{}' not child of '{}'.", childCode, parentCode ) );
-				}
-			}
+			return;
 		}
 
-		try
+		if ( m_parents.front().code() != gmod.rootNode().code() )
 		{
-			internal::LocationSetsVisitor visitor;
-			for ( size_t i = 0; i < m_parents.size() + 1; ++i )
-			{
-				GmodNode* nodeToVisit = ( i < m_parents.size() ) ? m_parents[i] : m_node;
-				if ( !nodeToVisit )
-				{
-					throw std::runtime_error( fmt::format( "Null node encountered at index {} during LocationSetsVisitor phase.", i ) );
-				}
-				visitor.visit( *nodeToVisit, i, m_parents, *m_node );
-			}
-		}
-		catch ( [[maybe_unused]] const std::exception& ex )
-		{
-			if ( m_node )
-			{
-				SPDLOG_ERROR( "GmodPath construction for node '{}' failed during LocationSetsVisitor validation: {}", m_node->code(), ex.what() );
-			}
-
-			throw;
+			SPDLOG_DEBUG( "GmodPath: First parent '{}' is not root '{}' - allowing for short path",
+				m_parents.front().code(), gmod.rootNode().code() );
 		}
 	}
 
 	GmodPath::GmodPath()
 		: m_visVersion{ VisVersion::Unknown },
 		  m_gmod{ nullptr },
-		  m_node{ nullptr }
+		  m_node{ std::nullopt },
+		  m_parents{}
 	{
 	}
 
 	GmodPath::GmodPath( const GmodPath& other )
 		: m_visVersion{ other.m_visVersion },
 		  m_gmod{ other.m_gmod },
-		  m_node{ nullptr },
-		  m_parents{}
+		  m_node{ other.m_node },
+		  m_parents{ other.m_parents }
 	{
-		m_ownedNodes.reserve( other.m_ownedNodes.size() );
-		std::unordered_map<const GmodNode*, GmodNode*> nodeMapping;
-
-		for ( GmodNode* ownedNodeToCopy : other.m_ownedNodes )
-		{
-			if ( ownedNodeToCopy )
-			{
-				GmodNode* newCopy = new GmodNode( *ownedNodeToCopy );
-				m_ownedNodes.push_back( newCopy );
-				nodeMapping[ownedNodeToCopy] = newCopy;
-			}
-			else
-			{
-				m_ownedNodes.push_back( nullptr );
-			}
-		}
-
-		m_parents.reserve( other.m_parents.size() );
-		for ( GmodNode* originalParent : other.m_parents )
-		{
-			auto it = nodeMapping.find( originalParent );
-			if ( it != nodeMapping.end() )
-			{
-				m_parents.push_back( it->second );
-			}
-			else
-			{
-				m_parents.push_back( originalParent );
-			}
-		}
-
-		auto nodeIt = nodeMapping.find( other.m_node );
-		if ( nodeIt != nodeMapping.end() )
-		{
-			m_node = nodeIt->second;
-		}
-		else
-		{
-			m_node = other.m_node;
-		}
 	}
 
 	GmodPath::GmodPath( GmodPath&& other ) noexcept
 		: m_visVersion{ other.m_visVersion },
 		  m_gmod{ other.m_gmod },
-		  m_node{ other.m_node },
-		  m_parents{ std::move( other.m_parents ) },
-		  m_ownedNodes{ std::move( other.m_ownedNodes ) }
+		  m_node{ std::move( other.m_node ) },
+		  m_parents{ std::move( other.m_parents ) }
 	{
-		other.m_node = nullptr;
 		other.m_gmod = nullptr;
 		other.m_visVersion = VisVersion::Unknown;
-	}
-
-	GmodPath::~GmodPath()
-	{
-		for ( GmodNode* ownedNode : m_ownedNodes )
-		{
-			delete ownedNode;
-		}
-		m_ownedNodes.clear();
 	}
 
 	//----------------------------------------------
@@ -498,29 +209,10 @@ namespace dnv::vista::sdk
 			return *this;
 		}
 
-		for ( GmodNode* ownedNode : m_ownedNodes )
-		{
-			delete ownedNode;
-		}
-		m_ownedNodes.clear();
-
 		m_visVersion = other.m_visVersion;
 		m_gmod = other.m_gmod;
-		m_parents = other.m_parents;
 		m_node = other.m_node;
-
-		m_ownedNodes.reserve( other.m_ownedNodes.size() );
-		for ( GmodNode* ownedNodeToCopy : other.m_ownedNodes )
-		{
-			if ( ownedNodeToCopy )
-			{
-				m_ownedNodes.push_back( new GmodNode( *ownedNodeToCopy ) );
-			}
-			else
-			{
-				m_ownedNodes.push_back( nullptr );
-			}
-		}
+		m_parents = other.m_parents;
 
 		return *this;
 	}
@@ -532,19 +224,11 @@ namespace dnv::vista::sdk
 			return *this;
 		}
 
-		for ( GmodNode* ownedNode : m_ownedNodes )
-		{
-			delete ownedNode;
-		}
-		m_ownedNodes.clear();
-
 		m_visVersion = other.m_visVersion;
 		m_gmod = other.m_gmod;
+		m_node = std::move( other.m_node );
 		m_parents = std::move( other.m_parents );
-		m_node = other.m_node;
-		m_ownedNodes = std::move( other.m_ownedNodes );
 
-		other.m_node = nullptr;
 		other.m_gmod = nullptr;
 		other.m_visVersion = VisVersion::Unknown;
 
@@ -558,34 +242,41 @@ namespace dnv::vista::sdk
 	std::vector<GmodIndividualizableSet> GmodPath::individualizableSets() const
 	{
 		std::vector<GmodIndividualizableSet> result;
+		result.reserve( 8 );
+
 		internal::LocationSetsVisitor visitor;
+		std::vector<GmodNode*> tempParents;
+		tempParents.reserve( m_parents.size() );
+
+		for ( const auto& parent : m_parents )
+		{
+			tempParents.push_back( const_cast<GmodNode*>( &parent ) );
+		}
 
 		for ( size_t i = 0; i < length(); ++i )
 		{
-			GmodNode* node = ( *this )[i];
-			if ( !node )
-				continue;
+			const GmodNode& node = ( i < m_parents.size() ) ? m_parents[i] : *m_node;
 
-			auto set = visitor.visit( *node, i, m_parents, *m_node );
+			auto set = visitor.visit( node, i, tempParents, *m_node );
 			if ( !set.has_value() )
+			{
 				continue;
+			}
 
 			const auto& [startIdx, endIdx, location] = set.value();
-			int start = static_cast<int>( startIdx );
-			int end = static_cast<int>( endIdx );
 
-			if ( start == end )
+			if ( startIdx == endIdx )
 			{
-				std::vector<int> indices = { start };
-				result.emplace_back( std::move( indices ), *this );
+				result.emplace_back( std::vector<int>{ static_cast<int>( startIdx ) }, *this );
+
 				continue;
 			}
 
 			std::vector<int> nodes;
-			nodes.reserve( static_cast<size_t>( end - start + 1 ) );
-			for ( int j = start; j <= end; ++j )
+			nodes.reserve( endIdx - startIdx + 1 );
+			for ( size_t j = startIdx; j <= endIdx; ++j )
 			{
-				nodes.push_back( j );
+				nodes.push_back( static_cast<int>( j ) );
 			}
 
 			result.emplace_back( std::move( nodes ), *this );
@@ -601,13 +292,9 @@ namespace dnv::vista::sdk
 			return std::nullopt;
 		}
 
-		GmodNode* nodeInPath = ( *this )[nodeDepth];
-		if ( !nodeInPath )
-		{
-			return std::nullopt;
-		}
+		const GmodNode& nodeInPath = ( *this )[nodeDepth];
 
-		const auto& normalAssignmentNames = nodeInPath->metadata().normalAssignmentNames();
+		const auto& normalAssignmentNames = nodeInPath.metadata().normalAssignmentNames();
 		if ( normalAssignmentNames.empty() )
 		{
 			return std::nullopt;
@@ -620,14 +307,11 @@ namespace dnv::vista::sdk
 
 		for ( size_t i = length() - 1;; --i )
 		{
-			GmodNode* child = ( *this )[i];
-			if ( child )
+			const GmodNode& child = ( *this )[i];
+			auto it = normalAssignmentNames.find( child.code().data() );
+			if ( it != normalAssignmentNames.end() )
 			{
-				auto it = normalAssignmentNames.find( child->code().data() );
-				if ( it != normalAssignmentNames.end() )
-				{
-					return it->second;
-				}
+				return it->second;
 			}
 
 			if ( i == 0 )
@@ -646,38 +330,39 @@ namespace dnv::vista::sdk
 		auto enumerator = this->enumerator();
 		while ( enumerator.next() )
 		{
-			const auto& [depth, node] = enumerator.current();
+			const auto& [depth, nodePtr] = enumerator.current();
 
-			if ( !node )
+			if ( !nodePtr )
 			{
 				continue;
 			}
 
+			const GmodNode& node = *nodePtr;
 			bool isTarget = ( depth == m_parents.size() );
 
-			if ( !( node->isLeafNode() || isTarget ) || !node->isFunctionNode() )
+			if ( !( node.isLeafNode() || isTarget ) || !node.isFunctionNode() )
 			{
 				continue;
 			}
 
 			std::string name;
-			const auto& commonName = node->metadata().commonName();
+			const auto& commonName = node.metadata().commonName();
 			if ( commonName.has_value() && !commonName->empty() )
 			{
 				name = *commonName;
 			}
 			else
 			{
-				name = node->metadata().name();
+				name = node.metadata().name();
 			}
 
-			const auto& normalAssignmentNames = node->metadata().normalAssignmentNames();
+			const auto& normalAssignmentNames = node.metadata().normalAssignmentNames();
 
 			if ( !normalAssignmentNames.empty() )
 			{
-				if ( m_node )
+				if ( m_node.has_value() )
 				{
-					auto nodeCodeIt = normalAssignmentNames.find( std::string( m_node->code() ) );
+					auto nodeCodeIt = normalAssignmentNames.find( m_node->code().data() );
 					if ( nodeCodeIt != normalAssignmentNames.end() )
 					{
 						name = nodeCodeIt->second;
@@ -688,14 +373,12 @@ namespace dnv::vista::sdk
 				{
 					for ( size_t i = m_parents.size() - 1; i >= depth; --i )
 					{
-						if ( m_parents[i] )
+						const GmodNode& parent = m_parents[i];
+						auto parentCodeIt = normalAssignmentNames.find( parent.code().data() );
+						if ( parentCodeIt != normalAssignmentNames.end() )
 						{
-							auto parentCodeIt = normalAssignmentNames.find( std::string( m_parents[i]->code() ) );
-							if ( parentCodeIt != normalAssignmentNames.end() )
-							{
-								name = parentCodeIt->second;
-								break;
-							}
+							name = parentCodeIt->second;
+							break;
 						}
 
 						if ( i == depth )
@@ -713,12 +396,13 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
-	// Utility methods
+	// State inspection methods
 	//----------------------------------------------
 
 	bool GmodPath::isValid( const std::vector<GmodNode*>& parents, const GmodNode& node )
 	{
 		int missingLinkAt;
+
 		return isValid( parents, node, missingLinkAt );
 	}
 
@@ -727,10 +411,14 @@ namespace dnv::vista::sdk
 		missingLinkAt = -1;
 
 		if ( parents.empty() )
+		{
 			return false;
+		}
 
 		if ( !parents.empty() && !parents[0]->isRoot() )
+		{
 			return false;
+		}
 
 		for ( size_t i = 0; i < parents.size(); ++i )
 		{
@@ -749,158 +437,77 @@ namespace dnv::vista::sdk
 
 	bool GmodPath::isMappable() const
 	{
-		if ( !m_node )
+		return m_node.has_value() && m_node->isMappable();
+	}
+
+	bool GmodPath::isIndividualizable() const
+	{
+		if ( !m_node.has_value() || length() == 0 )
 		{
 			return false;
 		}
 
-		return m_node->isMappable();
+		internal::LocationSetsVisitor visitor;
+		std::vector<GmodNode*> tempParents;
+		tempParents.reserve( m_parents.size() );
+
+		for ( const auto& parent : m_parents )
+		{
+			tempParents.push_back( const_cast<GmodNode*>( &parent ) );
+		}
+
+		for ( size_t i = 0; i < length(); ++i )
+		{
+			const GmodNode& node = ( i < m_parents.size() ) ? m_parents[i] : *m_node;
+
+			auto set = visitor.visit( node, i, tempParents, *m_node );
+			if ( set.has_value() )
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	//----------------------------------------------
-	// String conversion methods
+	// Path manipulation methods
 	//----------------------------------------------
-
-	std::string GmodPath::toString() const
-	{
-		std::stringstream builder;
-		toString( builder, '/' );
-
-		std::string result = builder.str();
-
-		return result;
-	}
-
-	std::string GmodPath::toStringDump() const
-	{
-		std::stringstream builder;
-		toStringDump( builder );
-
-		return builder.str();
-	}
-
-	std::string GmodPath::toFullPathString() const
-	{
-		std::stringstream builder;
-		toFullPathString( builder );
-
-		return builder.str();
-	}
 
 	GmodPath GmodPath::withoutLocations() const
 	{
-		if ( !m_gmod || !m_node )
+		if ( !m_gmod || !m_node.has_value() )
 		{
 			return GmodPath{};
 		}
 
-		std::vector<GmodNode*> newParents;
+		std::vector<GmodNode> newParents;
 		newParents.reserve( m_parents.size() );
 
-		for ( GmodNode* parent : m_parents )
+		for ( const GmodNode& parent : m_parents )
 		{
-			if ( parent )
-			{
-				const GmodNode* baseNode = nullptr;
-				if ( m_gmod->tryGetNode( parent->code(), baseNode ) && baseNode )
-				{
-					newParents.push_back( const_cast<GmodNode*>( baseNode ) );
-				}
-			}
+			newParents.push_back( parent.withoutLocation() );
 		}
 
-		const GmodNode* baseFinalNode = nullptr;
-		if ( m_gmod->tryGetNode( m_node->code(), baseFinalNode ) && baseFinalNode )
-		{
-			return GmodPath( *m_gmod, const_cast<GmodNode*>( baseFinalNode ), std::move( newParents ) );
-		}
-
-		return GmodPath{};
-	}
-
-	void GmodPath::toString( std::stringstream& builder, char separator ) const
-	{
-		for ( const auto& parent : m_parents )
-		{
-			if ( !Gmod::isLeafNode( parent->metadata() ) )
-			{
-				continue;
-			}
-
-			parent->toString( builder );
-			builder << separator;
-		}
-
-		m_node->toString( builder );
-	}
-
-	void GmodPath::toStringDump( std::stringstream& builder ) const
-	{
-		auto enumerator = this->enumerator();
-		bool first = true;
-
-		while ( enumerator.next() )
-		{
-			const auto& [depth, pathNode] = enumerator.current();
-
-			if ( depth == 0 )
-			{
-				continue;
-			}
-
-			if ( !first )
-			{
-				builder << " | ";
-			}
-
-			builder << pathNode->code().data();
-
-			const auto& name = pathNode->metadata().name();
-			if ( !name.empty() )
-			{
-				builder << "/N:" << name;
-			}
-
-			const auto& commonName = pathNode->metadata().commonName();
-			if ( commonName.has_value() && !commonName->empty() )
-			{
-				builder << "/CN:" << *commonName;
-			}
-
-			auto normalAssignment = normalAssignmentName( depth );
-			if ( normalAssignment && !normalAssignment->empty() )
-			{
-				builder << "/NAN:" << *normalAssignment;
-			}
-
-			first = false;
-		}
-	}
-
-	void GmodPath::toFullPathString( std::stringstream& builder ) const
-	{
-		auto enumerator = this->enumerator();
-
-		while ( enumerator.next() )
-		{
-			const auto& [depth, pathNode] = enumerator.current();
-
-			if ( !pathNode )
-			{
-				continue;
-			}
-
-			pathNode->toString( builder );
-
-			if ( depth != ( length() - 1 ) )
-			{
-				builder << '/';
-			}
-		}
+		return GmodPath( *m_gmod, m_node->withoutLocation(), std::move( newParents ) );
 	}
 
 	//----------------------------------------------
-	// Public static parsing methods
+	// Path enumeration methods
+	//----------------------------------------------
+
+	GmodPath::Enumerator GmodPath::fullPath() const
+	{
+		return fullPathFrom( 0 );
+	}
+
+	GmodPath::Enumerator GmodPath::fullPathFrom( size_t fromDepth ) const
+	{
+		return Enumerator( this, fromDepth );
+	}
+
+	//----------------------------------------------
+	// Parsing methods
 	//----------------------------------------------
 
 	GmodPath GmodPath::parse( std::string_view item, VisVersion visVersion )
@@ -977,6 +584,7 @@ namespace dnv::vista::sdk
 		if ( auto* okResult = dynamic_cast<GmodParsePathResult::Ok*>( result.get() ) )
 		{
 			outPath.emplace( std::move( okResult->path ) );
+
 			return true;
 		}
 
@@ -1001,10 +609,12 @@ namespace dnv::vista::sdk
 		if ( auto* okResult = dynamic_cast<GmodParsePathResult::Ok*>( result.get() ) )
 		{
 			outPath.emplace( std::move( okResult->path ) );
+
 			return true;
 		}
 
 		outPath.reset();
+
 		return false;
 	}
 
@@ -1021,413 +631,342 @@ namespace dnv::vista::sdk
 	// Private static parsing methods
 	//----------------------------------------------
 
+	std::unique_ptr<GmodParsePathResult> GmodPath::parseFullPathInternal( std::string_view item, const Gmod& gmod, const Locations& locations )
+	{
+		constexpr size_t MAX_NODES = 32;
+		std::vector<GmodNode> nodes;
+		nodes.reserve( MAX_NODES );
+
+		const char* current = item.data();
+		const char* end = current + item.size();
+
+		while ( current < end && nodes.size() < MAX_NODES )
+		{
+			const char* slash = static_cast<const char*>( std::memchr( current, '/', static_cast<size_t>( end - current ) ) );
+			const char* segmentEnd = slash ? slash : end;
+
+			std::string_view segment{ current, static_cast<size_t>( segmentEnd - current ) };
+
+			const char* dash = static_cast<const char*>( std::memchr( current, '-', static_cast<size_t>( segmentEnd - current ) ) );
+
+			if ( dash )
+			{
+				std::string_view codePart{ current, static_cast<size_t>( dash - current ) };
+				std::string_view locationPart{ dash + 1, static_cast<size_t>( std::distance( dash + 1, segmentEnd ) ) };
+
+				const GmodNode* nodePtr;
+				if ( !gmod.tryGetNode( codePart, nodePtr ) )
+				{
+					return std::make_unique<GmodParsePathResult::Err>( "Node lookup failed" );
+				}
+
+				Location parsedLocation;
+				if ( !locations.tryParse( locationPart, parsedLocation ) )
+				{
+					return std::make_unique<GmodParsePathResult::Err>( "Location parse failed" );
+				}
+
+				nodes.emplace_back( nodePtr->withLocation( parsedLocation ) );
+			}
+			else
+			{
+				const GmodNode* nodePtr;
+				if ( !gmod.tryGetNode( segment, nodePtr ) )
+				{
+					return std::make_unique<GmodParsePathResult::Err>( "Node lookup failed" );
+				}
+
+				nodes.emplace_back( *nodePtr );
+			}
+
+			current = slash ? slash + 1 : end;
+		}
+
+		if ( nodes.empty() )
+		{
+			return std::make_unique<GmodParsePathResult::Err>( "No nodes found" );
+		}
+
+		GmodNode endNode = std::move( nodes.back() );
+		nodes.pop_back();
+
+		std::vector<GmodNode> parents = std::move( nodes );
+
+		return std::make_unique<GmodParsePathResult::Ok>( GmodPath( gmod, std::move( endNode ), std::move( parents ) ) );
+	}
+
 	std::unique_ptr<GmodParsePathResult> GmodPath::parseInternal( std::string_view item, const Gmod& gmod, const Locations& locations )
 	{
 		if ( gmod.visVersion() != locations.visVersion() )
-			throw std::invalid_argument( "Got different VIS versions for Gmod and Locations arguments" );
+		{
+			return std::make_unique<GmodParsePathResult::Err>( "Got different VIS versions for Gmod and Locations arguments" );
+		}
 
 		if ( item.empty() )
+		{
 			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
+		}
 
 		size_t start = item.find_first_not_of( " \t\n\r\f\v" );
 		if ( start == std::string_view::npos )
+		{
 			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
+		}
 
 		item = item.substr( start );
 		size_t end = item.find_last_not_of( " \t\n\r\f\v" );
 		item = item.substr( 0, end + 1 );
 
 		if ( !item.empty() && item.front() == '/' )
+		{
 			item.remove_prefix( 1 );
+		}
 
 		if ( item.empty() )
-			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
-
-		std::deque<internal::PathNode> parts;
-		std::string_view currentSegment = item;
-		while ( !currentSegment.empty() )
 		{
-			size_t slashPosition = currentSegment.find( '/' );
-			std::string_view part = currentSegment.substr( 0, slashPosition );
+			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
+		}
 
-			internal::PathNode currentPathNode;
-			size_t dashPosition = part.find( '-' );
-			const GmodNode* tempNodeCheck = nullptr;
+		struct PathNode
+		{
+			std::string_view code;
+			std::optional<Location> location;
+		};
 
-			if ( dashPosition != std::string_view::npos )
+		std::vector<PathNode> parts;
+
+		std::string_view remaining = item;
+		while ( !remaining.empty() )
+		{
+			size_t slashPos = remaining.find( '/' );
+			std::string_view part = remaining.substr( 0, slashPos );
+
+			if ( part.empty() )
 			{
-				std::string_view codePart = part.substr( 0, dashPosition );
-				std::string_view locationPart = part.substr( dashPosition + 1 );
-				currentPathNode.code = std::string( codePart );
+				return std::make_unique<GmodParsePathResult::Err>( "Failed find any parts" );
+			}
 
-				if ( !gmod.tryGetNode( codePart, tempNodeCheck ) )
-					return std::make_unique<GmodParsePathResult::Err>( fmt::format( "Failed to get GmodNode for {}", std::string( part ) ) );
+			PathNode pathNode;
+			size_t dashPos = part.find( '-' );
+
+			if ( dashPos != std::string_view::npos )
+			{
+				std::string_view codePart = part.substr( 0, dashPos );
+				std::string_view locationPart = part.substr( dashPos + 1 );
+
+				pathNode.code = codePart;
+
+				const GmodNode* tempNode = nullptr;
+				if ( !gmod.tryGetNode( codePart, tempNode ) || !tempNode )
+				{
+					return std::make_unique<GmodParsePathResult::Err>(
+						fmt::format( "Failed to get GmodNode for {}", std::string( codePart ) ) );
+				}
 
 				Location parsedLocation;
 				if ( !locations.tryParse( locationPart, parsedLocation ) )
-					return std::make_unique<GmodParsePathResult::Err>( fmt::format( "Failed to parse location {}", std::string( locationPart ) ) );
+				{
+					return std::make_unique<GmodParsePathResult::Err>(
+						fmt::format( "Failed to parse location {}", std::string( locationPart ) ) );
+				}
 
-				currentPathNode.location = parsedLocation;
+				pathNode.location = parsedLocation;
 			}
 			else
 			{
-				currentPathNode.code = std::string( part );
-				if ( !gmod.tryGetNode( part, tempNodeCheck ) )
-					return std::make_unique<GmodParsePathResult::Err>( fmt::format( "Failed to get GmodNode for {}", std::string( part ) ) );
-			}
-			parts.push_back( currentPathNode );
+				pathNode.code = part;
 
-			if ( slashPosition == std::string_view::npos )
+				const GmodNode* tempNode = nullptr;
+				if ( !gmod.tryGetNode( part, tempNode ) || !tempNode )
+				{
+					return std::make_unique<GmodParsePathResult::Err>(
+						fmt::format( "Failed to get GmodNode for {}", std::string( part ) ) );
+				}
+			}
+
+			parts.push_back( std::move( pathNode ) );
+
+			if ( slashPos == std::string_view::npos )
+			{
 				break;
-			currentSegment = currentSegment.substr( slashPosition + 1 );
+			}
+			remaining = remaining.substr( slashPos + 1 );
 		}
 
 		if ( parts.empty() )
-			return std::make_unique<GmodParsePathResult::Err>( "Failed find any parts" );
-
-		for ( const auto& parsedNode : parts )
 		{
-			if ( parsedNode.code.empty() )
-				return std::make_unique<GmodParsePathResult::Err>( "Found part with empty code" );
+			return std::make_unique<GmodParsePathResult::Err>( "Failed find any parts" );
 		}
-
-		internal::PathNode toFind = parts.front();
-		parts.pop_front();
 
 		const GmodNode* baseNode = nullptr;
-		if ( !gmod.tryGetNode( toFind.code, baseNode ) || !baseNode )
-			return std::make_unique<GmodParsePathResult::Err>( "Failed to get GmodNode for " + toFind.code );
+		if ( !gmod.tryGetNode( parts[0].code, baseNode ) || !baseNode )
+		{
+			return std::make_unique<GmodParsePathResult::Err>( "Failed to find base node" );
+		}
 
-		internal::ParseContext context( std::move( parts ), gmod, toFind );
-
-		TraverseHandlerWithState<internal::ParseContext> handler =
-			[]( internal::ParseContext& state, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
-			return internal::parseInternalTraversalHandler( state, parents, node );
+		struct ParseContext
+		{
+			std::vector<PathNode> parts;
+			size_t currentPartIndex = 0;
+			std::unordered_map<std::string_view, Location> locationMap;
+			std::vector<GmodNode> foundPathParents;
+			std::optional<GmodNode> foundEndNode;
+			bool pathFound = false;
+			const Gmod* gmod = nullptr;
 		};
 
-		GmodTraversal::traverse( context, *baseNode, handler );
+		ParseContext context;
+		context.parts = std::move( parts );
+		context.gmod = &gmod;
 
-		if ( context.resultingPath.has_value() )
+		for ( const auto& part : context.parts )
 		{
-			const auto& resultPath = context.resultingPath.value();
-
-			if ( resultPath.m_parents.empty() )
+			if ( part.location.has_value() )
 			{
-				if ( resultPath.m_node != &gmod.rootNode() )
+				context.locationMap[part.code] = part.location.value();
+			}
+		}
+
+		auto handler = []( ParseContext& ctx, const std::vector<const GmodNode*>& parents, const GmodNode& current ) -> TraversalHandlerResult {
+			const auto& targetCode = ctx.parts[ctx.currentPartIndex].code;
+			bool found = ( current.code() == targetCode );
+
+			if ( !found && Gmod::isLeafNode( current.metadata() ) )
+			{
+				return TraversalHandlerResult::SkipSubtree;
+			}
+
+			if ( !found )
+			{
+				return TraversalHandlerResult::Continue;
+			}
+
+			GmodNode nodeWithLocation = current;
+			if ( ctx.locationMap.find( current.code() ) != ctx.locationMap.end() )
+			{
+				nodeWithLocation = current.withLocation( ctx.locationMap[current.code()] );
+			}
+
+			ctx.currentPartIndex++;
+
+			if ( ctx.currentPartIndex >= ctx.parts.size() )
+			{
+				std::vector<GmodNode> pathParents;
+				pathParents.reserve( parents.size() + 1 );
+
+				for ( const GmodNode* parent : parents )
 				{
-					return std::make_unique<GmodParsePathResult::Err>( "Single node path must be the root node" );
-				}
-			}
-			else
-			{
-				if ( resultPath.m_parents.empty() || resultPath.m_parents[0] != &gmod.rootNode() )
-				{
-					return std::make_unique<GmodParsePathResult::Err>( "Path must start from root node" );
-				}
-			}
-
-			int missingLinkAt;
-			if ( !GmodPath::isValid( resultPath.m_parents, *resultPath.m_node, missingLinkAt ) )
-			{
-				return std::make_unique<GmodParsePathResult::Err>( "Invalid path structure - missing parent-child relationship" );
-			}
-
-			return std::make_unique<GmodParsePathResult::Ok>( std::move( context.resultingPath.value() ) );
-		}
-		else
-		{
-			for ( GmodNode* ownedNode : context.ownedNodesForCurrentPath )
-				delete ownedNode;
-
-			return std::make_unique<GmodParsePathResult::Err>( "Failed to find path after traversal for item '" + std::string( item ) + "'." );
-		}
-	}
-
-	std::unique_ptr<GmodParsePathResult> GmodPath::parseFullPathInternal( std::string_view item, const Gmod& gmod, const Locations& locations )
-	{
-		assert( gmod.visVersion() == locations.visVersion() );
-
-		bool isEmptyOrWhitespace = item.empty();
-		if ( !item.empty() )
-		{
-			bool allWhitespace = true;
-			for ( char whiteSpace : item )
-			{
-				if ( !std::isspace( static_cast<unsigned char>( whiteSpace ) ) )
-				{
-					allWhitespace = false;
-
-					break;
-				}
-			}
-			if ( allWhitespace )
-			{
-				isEmptyOrWhitespace = true;
-			}
-		}
-
-		if ( isEmptyOrWhitespace )
-		{
-			return std::make_unique<GmodParsePathResult::Err>( std::string( "GmodPath::parseFullPathInternal: Item string is empty or all whitespace." ) );
-		}
-
-		std::string_view rootNodeCode = gmod.rootNode().code();
-		if ( item.length() < rootNodeCode.length() || item.substr( 0, rootNodeCode.length() ) != rootNodeCode )
-		{
-			return std::make_unique<GmodParsePathResult::Err>(
-				"GmodPath::parseFullPathInternal: Path must start with root node code '" +
-				std::string( rootNodeCode ) + "'. Path was: '" + std::string( item ) + "'" );
-		}
-
-		std::vector<GmodNode> parsedNodes;
-		if ( item.length() > 0 )
-		{
-			parsedNodes.reserve( item.length() / 3 );
-		}
-
-		std::string_view currentProcessing = item;
-		size_t searchOffset = 0;
-		while ( searchOffset < currentProcessing.length() )
-		{
-			size_t nextSlashPos = currentProcessing.find( '/', searchOffset );
-			std::string_view nodeCode;
-
-			if ( nextSlashPos == std::string_view::npos )
-			{
-				nodeCode = currentProcessing.substr( searchOffset );
-				searchOffset = currentProcessing.length();
-			}
-			else
-			{
-				nodeCode = currentProcessing.substr( searchOffset, nextSlashPos - searchOffset );
-				searchOffset = nextSlashPos + 1;
-			}
-
-			if ( nodeCode.empty() )
-			{
-				return std::make_unique<GmodParsePathResult::Err>(
-					fmt::format( "GmodPath::parseFullPathInternal: Path string '{}' contains an empty segment.", item ) );
-			}
-
-			size_t dashIndex = nodeCode.find( '-' );
-			const GmodNode* tempNode = nullptr;
-
-			if ( dashIndex == std::string_view::npos )
-			{
-				if ( !gmod.tryGetNode( nodeCode, tempNode ) || !tempNode )
-				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Failed to get GmodNode for {}", std::string( nodeCode ) ) );
+					GmodNode parentWithLocation = *parent;
+					if ( ctx.locationMap.find( parent->code() ) != ctx.locationMap.end() )
+					{
+						parentWithLocation = parent->withLocation( ctx.locationMap[parent->code()] );
+					}
+					pathParents.push_back( parentWithLocation );
 				}
 
-				parsedNodes.push_back( *tempNode );
-			}
-			else
-			{
-				std::string_view codepart = nodeCode.substr( 0, dashIndex );
-				if ( !gmod.tryGetNode( codepart, tempNode ) || !tempNode )
+				GmodNode endNode = nodeWithLocation;
+
+				const GmodNode* startNode = nullptr;
+				if ( pathParents.size() > 0 && pathParents[0].parents().size() == 1 )
 				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Failed to get GmodNode for {}", std::string( codepart ) ) );
+					startNode = pathParents[0].parents()[0];
 				}
-				std::string_view location = nodeCode.substr( dashIndex + 1 );
-				Location parsedLocation;
-				if ( !locations.tryParse( location, parsedLocation ) )
+				else if ( endNode.parents().size() == 1 )
 				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Failed to parse location - {}", std::string( location ) ) );
+					startNode = endNode.parents()[0];
 				}
 
-				parsedNodes.push_back( tempNode->tryWithLocation( std::make_optional( parsedLocation ) ) );
+				if ( !startNode || startNode->parents().size() > 1 )
+				{
+					return TraversalHandlerResult::Stop;
+				}
+
+				std::vector<GmodNode> reverseHierarchy;
+
+				while ( startNode && startNode->parents().size() == 1 )
+				{
+					GmodNode nodeToAdd = *startNode;
+					if ( ctx.locationMap.find( startNode->code() ) != ctx.locationMap.end() )
+					{
+						nodeToAdd = startNode->withLocation( ctx.locationMap[startNode->code()] );
+					}
+					reverseHierarchy.push_back( nodeToAdd );
+					startNode = startNode->parents()[0];
+					if ( startNode->parents().size() > 1 )
+					{
+						return TraversalHandlerResult::Stop;
+					}
+				}
+
+				std::reverse( reverseHierarchy.begin(), reverseHierarchy.end() );
+				reverseHierarchy.insert( reverseHierarchy.begin(), ctx.gmod->rootNode() );
+				reverseHierarchy.insert( reverseHierarchy.end(), pathParents.begin(), pathParents.end() );
+
+				ctx.foundPathParents = std::move( reverseHierarchy );
+				ctx.foundEndNode = std::move( endNode );
+				ctx.pathFound = true;
+				return TraversalHandlerResult::Stop;
 			}
-		}
 
-		if ( parsedNodes.empty() )
+			return TraversalHandlerResult::Continue;
+		};
+
+		TraverseHandlerWithState<ParseContext> handlerPtr = handler;
+		TraversalOptions options;
+		GmodTraversal::traverse( context, *baseNode, handlerPtr, options );
+
+		if ( !context.pathFound )
 		{
-			return std::make_unique<GmodParsePathResult::Err>(
-				"GmodPath::parseFullPathInternal: Failed to find any nodes in path string '" + std::string( item ) + "'." );
-		}
-
-		GmodNode tempEndNode = parsedNodes.back();
-		parsedNodes.pop_back();
-
-		std::vector<GmodNode*> tempParentsForValidation;
-		tempParentsForValidation.reserve( parsedNodes.size() );
-		for ( GmodNode& pv : parsedNodes )
-		{
-			tempParentsForValidation.push_back( &pv );
-		}
-
-		int missingLinkAt;
-		if ( !GmodPath::isValid( tempParentsForValidation, tempEndNode, missingLinkAt ) )
-		{
-			return std::make_unique<GmodParsePathResult::Err>(
-				"GmodPath::parseFullPathInternal: Sequence of nodes is invalid. Path: '" + std::string( item ) + "'" );
+			return std::make_unique<GmodParsePathResult::Err>( "Failed to find path after traversal" );
 		}
 
 		internal::LocationSetsVisitor locationVisitor;
-		std::optional<size_t> previousNonNullLocationIdx;
 
-		std::array<std::pair<int, int>, 16> setsArray;
-		int setCounter = 0;
-
-		std::vector<GmodNode*> tempParentsForVisit;
-		tempParentsForVisit.reserve( parsedNodes.size() );
-		for ( GmodNode& node : parsedNodes )
+		std::vector<GmodNode*> tempParents;
+		tempParents.reserve( context.foundPathParents.size() );
+		for ( GmodNode& parent : context.foundPathParents )
 		{
-			tempParentsForVisit.push_back( &node );
+			tempParents.push_back( &parent );
 		}
 
-		for ( size_t i = 0; i < parsedNodes.size() + 1; ++i )
+		for ( size_t i = 0; i < context.foundPathParents.size() + 1; ++i )
 		{
-			GmodNode& nodeForVisit = ( i < parsedNodes.size() ) ? parsedNodes[i] : tempEndNode;
+			GmodNode& node = ( i < context.foundPathParents.size() ) ? context.foundPathParents[i] : context.foundEndNode.value();
 
-			std::optional<std::tuple<size_t, size_t, std::optional<Location>>> setDetails =
-				locationVisitor.visit( nodeForVisit, i, tempParentsForVisit, tempEndNode );
-
-			if ( !setDetails.has_value() )
+			auto set = locationVisitor.visit( node, i, tempParents, context.foundEndNode.value() );
+			if ( !set.has_value() )
 			{
-				if ( !previousNonNullLocationIdx.has_value() && nodeForVisit.location().has_value() )
+				if ( node.location().has_value() )
 				{
-					previousNonNullLocationIdx = i;
+					return std::make_unique<GmodParsePathResult::Err>( "Invalid location set configuration" );
 				}
+
 				continue;
 			}
 
-			const auto& setTuple = setDetails.value();
-			size_t setStartIdx = std::get<0>( setTuple );
-			size_t setEndIdx = std::get<1>( setTuple );
-			std::optional<Location> setCommonLocation = std::get<2>( setTuple );
+			const auto& [setStart, setEnd, setLocation] = set.value();
 
-			if ( previousNonNullLocationIdx.has_value() )
+			if ( setStart == setEnd )
 			{
-				for ( size_t j = previousNonNullLocationIdx.value(); j < setStartIdx; ++j )
-				{
-					GmodNode& previousNode = ( j < parsedNodes.size() )
-												 ? parsedNodes[j]
-												 : tempEndNode;
-
-					if ( previousNode.location().has_value() )
-					{
-						return std::make_unique<GmodParsePathResult::Err>(
-							fmt::format( "Expected all nodes in the set to be without individualization. Found {}", std::string( previousNode.code() ) ) );
-					}
-				}
-			}
-			previousNonNullLocationIdx.reset();
-
-			if ( setCounter < 16 )
-			{
-				setsArray[static_cast<size_t>( setCounter++ )] = { static_cast<int>( setStartIdx ), static_cast<int>( setEndIdx ) };
-			}
-			else
-			{
-				throw std::out_of_range( fmt::format( "Exceeded maximum of 16 location sets supported while parsing path: '{}'", std::string( item ) ) );
-			}
-
-			if ( setStartIdx == setEndIdx )
 				continue;
+			}
 
-			for ( size_t j = setStartIdx; j <= setEndIdx; ++j )
+			for ( size_t j = setStart; j <= setEnd; ++j )
 			{
-				if ( j < parsedNodes.size() )
+				if ( j < context.foundPathParents.size() )
 				{
-					parsedNodes[j] = parsedNodes[j].tryWithLocation( setCommonLocation );
+					auto oldNode = context.foundPathParents[j];
+					context.foundPathParents[j] = context.foundPathParents[j].tryWithLocation( setLocation );
 				}
 				else
 				{
-					tempEndNode = tempEndNode.tryWithLocation( setCommonLocation );
+					auto oldNode = context.foundEndNode.value();
+					context.foundEndNode = context.foundEndNode.value().tryWithLocation( setLocation );
 				}
 			}
 		}
 
-		std::pair<int, int> currentSet = { -1, -1 };
-		int currentSetIndex = 0;
-		for ( int i = 0; i < static_cast<int>( parsedNodes.size() ) + 1; ++i )
-		{
-			while ( currentSetIndex < setCounter && currentSet.second < i )
-			{
-				if ( static_cast<size_t>( currentSetIndex ) < setsArray.size() )
-				{
-					currentSet = setsArray[static_cast<size_t>( currentSetIndex++ )];
-				}
-				else
-				{
-					throw std::logic_error(
-						fmt::format( "Internal logic error: currentSetIndex ({}) is out of bounds for setsArray (size {}). Path: '{}'", currentSetIndex, setsArray.size(), std::string( item ) ) );
-				}
-			}
-
-			bool insideSet = ( currentSet.first != -1 && i >= currentSet.first && i <= currentSet.second );
-
-			GmodNode& nodeCheck = ( static_cast<size_t>( i ) < parsedNodes.size() )
-									  ? parsedNodes[static_cast<size_t>( i )]
-									  : tempEndNode;
-
-			const GmodNode* expectedLocationNode = nullptr;
-			if ( currentSet.second != -1 )
-			{
-				if ( currentSet.second >= 0 && currentSet.second < static_cast<int>( parsedNodes.size() ) )
-				{
-					expectedLocationNode = &parsedNodes[static_cast<size_t>( currentSet.second )];
-				}
-				else
-				{
-					expectedLocationNode = &tempEndNode;
-				}
-			}
-
-			if ( insideSet )
-			{
-				if ( !expectedLocationNode || nodeCheck.location() != expectedLocationNode->location() )
-				{
-					[[maybe_unused]] auto formatLocation = []( const std::optional<Location>& location ) -> std::string {
-						if ( location.has_value() )
-						{
-							return location.value().toString();
-						}
-						return "nullopt";
-					};
-
-					return std::make_unique<GmodParsePathResult::Err>(
-						"GmodPath::parseFullPathInternal: Expected nodes in set to be individualized the same. Found " +
-						std::string( nodeCheck.code().data() ) + " with location " +
-						formatLocation( nodeCheck.location() ) + ", expected " +
-						formatLocation( expectedLocationNode ? expectedLocationNode->location() : std::optional<Location>() ) );
-				}
-			}
-			else
-			{
-				if ( nodeCheck.location().has_value() )
-				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Expected all nodes outside set to be without individualization. Found {}", std::string( nodeCheck.code() ) ) );
-				}
-			}
-		}
-
-		auto finalPath = std::make_unique<GmodPath>();
-		finalPath->m_gmod = &gmod;
-		finalPath->m_visVersion = gmod.visVersion();
-
-		finalPath->m_parents.reserve( parsedNodes.size() );
-		for ( const GmodNode& parsedNode : parsedNodes )
-		{
-			GmodNode* heapParent = new GmodNode( parsedNode );
-			finalPath->m_parents.push_back( heapParent );
-			finalPath->m_ownedNodes.push_back( heapParent );
-		}
-
-		GmodNode* heapEndNode = new GmodNode( tempEndNode );
-		finalPath->m_node = heapEndNode;
-		finalPath->m_ownedNodes.push_back( heapEndNode );
-
-		if ( finalPath->m_node )
-		{
-			finalPath->m_visVersion = finalPath->m_node->visVersion();
-		}
-
-		return std::make_unique<GmodParsePathResult::Ok>( std::move( *finalPath ) );
+		return std::make_unique<GmodParsePathResult::Ok>( GmodPath( gmod, std::move( context.foundEndNode.value() ), std::move( context.foundPathParents ) ) );
 	}
 
 	//----------------------------------------------
@@ -1435,13 +974,13 @@ namespace dnv::vista::sdk
 	//----------------------------------------------
 
 	//----------------------------
-	// Construction / destruction
+	// Construction
 	//----------------------------
 
 	GmodPath::Enumerator::Enumerator( const GmodPath* pathInst, size_t startIndex )
-		: m_pathInstance( pathInst ),
-		  m_currentIndex( std::numeric_limits<size_t>::max() ),
-		  m_current( std::numeric_limits<size_t>::max(), nullptr )
+		: m_pathInstance{ pathInst },
+		  m_currentIndex{ std::numeric_limits<size_t>::max() },
+		  m_current{ std::numeric_limits<size_t>::max(), nullptr }
 	{
 		if ( startIndex != std::numeric_limits<size_t>::max() )
 		{
@@ -1475,36 +1014,31 @@ namespace dnv::vista::sdk
 										 std::to_string( m_path.length() ) + "." );
 			}
 
-			GmodNode* currentNode = m_path[static_cast<size_t>( nodeIdx )];
-			if ( !currentNode )
-			{
-				throw std::runtime_error( "GmodIndividualizableSet constructor: Node at index " +
-										  std::to_string( nodeIdx ) + " is null in the source path." );
-			}
+			const GmodNode& currentNode = m_path[static_cast<size_t>( nodeIdx )];
 
 			bool isTargetNode = ( static_cast<size_t>( nodeIdx ) == m_path.length() - 1 );
 			bool isInSet = ( m_nodeIndices.size() > 1 );
-			if ( !currentNode->isIndividualizable( isTargetNode, isInSet ) )
+			if ( !currentNode.isIndividualizable( isTargetNode, isInSet ) )
 			{
 				throw std::invalid_argument( "GmodIndividualizableSet constructor: Node '" +
-											 std::string( currentNode->code().data() ) + "' (at index " +
+											 std::string( currentNode.code().data() ) + "' (at index " +
 											 std::to_string( nodeIdx ) + ") is not individualizable in the given context." );
 			}
 		}
 
 		if ( m_nodeIndices.size() > 1 )
 		{
-			GmodNode* firstNode = m_path[static_cast<size_t>( m_nodeIndices[0] )];
-			std::optional<Location> expectedLocation = firstNode->location();
+			const GmodNode& firstNode = m_path[static_cast<size_t>( m_nodeIndices[0] )];
+			std::optional<Location> expectedLocation = firstNode.location();
 
-			for ( size_t k = 1; k < m_nodeIndices.size(); ++k )
+			for ( size_t i = 1; i < m_nodeIndices.size(); ++i )
 			{
-				int currentIdx = m_nodeIndices[k];
-				GmodNode* currentNode = m_path[static_cast<size_t>( currentIdx )];
-				if ( currentNode->location() != expectedLocation )
+				int currentIdx = m_nodeIndices[i];
+				const GmodNode& currentNode = m_path[static_cast<size_t>( currentIdx )];
+				if ( currentNode.location() != expectedLocation )
 				{
 					throw std::invalid_argument( "GmodIndividualizableSet constructor: Nodes have different locations. Node '" +
-												 std::string( currentNode->code().data() ) + "' (at index " +
+												 std::string( currentNode.code().data() ) + "' (at index " +
 												 std::to_string( currentIdx ) + ") has location while first node in set had different or no location." );
 				}
 			}
@@ -1513,10 +1047,11 @@ namespace dnv::vista::sdk
 		bool foundPartOfShortPath = false;
 		for ( int nodeIdx : m_nodeIndices )
 		{
-			GmodNode* currentNode = m_path[static_cast<size_t>( nodeIdx )];
-			if ( currentNode == m_path.node() || currentNode->isLeafNode() )
+			const GmodNode& currentNode = m_path[static_cast<size_t>( nodeIdx )];
+			if ( currentNode == m_path.node() || currentNode.isLeafNode() )
 			{
 				foundPartOfShortPath = true;
+
 				break;
 			}
 		}
@@ -1539,6 +1074,7 @@ namespace dnv::vista::sdk
 		}
 
 		m_isBuilt = true;
+
 		return std::move( m_path );
 	}
 
@@ -1558,8 +1094,7 @@ namespace dnv::vista::sdk
 				throw std::out_of_range( "Node index out of bounds" );
 			}
 
-			GmodNode* node = m_path[static_cast<size_t>( nodeIdx )];
-			result.push_back( node );
+			result.push_back( const_cast<GmodNode*>( &m_path[static_cast<size_t>( nodeIdx )] ) );
 		}
 
 		return result;
@@ -1576,28 +1111,22 @@ namespace dnv::vista::sdk
 				continue;
 			}
 
-			GmodNode*& nodeInPath = m_path[static_cast<size_t>( nodeIdx )];
-			if ( !nodeInPath )
-			{
-				continue;
-			}
+			GmodNode& nodeInPath = const_cast<GmodPath&>( m_path )[static_cast<size_t>( nodeIdx )];
 
 			if ( !location.has_value() )
 			{
-				GmodNode newNode = nodeInPath->withoutLocation();
-				*nodeInPath = std::move( newNode );
+				nodeInPath = nodeInPath.withoutLocation();
 			}
 			else
 			{
-				GmodNode newNode = nodeInPath->withLocation( location.value() );
-				*nodeInPath = std::move( newNode );
+				nodeInPath = nodeInPath.withLocation( location.value() );
 			}
 		}
 	}
 
 	std::string GmodIndividualizableSet::toString() const
 	{
-		std::stringstream ss;
+		fmt::memory_buffer builder;
 		bool firstNodeAppended = false;
 
 		for ( size_t j = 0; j < m_nodeIndices.size(); ++j )
@@ -1605,29 +1134,28 @@ namespace dnv::vista::sdk
 			int nodeIdx = m_nodeIndices[j];
 			if ( nodeIdx < 0 || static_cast<size_t>( nodeIdx ) >= m_path.length() )
 			{
-				SPDLOG_ERROR( "GmodIndividualizableSet::toString(): Node index {} is out of bounds for path length {}. Skipping.", nodeIdx, m_path.length() );
+				SPDLOG_ERROR( "GmodIndividualizableSet::toString(): Node index {} is out of bounds for path length {}. Skipping.",
+					nodeIdx,
+					m_path.length() );
+
 				continue;
 			}
 
-			GmodNode* currentNode = m_path[static_cast<size_t>( nodeIdx )];
-			if ( !currentNode )
-			{
-				SPDLOG_ERROR( "GmodIndividualizableSet::toString(): Node at index {} in m_path is null. Skipping.", nodeIdx );
-				continue;
-			}
+			const GmodNode& currentNode = m_path[static_cast<size_t>( nodeIdx )];
 
-			if ( currentNode->isLeafNode() || j == m_nodeIndices.size() - 1 )
+			if ( currentNode.isLeafNode() || j == m_nodeIndices.size() - 1 )
 			{
 				if ( firstNodeAppended )
 				{
-					ss << '/';
+					builder.push_back( '/' );
 				}
-				currentNode->toString( ss );
+
+				currentNode.toString( std::back_inserter( builder ) );
 				firstNodeAppended = true;
 			}
 		}
-		std::string result = ss.str();
-		return result;
+
+		return fmt::to_string( builder );
 	}
 
 	//=====================================================================

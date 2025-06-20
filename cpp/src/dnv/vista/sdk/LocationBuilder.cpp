@@ -12,88 +12,85 @@
 
 namespace dnv::vista::sdk
 {
-	namespace
+	//=====================================================================
+	// Static helper methods
+	//=====================================================================
+
+	template <typename T>
+	LocationBuilder withValueInternal( const LocationBuilder& builder, LocationGroup group, T value )
 	{
-		//=====================================================================
-		// Static helper methods
-		//=====================================================================
-
-		template <typename T>
-		static LocationBuilder withValueInternal( const LocationBuilder& builder, LocationGroup group, T value )
+		if constexpr ( std::is_same_v<T, int> )
 		{
-			if constexpr ( std::is_same_v<T, int> )
+			if ( group != LocationGroup::Number )
 			{
-				if ( group != LocationGroup::Number )
-				{
-					throw std::invalid_argument( "Value should be number" );
-				}
-				if ( value < 1 )
-				{
-					throw std::invalid_argument( "Value should be greater than 0" );
-				}
-
-				LocationBuilder result = builder;
-				result.m_number = value;
-				return result;
+				throw std::invalid_argument( "Value should be number" );
 			}
-			else if constexpr ( std::is_same_v<T, char> )
+			if ( value < 1 )
 			{
-				if ( group == LocationGroup::Number )
-				{
-					throw std::invalid_argument( "Value should be a character" );
-				}
+				throw std::invalid_argument( "Value should be greater than 0" );
+			}
 
-				auto it = builder.m_reversedGroups.find( value );
-				if ( it == builder.m_reversedGroups.end() || it->second != group )
-				{
-					std::string groupName;
-					switch ( group )
-					{
-						case LocationGroup::Side:
-							groupName = "Side";
-							break;
-						case LocationGroup::Vertical:
-							groupName = "Vertical";
-							break;
-						case LocationGroup::Transverse:
-							groupName = "Transverse";
-							break;
-						case LocationGroup::Longitudinal:
-							groupName = "Longitudinal";
-							break;
-						default:
-							groupName = "Unknown";
-							break;
-					}
-					throw std::invalid_argument(
-						"The value '" + std::string( 1, value ) + "' is an invalid " + groupName + " value" );
-				}
+			LocationBuilder result = builder;
+			result.m_number = value;
+			return result;
+		}
+		else if constexpr ( std::is_same_v<T, char> )
+		{
+			if ( group == LocationGroup::Number )
+			{
+				throw std::invalid_argument( "Value should be a character" );
+			}
 
-				LocationBuilder result = builder;
+			auto it = builder.m_reversedGroups.find( value );
+			if ( it == builder.m_reversedGroups.end() || it->second != group )
+			{
+				std::string groupName;
 				switch ( group )
 				{
 					case LocationGroup::Side:
-						result.m_side = value;
+						groupName = "Side";
 						break;
 					case LocationGroup::Vertical:
-						result.m_vertical = value;
+						groupName = "Vertical";
 						break;
 					case LocationGroup::Transverse:
-						result.m_transverse = value;
+						groupName = "Transverse";
 						break;
 					case LocationGroup::Longitudinal:
-						result.m_longitudinal = value;
+						groupName = "Longitudinal";
 						break;
 					default:
-						throw std::invalid_argument( "Unsupported LocationGroup" );
+						groupName = "Unknown";
+						break;
 				}
-				return result;
+				throw std::invalid_argument(
+					"The value '" + std::string( 1, value ) + "' is an invalid " + groupName + " value" );
 			}
-			else
+
+			LocationBuilder result = builder;
+			switch ( group )
 			{
-				static_assert( std::is_same_v<T, int> || std::is_same_v<T, char>,
-					"withValueInternal only supports int and char types" );
+				case LocationGroup::Side:
+					result.m_side = value;
+					break;
+				case LocationGroup::Vertical:
+					result.m_vertical = value;
+					break;
+				case LocationGroup::Transverse:
+					result.m_transverse = value;
+					break;
+				case LocationGroup::Longitudinal:
+					result.m_longitudinal = value;
+					break;
+				default:
+					throw std::invalid_argument( "Unsupported LocationGroup" );
 			}
+			return result;
+		}
+		else
+		{
+			static_assert( std::is_same_v<T, int> || std::is_same_v<T, char>,
+				"withValueInternal only supports int and char types" );
 		}
 	}
 

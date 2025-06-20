@@ -15,7 +15,7 @@ if(MSVC)
 	add_compile_options(/WX-)                                           # Warnings not as errors
 	add_compile_options(/permissive-)                                   # Strict conformance mode
 	add_compile_options(/fp:fast)                                       # Fast floating point
-	add_compile_options(/Zc:__cplusplus)                                # Correct __cplusplus macro
+	add_compile_options(/Zc:__cplusplus)                                # __cplusplus macro
 	add_compile_options(/Zc:inline)                                     # Remove unreferenced COMDAT
 	add_compile_options(/Zc:preprocessor)                               # Conforming preprocessor
 	add_compile_options(/external:anglebrackets)                        # Treat angle bracket includes as external
@@ -40,10 +40,8 @@ if(MSVC)
 	add_compile_options($<$<CONFIG:Release>:/Oi>)                       # Enable intrinsic functions
 	add_compile_options($<$<CONFIG:Release>:/Ot>)                       # Favor fast code over small code
 	add_compile_options($<$<CONFIG:Release>:/Ob3>)                      # Aggressive inlining
-#	add_compile_options($<$<CONFIG:Release>:/GL>)                       # Whole program optimization
 	add_compile_options($<$<CONFIG:Release>:/Gy>)                       # Function-Level Linking
 	add_compile_options($<$<CONFIG:Release>:/Qpar>)                     # Auto-parallelization
-#	add_compile_options($<$<CONFIG:Release>:/Qvec-report:2>)            # Vectorization reporting
 	add_compile_options($<$<CONFIG:Release>:/DNDEBUG>)                  # Disable debug assertions
 	add_compile_options($<$<CONFIG:Release>:/GS->)                      # Disable buffer security checks
 	add_compile_options($<$<CONFIG:Release>:/Gw>)                       # Optimize global data
@@ -53,7 +51,6 @@ if(MSVC)
 	# Linker optimizations for Release
 	add_link_options($<$<CONFIG:Release>:/OPT:REF>)                     # Remove unreferenced functions
 	add_link_options($<$<CONFIG:Release>:/OPT:ICF>)                     # Identical COMDAT folding
-	add_link_options($<$<CONFIG:Release>:/LTCG>)                        # Link Time Code Generation
 	add_link_options($<$<CONFIG:Release>:/INCREMENTAL:NO>)              # Disable incremental linking
 
 	#----------------------------------------------

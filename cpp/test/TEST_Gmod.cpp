@@ -165,7 +165,7 @@ namespace dnv::vista::sdk::tests
 				int maxOccurrence = 0;
 				const Gmod& gmodRef;
 
-				FullTraversalState( const Gmod& gmod ) : gmodRef( gmod ) {}
+				FullTraversalState( const Gmod& gmod ) : gmodRef{ gmod } {}
 			};
 
 			FullTraversalState traversalState( gmod );
@@ -182,15 +182,17 @@ namespace dnv::vista::sdk::tests
 
 				if ( isHG3Related )
 				{
-					std::vector<GmodNode*> nonConstParents;
-					nonConstParents.reserve( parents.size() );
+					std::vector<GmodNode> parentValues;
+					parentValues.reserve( parents.size() );
 					for ( const GmodNode* p_const : parents )
 					{
-						nonConstParents.push_back( const_cast<GmodNode*>( p_const ) );
+						if ( p_const )
+						{
+							parentValues.emplace_back( *p_const );
+						}
 					}
-					GmodNode* nonConstNode = const_cast<GmodNode*>( &node );
 
-					state.paths.emplace_back( state.gmodRef, nonConstNode, std::move( nonConstParents ) );
+					state.paths.emplace_back( state.gmodRef, node, std::move( parentValues ) );
 				}
 
 				const GmodNode* lastParent = parents.empty() ? nullptr : parents.back();
@@ -458,7 +460,6 @@ namespace dnv::vista::sdk::tests
 				}
 			}
 
-			int gmodIteratedCount = 0;
 			{
 				std::unordered_set<std::string> seen_codes;
 				Gmod::Enumerator enumerator = gmod.enumerator();
@@ -475,7 +476,6 @@ namespace dnv::vista::sdk::tests
 					ASSERT_TRUE( gmod.tryGetNode( gmodNodeCode, foundNodePtr ) ) << "Failed to find node from Gmod iterated code: " << gmodNodeCode << " for version " << VisVersionExtensions::toVersionString( visVersion );
 					ASSERT_NE( foundNodePtr, nullptr ) << "Found node pointer is null for Gmod iterated code: " << gmodNodeCode << " for version " << VisVersionExtensions::toVersionString( visVersion );
 					ASSERT_EQ( gmodNodeCode, foundNodePtr->code() ) << "Mismatch between Gmod iterated code and found node code for: " << gmodNodeCode << " for version " << VisVersionExtensions::toVersionString( visVersion );
-					gmodIteratedCount++;
 				}
 			}
 

@@ -376,4 +376,28 @@ namespace dnv::vista::sdk
 
 		return m_childrenSet.contains( code );
 	}
+
+	//----------------------------------------------
+	// String conversion methods
+	//----------------------------------------------
+
+	inline std::string GmodNode::toString() const
+	{
+		fmt::memory_buffer builder;
+		toString( std::back_inserter( builder ) );
+
+		return fmt::to_string( builder );
+	}
+
+	template <typename OutputIt>
+	inline OutputIt GmodNode::toString( OutputIt out ) const
+	{
+		out = fmt::format_to( out, "{}", m_code );
+		if ( m_location.has_value() )
+		{
+			out = fmt::format_to( out, "-{}", m_location->toString() );
+		}
+
+		return out;
+	}
 }

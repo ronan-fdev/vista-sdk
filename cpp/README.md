@@ -235,7 +235,7 @@ Benchmark suites include:
 
 ## Build Requirements
 
--   **C++20 compliant compiler** (MSVC 2019+, GCC 10+, Clang 12+)
+-   **C++20 compliant compiler** (MSVC 2019+, GCC 12+, Clang 12+)
 -   **CMake 3.20+**
 -   **Dependencies automatically fetched via FetchContent:**
 

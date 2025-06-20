@@ -33,6 +33,9 @@ namespace dnv::vista::sdk
 	 */
 	class LocationBuilder final
 	{
+		template <typename T>
+		friend LocationBuilder withValueInternal( const LocationBuilder& builder, LocationGroup group, T value );
+
 		//----------------------------------------------
 		// Construction / destruction
 		//----------------------------------------------

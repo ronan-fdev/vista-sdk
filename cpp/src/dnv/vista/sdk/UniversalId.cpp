@@ -14,7 +14,7 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	//----------------------------------------------
-	// Construction / destruction
+	// Construction
 	//----------------------------------------------
 
 	UniversalId::UniversalId( const UniversalIdBuilder& builder )

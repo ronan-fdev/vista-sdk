@@ -17,6 +17,7 @@ include(Dependencies.cmake)
 include(CompilersSettings.cmake)
 
 # --- Build options ---
+option(VISTA_SDK_CPP_BUILD_STATIC          "Build static libraries instead of shared"                  OFF    )
 option(VISTA_SDK_CPP_BUILD_TESTS           "Build tests"                                               ON     )
 option(VISTA_SDK_CPP_BUILD_SMOKE_TESTS     "Build smoke tests"                                         OFF    )
 option(VISTA_SDK_CPP_RUN_TESTS             "Run tests after build"                                     OFF    )
@@ -31,7 +32,7 @@ option(CI_FORCE_DEBUG_SPDLOG_WARN          "For CI Debug builds, force SPDLOG_AC
 if(MSVC)
 	set(WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-	set(BUILD_SHARED_LIBS TRUE)
+	set(BUILD_SHARED_LIBS NOT ${VISTA_SDK_CPP_BUILD_STATIC})
 endif()
 
 # --- Ccache setup ---
@@ -81,7 +82,11 @@ endif()
 include(Sources.cmake)
 
 # --- Library definition ---
-add_library(${PROJECT_NAME} SHARED)
+if(VISTA_SDK_CPP_BUILD_STATIC)
+	add_library(${PROJECT_NAME} STATIC)
+else()
+	add_library(${PROJECT_NAME} SHARED)
+endif()
 
 target_sources(${PROJECT_NAME}
 	PUBLIC
@@ -91,6 +96,28 @@ target_sources(${PROJECT_NAME}
 		${PRIVATE_SOURCES}
 )
 
+# --- Library versioning ---
+configure_file(
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/version.h.in
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/version.h
+	@ONLY
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+	VERSION ${PROJECT_VERSION}
+	SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+
+if(WIN32 AND NOT VISTA_SDK_CPP_BUILD_STATIC)
+	configure_file(
+		${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
+		${CMAKE_BINARY_DIR}/version.rc
+		@ONLY
+	)
+	target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR}/version.rc)
+endif()
+
+# --- Precompiled headers ---
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/pch.h)
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
@@ -100,6 +127,8 @@ target_include_directories(${PROJECT_NAME}
 		${VISTA_SDK_CPP_SOURCE_DIR}
 		${zlib_SOURCE_DIR}
 )
+
+# --- Linker ---
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	spdlog::spdlog
 	nlohmann_json::nlohmann_json

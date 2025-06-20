@@ -47,6 +47,15 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
+	// Node query methods
+	//----------------------------------------------
+
+	inline bool Gmod::tryGetNode( std::string_view code, const GmodNode*& node ) const
+	{
+		return m_nodeMap.tryGetValue( code, node );
+	}
+
+	//----------------------------------------------
 	// Static state inspection methods
 	//----------------------------------------------
 
@@ -133,5 +142,68 @@ namespace dnv::vista::sdk
 
 		return childCategory.find( NODE_CATEGORY_PRODUCT ) != std::string_view::npos &&
 			   childType == NODE_TYPE_SELECTION;
+	}
+
+	//----------------------------------------------
+	// Enumeration
+	//----------------------------------------------
+
+	inline Gmod::Enumerator Gmod::enumerator() const
+	{
+		return Enumerator( &m_nodeMap );
+	}
+
+	//----------------------------------------------
+	// Gmod::Enumerator class
+	//----------------------------------------------
+
+	//-----------------------------
+	// Iteration interface
+	//-----------------------------
+
+	inline const GmodNode& Gmod::Enumerator::current() const
+	{
+		if ( !m_sourceMapPtr || m_isInitialState || m_currentMapIterator == m_sourceMapPtr->end() )
+		{
+			throw std::out_of_range( "Gmod::Enumerator::getCurrent() called in an invalid state or past the end." );
+		}
+
+		return m_currentMapIterator->second;
+	}
+
+	inline bool Gmod::Enumerator::next() noexcept
+	{
+		if ( !m_sourceMapPtr || m_sourceMapPtr->isEmpty() )
+		{
+			m_isInitialState = false;
+
+			return false;
+		}
+
+		if ( m_isInitialState )
+		{
+			m_isInitialState = false;
+
+			return m_currentMapIterator != m_sourceMapPtr->end();
+		}
+
+		if ( m_currentMapIterator != m_sourceMapPtr->end() )
+		{
+			++m_currentMapIterator;
+
+			return m_currentMapIterator != m_sourceMapPtr->end();
+		}
+
+		return false;
+	}
+
+	inline void Gmod::Enumerator::reset() noexcept
+	{
+		m_isInitialState = true;
+
+		if ( m_sourceMapPtr )
+		{
+			m_currentMapIterator = m_sourceMapPtr->begin();
+		}
 	}
 }

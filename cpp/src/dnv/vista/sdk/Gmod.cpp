@@ -8,7 +8,6 @@
 #include "dnv/vista/sdk/Gmod.h"
 
 #include "dnv/vista/sdk/GmodPath.h"
-#include "dnv/vista/sdk/VISVersion.h"
 
 namespace dnv::vista::sdk
 {
@@ -36,8 +35,6 @@ namespace dnv::vista::sdk
 	{
 		if ( ( m_nodeMap.begin() == m_nodeMap.end() ) && !dto.items().empty() )
 		{
-			SPDLOG_ERROR( "Gmod constructor: m_nodeMap is empty after construction despite non-empty DTO items for VIS version {}. Aborting further GMOD initialization.", VisVersionExtensions::toVersionString( version ) );
-
 			return;
 		}
 
@@ -106,8 +103,6 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			SPDLOG_ERROR( "Gmod constructor: Root node 'VE' not found in m_nodeMap for VIS version {}. GMOD is likely invalid.",
-				VisVersionExtensions::toVersionString( version ) );
 			m_rootNode = nullptr;
 		}
 	}
@@ -133,14 +128,11 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			SPDLOG_ERROR( "Gmod constructor: Root node 'VE' not found in m_nodeMap for VIS version {}. GMOD is likely invalid.",
-				VisVersionExtensions::toVersionString( version ) );
 			m_rootNode = nullptr;
 		}
 
 		if ( m_rootNode == nullptr && nodeMap.count( "VE" ) )
 		{
-			SPDLOG_ERROR( "Failed to correctly initialize root node from provided map for VIS version {}. m_rootNode is null but VE existed in input.", VisVersionExtensions::toVersionString( version ) );
 		}
 		else if ( m_rootNode != nullptr && m_rootNode->code() != "VE" )
 		{
@@ -149,21 +141,11 @@ namespace dnv::vista::sdk
 
 		if ( m_nodeMap.isEmpty() && !nodeMap.empty() )
 		{
-			SPDLOG_ERROR( "Failed to initialize node dictionary from provided map for VIS version {}. m_nodeMap is empty.", VisVersionExtensions::toVersionString( version ) );
 		}
 		if ( !m_nodeMap.isEmpty() && m_nodeMap.size() != nodeMap.size() )
 		{
 			SPDLOG_WARN( "Gmod constructor from map: m_nodeMap size ({}) does not match input nodeMap size ({}).", m_nodeMap.size(), nodeMap.size() );
 		}
-	}
-
-	//----------------------------------------------
-	// Node query methods
-	//----------------------------------------------
-
-	bool Gmod::tryGetNode( std::string_view code, const GmodNode*& node ) const
-	{
-		return m_nodeMap.tryGetValue( code, node );
 	}
 
 	//----------------------------------------------
@@ -191,15 +173,6 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
-	// Iteration
-	//----------------------------------------------
-
-	Gmod::Enumerator Gmod::enumerator() const
-	{
-		return Enumerator( &m_nodeMap );
-	}
-
-	//----------------------------------------------
 	// Gmod::Enumerator class
 	//----------------------------------------------
 
@@ -211,53 +184,6 @@ namespace dnv::vista::sdk
 		: m_sourceMapPtr{ map },
 		  m_isInitialState{ true }
 	{
-		if ( m_sourceMapPtr )
-		{
-			m_currentMapIterator = m_sourceMapPtr->begin();
-		}
-	}
-
-	//-----------------------------
-	// Iteration interface
-	//-----------------------------
-
-	const GmodNode& Gmod::Enumerator::current() const
-	{
-		if ( !m_sourceMapPtr || m_isInitialState || m_currentMapIterator == m_sourceMapPtr->end() )
-		{
-			throw std::out_of_range( "Gmod::Enumerator::getCurrent() called in an invalid state or past the end." );
-		}
-		return m_currentMapIterator->second;
-	}
-
-	bool Gmod::Enumerator::next() noexcept
-	{
-		if ( !m_sourceMapPtr || m_sourceMapPtr->isEmpty() )
-		{
-			m_isInitialState = false;
-
-			return false;
-		}
-
-		if ( m_isInitialState )
-		{
-			m_isInitialState = false;
-
-			return m_currentMapIterator != m_sourceMapPtr->end();
-		}
-
-		if ( m_currentMapIterator != m_sourceMapPtr->end() )
-		{
-			++m_currentMapIterator;
-			return m_currentMapIterator != m_sourceMapPtr->end();
-		}
-
-		return false;
-	}
-
-	void Gmod::Enumerator::reset() noexcept
-	{
-		m_isInitialState = true;
 		if ( m_sourceMapPtr )
 		{
 			m_currentMapIterator = m_sourceMapPtr->begin();

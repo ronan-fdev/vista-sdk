@@ -22,6 +22,9 @@ namespace dnv::vista::sdk
 		//=====================================================================
 
 		static constexpr const char* VIS_RELEASE_KEY = "visRelease";
+
+		static constexpr size_t CHUNK_IN_SIZE = 32768;
+		static constexpr size_t CHUNK_OUT_SIZE = 65536;
 	}
 
 	//----------------------------------------------------------------------
@@ -30,7 +33,6 @@ namespace dnv::vista::sdk
 
 	std::vector<std::string> EmbeddedResource::visVersions()
 	{
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto names = resourceNames();
 		std::vector<std::string> visVersions;
 
@@ -79,9 +81,6 @@ namespace dnv::vista::sdk
 			{
 				std::copy( visVersions.begin(), visVersions.end() - 1, std::ostream_iterator<std::string>( versionsList, ", " ) );
 				versionsList << visVersions.back();
-
-				auto endTime = std::chrono::high_resolution_clock::now();
-				auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
 			}
 			else
 			{
@@ -107,7 +106,6 @@ namespace dnv::vista::sdk
 		}
 
 		auto names = resourceNames();
-		auto searchStartTime = std::chrono::high_resolution_clock::now();
 
 		auto it = std::find_if( names.begin(), names.end(),
 			[&visVersion]( const std::string& name ) {
@@ -116,10 +114,6 @@ namespace dnv::vista::sdk
 					   name.ends_with( ".json.gz" ) &&
 					   name.find( "versioning" ) == std::string::npos;
 			} );
-
-		auto searchEndTime = std::chrono::high_resolution_clock::now();
-		auto searchDuration = std::chrono::duration_cast<std::chrono::microseconds>( searchEndTime - searchStartTime );
-		SPDLOG_DEBUG( "Resource search completed in {} μs", searchDuration.count() );
 
 		if ( it == names.end() )
 		{
@@ -134,17 +128,10 @@ namespace dnv::vista::sdk
 
 		try
 		{
-			auto startTime = std::chrono::high_resolution_clock::now();
-
 			auto stream = decompressedStream( *it );
 			nlohmann::json gmodJson = nlohmann::json::parse( *stream );
 
 			GmodDto loadedDto = GmodDto::fromJson( gmodJson );
-
-			auto endTime = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-
-			SPDLOG_DEBUG( "Successfully loaded GMOD DTO for version {} in {} ms", visVersion, duration.count() );
 
 			resultForCache.emplace( std::move( loadedDto ) );
 		}
@@ -181,7 +168,6 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto names = resourceNames();
 
 		std::vector<std::string> matchingResources;
@@ -203,8 +189,6 @@ namespace dnv::vista::sdk
 		{
 			try
 			{
-				auto processStartTime = std::chrono::high_resolution_clock::now();
-
 				auto stream = decompressedStream( resourceName );
 				nlohmann::json versioningJson = nlohmann::json::parse( *stream );
 
@@ -219,11 +203,6 @@ namespace dnv::vista::sdk
 						resultMap.emplace( visVersion, std::move( dto ) );
 						foundAnyResource = true;
 					}
-
-					auto processEndTime = std::chrono::high_resolution_clock::now();
-					auto processDuration = std::chrono::duration_cast<std::chrono::milliseconds>( processEndTime - processStartTime );
-
-					SPDLOG_DEBUG( "Loaded GMOD Versioning DTO for version {} from {} in {} ms", visVersion, resourceName, processDuration.count() );
 				}
 				else
 				{
@@ -244,9 +223,6 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto endTime = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-
 		std::lock_guard<std::mutex> lock( gmodVersioningCacheMutex );
 		cacheInitialized = true;
 		if ( foundAnyResource )
@@ -255,7 +231,6 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			SPDLOG_ERROR( "No valid GMOD Versioning resources found after {} ms", duration.count() );
 			gmodVersioningCache = std::nullopt;
 		}
 		return gmodVersioningCache;
@@ -275,7 +250,6 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto names = resourceNames();
 
 		auto it = std::find_if( names.begin(), names.end(),
@@ -301,9 +275,6 @@ namespace dnv::vista::sdk
 			nlohmann::json codebooksJson = nlohmann::json::parse( *stream );
 
 			CodebooksDto loadedDto = CodebooksDto::fromJson( codebooksJson );
-
-			auto endTime = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
 
 			resultForCache.emplace( std::move( loadedDto ) );
 		}
@@ -340,7 +311,6 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto names = resourceNames();
 
 		auto it = std::find_if( names.begin(), names.end(),
@@ -366,10 +336,6 @@ namespace dnv::vista::sdk
 			nlohmann::json locationsJson = nlohmann::json::parse( *stream );
 
 			LocationsDto loadedDto = LocationsDto::fromJson( locationsJson );
-
-			auto endTime = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-			SPDLOG_DEBUG( "Successfully loaded Locations DTO for version {} in {} ms", visVersion, duration.count() );
 
 			resultForCache.emplace( std::move( loadedDto ) );
 		}
@@ -406,7 +372,6 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto names = resourceNames();
 
 		auto it = std::find_if( names.begin(), names.end(),
@@ -433,10 +398,6 @@ namespace dnv::vista::sdk
 			nlohmann::json dtNamesJson = nlohmann::json::parse( *stream );
 
 			DataChannelTypeNamesDto loadedDto = DataChannelTypeNamesDto::fromJson( dtNamesJson );
-
-			auto endTime = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-			SPDLOG_DEBUG( "Successfully loaded DataChannelTypeNames DTO for version {} in {} ms", version, duration.count() );
 
 			resultForCache.emplace( std::move( loadedDto ) );
 		}
@@ -473,7 +434,6 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto names = resourceNames();
 
 		auto it = std::find_if( names.begin(), names.end(),
@@ -500,10 +460,6 @@ namespace dnv::vista::sdk
 			nlohmann::json fdTypesJson = nlohmann::json::parse( *stream );
 
 			FormatDataTypesDto loadedDto = FormatDataTypesDto::fromJson( fdTypesJson );
-
-			auto endTime = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-			SPDLOG_DEBUG( "Successfully loaded FormatDataTypes DTO for version {} in {} ms", version, duration.count() );
 
 			resultForCache.emplace( std::move( loadedDto ) );
 		}
@@ -544,7 +500,6 @@ namespace dnv::vista::sdk
 				return cachedResourceNames;
 			}
 		}
-		auto startTime = std::chrono::high_resolution_clock::now();
 
 		std::vector<std::filesystem::path> possibleDirs;
 
@@ -553,6 +508,7 @@ namespace dnv::vista::sdk
 			possibleDirs.push_back( *successfulDir );
 		}
 
+		/* TODO: resources will always be at the same location in the future */
 		possibleDirs.push_back( std::filesystem::current_path() / "resources" );
 		possibleDirs.push_back( std::filesystem::current_path() / "../resources" );
 		possibleDirs.push_back( std::filesystem::current_path() / "../../resources" );
@@ -602,24 +558,32 @@ namespace dnv::vista::sdk
 			SPDLOG_WARN( "No embedded resource files (.json.gz) found in search paths." );
 		}
 
-		auto endTime = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-		SPDLOG_DEBUG( "Resource names cache built in {} ms.", duration.count() );
-
 		{
 			std::lock_guard<std::mutex> lock( cacheMutex );
 			cachedResourceNames = std::move( foundNames );
 			initialized = true;
+
 			return cachedResourceNames;
 		}
 	}
 
 	std::shared_ptr<std::istream> EmbeddedResource::decompressedStream( const std::string& resourceName )
 	{
-		auto startTime = std::chrono::high_resolution_clock::now();
 		auto compressedStream = stream( resourceName );
 
-		auto decompressedBuffer = std::make_shared<std::stringstream>();
+		compressedStream->seekg( 0, std::ios::end );
+		auto pos = compressedStream->tellg();
+		if ( pos < 0 )
+		{
+			throw std::runtime_error( "Invalid stream position for " + resourceName );
+		}
+		size_t compressedSize = static_cast<size_t>( pos );
+		compressedStream->seekg( 0, std::ios::beg );
+
+		size_t estimatedDecompressedSize = compressedSize * 4;
+
+		std::string decompressedData;
+		decompressedData.reserve( estimatedDecompressedSize );
 
 		::z_stream zs = {};
 		zs.zalloc = Z_NULL;
@@ -631,19 +595,14 @@ namespace dnv::vista::sdk
 			throw std::runtime_error( "Failed to initialize zlib for decompression for " + resourceName );
 		}
 
-		const size_t CHUNK_IN_SIZE = 16384;
 		std::vector<char> inBuffer( CHUNK_IN_SIZE );
-		const size_t CHUNK_OUT_SIZE = 32768;
 		std::vector<char> outBuffer( CHUNK_OUT_SIZE );
 		int ret = Z_OK;
-		size_t totalCompressedRead = 0;
-		size_t totalDecompressedWritten = 0;
 
 		do
 		{
 			compressedStream->read( inBuffer.data(), CHUNK_IN_SIZE );
 			zs.avail_in = static_cast<uInt>( compressedStream->gcount() );
-			totalCompressedRead += zs.avail_in;
 
 			if ( zs.avail_in == 0 && !compressedStream->eof() )
 			{
@@ -660,36 +619,22 @@ namespace dnv::vista::sdk
 
 				ret = ::inflate( &zs, Z_NO_FLUSH );
 
-				if ( ret != Z_OK && ret != Z_STREAM_END && ret != Z_BUF_ERROR /* Z_BUF_ERROR is ok if avail_out is 0 */ )
+				if ( ret != Z_OK && ret != Z_STREAM_END && ret != Z_BUF_ERROR )
 				{
 					std::string errorMsg = ( zs.msg ) ? zs.msg : "Unknown zlib error";
 					::inflateEnd( &zs );
-
 					throw std::runtime_error( "Zlib decompression failed for resource '" + resourceName +
 											  "' with error code " + std::to_string( ret ) + ": " + errorMsg );
 				}
 
 				size_t have = CHUNK_OUT_SIZE - zs.avail_out;
-				decompressedBuffer->write( outBuffer.data(), static_cast<std::streamsize>( have ) );
-				totalDecompressedWritten += have;
+				decompressedData.append( outBuffer.data(), have );
 			} while ( zs.avail_out == 0 );
 		} while ( ret != Z_STREAM_END );
 
 		::inflateEnd( &zs );
 
-		decompressedBuffer->seekg( 0 );
-
-		auto endTime = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( endTime - startTime );
-
-		[[maybe_unused]] double ratio = ( totalCompressedRead > 0 ) ? static_cast<double>( totalDecompressedWritten ) / static_cast<double>( totalCompressedRead ) : 0.0;
-		[[maybe_unused]] double compressionPercent = ( totalDecompressedWritten > 0 ) ? ( static_cast<double>( totalCompressedRead ) * 100.0 ) / static_cast<double>( totalDecompressedWritten ) : 0.0;
-
-		SPDLOG_DEBUG( "Decompressed resource '{}' in {} ms. Read: {} bytes, Wrote: {} bytes. Ratio: {:.2f}x. Compression: {:.1f}%.",
-			resourceName, duration.count(), totalCompressedRead, totalDecompressedWritten, ratio, compressionPercent );
-
-		SPDLOG_DEBUG( "Memory footprint: Decompressed ~{:.2f} MB", static_cast<double>( totalDecompressedWritten ) / ( 1024.0 * 1024.0 ) );
-
+		auto decompressedBuffer = std::make_shared<std::istringstream>( std::move( decompressedData ) );
 		return decompressedBuffer;
 	}
 

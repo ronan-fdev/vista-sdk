@@ -31,90 +31,89 @@ add_library(nlohmann_json::nlohmann_json ALIAS nlohmann_json)
 # --- FetchContent dependencies ---
 include(FetchContent)
 
-FetchContent_Declare(
-  spdlog
-  GIT_REPOSITORY https://github.com/gabime/spdlog.git
-  GIT_TAG        v1.15.3
-  GIT_SHALLOW    TRUE
-  CMAKE_ARGS
-	-DSPDLOG_BUILD_SHARED=OFF
-	-DSPDLOG_ENABLE_PCH=ON
-	-DSPDLOG_BUILD_EXAMPLE=OFF
-	-DSPDLOG_BUILD_EXAMPLE_HO=OFF
-	-DSPDLOG_BUILD_TESTS=OFF
-	-DSPDLOG_BUILD_EXAMPLE_HO=OFF
-	-DSPDLOG_BUILD_BENCH=OFF
-	-DSPDLOG_BUILD_WARNINGS=OFF
-	-DSPDLOG_FMT_EXTERNAL=ON
-	-DSPDLOG_NO_EXCEPTIONS=ON
-	-DSPDLOG_PREVENT_CHILD_FD=OFF
-)
+# --- spdlog ---
+set(SPDLOG_ENABLE_PCH        ON  CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_EXAMPLE     OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_EXAMPLE_HO  OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_TESTS       OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_BENCH       OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_WARNINGS    OFF CACHE BOOL "" FORCE)
+set(SPDLOG_FMT_EXTERNAL      ON  CACHE BOOL "" FORCE)
+set(SPDLOG_NO_EXCEPTIONS     ON  CACHE BOOL "" FORCE)
+set(SPDLOG_PREVENT_CHILD_FD  OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
-  zlib
-  GIT_REPOSITORY https://github.com/madler/zlib.git
-  GIT_TAG        v1.3.1
-  GIT_SHALLOW    TRUE
-  CMAKE_ARGS
-	-DZLIB_BUILD_SHARED=OFF
-	-DZLIB_BUILD_TESTING=OFF
-	-DZLIB_BUILD_STATIC=ON
-	-DZLIB_BUILD_MINIZIP=OFF
-	-DZLIB_PREFIX=OFF
-	-DZLIB_INSTALL=OFF
+	spdlog
+	GIT_REPOSITORY https://github.com/gabime/spdlog.git
+	GIT_TAG        v1.15.3
+	GIT_SHALLOW    TRUE
 )
 
-FetchContent_Declare(
-  cpuid
-  GIT_REPOSITORY https://github.com/anrieff/libcpuid.git
-  GIT_TAG        v0.8.0
-  GIT_SHALLOW    TRUE
-  CMAKE_ARGS
-	-DBUILD_SHARED_LIBS=OFF
-	-DLIBCPUID_ENABLE_TESTS=OFF
-	-DLIBCPUID_BUILD_DRIVERS=OFF
-	-DLIBCPUID_ENABLE_DOCS=OFF
-)
+# --- zlib ---
+set(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(ZLIB_BUILD_STATIC  ON  CACHE BOOL "" FORCE)
+set(ZLIB_BUILD_MINIZIP OFF CACHE BOOL "" FORCE)
+set(ZLIB_PREFIX        OFF CACHE BOOL "" FORCE)
+set(ZLIB_INSTALL       OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG        11.2.0
-  GIT_SHALLOW    TRUE
-  CMAKE_ARGS
-	-DBUILD_SHARED_LIBS=OFF
-	-DFMT_FUZZ=OFF
-	-DFMT_TEST=OFF
-	-DFMT_DOC=OFF
-	-DFMT_INSTALL=OFF
-	-DFMT_HEADER_ONLY=ON
-	-DFMT_OS=OFF
+	zlib
+	GIT_REPOSITORY https://github.com/madler/zlib.git
+	GIT_TAG        v1.3.1
+	GIT_SHALLOW    TRUE
 )
 
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        v1.17.0
-  GIT_SHALLOW    TRUE
-  CMAKE_ARGS
-	-DBUILD_SHARED_LIBS=OFF
-	-DBUILD_GMOCK=OFF
-	-DINSTALL_GTEST=OFF
-	-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>DLL
-)
+# --- {cpuid} ---
+set(LIBCPUID_ENABLE_TESTS   OFF CACHE BOOL "" FORCE)
+set(LIBCPUID_BUILD_DRIVERS  OFF CACHE BOOL "" FORCE)
+set(LIBCPUID_ENABLE_DOCS    OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
-  googlebenchmark
-  GIT_REPOSITORY https://github.com/google/benchmark.git
-  GIT_TAG        v1.9.4
-  GIT_SHALLOW    TRUE
-  CMAKE_ARGS
-	-DBUILD_SHARED_LIBS=OFF
-	-DBENCHMARK_ENABLE_INSTALL=OFF
-	-DBENCHMARK_ENABLE_TESTING=OFF
-	-DBENCHMARK_ENABLE_GTEST_TESTS=OFF
-	-DBENCHMARK_USE_BUNDLED_GTEST =OFF
-	-DBENCHMARK_DOWNLOAD_DEPENDENCIES=OFF
+	cpuid
+	GIT_REPOSITORY https://github.com/anrieff/libcpuid.git
+	GIT_TAG        v0.8.0
+	GIT_SHALLOW    TRUE
+)
+
+# --- {fmt} ---
+set(FMT_FUZZ         OFF CACHE BOOL "" FORCE)
+set(FMT_TEST         OFF CACHE BOOL "" FORCE)
+set(FMT_DOC          OFF CACHE BOOL "" FORCE)
+set(FMT_INSTALL      OFF CACHE BOOL "" FORCE)
+set(FMT_HEADER_ONLY  ON  CACHE BOOL "" FORCE)
+set(FMT_OS           OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+	fmt
+	GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+	GIT_TAG        11.2.0
+	GIT_SHALLOW    TRUE
+)
+
+# --- Google test ---
+set(BUILD_GMOCK   OFF CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+set(BUILD_GMOCK   OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+	googletest
+	GIT_REPOSITORY https://github.com/google/googletest.git
+	GIT_TAG        v1.17.0
+	GIT_SHALLOW    TRUE
+)
+
+# --- Google benchmark ---
+set(BENCHMARK_ENABLE_INSTALL         OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_ENABLE_TESTING         OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_ENABLE_GTEST_TESTS     OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_USE_BUNDLED_GTEST      OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_DOWNLOAD_DEPENDENCIES  OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+	googlebenchmark
+	GIT_REPOSITORY https://github.com/google/benchmark.git
+	GIT_TAG        v1.9.4
+	GIT_SHALLOW    TRUE
 )
 
 FetchContent_MakeAvailable(fmt spdlog zlib cpuid googletest googlebenchmark)

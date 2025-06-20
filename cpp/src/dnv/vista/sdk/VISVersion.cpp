@@ -57,13 +57,12 @@ namespace dnv::vista::sdk
 
 	std::vector<VisVersion> VisVersionExtensions::allVersions()
 	{
-		static constexpr std::array<VisVersion, 6> versions = {
-			VisVersion::v3_4a,
+		static constexpr std::array<VisVersion, 6> versions = { { VisVersion::v3_4a,
 			VisVersion::v3_5a,
 			VisVersion::v3_6a,
 			VisVersion::v3_7a,
 			VisVersion::v3_8a,
-			VisVersion::v3_9a };
+			VisVersion::v3_9a } };
 
 		return std::vector<VisVersion>( versions.begin(), versions.end() );
 	}

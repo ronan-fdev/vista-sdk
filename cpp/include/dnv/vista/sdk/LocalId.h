@@ -63,7 +63,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Copy assignment operator */
-		LocalId& operator=( const LocalId& other ) = default;
+		LocalId& operator=( const LocalId& other ) = delete;
 
 		/** @brief Move assignment operator */
 		LocalId& operator=( LocalId&& other ) noexcept = default;

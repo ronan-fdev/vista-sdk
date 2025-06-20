@@ -14,7 +14,7 @@
 
 namespace dnv::vista::sdk
 {
-	namespace internal
+	namespace
 	{
 		//=====================================================================
 		// Internal helper components

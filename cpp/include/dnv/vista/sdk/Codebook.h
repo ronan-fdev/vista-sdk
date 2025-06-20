@@ -133,7 +133,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Iterator type for traversing standard values
 		 */
-		using Iterator = std::unordered_set<std::string>::const_iterator;
+		using Iterator = std::unordered_set<std::string, StringHash, StringEqual>::const_iterator;
 
 		//----------------------------------------------
 		// Construction / destruction
@@ -232,7 +232,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Iterator type for traversing groups
 		 */
-		using Iterator = std::unordered_set<std::string>::const_iterator;
+		using Iterator = std::unordered_set<std::string, StringHash, StringEqual>::const_iterator;
 
 		//----------------------------------------------
 		// Construction / destruction

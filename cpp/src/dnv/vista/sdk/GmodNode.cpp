@@ -82,7 +82,7 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	//----------------------------------------------
-	// Construction / destruction
+	// Construction
 	//----------------------------------------------
 
 	GmodNode::GmodNode( VisVersion version, const GmodNodeDto& dto )
@@ -245,25 +245,6 @@ namespace dnv::vista::sdk
 	bool GmodNode::isAssetFunctionNode() const
 	{
 		return Gmod::isAssetFunctionNode( m_metadata );
-	}
-
-	//----------------------------------------------
-	// Utility methods
-	//----------------------------------------------
-
-	std::string GmodNode::toString() const
-	{
-		return m_location.has_value() ? fmt::format( "{}-{}", m_code, m_location->toString() ) : m_code;
-	}
-
-	void GmodNode::toString( std::stringstream& builder ) const
-	{
-		builder << m_code;
-
-		if ( m_location.has_value() )
-		{
-			builder << "-" << m_location->toString();
-		}
 	}
 
 	//----------------------------------------------

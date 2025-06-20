@@ -175,7 +175,7 @@ namespace dnv::vista::sdk
 	{
 	private:
 		//----------------------------------------------
-		// Construction / destruction
+		// Construction
 		//----------------------------------------------
 
 		/** @brief Private constructor (singleton pattern) */
@@ -188,6 +188,10 @@ namespace dnv::vista::sdk
 		VIS( VIS&& ) noexcept = delete;
 
 	public:
+		//----------------------------------------------
+		// Destruction
+		//----------------------------------------------
+
 		/** @brief Virtual destructor */
 		virtual ~VIS() = default;
 
@@ -392,47 +396,31 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/**
-		 * @brief Checks if the content of a std::stringstream matches the ISO Local ID format.
-		 * @param builder The std::stringstream whose content is to be validated.
-		 * @return True if the content matches the ISO Local ID format, false otherwise.
+		 * @brief Checks if a string-like sequence of characters matches the expected format for an ISO Local ID string.
+		 * @tparam StringLike A type that can be iterated over, yielding characters (e.g., std::string, std::string_view, fmt::memory_buffer).
+		 * @param value The string-like value to validate.
+		 * @return True if the value matches the ISO Local ID format, false otherwise.
 		 */
-		[[nodiscard]] inline static bool matchISOLocalIdString( const std::stringstream& builder ) noexcept;
+		template <typename StringLike>
+		[[nodiscard]] inline static bool matchISOLocalIdString( const StringLike& value ) noexcept;
 
 		/**
-		 * @brief Checks if a string_view matches the expected format for an ISO Local ID string.
-		 * @param value The std::string_view to validate.
-		 * @return True if the string_view matches the ISO Local ID format, false otherwise.
-		 */
-		[[nodiscard]] inline static bool matchISOLocalIdString( std::string_view value ) noexcept;
-
-		/**
-		 * @brief Checks if all characters in a string_view are valid ISO characters.
-		 * @param value The std::string_view to validate.
+		 * @brief Checks if all characters in a string-like sequence are valid ISO characters.
+		 * @tparam StringLike A type that can be iterated over, yielding characters (e.g., std::string, std::string_view, fmt::memory_buffer).
+		 * @param value The string-like value to validate.
 		 * @return True if all characters are valid ISO characters, false otherwise.
 		 */
-		[[nodiscard]] inline static bool isISOString( std::string_view value ) noexcept;
+		template <typename StringLike>
+		[[nodiscard]] inline static bool isISOString( const StringLike& value ) noexcept;
 
 		/**
-		 * @brief Checks if all characters in a std::string are valid ISO characters.
-		 * @param value The std::string to validate.
-		 * @return True if all characters are valid ISO characters, false otherwise.
+		 * @brief A comprehensive check if a string-like sequence of characters is a valid ISO Local ID string.
+		 * @tparam StringLike A type that can be iterated over, yielding characters (e.g., std::string, std::string_view, fmt::memory_buffer).
+		 * @param value The string-like value to validate.
+		 * @return True if the value is a valid ISO Local ID string, false otherwise.
 		 */
-		[[nodiscard]] inline static bool isISOString( const std::string& value ) noexcept;
-
-		/**
-		 * @brief Checks if all characters in the content of a std::stringstream are valid ISO characters.
-		 * @param builder The std::stringstream whose content is to be validated.
-		 * @return True if all characters in the content are valid ISO characters, false otherwise.
-		 */
-		[[nodiscard]] inline static bool isISOString( const std::stringstream& builder ) noexcept;
-
-		/**
-		 * @brief A comprehensive check if a string is a valid ISO Local ID string.
-		 * This may involve format and character set validation.
-		 * @param value The std::string to validate.
-		 * @return True if the string is a valid ISO Local ID string, false otherwise.
-		 */
-		[[nodiscard]] inline static bool isISOLocalIdString( const std::string& value ) noexcept;
+		template <typename StringLike>
+		[[nodiscard]] inline static bool isISOLocalIdString( const StringLike& value ) noexcept;
 
 		/**
 		 * @brief Checks if a character is a valid character within an ISO-compliant string.

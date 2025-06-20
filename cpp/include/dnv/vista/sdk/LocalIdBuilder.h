@@ -51,13 +51,13 @@ namespace dnv::vista::sdk
 		 * @details Defines the standard prefix "/dnv-v2" used in VIS Local ID format.
 		 * @note Used during parsing and string generation for validation.
 		 */
-		static const std::string namingRule;
+		inline static const std::string namingRule = "dnv-v2";
 
 		/** @brief List of standard `CodebookName` values used directly within the LocalId structure. */
 		static const std::vector<CodebookName> usedCodebooks;
 
 		//----------------------------------------------
-		// Construction / destruction
+		// Construction
 		//----------------------------------------------
 
 	protected:
@@ -70,6 +70,10 @@ namespace dnv::vista::sdk
 
 		/** @brief Move constructor */
 		LocalIdBuilder( LocalIdBuilder&& ) noexcept = default;
+
+		//----------------------------------------------
+		// Destruction
+		//----------------------------------------------
 
 		/** @brief Destructor */
 		~LocalIdBuilder() = default;
@@ -267,14 +271,16 @@ namespace dnv::vista::sdk
 		 * @return A `std::string` representing the configured Local ID.
 		 *         Returns an empty string if the state is not valid (`isValid()` is false).
 		 */
-		[[nodiscard]] std::string toString() const;
+		[[nodiscard]] inline std::string toString() const;
 
 		/**
-		 * @brief Appends the string representation of the Local ID to a stringstream.
-		 * @details Efficiently builds the string representation directly into the provided stream.
-		 * @param[in,out] builder The `std::stringstream` to append the representation to.
+		 * @brief Appends the string representation of the Local ID to a generic output iterator.
+		 * @tparam OutputIt The type of the output iterator.
+		 * @param out The output iterator to append to.
+		 * @return The iterator pointing to the end of the written output.
 		 */
-		void toString( std::stringstream& builder ) const;
+		template <typename OutputIt>
+		inline OutputIt toString( OutputIt out ) const;
 
 		//----------------------------------------------
 		// Static factory methods

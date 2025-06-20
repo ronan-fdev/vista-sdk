@@ -154,8 +154,8 @@ namespace dnv::vista::sdk::tests
 									.withoutLocalId()
 									.withoutImoNumber();
 
-		universalBuilder.tryWithLocalId( std::nullopt );
-		universalBuilder.tryWithImoNumber( std::nullopt );
+		(void)universalBuilder.tryWithLocalId( std::nullopt );
+		(void)universalBuilder.tryWithImoNumber( std::nullopt );
 
 		EXPECT_FALSE( universalBuilder.localId().has_value() );
 		EXPECT_FALSE( universalBuilder.imoNumber().has_value() );

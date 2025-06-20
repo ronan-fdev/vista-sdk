@@ -76,13 +76,13 @@ namespace dnv::vista::sdk
 		 * @brief Get the name of this codebook
 		 * @return The codebook name
 		 */
-		[[nodiscard]] std::string_view name() const;
+		[[nodiscard]] inline std::string_view name() const;
 
 		/**
 		 * @brief Get the values map of this codebook
 		 * @return The map of group names to their corresponding values
 		 */
-		[[nodiscard]] const ValuesMap& values() const;
+		[[nodiscard]] inline const ValuesMap& values() const;
 
 		//----------------------------------------------
 		// Serialization
@@ -197,13 +197,13 @@ namespace dnv::vista::sdk
 		 * @brief Get the VIS version string
 		 * @return The VIS version string
 		 */
-		[[nodiscard]] const std::string& visVersion() const;
+		[[nodiscard]] inline const std::string& visVersion() const;
 
 		/**
 		 * @brief Get the collection of codebooks
 		 * @return The vector of codebook DTOs
 		 */
-		[[nodiscard]] const Items& items() const;
+		[[nodiscard]] inline const Items& items() const;
 
 		//----------------------------------------------
 		// Serialization
@@ -243,3 +243,5 @@ namespace dnv::vista::sdk
 		Items m_items;
 	};
 }
+
+#include "CodebooksDto.inl"

@@ -92,8 +92,6 @@ namespace dnv::vista::sdk
 
 	std::optional<GmodNodeDto> GmodNodeDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		try
 		{
 			if ( !json.contains( CODE_KEY ) || !json.at( CODE_KEY ).is_string() )
@@ -225,8 +223,6 @@ namespace dnv::vista::sdk
 				std::move( commonDefinition ),
 				installSubstructure,
 				std::move( normalAssignmentNames ) );
-
-			auto duration = std::chrono::duration_cast<std::chrono::microseconds>( std::chrono::steady_clock::now() - startTime );
 
 			return std::optional<GmodNodeDto>{ std::move( resultDto ) };
 		}
@@ -435,8 +431,6 @@ namespace dnv::vista::sdk
 
 	std::optional<GmodDto> GmodDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		try
 		{
 			if ( !json.contains( VIS_RELEASE_KEY ) || !json.at( VIS_RELEASE_KEY ).is_string() )
@@ -549,10 +543,6 @@ namespace dnv::vista::sdk
 
 			GmodDto resultDto( std::move( visVersion ), std::move( items ), std::move( relations ) );
 
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-			SPDLOG_DEBUG( "Parsed GmodDto with {} nodes, {} relations and VIS version {} in {} ms",
-				resultDto.items().size(), resultDto.relations().size(), resultDto.visVersion(), duration.count() );
-
 			return std::optional<GmodDto>{ std::move( resultDto ) };
 		}
 		catch ( [[maybe_unused]] const nlohmann::json::exception& ex )
@@ -615,13 +605,7 @@ namespace dnv::vista::sdk
 
 	nlohmann::json GmodDto::toJson() const
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		nlohmann::json j = { { VIS_RELEASE_KEY, m_visVersion }, { ITEMS_KEY, m_items }, { RELATIONS_KEY, m_relations } };
-
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-		SPDLOG_DEBUG( "Serialized GmodDto with {} items, {} relations for VIS version {} in {} ms",
-			m_items.size(), m_relations.size(), m_visVersion, duration.count() );
 
 		return j;
 	}

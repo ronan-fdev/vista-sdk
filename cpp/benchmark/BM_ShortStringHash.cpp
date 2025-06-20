@@ -41,7 +41,7 @@ namespace dnv::vista::sdk::benchmarks
 	{
 		[[nodiscard]] static uint32_t hash( uint32_t hash, uint8_t ch ) noexcept
 		{
-			return internal::Hashing::Larson( hash, ch );
+			return Hashing::Larson( hash, ch );
 		}
 	};
 
@@ -49,7 +49,7 @@ namespace dnv::vista::sdk::benchmarks
 	{
 		[[nodiscard]] static uint32_t hash( uint32_t hash, uint8_t ch ) noexcept
 		{
-			return internal::Hashing::crc32( hash, ch );
+			return Hashing::crc32( hash, ch );
 		}
 	};
 
@@ -57,7 +57,7 @@ namespace dnv::vista::sdk::benchmarks
 	{
 		[[nodiscard]] static uint32_t hash( uint32_t hash, uint8_t ch ) noexcept
 		{
-			return internal::Hashing::fnv1a( hash, ch );
+			return Hashing::fnv1a( hash, ch );
 		}
 	};
 

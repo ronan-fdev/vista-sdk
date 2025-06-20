@@ -1,5 +1,7 @@
 #pragma once
 
+#include <immintrin.h>
+
 /* STL */
 #include <fstream>
 #include <future>

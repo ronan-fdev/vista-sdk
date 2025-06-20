@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical LocalIdBuilder operations
  */
 
+#include "CodebookName.h"
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -298,5 +300,69 @@ namespace dnv::vista::sdk
 	inline const std::optional<MetadataTag>& LocalIdBuilder::detail() const noexcept
 	{
 		return m_detail;
+	}
+
+	//----------------------------------------------
+	// String conversion
+	//----------------------------------------------
+
+	inline std::string LocalIdBuilder::toString() const
+	{
+		/* LocalId format: /dnv-v2/vis-{version}/{primary-item}[/sec/{secondary-item}][~{description}]/meta/{metadata-tags} */
+		fmt::memory_buffer builder;
+
+		toString( std::back_inserter( builder ) );
+
+		/* Cleanup trailing slash */
+		if ( builder.size() > 0 && builder[builder.size() - 1] == '/' )
+		{
+			builder.resize( builder.size() - 1 );
+		}
+
+		return fmt::to_string( builder );
+	}
+
+	template <typename OutputIt>
+	inline OutputIt LocalIdBuilder::toString( OutputIt out ) const
+	{
+		if ( !m_visVersion.has_value() )
+		{
+			throw std::invalid_argument( "No VisVersion configured on LocalId" );
+		}
+
+		/* Naming rule prefix: "/dnv-v2" */
+		out = fmt::format_to( out, "/{}/", namingRule );
+
+		/* VIS version: "vis-{major}-{minor}{patch}" */
+		out = fmt::format_to( out, "{}/", VisVersionExtensions::toVersionString( *m_visVersion ) );
+
+		/* Items section: primary item [+ secondary item] [+ description] */
+		out = m_items.append( out, m_verboseMode );
+
+		/* Metadata section prefix: "/meta" */
+		out = fmt::format_to( out, "meta/" );
+
+		/* Metadata tags: {prefix}{separator}{value} */
+		auto appendMeta = [&out]( const std::optional<MetadataTag>& tag ) {
+			if ( tag.has_value() )
+			{
+				out = fmt::format_to(
+					out, "{}{}{}/",
+					CodebookNames::toPrefix( tag->name() ),
+					tag->prefix(),
+					tag->value() );
+			}
+		};
+
+		appendMeta( m_quantity );
+		appendMeta( m_content );
+		appendMeta( m_calculation );
+		appendMeta( m_state );
+		appendMeta( m_command );
+		appendMeta( m_type );
+		appendMeta( m_position );
+		appendMeta( m_detail );
+
+		return out;
 	}
 }

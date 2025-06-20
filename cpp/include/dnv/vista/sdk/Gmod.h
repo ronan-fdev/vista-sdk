@@ -131,7 +131,7 @@ namespace dnv::vista::sdk
 		 * @param[out] node Output parameter; set to a pointer to the GmodNode if found, otherwise nullptr.
 		 * @return True if the node was found, false otherwise.
 		 */
-		bool tryGetNode( std::string_view code, const GmodNode*& node ) const;
+		inline bool tryGetNode( std::string_view code, const GmodNode*& node ) const;
 
 		//----------------------------------------------
 		// Path parsing & navigation
@@ -246,7 +246,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets an enumerator for iterating over all nodes within this Gmod instance.
 		 * @return An Enumerator object.
 		 */
-		Enumerator enumerator() const;
+		inline Enumerator enumerator() const;
 
 		//----------------------------------------------
 		// Gmod::Enumerator class
@@ -302,20 +302,20 @@ namespace dnv::vista::sdk
 			 * @throws std::runtime_error If called when the enumerator is in an invalid state
 			 *                            (e.g., before the first moveNext() or after iteration has ended).
 			 */
-			[[nodiscard]] const GmodNode& current() const;
+			[[nodiscard]] inline const GmodNode& current() const;
 
 			/**
 			 * @brief Advances the enumerator to the next GmodNode in the collection.
 			 * @return True if the enumerator was successfully advanced to the next node;
 			 *         false if the end of the collection has been passed.
 			 */
-			bool next() noexcept;
+			bool inline next() noexcept;
 
 			/**
 			 * @brief Resets the enumerator to its initial state, positioned before the first node.
 			 * @details After calling reset, next() must be called to access the first node.
 			 */
-			void reset() noexcept;
+			void inline reset() noexcept;
 
 			//-----------------------------
 			// Private member variables

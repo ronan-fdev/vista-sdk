@@ -62,7 +62,7 @@ namespace dnv::vista::sdk
 			const std::unordered_map<std::string, std::string>& normalAssignmentNames = {} );
 
 		/** @brief Default constructor. */
-		GmodNodeMetadata() = delete;
+		GmodNodeMetadata() = default;
 
 		/** @brief Copy constructor */
 		GmodNodeMetadata( const GmodNodeMetadata& );
@@ -210,7 +210,7 @@ namespace dnv::vista::sdk
 
 	public:
 		//----------------------------------------------
-		// Construction / destruction
+		// Construction
 		//----------------------------------------------
 
 		/**
@@ -221,13 +221,17 @@ namespace dnv::vista::sdk
 		GmodNode( VisVersion version, const GmodNodeDto& dto );
 
 		/** @brief Default constructor. */
-		GmodNode() = delete;
+		GmodNode() = default;
 
 		/** @brief Copy constructor */
-		GmodNode( const GmodNode& ); //= default;
+		GmodNode( const GmodNode& );
 
 		/** @brief Move constructor */
 		GmodNode( GmodNode&& ) noexcept = default;
+
+		//----------------------------------------------
+		// Destruction
+		//----------------------------------------------
 
 		/** @brief Destructor */
 		~GmodNode() = default;
@@ -483,7 +487,7 @@ namespace dnv::vista::sdk
 		[[nodiscard]] inline bool isChild( const std::string& code ) const;
 
 		//----------------------------------------------
-		// Utility methods
+		// String conversion methods
 		//----------------------------------------------
 
 		/**
@@ -491,14 +495,16 @@ namespace dnv::vista::sdk
 		 * @details The format is typically "<code>" or "<code>-<location>" if location is present.
 		 * @return A `std::string` representing the node.
 		 */
-		[[nodiscard]] std::string toString() const;
+		[[nodiscard]] inline std::string toString() const;
 
 		/**
-		 * @brief Appends the node's string representation to a `std::stringstream`.
-		 * @details This method is useful for efficiently building larger strings composed of multiple node representations.
-		 * @param builder The `std::stringstream` to append the node's string representation to.
+		 * @brief Appends the node's string representation to a generic output iterator.
+		 * @tparam OutputIt The type of the output iterator.
+		 * @param out The output iterator to write to.
+		 * @return The iterator pointing to the end of the written output.
 		 */
-		void toString( std::stringstream& builder ) const;
+		template <typename OutputIt>
+		inline OutputIt toString( OutputIt out ) const;
 
 	private:
 		//----------------------------------------------

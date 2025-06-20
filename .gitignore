@@ -71,4 +71,8 @@ build/
 # Docs directories
 docs/
 
+#github CI/CD
 #.github/workflows/build-cpp.yml
+
+# Generated files
+cpp/include/dnv/vista/sdk/internal/version.h

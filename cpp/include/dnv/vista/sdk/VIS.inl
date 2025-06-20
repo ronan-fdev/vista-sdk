@@ -9,24 +9,16 @@ namespace dnv::vista::sdk
 	// ISO string validation methods
 	//----------------------------------------------
 
-	inline bool VIS::matchISOLocalIdString( const std::stringstream& builder ) noexcept
+	template <typename StringLike>
+	inline bool VIS::matchISOLocalIdString( const StringLike& value ) noexcept
 	{
-		return matchISOLocalIdString( std::string_view( builder.str() ) );
-	}
-
-	inline bool VIS::matchISOLocalIdString( std::string_view value ) noexcept
-	{
-		const char* data = value.data();
-		const char* end = data + value.size();
-
-		for ( const char* charPtr = data; charPtr != end; ++charPtr )
+		for ( const auto c : value )
 		{
-			if ( *charPtr == '/' )
+			if ( c == '/' )
 			{
 				continue;
 			}
-
-			if ( !matchAsciiDecimal( static_cast<int>( *charPtr ) ) )
+			if ( !isISOString( c ) )
 			{
 				return false;
 			}
@@ -35,19 +27,12 @@ namespace dnv::vista::sdk
 		return true;
 	}
 
-	inline bool VIS::isISOString( std::string_view value ) noexcept
+	template <typename StringLike>
+	inline bool VIS::isISOString( const StringLike& value ) noexcept
 	{
-		if ( value.empty() )
+		for ( const auto c : value )
 		{
-			return true;
-		}
-
-		const char* data = value.data();
-		const char* end = data + value.size();
-
-		for ( const char* charPtr = data; charPtr != end; ++charPtr )
-		{
-			if ( !matchAsciiDecimal( static_cast<int>( *charPtr ) ) )
+			if ( !isISOString( c ) )
 			{
 				return false;
 			}
@@ -56,21 +41,10 @@ namespace dnv::vista::sdk
 		return true;
 	}
 
-	inline bool VIS::isISOString( const std::string& value ) noexcept
+	template <typename StringLike>
+	inline bool VIS::isISOLocalIdString( const StringLike& value ) noexcept
 	{
-		return isISOString( std::string_view( value ) );
-	}
-
-	inline bool VIS::isISOString( const std::stringstream& builder ) noexcept
-	{
-		std::string str = builder.str();
-
-		return isISOString( std::string_view( str ) );
-	}
-
-	inline bool VIS::isISOLocalIdString( const std::string& value ) noexcept
-	{
-		return !value.empty() && matchISOLocalIdString( value );
+		return matchISOLocalIdString( value );
 	}
 
 	inline bool VIS::isISOString( char c ) noexcept

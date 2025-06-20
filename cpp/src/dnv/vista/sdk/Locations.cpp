@@ -403,7 +403,9 @@ namespace dnv::vista::sdk
 					if ( !std::isdigit( c ) && ( c == 'N' || std::find( m_locationCodes.begin(), m_locationCodes.end(), c ) == m_locationCodes.end() ) )
 					{
 						if ( !first )
+						{
 							invalidChars += ",";
+						}
 						first = false;
 						invalidChars += "'" + std::string( 1, c ) + "'";
 					}

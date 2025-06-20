@@ -3,7 +3,7 @@
  * @brief Inline implementations for performance-critical GmodPath operations
  */
 
-#include "GmodNode.h"
+#include "Gmod.h"
 
 namespace dnv::vista::sdk
 {
@@ -27,82 +27,19 @@ namespace dnv::vista::sdk
 			return false;
 		}
 
-		if ( m_visVersion != other.m_visVersion )
+		if ( m_node.has_value() != other.m_node.has_value() )
 		{
 			return false;
 		}
 
-		/* Compare parents */
+		if ( m_node.has_value() && m_node.value() != other.m_node.value() )
+		{
+			return false;
+		}
+
 		for ( size_t i = 0; i < m_parents.size(); ++i )
 		{
-			{ /* Null pointers */
-				if ( ( !m_parents[i] && other.m_parents[i] ) || ( m_parents[i] && !other.m_parents[i] ) )
-				{
-					return false;
-				}
-
-				if ( !m_parents[i] && !other.m_parents[i] )
-				{
-					continue;
-				}
-			}
-
-			{ /* Compare codes */
-				if ( m_parents[i]->code() != other.m_parents[i]->code() )
-				{
-					return false;
-				}
-			}
-
-			{ /* Compare locations */
-				bool thisHasLocation = m_parents[i]->location().has_value();
-				bool otherHasLocation = other.m_parents[i]->location().has_value();
-
-				if ( thisHasLocation != otherHasLocation )
-				{
-					return false;
-				}
-
-				if ( thisHasLocation && otherHasLocation &&
-					 m_parents[i]->location().value() != other.m_parents[i]->location().value() )
-				{
-					return false;
-				}
-			}
-		}
-
-		{ /* Null target nodes */
-			if ( ( !m_node && other.m_node ) || ( m_node && !other.m_node ) )
-			{
-				return false;
-			}
-
-			if ( !m_node && !other.m_node )
-			{
-				return true;
-			}
-		}
-
-		{ /* Target node code */
-
-			if ( m_node->code() != other.m_node->code() )
-			{
-				return false;
-			}
-		}
-
-		{ /* Target node location */
-
-			bool thisHasLocation = m_node->location().has_value();
-			bool otherHasLocation = other.m_node->location().has_value();
-
-			if ( thisHasLocation != otherHasLocation )
-			{
-				return false;
-			}
-
-			if ( thisHasLocation && otherHasLocation &&
-				 m_node->location().value() != other.m_node->location().value() )
+			if ( m_parents[i] != other.m_parents[i] )
 			{
 				return false;
 			}
@@ -120,38 +57,44 @@ namespace dnv::vista::sdk
 	// Lookup operators
 	//----------------------------------------------
 
-	inline GmodNode* GmodPath::operator[]( size_t index ) const
+	inline const GmodNode& GmodPath::operator[]( size_t index ) const
 	{
-		if ( index >= ( m_parents.size() + 1 ) )
-		{
-			throw std::out_of_range( fmt::format( "Index {} out of range for GmodPath indexer. Path length is {}.", index, m_parents.size() + 1 ) );
-		}
-
-		if ( index < m_parents.size() )
-		{
-			GmodNode* parentNode = m_parents[index];
-			return parentNode;
-		}
-		else
-		{
-			return m_node;
-		}
-	}
-
-	inline GmodNode*& GmodPath::operator[]( size_t index )
-	{
-		if ( index >= ( m_parents.size() + 1 ) )
-		{
-			throw std::out_of_range( fmt::format( "Index {} out of range for GmodPath indexer. Path length is {}.", index, m_parents.size() + 1 ) );
-		}
-
 		if ( index < m_parents.size() )
 		{
 			return m_parents[index];
 		}
+		else if ( index == m_parents.size() )
+		{
+			if ( !m_node.has_value() )
+			{
+				throw std::out_of_range( "No target node in empty GmodPath" );
+			}
+
+			return m_node.value();
+		}
 		else
 		{
-			return m_node;
+			throw std::out_of_range( "Index out of range" );
+		}
+	}
+
+	inline GmodNode& GmodPath::operator[]( size_t index )
+	{
+		if ( index < m_parents.size() )
+		{
+			return m_parents[index];
+		}
+		else if ( index == m_parents.size() )
+		{
+			if ( !m_node.has_value() )
+			{
+				throw std::out_of_range( "No target node in empty GmodPath" );
+			}
+			return m_node.value();
+		}
+		else
+		{
+			throw std::out_of_range( "Index out of range" );
 		}
 	}
 
@@ -169,41 +112,157 @@ namespace dnv::vista::sdk
 		return m_gmod;
 	}
 
-	inline GmodNode* GmodPath::node() const noexcept
+	inline const GmodNode& GmodPath::node() const
 	{
-		return m_node;
+		if ( !m_node.has_value() )
+		{
+			throw std::runtime_error( "Accessing node on empty GmodPath" );
+		}
+
+		return m_node.value();
 	}
 
-	inline const std::vector<GmodNode*>& GmodPath::parents() const noexcept
+	inline const std::vector<GmodNode>& GmodPath::parents() const noexcept
 	{
 		return m_parents;
 	}
 
 	inline size_t GmodPath::length() const noexcept
 	{
-		return m_parents.size() + 1;
+		return m_parents.size() + ( m_node.has_value() ? 1 : 0 );
 	}
 
 	inline size_t GmodPath::hashCode() const noexcept
 	{
-		size_t hashCode = 0;
-
-		for ( size_t i = 0; i < m_parents.size(); ++i )
+		if ( !m_node.has_value() )
 		{
-			if ( m_parents[i] )
-			{
-				size_t nodeHash = m_parents[i]->hashCode();
-				hashCode ^= nodeHash + 0x9e3779b9 + ( hashCode << 6 ) + ( hashCode >> 2 );
-			}
+			return 0;
 		}
 
-		if ( m_node )
+		size_t hashCode = 0;
+
+		for ( const auto& parent : m_parents )
 		{
-			size_t nodeHash = m_node->hashCode();
+			size_t nodeHash = parent.hashCode();
 			hashCode ^= nodeHash + 0x9e3779b9 + ( hashCode << 6 ) + ( hashCode >> 2 );
 		}
 
+		size_t nodeHash = m_node->hashCode();
+		hashCode ^= nodeHash + 0x9e3779b9 + ( hashCode << 6 ) + ( hashCode >> 2 );
+
 		return hashCode;
+	}
+
+	//----------------------------------------------
+	// String conversion methods
+	//----------------------------------------------
+
+	inline std::string GmodPath::toString() const
+	{
+		fmt::memory_buffer builder;
+		toString( std::back_inserter( builder ) );
+
+		return fmt::to_string( builder );
+	}
+
+	inline std::string GmodPath::toFullPathString() const
+	{
+		fmt::memory_buffer builder;
+		toFullPathString( std::back_inserter( builder ) );
+		return fmt::to_string( builder );
+	}
+
+	inline std::string GmodPath::toStringDump() const
+	{
+		fmt::memory_buffer builder;
+		toStringDump( std::back_inserter( builder ) );
+		return fmt::to_string( builder );
+	}
+
+	template <typename OutputIt>
+	inline OutputIt GmodPath::toString( OutputIt out, char separator ) const
+	{
+		bool first = true;
+		for ( const auto& parent : m_parents )
+		{
+			if ( !Gmod::isLeafNode( parent.metadata() ) )
+			{
+				continue;
+			}
+			if ( !first )
+			{
+				*out++ = separator;
+			}
+			out = parent.toString( out );
+			first = false;
+		}
+
+		if ( m_node.has_value() )
+		{
+			if ( !first )
+			{
+				*out++ = separator;
+			}
+			out = m_node->toString( out );
+		}
+		return out;
+	}
+
+	template <typename OutputIt>
+	inline OutputIt GmodPath::toFullPathString( OutputIt out ) const
+	{
+		auto enumerator = this->fullPath();
+		while ( enumerator.next() )
+		{
+			const auto& [depth, pathNode] = enumerator.current();
+			out = pathNode->toString( out );
+			if ( depth != ( length() - 1 ) )
+			{
+				*out++ = '/';
+			}
+		}
+		return out;
+	}
+
+	template <typename OutputIt>
+	inline OutputIt GmodPath::toStringDump( OutputIt out ) const
+	{
+		auto enumerator = this->fullPath();
+		while ( enumerator.next() )
+		{
+			const auto& [depth, pathNode] = enumerator.current();
+
+			if ( depth == 0 )
+			{
+				continue;
+			}
+
+			if ( depth != 1 )
+			{
+				out = fmt::format_to( out, " | " );
+			}
+
+			out = fmt::format_to( out, "{}", pathNode->code() );
+
+			const auto& name = pathNode->metadata().name();
+			if ( !name.empty() )
+			{
+				out = fmt::format_to( out, "/N:{}", name );
+			}
+
+			const auto& commonName = pathNode->metadata().commonName();
+			if ( commonName.has_value() && !commonName->empty() )
+			{
+				out = fmt::format_to( out, "/CN:{}", *commonName );
+			}
+
+			auto normalAssignment = normalAssignmentName( depth );
+			if ( normalAssignment && !normalAssignment->empty() )
+			{
+				out = fmt::format_to( out, "/NAN:{}", *normalAssignment );
+			}
+		}
+		return out;
 	}
 
 	//----------------------------------------------
@@ -214,9 +273,9 @@ namespace dnv::vista::sdk
 	// Enumeration methods
 	//----------------------------
 
-	inline bool GmodPath::Enumerator::next()
+	bool GmodPath::Enumerator::next()
 	{
-		if ( !m_pathInstance )
+		if ( !m_pathInstance || !m_pathInstance->m_gmod || !m_pathInstance->m_node.has_value() )
 		{
 			return false;
 		}
@@ -227,10 +286,24 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			m_currentIndex++;
+			++m_currentIndex;
 		}
 
-		return m_currentIndex < m_pathInstance->length();
+		if ( m_currentIndex >= m_pathInstance->length() )
+		{
+			return false;
+		}
+
+		if ( m_currentIndex < m_pathInstance->m_parents.size() )
+		{
+			m_current = std::make_pair( m_currentIndex, &m_pathInstance->m_parents[m_currentIndex] );
+		}
+		else
+		{
+			m_current = std::make_pair( m_currentIndex, &m_pathInstance->m_node.value() );
+		}
+
+		return true;
 	}
 
 	inline const GmodPath::Enumerator::PathElement& GmodPath::Enumerator::current() const
@@ -242,14 +315,23 @@ namespace dnv::vista::sdk
 		}
 
 		m_current.first = m_currentIndex;
-		m_current.second = ( *m_pathInstance )[m_currentIndex];
-		return m_current;
-	}
 
-	inline void GmodPath::Enumerator::reset()
-	{
-		m_currentIndex = std::numeric_limits<size_t>::max();
-		m_current = { std::numeric_limits<size_t>::max(), nullptr };
+		if ( m_currentIndex < m_pathInstance->m_parents.size() )
+		{
+			m_current.second = &( m_pathInstance->m_parents[m_currentIndex] );
+		}
+		else if ( m_currentIndex == m_pathInstance->m_parents.size() && m_pathInstance->m_node.has_value() )
+		{
+			m_current.second = &( m_pathInstance->m_node.value() );
+		}
+		else
+		{
+			static PathElement invalidElement{ std::numeric_limits<size_t>::max(), nullptr };
+
+			return invalidElement;
+		}
+
+		return m_current;
 	}
 
 	//=====================================================================
@@ -278,12 +360,8 @@ namespace dnv::vista::sdk
 			return std::nullopt;
 		}
 
-		const GmodNode* firstNode = m_path[static_cast<size_t>( firstNodeIdx )];
-		if ( !firstNode )
-		{
-			return std::nullopt;
-		}
+		const GmodNode& firstNode = m_path[static_cast<size_t>( firstNodeIdx )];
 
-		return firstNode->location();
+		return firstNode.location();
 	}
 }

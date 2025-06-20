@@ -36,26 +36,11 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
-	// Accessor
-	//----------------------------------------------
-
-	std::string_view CodebookDto::name() const
-	{
-		return m_name;
-	}
-
-	const CodebookDto::ValuesMap& CodebookDto::values() const
-	{
-		return m_values;
-	}
-
-	//----------------------------------------------
 	// Serialization
 	//----------------------------------------------
 
 	std::optional<CodebookDto> CodebookDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
 		try
 		{
 			if ( !json.contains( NAME_KEY ) || !json.at( NAME_KEY ).is_string() )
@@ -68,7 +53,6 @@ namespace dnv::vista::sdk
 			std::string tempName = json.at( NAME_KEY ).get<std::string>();
 
 			ValuesMap tempValues;
-			size_t totalValuesParsed = 0;
 
 			if ( json.contains( VALUES_KEY ) )
 			{
@@ -96,7 +80,6 @@ namespace dnv::vista::sdk
 						{
 							/* Attempt to parse the array of strings for the current group */
 							groupValues = groupValueJson.get<ValueGroup>();
-							totalValuesParsed += groupValues.size();
 							tempValues.emplace( groupName, std::move( groupValues ) );
 						}
 						catch ( [[maybe_unused]] const nlohmann::json::exception& ex )
@@ -113,9 +96,6 @@ namespace dnv::vista::sdk
 
 			/* Construct the final DTO using successfully parsed data */
 			CodebookDto resultDto( std::move( tempName ), std::move( tempValues ) );
-
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-			SPDLOG_DEBUG( "Successfully parsed CodebookDto '{}' in {} ms", resultDto.name(), duration.count() );
 
 			return std::optional<CodebookDto>{ std::move( resultDto ) };
 		}
@@ -165,13 +145,8 @@ namespace dnv::vista::sdk
 
 	nlohmann::json CodebookDto::toJson() const
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
 		/* Directly construct JSON object from members */
 		nlohmann::json obj = { { NAME_KEY, m_name }, { VALUES_KEY, m_values } };
-
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-		SPDLOG_DEBUG( "Serialized CodebookDto '{}' with {} groups in {} ms", m_name, m_values.size(), duration.count() );
 
 		return obj;
 	}
@@ -231,26 +206,11 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
-	// Accessors
-	//----------------------------------------------
-
-	const std::string& CodebooksDto::visVersion() const
-	{
-		return m_visVersion;
-	}
-
-	const CodebooksDto::Items& CodebooksDto::items() const
-	{
-		return m_items;
-	}
-
-	//----------------------------------------------
 	// Serialization
 	//----------------------------------------------
 
 	std::optional<CodebooksDto> CodebooksDto::tryFromJson( const nlohmann::json& json )
 	{
-		auto startTime = std::chrono::steady_clock::now();
 		try
 		{
 			if ( !json.contains( VIS_RELEASE_KEY ) || !json.at( VIS_RELEASE_KEY ).is_string() )
@@ -310,9 +270,6 @@ namespace dnv::vista::sdk
 			/* Construct the final DTO using successfully parsed data */
 			CodebooksDto resultDto( std::move( tempVisVersion ), std::move( tempItems ) );
 
-			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-			SPDLOG_DEBUG( "Successfully parsed CodebooksDto with {} items for VIS version {} in {} ms", resultDto.items().size(), resultDto.visVersion(), duration.count() );
-
 			return std::optional<CodebooksDto>{ std::move( resultDto ) };
 		}
 		catch ( [[maybe_unused]] const nlohmann::json::exception& ex )
@@ -361,14 +318,6 @@ namespace dnv::vista::sdk
 
 	nlohmann::json CodebooksDto::toJson() const
 	{
-		auto startTime = std::chrono::steady_clock::now();
-
-		/* Directly construct JSON object from members */
-		nlohmann::json obj = { { VIS_RELEASE_KEY, m_visVersion }, { ITEMS_KEY, m_items } };
-
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( std::chrono::steady_clock::now() - startTime );
-		SPDLOG_DEBUG( "Serialized CodebooksDto with {} items for VIS version {} in {} ms", m_items.size(), m_visVersion, duration.count() );
-
-		return obj;
+		return { { VIS_RELEASE_KEY, m_visVersion }, { ITEMS_KEY, m_items } };
 	}
 }

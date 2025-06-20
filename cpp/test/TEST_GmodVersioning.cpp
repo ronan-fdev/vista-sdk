@@ -104,7 +104,7 @@ namespace dnv::vista::sdk::tests
 			const Gmod& gmod;
 			const std::string targetPath = "1012.22/S201.1/C151.2/S110.2/C101.61/S203.2/S101";
 
-			PathState( const Gmod& g ) : gmod( g ) {}
+			PathState( const Gmod& g ) : gmod{ g } {}
 		};
 
 		PathState state( gmod );
@@ -112,16 +112,26 @@ namespace dnv::vista::sdk::tests
 		TraverseHandlerWithState<PathState> handler =
 			[]( PathState& state, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
 			if ( parents.empty() )
+			{
 				return TraversalHandlerResult::Continue;
+			}
 
-			std::vector<GmodNode*> nonConstParents;
-			nonConstParents.reserve( parents.size() );
+			std::vector<GmodNode> parentValues;
+			parentValues.reserve( parents.size() );
 			for ( const GmodNode* p : parents )
-				nonConstParents.push_back( const_cast<GmodNode*>( p ) );
+			{
+				if ( p )
+				{
+					parentValues.emplace_back( *p );
+				}
+			}
 
-			GmodPath path( state.gmod, const_cast<GmodNode*>( &node ), nonConstParents );
+			GmodPath path( state.gmod, node, std::move( parentValues ) );
+
 			if ( path.toString() == state.targetPath )
+			{
 				return TraversalHandlerResult::Stop;
+			}
 
 			return TraversalHandlerResult::Continue;
 		};
@@ -147,6 +157,7 @@ namespace dnv::vista::sdk::tests
 			{
 				return false;
 			}
+
 			return node.parents().size() == 1 && onePathToRoot( *node.parents()[0] );
 		}
 	}
@@ -279,7 +290,10 @@ namespace dnv::vista::sdk::tests
 
 		PathTestData( const std::string& input, const std::string& expected,
 			VisVersion source = VisVersion::v3_4a, VisVersion target = VisVersion::v3_6a )
-			: inputPath( input ), expectedPath( expected ), sourceVersion( source ), targetVersion( target )
+			: inputPath{ input },
+			  expectedPath{ expected },
+			  sourceVersion{ source },
+			  targetVersion{ target }
 		{
 		}
 	};
@@ -338,10 +352,11 @@ namespace dnv::vista::sdk::tests
 		auto sourceEnumerator = sourcePathOpt->enumerator();
 		while ( sourceEnumerator.next() )
 		{
-			const auto& [depth, node] = sourceEnumerator.current();
-			if ( node && node->location().has_value() )
+			const auto& [depth, nodePtr] = sourceEnumerator.current();
+
+			if ( nodePtr && nodePtr->location().has_value() )
 			{
-				nodesWithLocation.push_back( std::string( node->code() ) );
+				nodesWithLocation.push_back( std::string( nodePtr->code() ) );
 			}
 		}
 
@@ -353,10 +368,13 @@ namespace dnv::vista::sdk::tests
 		LocationValidationState state;
 		TraverseHandlerWithState<LocationValidationState> handler =
 			[]( LocationValidationState& s, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+			(void)parents;
+
 			if ( node.location().has_value() )
 			{
 				s.allNodesHaveNullLocation = false;
 			}
+
 			return TraversalHandlerResult::Continue;
 		};
 
@@ -393,15 +411,19 @@ namespace dnv::vista::sdk::tests
 
 		FullPathTestData( const std::string& input, const std::string& expected,
 			VisVersion source = VisVersion::v3_4a, VisVersion target = VisVersion::v3_6a )
-			: inputPath( input ), expectedPath( expected ), sourceVersion( source ), targetVersion( target )
+			: inputPath{ input },
+			  expectedPath{ expected },
+			  sourceVersion{ source },
+			  targetVersion{ target }
 		{
 		}
 	};
 
 	std::vector<FullPathTestData> validFullPathTestData()
 	{
-		return { { "VE/600a/630/632/632.3/632.32/632.32i-2/S110",
-			"VE/600a/630/632/632.3/632.32/632.32i-2/SS5/S110" } };
+		return {
+			{ "VE/600a/630/632/632.3/632.32/632.32i-2/S110",
+				"VE/600a/630/632/632.3/632.32/632.32i-2/SS5/S110" } };
 	}
 
 	class FullPathConversionTest : public ::testing::TestWithParam<FullPathTestData>
@@ -452,7 +474,9 @@ namespace dnv::vista::sdk::tests
 		std::string expectedCode;
 
 		NodeTestData( const std::string& input, const std::optional<std::string>& loc, const std::string& expected )
-			: inputCode( input ), location( loc ), expectedCode( expected )
+			: inputCode{ input },
+			  location{ loc },
+			  expectedCode{ expected }
 		{
 		}
 	};

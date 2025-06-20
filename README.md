@@ -50,15 +50,18 @@ Each SDK makes use of the contents of the resources and schemas folders to gener
  ┃ ┣ 📜codebooks-vis-3-6a.json.gz
  ┃ ┣ 📜codebooks-vis-3-7a.json.gz
  ┃ ┣ 📜codebooks-vis-3-8a.json.gz
+ ┃ ┣ 📜codebooks-vis-3-9a.json.gz
  ┃ ┣ 📜gmod-vis-3-4a.json.gz
  ┃ ┣ 📜gmod-vis-3-5a.json.gz
  ┃ ┣ 📜gmod-vis-3-6a.json.gz
  ┃ ┣ 📜gmod-vis-3-7a.json.gz
  ┃ ┣ 📜gmod-vis-3-8a.json.gz
+ ┃ ┣ 📜gmod-vis-3-9a.json.gz
  ┃ ┣ 📜gmod-vis-versioning-3-5a.json.gz
  ┃ ┣ 📜gmod-vis-versioning-3-6a.json.gz
  ┃ ┣ 📜gmod-vis-versioning-3-7a.json.gz
  ┃ ┣ 📜gmod-vis-versioning-3-8a.json.gz
+ ┃ ┣ 📜gmod-vis-versioning-3-9a.json.gz
  ┃ ┣ 📜iso19848-v2018-data-channel-type-names.json.gz
  ┃ ┣ 📜iso19848-v2018-format-data-types.json.gz
  ┃ ┣ 📜iso19848-v2024-data-channel-type-names.json.gz
@@ -68,6 +71,7 @@ Each SDK makes use of the contents of the resources and schemas folders to gener
  ┃ ┣ 📜locations-vis-3-6a.json.gz
  ┃ ┣ 📜locations-vis-3-7a.json.gz
  ┃ ┗ 📜locations-vis-3-8a.json.gz
+ ┃ ┗ 📜locations-vis-3-9a.json.gz
  ┣ 📂schemas
  ┃ ┣ 📂json
  ┃ ┃ ┣ 📜DataChannelList.sample.compact.json

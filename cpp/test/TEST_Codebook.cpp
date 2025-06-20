@@ -441,13 +441,13 @@ namespace dnv::vista::sdk
 				ASSERT_EQ( cbName, roundTripName );
 			}
 
-			ASSERT_THROW( dnv::vista::sdk::CodebookNames::fromPrefix( "" ), std::invalid_argument );
-			ASSERT_THROW( dnv::vista::sdk::CodebookNames::fromPrefix( "invalid_prefix" ), std::invalid_argument );
-			ASSERT_THROW( dnv::vista::sdk::CodebookNames::fromPrefix( "po" ), std::invalid_argument );
+			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::fromPrefix( "" ), std::invalid_argument );
+			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::fromPrefix( "invalid_prefix" ), std::invalid_argument );
+			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::fromPrefix( "po" ), std::invalid_argument );
 
-			ASSERT_THROW( dnv::vista::sdk::CodebookNames::fromPrefix( "QTY" ), std::invalid_argument );
-			ASSERT_THROW( dnv::vista::sdk::CodebookNames::fromPrefix( "Pos" ), std::invalid_argument );
-			ASSERT_THROW( dnv::vista::sdk::CodebookNames::fromPrefix( "funct.SVC" ), std::invalid_argument );
+			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::fromPrefix( "QTY" ), std::invalid_argument );
+			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::fromPrefix( "Pos" ), std::invalid_argument );
+			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::fromPrefix( "funct.SVC" ), std::invalid_argument );
 
 			const auto invalidCbName = static_cast<dnv::vista::sdk::CodebookName>( 999 );
 			ASSERT_THROW( (void)dnv::vista::sdk::CodebookNames::toPrefix( invalidCbName ), std::invalid_argument );
