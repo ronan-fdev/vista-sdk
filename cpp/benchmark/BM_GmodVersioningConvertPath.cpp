@@ -1,5 +1,5 @@
 /**
- * @file GmodVersioningConvertPath.cpp
+ * @file BM_GmodVersioningConvertPath.cpp
  * @brief GMOD version conversion performance benchmark testing path conversion between VIS versions
  */
 
@@ -45,7 +45,6 @@ namespace dnv::vista::sdk::benchmarks
 
 	BENCHMARK_F( GmodVersioningFixture, ConvertPath )( benchmark::State& state )
 	{
-
 		for ( auto _ : state )
 		{
 			auto result = m_vis->convertPath( VisVersion::v3_4a, m_gmodPath, VisVersion::v3_5a );

@@ -326,73 +326,79 @@ namespace dnv::vista::sdk
 	// Relationship accessors
 	//----------------------------------------------
 
-	inline const std::vector<GmodNode*>& GmodNode::children() const noexcept
+	inline const std::vector<GmodNode> GmodNode::children() const noexcept
 	{
-		return m_children;
+		std::vector<GmodNode> result;
+		result.reserve( m_children.size() );
+		for ( const auto* child : m_children )
+		{
+			result.push_back( *child );
+		}
+
+		return result;
 	}
 
-	inline const std::vector<GmodNode*>& GmodNode::parents() const noexcept
+	inline const std::vector<GmodNode> GmodNode::parents() const noexcept
 	{
-		return m_parents;
+		std::vector<GmodNode> result;
+		result.reserve( m_parents.size() );
+		for ( const auto* parent : m_parents )
+		{
+			result.push_back( *parent );
+		}
+
+		return result;
 	}
 
-	inline const GmodNode* GmodNode::productType() const noexcept
+	inline std::optional<const GmodNode*> GmodNode::productType() const noexcept
 	{
 		if ( m_children.size() != 1 )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		if ( !contains( m_metadata.category(), GMODNODE_CATEGORY_FUNCTION ) )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		const GmodNode* child = m_children[0];
-		if ( !child )
-		{
-			return nullptr;
-		}
 
 		if ( child->m_metadata.category() != GMODNODE_CATEGORY_PRODUCT )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		if ( child->m_metadata.type() != GMODNODE_TYPE_TYPE )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		return child;
 	}
 
-	inline const GmodNode* GmodNode::productSelection() const noexcept
+	inline std::optional<const GmodNode*> GmodNode::productSelection() const noexcept
 	{
 		if ( m_children.size() != 1 )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		if ( !contains( m_metadata.category(), GMODNODE_CATEGORY_FUNCTION ) )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		const GmodNode* child = m_children[0];
-		if ( !child )
-		{
-			return nullptr;
-		}
 
 		if ( !contains( child->m_metadata.category(), GMODNODE_CATEGORY_PRODUCT ) )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		if ( child->m_metadata.type() != GMODNODE_TYPE_SELECTION )
 		{
-			return nullptr;
+			return std::nullopt;
 		}
 
 		return child;
@@ -448,8 +454,8 @@ namespace dnv::vista::sdk
 				 m_metadata.category().find( GMODNODE_CATEGORY_FUNCTION ) != std::string::npos )
 			{
 				const GmodNode* child = m_children[0];
-				if ( child &&
-					 child->m_metadata.category() == GMODNODE_CATEGORY_PRODUCT &&
+
+				if ( child->m_metadata.category() == GMODNODE_CATEGORY_PRODUCT &&
 					 child->m_metadata.type() == GMODNODE_TYPE_TYPE )
 				{
 					m_cachedProductType = child;
@@ -476,8 +482,8 @@ namespace dnv::vista::sdk
 				 m_metadata.category().find( GMODNODE_CATEGORY_FUNCTION ) != std::string::npos )
 			{
 				const GmodNode* child = m_children[0];
-				if ( child &&
-					 child->m_metadata.category().find( GMODNODE_CATEGORY_PRODUCT ) != std::string::npos &&
+
+				if ( child->m_metadata.category().find( GMODNODE_CATEGORY_PRODUCT ) != std::string::npos &&
 					 child->m_metadata.type() == GMODNODE_TYPE_SELECTION )
 				{
 					m_cachedProductSelection = child;
@@ -498,7 +504,8 @@ namespace dnv::vista::sdk
 			return false;
 		}
 
-		if ( m_metadata.category().find( GMODNODE_CATEGORY_PRODUCT ) != std::string::npos && m_metadata.type() == GMODNODE_TYPE_SELECTION )
+		if ( m_metadata.category().find( GMODNODE_CATEGORY_PRODUCT ) != std::string::npos &&
+			 m_metadata.type() == GMODNODE_TYPE_SELECTION )
 		{
 			return false;
 		}
@@ -564,33 +571,17 @@ namespace dnv::vista::sdk
 	// Relationship management methods
 	//----------------------------------------------
 
-	inline void GmodNode::addChild( GmodNode* child ) noexcept
+	inline void GmodNode::addChild( const GmodNode* child ) noexcept
 	{
-		if ( !child )
-		{
-			return;
-		}
-
-		auto childCode = child->code();
-		if ( m_childrenSet.contains( childCode ) )
-		{
-			return;
-		}
-
 		m_children.push_back( child );
-		m_childrenSet.emplace( childCode );
+		m_childrenSet.emplace( child->code() );
 
 		m_cachedProductType.reset();
 		m_cachedProductSelection.reset();
 	}
 
-	inline void GmodNode::addParent( GmodNode* parent ) noexcept
+	inline void GmodNode::addParent( const GmodNode* parent ) noexcept
 	{
-		if ( !parent )
-		{
-			return;
-		}
-
 		m_parents.push_back( parent );
 	}
 
@@ -599,15 +590,12 @@ namespace dnv::vista::sdk
 		m_children.shrink_to_fit();
 		m_parents.shrink_to_fit();
 
-		if ( m_childrenSet.size() != m_children.size() )
-		{
-			m_childrenSet.clear();
-			m_childrenSet.reserve( m_children.size() );
+		m_childrenSet.clear();
+		m_childrenSet.reserve( m_children.size() );
 
-			for ( const auto* child : m_children )
-			{
-				m_childrenSet.emplace( child->code() );
-			}
+		for ( const auto& child : m_children )
+		{
+			m_childrenSet.emplace( child->code() );
 		}
 	}
 }

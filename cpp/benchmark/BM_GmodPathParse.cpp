@@ -1,5 +1,5 @@
 /**
- * @file GmodPathParse.cpp
+ * @file BM_GmodPathParse.cpp
  * @brief GMOD path parsing performance benchmarks comparing different parsing strategies
  */
 

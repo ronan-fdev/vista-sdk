@@ -1,5 +1,5 @@
 /**
- * @file GmodLookup.cpp
+ * @file BM_GmodLookup.cpp
  * @brief GMOD node lookup comparison between CHD Dictionary and std::unordered_map
  */
 

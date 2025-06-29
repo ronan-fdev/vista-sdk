@@ -13,9 +13,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 # --- Dependencies ---
 include(Dependencies.cmake)
 
-# --- Compiler settings ---
-include(CompilersSettings.cmake)
-
 # --- Build options ---
 option(VISTA_SDK_CPP_BUILD_STATIC          "Build static libraries instead of shared"                  OFF    )
 option(VISTA_SDK_CPP_BUILD_TESTS           "Build tests"                                               ON     )
@@ -116,6 +113,9 @@ if(WIN32 AND NOT VISTA_SDK_CPP_BUILD_STATIC)
 	)
 	target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR}/version.rc)
 endif()
+
+# --- Compiler settings ---
+include(CompilersSettings.cmake)
 
 # --- Precompiled headers ---
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/pch.h)

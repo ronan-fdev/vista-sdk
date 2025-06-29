@@ -1,5 +1,5 @@
 /**
- * @file GmodTests.cpp
+ * @file TESTS_Gmod.cpp
  * @brief Unit tests for the Generic Product Model (GMOD) functionality
  */
 
@@ -31,13 +31,13 @@ namespace dnv::vista::sdk::tests
 		// Helper functions
 		//=====================================================================
 
-		static std::size_t occurrences( const std::vector<const GmodNode*>& parents, const GmodNode& node )
+		static std::size_t occurrences( const std::vector<GmodNode>& parents, const GmodNode& node )
 		{
 			return static_cast<size_t>(
 				std::count_if(
 					parents.begin(), parents.end(),
-					[&node]( const GmodNode* p ) {
-						return p != nullptr && p->code() == node.code();
+					[&node]( const GmodNode& p ) {
+						return p.code() == node.code();
 					} ) );
 		}
 
@@ -117,11 +117,11 @@ namespace dnv::vista::sdk::tests
 			auto [vis, gmod] = visAndGmod( VisVersion::v3_4a );
 
 			const GmodNode& node1 = gmod["411.3"];
-			EXPECT_NE( node1.productType(), nullptr );
-			EXPECT_EQ( node1.productSelection(), nullptr );
+			EXPECT_TRUE( node1.productType().has_value() );
+			EXPECT_FALSE( node1.productSelection().has_value() );
 
 			const GmodNode& node2 = gmod["H601"];
-			EXPECT_EQ( node2.productType(), nullptr );
+			EXPECT_FALSE( node2.productType().has_value() );
 		}
 
 		//----------------------------------------------
@@ -133,11 +133,11 @@ namespace dnv::vista::sdk::tests
 			auto [vis, gmod] = visAndGmod( VisVersion::v3_4a );
 
 			const GmodNode& node1 = gmod["411.2"];
-			EXPECT_NE( node1.productSelection(), nullptr );
-			EXPECT_EQ( node1.productType(), nullptr );
+			EXPECT_TRUE( node1.productSelection().has_value() );
+			EXPECT_FALSE( node1.productType().has_value() );
 
 			const GmodNode& node2 = gmod["H601"];
-			EXPECT_EQ( node2.productSelection(), nullptr );
+			EXPECT_FALSE( node2.productSelection().has_value() );
 		}
 
 		//----------------------------------------------
@@ -174,30 +174,20 @@ namespace dnv::vista::sdk::tests
 			int maxExpected = TraversalOptions::DEFAULT_MAX_TRAVERSAL_OCCURRENCE;
 
 			TraverseHandlerWithState<FullTraversalState> handler =
-				[]( FullTraversalState& state, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
-				EXPECT_TRUE( parents.empty() || parents[0]->isRoot() );
+				[]( FullTraversalState& state, const std::vector<GmodNode>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+				EXPECT_TRUE( parents.empty() || parents[0].isRoot() );
 
 				bool isHG3Related = ( node.code() == "HG3" ) ||
-									std::any_of( parents.begin(), parents.end(), []( const GmodNode* p ) {
-										return p != nullptr && p->code() == "HG3";
+									std::any_of( parents.begin(), parents.end(), []( const GmodNode& p ) {
+										return p.code() == "HG3";
 									} );
 
 				if ( isHG3Related )
 				{
-					std::vector<GmodNode> parentValues;
-					parentValues.reserve( parents.size() );
-					for ( const GmodNode* p_const : parents )
-					{
-						if ( p_const )
-						{
-							parentValues.emplace_back( *p_const );
-						}
-					}
-
-					state.paths.emplace_back( state.gmodRef, node, std::move( parentValues ) );
+					state.paths.emplace_back( state.gmodRef, node, parents );
 				}
 
-				const GmodNode* lastParent = parents.empty() ? nullptr : parents.back();
+				const GmodNode* lastParent = parents.empty() ? nullptr : &parents.back();
 
 				bool skipOccurenceCheck = Gmod::isProductSelectionAssignment( lastParent, &node );
 				if ( skipOccurenceCheck )
@@ -235,13 +225,13 @@ namespace dnv::vista::sdk::tests
 			};
 
 			MaxOccurrenceState state;
-			size_t maxExpected = 2;
+			int maxExpected = 2;
 			TraversalOptions options;
 			options.maxTraversalOccurrence = maxExpected;
 
 			TraverseHandlerWithState<MaxOccurrenceState> handler =
-				[]( MaxOccurrenceState& state, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
-				const GmodNode* lastParent = parents.empty() ? nullptr : parents.back();
+				[]( MaxOccurrenceState& state, const std::vector<GmodNode>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+				const GmodNode* lastParent = parents.empty() ? nullptr : &parents.back();
 				bool skipOccurenceCheck = Gmod::isProductSelectionAssignment( lastParent, &node );
 				if ( skipOccurenceCheck )
 				{
@@ -274,8 +264,8 @@ namespace dnv::vista::sdk::tests
 			TraversalState state( 5 );
 
 			dnv::vista::sdk::TraverseHandlerWithState<TraversalState> handler =
-				[]( TraversalState& currentState, const std::vector<const GmodNode*>& parents, [[maybe_unused]] const GmodNode& node ) -> TraversalHandlerResult {
-				EXPECT_TRUE( parents.empty() || parents[0]->isRoot() );
+				[]( TraversalState& currentState, const std::vector<GmodNode>& parents, [[maybe_unused]] const GmodNode& node ) -> TraversalHandlerResult {
+				EXPECT_TRUE( parents.empty() || parents[0].isRoot() );
 				if ( ++currentState.nodeCount == currentState.stopAfter )
 				{
 					return TraversalHandlerResult::Stop;
@@ -302,9 +292,9 @@ namespace dnv::vista::sdk::tests
 
 			const GmodNode& startNode = gmod["400a"];
 
-			dnv::vista::sdk::TraverseHandlerWithState<TraversalState> handler =
-				[]( TraversalState& currentState, const std::vector<const GmodNode*>& parents, [[maybe_unused]] const GmodNode& node ) -> TraversalHandlerResult {
-				EXPECT_TRUE( parents.empty() || ( parents[0] != nullptr && parents[0]->code() == "400a" ) );
+			TraverseHandlerWithState<TraversalState> handler =
+				[]( TraversalState& currentState, const std::vector<GmodNode>& parents, [[maybe_unused]] const GmodNode& node ) -> TraversalHandlerResult {
+				EXPECT_TRUE( parents.empty() || ( parents[0].code() == "400a" ) );
 
 				++currentState.nodeCount;
 

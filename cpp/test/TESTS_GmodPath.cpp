@@ -1,5 +1,5 @@
 /**
- * @file GmodPathTests.cpp
+ * @file TESTS_GmodPath.cpp
  * @brief Unit tests for the GmodPath class.
  */
 

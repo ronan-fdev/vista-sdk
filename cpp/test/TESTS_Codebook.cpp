@@ -1,5 +1,5 @@
 /**
- * @file CodebookTests.cpp
+ * @file TESTS_Codebook.cpp
  * @brief Unit tests for the Codebook and related functionalities.
  */
 

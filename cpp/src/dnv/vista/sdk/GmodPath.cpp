@@ -735,7 +735,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		auto handler = []( ParseContext& ctx, const std::vector<const GmodNode*>& parents, const GmodNode& current ) -> TraversalHandlerResult {
+		auto handler = []( ParseContext& ctx, const std::vector<GmodNode>& parents, const GmodNode& current ) -> TraversalHandlerResult {
 			const auto& targetCode = ctx.parts[ctx.currentPartIndex].code;
 			bool found = ( current.code() == targetCode );
 
@@ -762,45 +762,48 @@ namespace dnv::vista::sdk
 				std::vector<GmodNode> pathParents;
 				pathParents.reserve( parents.size() + 1 );
 
-				for ( const GmodNode* parent : parents )
+				for ( const GmodNode& parent : parents )
 				{
-					GmodNode parentWithLocation = *parent;
-					if ( ctx.locationMap.find( parent->code() ) != ctx.locationMap.end() )
+					GmodNode parentWithLocation = parent;
+					if ( ctx.locationMap.find( parent.code() ) != ctx.locationMap.end() )
 					{
-						parentWithLocation = parent->withLocation( ctx.locationMap[parent->code()] );
+						parentWithLocation = parent.withLocation( ctx.locationMap[parent.code()] );
 					}
 					pathParents.push_back( parentWithLocation );
 				}
 
 				GmodNode endNode = nodeWithLocation;
 
-				const GmodNode* startNode = nullptr;
+				std::optional<GmodNode> startNodeOpt = std::nullopt;
 				if ( pathParents.size() > 0 && pathParents[0].parents().size() == 1 )
 				{
-					startNode = pathParents[0].parents()[0];
+					auto nodeParents = pathParents[0].parents();
+					startNodeOpt = nodeParents[0];
 				}
 				else if ( endNode.parents().size() == 1 )
 				{
-					startNode = endNode.parents()[0];
+					auto nodeParents = endNode.parents();
+					startNodeOpt = nodeParents[0];
 				}
 
-				if ( !startNode || startNode->parents().size() > 1 )
+				if ( !startNodeOpt.has_value() || startNodeOpt->parents().size() > 1 )
 				{
 					return TraversalHandlerResult::Stop;
 				}
 
 				std::vector<GmodNode> reverseHierarchy;
 
-				while ( startNode && startNode->parents().size() == 1 )
+				while ( startNodeOpt.has_value() && startNodeOpt->parents().size() == 1 )
 				{
-					GmodNode nodeToAdd = *startNode;
-					if ( ctx.locationMap.find( startNode->code() ) != ctx.locationMap.end() )
+					GmodNode nodeToAdd = startNodeOpt.value();
+					if ( ctx.locationMap.find( startNodeOpt->code() ) != ctx.locationMap.end() )
 					{
-						nodeToAdd = startNode->withLocation( ctx.locationMap[startNode->code()] );
+						nodeToAdd = startNodeOpt->withLocation( ctx.locationMap[startNodeOpt->code()] );
 					}
 					reverseHierarchy.push_back( nodeToAdd );
-					startNode = startNode->parents()[0];
-					if ( startNode->parents().size() > 1 )
+					auto nodeParents = startNodeOpt->parents();
+					startNodeOpt = nodeParents[0];
+					if ( startNodeOpt->parents().size() > 1 )
 					{
 						return TraversalHandlerResult::Stop;
 					}

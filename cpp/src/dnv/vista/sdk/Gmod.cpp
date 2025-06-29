@@ -20,7 +20,8 @@ namespace dnv::vista::sdk
 	//----------------------------------------------
 
 	Gmod::Gmod( VisVersion version, const GmodDto& dto )
-		: m_visVersion{ version }, m_rootNode{ nullptr }
+		: m_visVersion{ version },
+		  m_rootNode{ nullptr }
 	{
 		const auto& items = dto.items();
 		std::vector<std::pair<std::string, GmodNode>> nodePairs;

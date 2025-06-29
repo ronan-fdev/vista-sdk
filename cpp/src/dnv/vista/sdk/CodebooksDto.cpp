@@ -216,7 +216,7 @@ namespace dnv::vista::sdk
 	std::optional<CodebooksDto> CodebooksDto::tryFromJson( const nlohmann::json& json )
 	{
 		[[maybe_unused]] const auto visHint = extractVisHint( json );
-		
+
 		try
 		{
 			if ( !json.contains( CODEBOOK_DTO_KEY_VIS_RELEASE ) || !json.at( CODEBOOK_DTO_KEY_VIS_RELEASE ).is_string() )

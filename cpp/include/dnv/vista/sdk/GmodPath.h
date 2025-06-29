@@ -30,7 +30,7 @@ namespace dnv::vista::sdk
 
 		dnv::vista::sdk::TraversalHandlerResult parseInternalTraversalHandler(
 			ParseContext& context,
-			const std::vector<const GmodNode*>& traversedParents,
+			const std::vector<GmodNode>& traversedParents,
 			const GmodNode& currentNode );
 	}
 
@@ -48,7 +48,7 @@ namespace dnv::vista::sdk
 
 		friend dnv::vista::sdk::TraversalHandlerResult internal::parseInternalTraversalHandler(
 			internal::ParseContext&,
-			const std::vector<const GmodNode*>&,
+			const std::vector<GmodNode>&,
 			const GmodNode& );
 
 	public:

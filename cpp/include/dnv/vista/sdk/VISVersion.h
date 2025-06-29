@@ -33,6 +33,14 @@ namespace dnv::vista::sdk
 		inline static bool isValid( VisVersion version );
 
 		/**
+		 * @brief Get the next VIS version in sequence
+		 * @param version The current version
+		 * @return The next VisVersion
+		 * @throws std::out_of_range if the current version is the latest
+		 */
+		inline static VisVersion next( VisVersion version );
+
+		/**
 		 * @brief Get the latest available VIS version
 		 * @return The latest VIS version
 		 */

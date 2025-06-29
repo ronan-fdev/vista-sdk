@@ -1,5 +1,5 @@
 /**
- * @file GmodVersioningTests.cpp
+ * @file TESTS_GmodVersioning.cpp
  * @brief Unit tests for the GmodVersioning class.
  */
 
@@ -112,7 +112,7 @@ namespace dnv::vista::sdk::tests
 		PathState state( gmod );
 
 		TraverseHandlerWithState<PathState> handler =
-			[]( PathState& state, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+			[]( PathState& state, const std::vector<GmodNode>& parents, const GmodNode& node ) -> TraversalHandlerResult {
 			if ( parents.empty() )
 			{
 				return TraversalHandlerResult::Continue;
@@ -120,12 +120,9 @@ namespace dnv::vista::sdk::tests
 
 			std::vector<GmodNode> parentValues;
 			parentValues.reserve( parents.size() );
-			for ( const GmodNode* p : parents )
+			for ( const GmodNode& p : parents )
 			{
-				if ( p )
-				{
-					parentValues.emplace_back( *p );
-				}
+				parentValues.emplace_back( p );
 			}
 
 			GmodPath path( state.gmod, node, std::move( parentValues ) );
@@ -140,7 +137,7 @@ namespace dnv::vista::sdk::tests
 
 		auto completed = GmodTraversal::traverse( state, gmod, handler );
 
-		ASSERT_FALSE( completed );
+		EXPECT_TRUE( completed );
 	}
 
 	//----------------------------------------------
@@ -160,7 +157,7 @@ namespace dnv::vista::sdk::tests
 				return false;
 			}
 
-			return node.parents().size() == 1 && onePathToRoot( *node.parents()[0] );
+			return node.parents().size() == 1 && onePathToRoot( node.parents()[0] );
 		}
 	}
 
@@ -234,10 +231,11 @@ namespace dnv::vista::sdk::tests
 
 		ASSERT_TRUE( m_setupSuccess ) << "Test setup failed";
 
-		std::vector<VisVersion> visVersionsToTest = { VisVersion::v3_7a };
-		const VisVersion latestVisVersion = VisVersion::v3_8a;
+		std::vector<VisVersion> visVersionsToTest = { VisVersion::v3_8a };
+		const VisVersion latestVisVersion = m_vis->latestVisVersion();
 
-		std::unordered_map<VisVersion, std::vector<std::string>> errored;
+		std::unordered_map<VisVersion, std::vector<std::string>>
+			errored;
 
 		for ( const auto& sourceVersion : visVersionsToTest )
 		{
@@ -369,7 +367,7 @@ namespace dnv::vista::sdk::tests
 
 		LocationValidationState state;
 		TraverseHandlerWithState<LocationValidationState> handler =
-			[]( LocationValidationState& s, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+			[]( LocationValidationState& s, const std::vector<GmodNode>& parents, const GmodNode& node ) -> TraversalHandlerResult {
 			(void)parents;
 
 			if ( node.location().has_value() )

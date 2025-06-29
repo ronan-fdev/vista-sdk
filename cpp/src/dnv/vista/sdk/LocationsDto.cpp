@@ -223,7 +223,7 @@ namespace dnv::vista::sdk
 	std::optional<LocationsDto> LocationsDto::tryFromJson( const nlohmann::json& json )
 	{
 		[[maybe_unused]] const auto visHint = extractVisHint( json );
-		
+
 		try
 		{
 			if ( !json.is_object() )

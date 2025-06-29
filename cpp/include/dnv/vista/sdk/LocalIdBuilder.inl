@@ -334,7 +334,7 @@ namespace dnv::vista::sdk
 		out = fmt::format_to( out, "/{}/", namingRule );
 
 		/* VIS version: "vis-{major}-{minor}{patch}" */
-		out = fmt::format_to( out, "{}/", VisVersionExtensions::toVersionString( *m_visVersion ) );
+		out = fmt::format_to( out, "vis-{}/", VisVersionExtensions::toVersionString( *m_visVersion ) );
 
 		/* Items section: primary item [+ secondary item] [+ description] */
 		out = m_items.append( out, m_verboseMode );

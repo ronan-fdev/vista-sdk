@@ -1,5 +1,5 @@
 /**
- * @file ShortStringHash.cpp
+ * @file BM_ShortStringHash.cpp
  * @brief Short string hash function performance comparison between different algorithms
  */
 

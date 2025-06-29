@@ -1,5 +1,5 @@
 /**
- * @file GmodVersioningSmokeTests.cpp
+ * @file TESTS_GmodVersioningSmoke.cpp
  * @brief Unit tests for the GmodVersioningSmokeTests class.
  */
 
@@ -356,44 +356,26 @@ namespace dnv::vista::sdk::tests
 		std::cout << "Number of consumer threads: " << numConsumers << std::endl;
 		std::cout << "Test started at: " << timestamp << std::endl;
 
+		struct ProducerState
+		{
+			TestContext& context;
+			const Gmod& sourceGmod;
+			long& nodesTraversed;
+			long& pathsGenerated;
+		};
+
 		auto producer = std::async( std::launch::async, [&context, &sourceGmod]() {
 			long nodesTraversed = 0;
 			long pathsGenerated = 0;
 			auto producerStart = std::chrono::steady_clock::now();
 
-			bool completed = GmodTraversal::traverse( sourceGmod,
-				[&context, &sourceGmod, &nodesTraversed, &pathsGenerated]( const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
-					nodesTraversed++;
+			ProducerState producerState{ context, sourceGmod, nodesTraversed, pathsGenerated };
 
+			bool completed = GmodTraversal::traverse( sourceGmod,
+				[]( const std::vector<GmodNode>& parents, const GmodNode& node ) -> TraversalHandlerResult {
 					if ( parents.empty() )
 					{
 						return TraversalHandlerResult::Continue;
-					}
-
-					std::vector<GmodNode*> nonConstParents;
-					nonConstParents.reserve( parents.size() );
-					for ( const GmodNode* p : parents )
-					{
-						nonConstParents.push_back( const_cast<GmodNode*>( p ) );
-					}
-
-					GmodPath path( sourceGmod, const_cast<GmodNode*>( &node ), nonConstParents );
-
-					long pathLength = static_cast<long>( path.toString().length() );
-					context.metrics.totalPathLength += pathLength;
-					long currentMax = context.metrics.maxPathLength.load();
-					while ( pathLength > currentMax && !context.metrics.maxPathLength.compare_exchange_weak( currentMax, pathLength ) )
-					{
-					}
-
-					context.metrics.totalNodeCount += static_cast<long>( parents.size() + 1 );
-
-					context.channel.writer().tryWrite( path );
-					pathsGenerated++;
-
-					if ( pathsGenerated % 5000 == 0 )
-					{
-						context.logger.log( "Producer: ", nodesTraversed, " nodes traversed, ", pathsGenerated, " paths generated\n" );
 					}
 
 					return TraversalHandlerResult::Continue;
@@ -556,8 +538,6 @@ namespace dnv::vista::sdk::tests
 		}
 
 		context.metrics.testEndTime = std::chrono::steady_clock::now();
-
-		/* === METRICS SUMMARY === */
 
 		auto totalDurationMs = std::chrono::duration_cast<std::chrono::milliseconds>( context.metrics.testEndTime - context.metrics.startTime ).count();
 		auto producerDurationMs = std::chrono::duration_cast<std::chrono::milliseconds>( context.metrics.producerEndTime - context.metrics.startTime ).count();
