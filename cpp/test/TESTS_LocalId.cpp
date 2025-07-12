@@ -1,5 +1,5 @@
 /**
- * @file LocalIdTests.cpp
+ * @file TESTS_LocalId.cpp
  * @brief Unit tests for LocalId and LocalIdBuilder classes.
  */
 

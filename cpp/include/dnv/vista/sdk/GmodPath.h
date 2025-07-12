@@ -16,10 +16,11 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	class Gmod;
-	class GmodParsePathResult;
 	class GmodIndividualizableSet;
 	class Location;
 	class Locations;
+
+	struct GmodParsePathResult;
 
 	enum class TraversalHandlerResult;
 	enum class VisVersion;
@@ -309,7 +310,7 @@ namespace dnv::vista::sdk
 		 * @return Parse result with either success path or error message
 		 * @details Uses GMOD traversal to find complete hierarchical path from partial input
 		 */
-		static std::unique_ptr<GmodParsePathResult> parseInternal(
+		static GmodParsePathResult parseInternal(
 			std::string_view item, const Gmod& gmod, const Locations& locations );
 
 		/**
@@ -319,12 +320,12 @@ namespace dnv::vista::sdk
 		 * @param locations The locations instance for location parsing
 		 * @return Parse result with either success path or error message
 		 */
-		static std::unique_ptr<GmodParsePathResult> parseFullPathInternal(
+		static GmodParsePathResult parseFullPathInternal(
 			std::string_view item, const Gmod& gmod, const Locations& locations );
 
 	public:
 		//----------------------------------------------
-		// GmodPath enumerator
+		// GmodPath::enumerator
 		//----------------------------------------------
 
 		class Enumerator final
@@ -473,66 +474,36 @@ namespace dnv::vista::sdk
 	};
 
 	//=====================================================================
-	// GmodParsePathResult class
+	// GmodParsePathResult
 	//=====================================================================
 
-	class GmodParsePathResult
+	struct GmodParsePathResult
 	{
-		//----------------------------------------------
-		// Construction
-		//----------------------------------------------
-	protected:
-		GmodParsePathResult() = default;
+		struct Ok
+		{
+			GmodPath path;
+			inline explicit Ok( GmodPath p );
+		};
 
-		GmodParsePathResult( const GmodParsePathResult& ) = delete;
-		GmodParsePathResult( GmodParsePathResult&& ) = delete;
+		struct Error
+		{
+			std::string error;
+			inline explicit Error( std::string e );
+		};
 
-	public:
-		//----------------------------------------------
-		// Assignment operators
-		//----------------------------------------------
+		std::variant<Ok, Error> result;
 
-	protected:
-		GmodParsePathResult& operator=( const GmodParsePathResult& ) = delete;
-		GmodParsePathResult& operator=( GmodParsePathResult&& ) = delete;
+		inline GmodParsePathResult( Ok ok );
+		inline GmodParsePathResult( Error err );
 
-	public:
-		virtual ~GmodParsePathResult() = default;
+		inline bool isOk() const noexcept;
+		inline bool isError() const noexcept;
 
-		class Ok;
-		class Err;
-	};
+		inline Ok& ok();
+		inline const Ok& ok() const;
 
-	class GmodParsePathResult::Ok final : public GmodParsePathResult
-	{
-	public:
-		explicit Ok( GmodPath path );
-
-		Ok( const Ok& ) = delete;
-		Ok( Ok&& ) noexcept = delete;
-		Ok& operator=( const Ok& ) = delete;
-		Ok& operator=( Ok&& ) noexcept = delete;
-
-		virtual ~Ok() = default;
-
-	public:
-		GmodPath path;
-	};
-
-	class GmodParsePathResult::Err final : public GmodParsePathResult
-	{
-	public:
-		explicit Err( std::string errorString );
-
-		Err( const Err& ) = delete;
-		Err( Err&& ) noexcept = delete;
-		Err& operator=( const Err& ) = delete;
-		Err& operator=( Err&& ) noexcept = delete;
-
-		virtual ~Err() = default;
-
-	public:
-		std::string error;
+		inline Error& error();
+		inline const Error& error() const;
 	};
 }
 

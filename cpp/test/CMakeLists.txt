@@ -19,20 +19,20 @@ include(GoogleTest)
 
 # --- Tests source files ---
 set(TEST_SOURCES
-	TEST_Codebook.cpp
-	TEST_Codebooks.cpp
-	TEST_Gmod.cpp
-	TEST_GmodPath.cpp
-	TEST_GmodVersioning.cpp
-	TEST_ImoNumber.cpp
-	TEST_ISOString.cpp
-	TEST_LocalId.cpp
-	TEST_Locations.cpp
-	TEST_UniversalId.cpp
+	TESTS_Codebook.cpp
+	TESTS_Codebooks.cpp
+	TESTS_Gmod.cpp
+	TESTS_GmodPath.cpp
+	TESTS_GmodVersioning.cpp
+	TESTS_ImoNumber.cpp
+	TESTS_ISOString.cpp
+	TESTS_LocalId.cpp
+	TESTS_Locations.cpp
+	TESTS_UniversalId.cpp
 )
 
 if(VISTA_SDK_CPP_BUILD_SMOKE_TESTS)
-	list(APPEND TEST_SOURCES GmodVersioningSmoke.cpp)
+	list(APPEND TEST_SOURCES TESTS_GmodVersioningSmoke.cpp)
 endif()
 
 # --- Copy test data at build time ---
@@ -60,6 +60,60 @@ foreach(test_source ${TEST_SOURCES})
 	if(NOT TARGET ${test_target_name})
 		add_executable(${test_target_name} TestDataLoader.h TestDataLoader.cpp ${test_source})
 
+		# --- Target-specific MSVC optimisation ---
+		if(MSVC)
+			target_compile_options(${test_target_name} PRIVATE
+				/std:c++20                             # C++20 standard
+				/MP                                    # Multi-processor compilation
+				/W4                                    # High warning level
+				/Wall                                  # All warnings
+				/WX-                                   # Warnings not as errors
+				/permissive-                           # Strict conformance mode
+				/fp:fast                               # Fast floating point
+				/Zc:__cplusplus                        # __cplusplus macro
+				/Zc:inline                             # Remove unreferenced COMDAT
+				/Zc:preprocessor                       # Conforming preprocessor
+				/external:anglebrackets                # Treat angle bracket includes as external
+				/external:W0                           # No warnings for external headers
+				/arch:AVX2                             # Enable AVX2 (covers AVX, SSE4.2, etc.)
+
+				# Optimization settings
+				$<$<CONFIG:Release>:/O2>               # Maximum speed optimization
+				$<$<CONFIG:Release>:/Oi>               # Enable intrinsic functions
+				$<$<CONFIG:Release>:/Ot>               # Favor fast code over small code
+#				$<$<CONFIG:Release>:/Ob3>              # Aggressive inlining
+				$<$<CONFIG:Release>:/Gy>               # Function-Level Linking
+				$<$<CONFIG:Release>:/Qpar>             # Auto-parallelization
+				$<$<CONFIG:Release>:/DNDEBUG>          # Disable debug assertions
+				$<$<CONFIG:Release>:/GS->              # Disable buffer security checks
+				$<$<CONFIG:Release>:/Gw>               # Optimize global data
+				$<$<CONFIG:Release>:/GT>               # Support fiber-safe TLS
+				$<$<CONFIG:Release>:/fp:except->       # Disable floating point exceptions
+
+				# Warning suppressions
+				/wd4505                                # unreferenced local function has been removed
+				/wd4514                                # unreferenced inline function has been removed
+				/wd4625                                # copy constructor was implicitly defined as deleted
+				/wd4626                                # assignment operator was implicitly defined as deleted
+				/wd4710                                # function not inlined
+				/wd4711                                # function 'function' selected for inline expansion
+				/wd4820                                # padding
+				/wd4834                                # discarding return value of function with 'nodiscard' attribute
+				/wd4866                                # compiler may not enforce left-to-right evaluation order for call to operator_name
+				/wd5026                                # move constructor was implicitly defined as deleted
+				/wd5027                                # move assignment operator was implicitly defined as deleted
+				/wd5045                                # Qspectre
+				/wd6031                                # return value ignored: 'called-function' could return unexpected value
+				/wd6326                                # potential comparison of a constant with another constant
+			)
+
+			target_link_options(${test_target_name} PRIVATE
+				$<$<CONFIG:Release>:/OPT:REF>          # Remove unreferenced functions
+				$<$<CONFIG:Release>:/OPT:ICF>          # Identical COMDAT folding
+				$<$<CONFIG:Release>:/INCREMENTAL:NO>   # Disable incremental linking
+			)
+		endif()
+
 		target_precompile_headers(${test_target_name} PRIVATE pch.h)
 
 		target_link_libraries(${test_target_name} PRIVATE
@@ -75,6 +129,7 @@ foreach(test_source ${TEST_SOURCES})
 
 		target_compile_definitions(${test_target_name} PRIVATE
 			$<$<CONFIG:Release>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
+			$<$<CONFIG:RelWithDebInfo>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
 			$<$<AND:$<CONFIG:Debug>,$<BOOL:${CI_FORCE_DEBUG_SPDLOG_WARN}>>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_WARN>
 		)
 
@@ -103,54 +158,5 @@ foreach(test_source ${TEST_SOURCES})
 			EXCLUDE_FROM_ALL FALSE
 			#INTERPROCEDURAL_OPTIMIZATION FALSE
 		)
-
-		# --- Target-specific MSVC optimisation ---
-		if(MSVC)
-			target_compile_options(${test_target_name} PRIVATE
-				/std:c++20                             # C++20 standard
-				/MP                                    # Multi-processor compilation
-				/W4                                    # High warning level
-				/Wall                                  # All warnings
-				/WX-                                   # Warnings not as errors
-				/permissive-                           # Strict conformance mode
-				/fp:fast                               # Fast floating point
-				/Zc:__cplusplus                        # __cplusplus macro
-				/Zc:inline                             # Remove unreferenced COMDAT
-				/Zc:preprocessor                       # Conforming preprocessor
-				/external:anglebrackets                # Treat angle bracket includes as external
-				/external:W0                           # No warnings for external headers
-				/arch:AVX2                             # Enable AVX2 (covers AVX, SSE4.2, etc.)
-
-				# Optimization settings
-				$<$<CONFIG:Release>:/O2>               # Maximum speed optimization
-				$<$<CONFIG:Release>:/Oi>               # Enable intrinsic functions
-				$<$<CONFIG:Release>:/Ot>               # Favor fast code over small code
-				$<$<CONFIG:Release>:/Ob3>              # Aggressive inlining
-				$<$<CONFIG:Release>:/Gy>               # Function-Level Linking
-				$<$<CONFIG:Release>:/Qpar>             # Auto-parallelization
-				$<$<CONFIG:Release>:/DNDEBUG>          # Disable debug assertions
-				$<$<CONFIG:Release>:/GS->              # Disable buffer security checks
-				$<$<CONFIG:Release>:/Gw>               # Optimize global data
-				$<$<CONFIG:Release>:/GT>               # Support fiber-safe TLS
-				$<$<CONFIG:Release>:/fp:except-> # Disable floating point exceptions
-
-				# Warning suppressions
-				/wd4505                                # unreferenced local function has been removed
-				/wd4514                                # unreferenced inline function has been removed
-				/wd4625                                # copy constructor was implicitly defined as deleted
-				/wd4626                                # assignment operator was implicitly defined as deleted
-				/wd4834                                # discarding return value of function with 'nodiscard' attribute
-				/wd5026                                # move constructor was implicitly defined as deleted
-				/wd5027                                # move assignment operator was implicitly defined as deleted
-				/wd6031                                # return value ignored: 'called-function' could return unexpected value
-				/wd6326                                # potential comparison of a constant with another constant
-			)
-
-			target_link_options(${test_target_name} PRIVATE
-				$<$<CONFIG:Release>:/OPT:REF>          # Remove unreferenced functions
-				$<$<CONFIG:Release>:/OPT:ICF>          # Identical COMDAT folding
-				$<$<CONFIG:Release>:/INCREMENTAL:NO>   # Disable incremental linking
-			)
-		endif()
 	endif()
 endforeach()

@@ -353,7 +353,7 @@ namespace dnv::vista::sdk
 	std::optional<GmodVersioningDto> GmodVersioningDto::tryFromJson( const nlohmann::json& json )
 	{
 		[[maybe_unused]] const auto visHint = extractVisHint( json );
-		
+
 		try
 		{
 			if ( !json.is_object() )

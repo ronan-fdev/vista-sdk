@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical CodebookName operations
  */
 
+#pragma once
+
 #include "Config.h"
 
 namespace dnv::vista::sdk
@@ -56,7 +58,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		throw std::invalid_argument( "Unknown prefix: " + std::string( prefix ) );
+		throw std::invalid_argument( fmt::format( "Unknown prefix: {}", prefix ) );
 	}
 
 	inline std::string_view CodebookNames::toPrefix( CodebookName name )
@@ -109,7 +111,7 @@ namespace dnv::vista::sdk
 			}
 			default:
 			{
-				throw std::invalid_argument( "Unknown codebook: " + std::to_string( static_cast<int>( name ) ) );
+				throw std::invalid_argument( fmt::format( "Unknown codebook: {}", static_cast<int>( name ) ) );
 			}
 		}
 	}

@@ -8,7 +8,12 @@
 
 #pragma once
 
+#include "Codebooks.h"
+#include "Gmod.h"
+#include "Locations.h"
 #include "VISVersion.h"
+
+#include "utils/StringUtils.h"
 
 namespace dnv::vista::sdk
 {
@@ -16,166 +21,28 @@ namespace dnv::vista::sdk
 	// Forward declarations
 	//=====================================================================
 
-	class Codebooks;
 	class CodebooksDto;
-	class Gmod;
 	class GmodDto;
 	class GmodNode;
 	class GmodPath;
-	class GmodVersioningDto;
 	class GmodVersioning;
+	class GmodVersioningDto;
 	class LocalId;
 	class LocalIdBuilder;
-	class Locations;
 	class LocationsDto;
-
-	//=====================================================================
-	// IVIS interface
-	//=====================================================================
-
-	/**
-	 * @brief Interface for VIS (Vessel Information Structure) operations.
-	 *
-	 * This interface defines the core operations for accessing and manipulating
-	 * Vessel Information Structure (VIS) data across different versions.
-	 * Implementations are expected to handle data retrieval, caching, and version conversion.
-	 */
-	class IVIS
-	{
-	protected:
-		//----------------------------------------------
-		// Construction
-		//----------------------------------------------
-
-		/** @brief Default constructor. */
-		IVIS() = default;
-
-		/** @brief Copy constructor (deleted) */
-		IVIS( const IVIS& ) = delete;
-
-		/** @brief Move constructor (deleted) */
-		IVIS( IVIS&& ) noexcept = delete;
-
-		//----------------------------------------------
-		// Destruction
-		//----------------------------------------------
-
-	public:
-		/** @brief Virtual destructor */
-		virtual ~IVIS() = default;
-
-		//----------------------------------------------
-		// Assignment operators
-		//----------------------------------------------
-
-		/** @brief Copy assignment operator (deleted) */
-		IVIS& operator=( const IVIS& ) = delete;
-
-		/** @brief Move assignment operator (deleted) */
-		IVIS& operator=( IVIS&& ) noexcept = delete;
-
-		//----------------------------------------------
-		// Accessors
-		//----------------------------------------------
-
-		/**
-		 * @brief Get the latest known and supported VIS version.
-		 * @return The latest VisVersion.
-		 */
-		[[nodiscard]] VisVersion latestVisVersion() const noexcept;
-
-		/**
-		 * @brief Get the GMOD (Generic Product Model) for a specific VIS version.
-		 * @param visVersion The VIS version for which to retrieve the GMOD.
-		 * @return A constant reference to the GMOD object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual const Gmod& gmod( VisVersion visVersion ) const = 0;
-
-		/**
-		 * @brief Get the Codebooks for a specific VIS version.
-		 * @param visVersion The VIS version for which to retrieve the Codebooks.
-		 * @return A constant reference to the Codebooks object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual const Codebooks& codebooks( VisVersion visVersion ) = 0;
-
-		/**
-		 * @brief Get the Locations for a specific VIS version.
-		 * @param visVersion The VIS version for which to retrieve the Locations.
-		 * @return A constant reference to the Locations object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual const Locations& locations( VisVersion visVersion ) = 0;
-
-		/**
-		 * @brief Get Codebooks for multiple VIS versions.
-		 * @param visVersions A vector of VIS versions.
-		 * @return An unordered_map where keys are VisVersion and values are Codebooks objects (copies).
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::unordered_map<VisVersion, Codebooks> codebooksMap( const std::vector<VisVersion>& visVersions ) = 0;
-
-		/**
-		 * @brief Get GMODs for multiple VIS versions.
-		 * @param visVersions A vector of VIS versions.
-		 * @return An unordered_map where keys are VisVersion and values are Gmod objects (copies).
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::unordered_map<VisVersion, Gmod> gmodsMap( const std::vector<VisVersion>& visVersions ) const = 0;
-
-		/**
-		 * @brief Get Locations for multiple VIS versions.
-		 * @param visVersions A vector of VIS versions.
-		 * @return An unordered_map where keys are VisVersion and values are Locations objects (copies).
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::unordered_map<VisVersion, Locations> locationsMap( const std::vector<VisVersion>& visVersions ) = 0;
-
-		/**
-		 * @brief Get all available and supported VIS versions.
-		 * @return A vector containing all supported VisVersion enumerators.
-		 */
-		[[nodiscard]] virtual std::vector<VisVersion> visVersions() = 0;
-
-		//----------------------------------------------
-		// Conversion
-		//----------------------------------------------
-
-		/**
-		 * @brief Convert a GMOD node from one VIS version to another.
-		 * @param sourceVersion The VIS version of the source GMOD node.
-		 * @param sourceNode The GMOD node to convert.
-		 * @param targetVersion The target VIS version for the conversion.
-		 * @return An std::optional containing the converted GmodNode if successful, or std::nullopt if conversion is not possible or fails.
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::optional<GmodNode> convertNode( VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion ) = 0;
-
-		/**
-		 * @brief Convert a GMOD path from one VIS version to another.
-		 * @param sourceVersion The VIS version of the source GMOD path.
-		 * @param sourcePath The GMOD path to convert.
-		 * @param targetVersion The target VIS version for the conversion.
-		 * @return An std::optional containing the converted GmodPath if successful, or std::nullopt if conversion is not possible or fails.
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::optional<GmodPath> convertPath( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) = 0;
-	};
 
 	//=====================================================================
 	// VIS singleton
 	//=====================================================================
 
 	/**
-	 * @brief Singleton implementation of the IVIS interface for Vessel Information Structure operations.
+	 * @brief Singleton implementation for Vessel Information Structure operations.
 	 *
-	 * This class implements the IVIS interface and provides efficient access to VIS data
-	 * (GMOD, Codebooks, Locations) using thread-safe caching mechanisms. It follows the
-	 * Singleton pattern to ensure a single point of access and consistent data management
-	 * throughout the application.
+	 * This class provides efficient access to VIS data (GMOD, Codebooks, Locations)
+	 * using thread-safe caching mechanisms. It follows the Singleton pattern to ensure
+	 * a single point of access and consistent data management throughout the application.
 	 */
-	class VIS final : public IVIS
+	class VIS final
 	{
 	private:
 		//----------------------------------------------
@@ -183,12 +50,12 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Private constructor (singleton pattern) */
-		VIS();
+		inline VIS();
 
-		/** @brief Copy constructor (deleted) */
+		/** @brief Copy constructor */
 		VIS( const VIS& ) = delete;
 
-		/** @brief Move constructor (deleted) */
+		/** @brief Move constructor */
 		VIS( VIS&& ) noexcept = delete;
 
 	public:
@@ -196,17 +63,17 @@ namespace dnv::vista::sdk
 		// Destruction
 		//----------------------------------------------
 
-		/** @brief Virtual destructor */
-		virtual ~VIS() = default;
+		/** @brief Destructor */
+		~VIS() = default;
 
 		//----------------------------------------------
 		// Assignment operators
 		//----------------------------------------------
 
-		/** @brief Copy assignment operator (deleted) */
+		/** @brief Copy assignment operator */
 		VIS& operator=( const VIS& ) = delete;
 
-		/** @brief Move assignment operator (deleted) */
+		/** @brief Move assignment operator */
 		VIS& operator=( VIS&& ) noexcept = delete;
 
 		//----------------------------------------------
@@ -217,87 +84,11 @@ namespace dnv::vista::sdk
 		 * @brief Provides access to the singleton instance of the VIS class.
 		 * @return A reference to the unique VIS instance.
 		 */
-		[[nodiscard]] static VIS& instance();
+		[[nodiscard]] inline static VIS& instance();
 
 		//----------------------------------------------
-		// Accessors
+		// DTO Loading
 		//----------------------------------------------
-
-		/**
-		 * @brief Get all available and supported VIS versions.
-		 * @return A vector containing all supported VisVersion enumerators.
-		 */
-		[[nodiscard]] virtual std::vector<VisVersion> visVersions() override;
-
-		/**
-		 * @brief Retrieves the GMOD versioning information processed into a GmodVersioning object.
-		 * This object provides higher-level access to version conversion logic.
-		 * @return The GmodVersioning object.
-		 * @throws std::runtime_error If the GMOD versioning data cannot be loaded or processed.
-		 */
-		[[nodiscard]] GmodVersioning gmodVersioning();
-
-		/**
-		 * @brief Get the GMOD (Generic Product Model) for a specific VIS version.
-		 * @param visVersion The VIS version for which to retrieve the GMOD.
-		 * @return A constant reference to the GMOD object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual const Gmod& gmod( VisVersion visVersion ) const override;
-
-		/**
-		 * @brief Get the Codebooks for a specific VIS version.
-		 * @param visVersion The VIS version for which to retrieve the Codebooks.
-		 * @return A constant reference to the Codebooks object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual const Codebooks& codebooks( VisVersion visVersion ) override;
-
-		/**
-		 * @brief Get the Locations for a specific VIS version.
-		 * @param visVersion The VIS version for which to retrieve the Locations.
-		 * @return A constant reference to the Locations object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual const Locations& locations( VisVersion visVersion ) override;
-
-		/**
-		 * @brief Get Codebooks for multiple VIS versions.
-		 * @param visVersions A vector of VIS versions.
-		 * @return An unordered_map where keys are VisVersion and values are Codebooks objects (copies).
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::unordered_map<VisVersion, Codebooks> codebooksMap( const std::vector<VisVersion>& visVersions ) override;
-
-		/**
-		 * @brief Get GMODs for multiple VIS versions.
-		 * @param visVersions A vector of VIS versions.
-		 * @return An unordered_map where keys are VisVersion and values are Gmod objects (copies).
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::unordered_map<VisVersion, Gmod> gmodsMap( const std::vector<VisVersion>& visVersions ) const override;
-
-		/**
-		 * @brief Get Locations for multiple VIS versions.
-		 * @param visVersions A vector of VIS versions.
-		 * @return An unordered_map where keys are VisVersion and values are Locations objects (copies).
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::unordered_map<VisVersion, Locations> locationsMap( const std::vector<VisVersion>& visVersions ) override;
-
-		//----------------------------------------------
-		// DTO accessors
-		//----------------------------------------------
-
-		/**
-		 * @brief Retrieves the GMOD Data Transfer Object (DTO) for a specific VIS version.
-		 * This method utilizes caching for performance.
-		 * @param visVersion The VIS version for which to retrieve the GMOD DTO.
-		 * @return The GmodDto object.
-		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
-		 * @throws std::runtime_error If the GMOD DTO cannot be loaded or found for the specified version.
-		 */
-		[[nodiscard]] GmodDto gmodDto( VisVersion visVersion ) const;
 
 		/**
 		 * @brief Statically loads the GMOD Data Transfer Object (DTO) for a specific VIS version.
@@ -307,14 +98,102 @@ namespace dnv::vista::sdk
 		 */
 		[[nodiscard]] static std::optional<GmodDto> loadGmodDto( VisVersion visVersion );
 
+		//----------------------------------------------
+		// Accessors
+		//----------------------------------------------
+
+		//-----------------------------
+		// VisVersion
+		//-----------------------------
+
 		/**
-		 * @brief Retrieves the GMOD versioning DTOs.
-		 * This method provides access to the data structures defining how GMOD nodes convert between versions.
-		 * @return An unordered_map where keys are version transition strings or identifiers,
-		 *         and values are GmodVersioningDto objects.
-		 * @throws std::runtime_error If the versioning DTOs cannot be loaded.
+		 * @brief Get all available and supported VIS versions.
+		 * @return A const reference to vector containing all supported VisVersion enumerators.
 		 */
-		[[nodiscard]] std::unordered_map<std::string, GmodVersioningDto> gmodVersioningDto();
+		[[nodiscard]] inline const std::vector<VisVersion>& visVersions() const noexcept;
+
+		/**
+		 * @brief Get the latest known and supported VIS version.
+		 * @return The latest VisVersion.
+		 */
+		[[nodiscard]] inline VisVersion latestVisVersion() const noexcept;
+
+		//-----------------------------
+		// Cached objects
+		//-----------------------------
+
+		/**
+		 * @brief Retrieves the GMOD versioning information processed into a GmodVersioning object.
+		 * This object provides higher-level access to version conversion logic.
+		 * @return The GmodVersioning object.
+		 * @throws std::runtime_error If the GMOD versioning data cannot be loaded or processed.
+		 */
+		[[nodiscard]] const GmodVersioning& gmodVersioning();
+
+		/**
+		 * @brief Get the GMOD (Generic Product Model) for a specific VIS version.
+		 * @param visVersion The VIS version for which to retrieve the GMOD.
+		 * @return A constant reference to the GMOD object.
+		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] inline const Gmod& gmod( VisVersion visVersion );
+
+		/**
+		 * @brief Get the Codebooks for a specific VIS version.
+		 * @param visVersion The VIS version for which to retrieve the Codebooks.
+		 * @return A constant reference to the Codebooks object.
+		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] inline const Codebooks& codebooks( VisVersion visVersion );
+
+		/**
+		 * @brief Get the Locations for a specific VIS version.
+		 * @param visVersion The VIS version for which to retrieve the Locations.
+		 * @return A constant reference to the Locations object.
+		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] inline const Locations& locations( VisVersion visVersion );
+
+		//-----------------------------
+		// Cached maps
+		//-----------------------------
+
+		/**
+		 * @brief Get GMODs for multiple VIS versions.
+		 * @param visVersions A vector of VIS versions.
+		 * @return A new unordered_map where keys are VisVersion and values are Gmod objects.
+		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] std::unordered_map<VisVersion, Gmod> gmodsMap( const std::vector<VisVersion>& visVersions );
+
+		/**
+		 * @brief Get Codebooks for multiple VIS versions.
+		 * @param visVersions A vector of VIS versions.
+		 * @return A new unordered_map where keys are VisVersion and values are Codebooks objects.
+		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] std::unordered_map<VisVersion, Codebooks> codebooksMap( const std::vector<VisVersion>& visVersions );
+
+		/**
+		 * @brief Get Locations for multiple VIS versions.
+		 * @param visVersions A vector of VIS versions.
+		 * @return A new unordered_map where keys are VisVersion and values are Locations objects.
+		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] std::unordered_map<VisVersion, Locations> locationsMap( const std::vector<VisVersion>& visVersions );
+
+		//----------------------------------------------
+		// Cached DTO
+		//----------------------------------------------
+
+		/**
+		 * @brief Retrieves the GMOD Data Transfer Object (DTO) for a specific VIS version.
+		 * @param visVersion The VIS version for which to retrieve the GMOD DTO.
+		 * @return The GmodDto object.
+		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
+		 * @throws std::runtime_error If the GMOD DTO cannot be loaded or found for the specified version.
+		 */
+		[[nodiscard]] inline const GmodDto& gmodDto( VisVersion visVersion );
 
 		/**
 		 * @brief Retrieves the Codebooks Data Transfer Object (DTO) for a specific VIS version.
@@ -323,7 +202,7 @@ namespace dnv::vista::sdk
 		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
 		 * @throws std::runtime_error If the Codebooks DTO cannot be loaded or found.
 		 */
-		[[nodiscard]] CodebooksDto codebooksDto( VisVersion visVersion );
+		[[nodiscard]] inline const CodebooksDto& codebooksDto( VisVersion visVersion );
 
 		/**
 		 * @brief Retrieves the Locations Data Transfer Object (DTO) for a specific VIS version.
@@ -332,11 +211,24 @@ namespace dnv::vista::sdk
 		 * @throws std::invalid_argument If the provided VIS version is invalid or not supported.
 		 * @throws std::runtime_error If the Locations DTO cannot be loaded or found.
 		 */
-		[[nodiscard]] LocationsDto locationsDto( VisVersion visVersion );
+		[[nodiscard]] inline const LocationsDto& locationsDto( VisVersion visVersion );
+
+		/**
+		 * @brief Retrieves the GMOD versioning DTOs.
+		 * This method provides access to the data structures defining how GMOD nodes convert between versions.
+		 * @return A const reference to StringMap where keys are version transition strings with heterogeneous lookup support,
+		 *         and values are GmodVersioningDto objects.
+		 * @throws std::runtime_error If the versioning DTOs cannot be loaded.
+		 */
+		[[nodiscard]] static const StringMap<GmodVersioningDto>& gmodVersioningDto();
 
 		//----------------------------------------------
 		// Conversion
 		//----------------------------------------------
+
+		//-----------------------------
+		// GmodNode
+		//-----------------------------
 
 		/**
 		 * @brief Convert a GMOD node from one VIS version to another.
@@ -346,17 +238,7 @@ namespace dnv::vista::sdk
 		 * @return An std::optional containing the converted GmodNode if successful, or std::nullopt if conversion is not possible or fails.
 		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
 		 */
-		[[nodiscard]] virtual std::optional<GmodNode> convertNode( VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion ) override;
-
-		/**
-		 * @brief Convert a GMOD path from one VIS version to another.
-		 * @param sourceVersion The VIS version of the source GMOD path.
-		 * @param sourcePath The GMOD path to convert.
-		 * @param targetVersion The target VIS version for the conversion.
-		 * @return An std::optional containing the converted GmodPath if successful, or std::nullopt if conversion is not possible or fails.
-		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
-		 */
-		[[nodiscard]] virtual std::optional<GmodPath> convertPath( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) override;
+		[[nodiscard]] std::optional<GmodNode> convertNode( VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion );
 
 		/**
 		 * @brief Convert a GMOD node to a different VIS version, inferring source version from the node.
@@ -368,6 +250,20 @@ namespace dnv::vista::sdk
 		 */
 		[[nodiscard]] std::optional<GmodNode> convertNode( const GmodNode& sourceNode, VisVersion targetVersion, const GmodNode* sourceParent = nullptr );
 
+		//-----------------------------
+		// GmodPath
+		//-----------------------------
+
+		/**
+		 * @brief Convert a GMOD path from one VIS version to another.
+		 * @param sourceVersion The VIS version of the source GMOD path.
+		 * @param sourcePath The GMOD path to convert.
+		 * @param targetVersion The target VIS version for the conversion.
+		 * @return An std::optional containing the converted GmodPath if successful, or std::nullopt if conversion is not possible or fails.
+		 * @throws std::invalid_argument If any provided VIS version is invalid or not supported.
+		 */
+		[[nodiscard]] std::optional<GmodPath> convertPath( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion );
+
 		/**
 		 * @brief Convert a GMOD path to a different VIS version, inferring source version from the path.
 		 * @param sourcePath The GMOD path to convert (must have its VIS version embedded or retrievable).
@@ -376,6 +272,10 @@ namespace dnv::vista::sdk
 		 * @throws std::invalid_argument If the target VIS version is invalid or not supported.
 		 */
 		[[nodiscard]] std::optional<GmodPath> convertPath( const GmodPath& sourcePath, VisVersion targetVersion );
+
+		//-----------------------------
+		// LocalId
+		//-----------------------------
 
 		/**
 		 * @brief Convert a LocalIdBuilder instance to a different VIS version.
@@ -396,64 +296,100 @@ namespace dnv::vista::sdk
 		[[nodiscard]] std::optional<LocalId> convertLocalId( const LocalId& sourceLocalId, VisVersion targetVersion );
 
 		//----------------------------------------------
-		// ISO string validation methods
+		// ISO string validation
 		//----------------------------------------------
 
 		/**
-		 * @brief Checks if a string-like sequence of characters matches the expected format for an ISO Local ID string.
-		 * @tparam StringLike A type that can be iterated over, yielding characters (e.g., std::string, std::string_view, fmt::memory_buffer).
-		 * @param value The string-like value to validate.
-		 * @return True if the value matches the ISO Local ID format, false otherwise.
+		 * @brief Validates ISO Local ID format for any string-like container.
+		 * @details Rules according to: "ISO19848 5.2.1, Note 1" and "RFC3986 2.3 - Unreserved characters"
+		 *          Allows '/' characters within the string, validates all other characters against ISO rules.
+		 *          Converts input to string_view for optimal performance.
+		 * @tparam StringLike Any type convertible to string_view (string, string_view, const char*, etc.)
+		 * @param value The string-like value to validate
+		 * @return True if the value matches the ISO Local ID format, false otherwise
 		 */
 		template <typename StringLike>
 		[[nodiscard]] inline static bool matchISOLocalIdString( const StringLike& value ) noexcept;
 
 		/**
-		 * @brief Checks if all characters in a string-like sequence are valid ISO characters.
-		 * @tparam StringLike A type that can be iterated over, yielding characters (e.g., std::string, std::string_view, fmt::memory_buffer).
-		 * @param value The string-like value to validate.
-		 * @return True if all characters are valid ISO characters, false otherwise.
+		 * @brief Validates that all characters are valid ISO characters for any string-like container.
+		 * @details Rules according to: "ISO19848 5.2.1, Note 1" and "RFC3986 2.3 - Unreserved characters"
+		 *          Does NOT allow '/' characters - strict ISO character validation only.
+		 *          Converts input to string_view for optimal performance.
+		 * @tparam StringLike Any type convertible to string_view (string, string_view, const char*, etc.)
+		 * @param value The string-like value to validate
+		 * @return True if all characters are valid ISO characters, false otherwise
 		 */
 		template <typename StringLike>
 		[[nodiscard]] inline static bool isISOString( const StringLike& value ) noexcept;
 
 		/**
-		 * @brief A comprehensive check if a string-like sequence of characters is a valid ISO Local ID string.
-		 * @tparam StringLike A type that can be iterated over, yielding characters (e.g., std::string, std::string_view, fmt::memory_buffer).
-		 * @param value The string-like value to validate.
-		 * @return True if the value is a valid ISO Local ID string, false otherwise.
+		 * @brief Alias for matchISOLocalIdString providing semantic clarity.
+		 * @details Comprehensive check combining ISO character validation with Local ID format rules.
+		 *          Identical behavior to matchISOLocalIdString - provided for API consistency.
+		 * @tparam StringLike Any type convertible to string_view (string, string_view, const char*, etc.)
+		 * @param value The string-like value to validate
+		 * @return True if the value is a valid ISO Local ID string, false otherwise
 		 */
 		template <typename StringLike>
 		[[nodiscard]] inline static bool isISOLocalIdString( const StringLike& value ) noexcept;
 
 		/**
-		 * @brief Checks if a character is a valid character within an ISO-compliant string.
-		 * @param c The character to check.
-		 * @return True if the character is valid for ISO strings, false otherwise.
+		 * @brief Validates a single character against ISO character rules.
+		 * @details Rules according to: "ISO19848 5.2.1, Note 1" and "RFC3986 2.3 - Unreserved characters"
+		 *          Fast single-character validation using ASCII decimal code checking.
+		 *          Supports: 0-9, A-Z, a-z, -, ., _, ~
+		 * @param c The character to check
+		 * @return True if the character is valid for ISO strings, false otherwise
 		 */
 		[[nodiscard]] inline static bool isISOString( char c ) noexcept;
 
 		/**
-		 * @brief Checks if an ASCII decimal code corresponds to a valid ISO character.
-		 * @param code The integer ASCII code to check.
-		 * @return True if the code represents a valid ISO character, false otherwise.
+		 * @brief Core ASCII character validation using decimal code ranges.
+		 * @details Validates character codes against ISO-compliant ranges:
+		 *          - Numbers: 48-57 (0-9)
+		 *          - Uppercase: 65-90 (A-Z)
+		 *          - Lowercase: 97-122 (a-z)
+		 *          - Special: 45(-), 46(.), 95(_), 126(~)
+		 * @param code The integer ASCII code to check
+		 * @return True if the code represents a valid ISO character, false otherwise
 		 */
-		[[nodiscard]] inline static bool matchAsciiDecimal( int code ) noexcept;
+		[[nodiscard]] inline static constexpr bool matchAsciiDecimal( int code ) noexcept;
 
 	private:
 		//----------------------------------------------
-		// Private member variables
+		// Cache member variables
 		//----------------------------------------------
 
-		mutable std::shared_mutex m_cacheMutex;
-		mutable std::unordered_map<VisVersion, Codebooks> m_codebooksCache;
-		mutable std::unordered_map<VisVersion, Gmod> m_gmodCache;
-		mutable std::unordered_map<VisVersion, Locations> m_locationsCache;
-		mutable std::unordered_map<VisVersion, CodebooksDto> m_codebooksDtoCache;
-		mutable std::unordered_map<VisVersion, GmodDto> m_gmodDtoCache;
-		mutable std::unordered_map<VisVersion, LocationsDto> m_locationsDtoCache;
-		mutable std::unordered_map<std::string, GmodVersioning> m_gmodVersioningCache;
-		mutable std::unordered_map<std::string, std::unordered_map<std::string, GmodVersioningDto>> m_gmodVersioningDtoCache;
+		/**
+		 * @brief Thread-safe cache for GMOD DTOs by VisVersion
+		 */
+		std::unordered_map<VisVersion, GmodDto> m_gmodDtoCache;
+
+		/**
+		 * @brief Thread-safe cache for Codebooks DTOs by VisVersion
+		 */
+		std::unordered_map<VisVersion, CodebooksDto> m_codebooksDtoCache;
+
+		/**
+		 * @brief Thread-safe cache for Locations DTOs by VisVersion
+		 */
+		std::unordered_map<VisVersion, LocationsDto> m_locationsDtoCache;
+
+		/**
+		 * @brief Thread-safe cache for processed Codebooks objects by VisVersion
+		 */
+		std::unordered_map<VisVersion, Codebooks> m_codebooksCache;
+
+		/**
+		 * @brief Thread-safe cache for processed GMOD objects by VisVersion
+		 */
+		std::unordered_map<VisVersion, Gmod> m_gmodsCache;
+
+		/**
+		 * @brief Thread-safe cache for processed Locations objects by VisVersion
+		 */
+		std::unordered_map<VisVersion, Locations> m_locationsCache;
 	};
 }
 

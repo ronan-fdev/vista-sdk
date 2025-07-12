@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical MetadataTag operations
  */
 
+#pragma once
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -22,8 +24,7 @@ namespace dnv::vista::sdk
 
 		if ( m_name != other.m_name )
 		{
-			static constexpr std::string_view errorPrefix = "Can't compare tags with different names";
-			throw std::invalid_argument( std::string( errorPrefix ) );
+			throw std::invalid_argument( "Can't compare tags with different names" );
 		}
 
 		return true;

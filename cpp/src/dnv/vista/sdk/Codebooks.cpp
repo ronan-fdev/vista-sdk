@@ -26,15 +26,15 @@ namespace dnv::vista::sdk
 	{
 		const auto& items = dto.items();
 
-		for ( const auto& typeDto : items )
+		for ( auto typeDto : items )
 		{
-			Codebook codebook( typeDto );
+			Codebook codebook( std::move( typeDto ) );
 			const auto index = static_cast<size_t>( codebook.name() ) - 1;
 			m_codebooks[index] = std::move( codebook );
 		}
 
-		const CodebookDto detailDto( std::string( CODEBOOK_NAME_DETAIL ), CodebookDto::ValuesMap{} );
+		CodebookDto detailDto( std::string{ CODEBOOK_NAME_DETAIL }, CodebookDto::ValuesMap{} );
 		constexpr auto detailIndex = static_cast<size_t>( CodebookName::Detail ) - 1;
-		m_codebooks[detailIndex] = Codebook( detailDto );
+		m_codebooks[detailIndex] = Codebook( std::move( detailDto ) );
 	}
 }

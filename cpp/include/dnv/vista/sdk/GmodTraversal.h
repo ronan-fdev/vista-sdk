@@ -90,7 +90,7 @@ namespace dnv::vista::sdk
 				//----------------------------
 
 				/** @brief Default constructor. */
-				inline Parents();
+				inline Parents( size_t maxOccurrence = 1 );
 
 				//----------------------------
 				// Stack operations
@@ -120,7 +120,9 @@ namespace dnv::vista::sdk
 				std::vector<const GmodNode*> m_parents;
 
 				/** @brief Occurrence count per node code */
-				std::unordered_map<std::string_view, size_t> m_occurrences;
+				StringMap<size_t> m_occurrences;
+
+				size_t m_maxTraversalOccurrence;
 			};
 
 			//----------------------------------------------
@@ -164,61 +166,7 @@ namespace dnv::vista::sdk
 			 * @return Traversal result
 			 */
 			template <typename TState>
-			[[nodiscard]] TraversalHandlerResult traverseNodeRecursive( TraversalContext<TState>& context, const GmodNode& node )
-			{
-				if ( node.metadata().installSubstructure().has_value() && !node.metadata().installSubstructure().value() )
-				{
-					return TraversalHandlerResult::Continue;
-				}
-
-				TraversalHandlerResult result = context.handler( context.state, context.parents.asList(), node );
-				if ( result == TraversalHandlerResult::Stop || result == TraversalHandlerResult::SkipSubtree )
-				{
-					return result;
-				}
-
-				bool skipOccurrenceCheck = Gmod::isProductSelectionAssignment( context.parents.lastOrDefault(), &node );
-				if ( !skipOccurrenceCheck )
-				{
-					size_t occ = context.parents.occurrences( node );
-
-					if ( occ == context.maxTraversalOccurrence )
-					{
-						return TraversalHandlerResult::SkipSubtree;
-					}
-
-					if ( occ > context.maxTraversalOccurrence )
-					{
-						throw std::runtime_error( "Invalid state - node occurred more than expected" );
-					}
-				}
-
-				context.parents.push( &node );
-
-				const auto& children = node.children();
-				for ( const auto* child : children )
-				{
-					if ( !child )
-					{
-						continue;
-					}
-
-					result = traverseNodeRecursive( context, *child );
-					if ( result == TraversalHandlerResult::Stop )
-					{
-						context.parents.pop();
-						return TraversalHandlerResult::Stop;
-					}
-					else if ( result == TraversalHandlerResult::SkipSubtree )
-					{
-						continue;
-					}
-				}
-
-				context.parents.pop();
-
-				return TraversalHandlerResult::Continue;
-			}
+			[[nodiscard]] TraversalHandlerResult traverseNode( TraversalContext<TState>& context, const GmodNode& node );
 		}
 
 		//=====================================================================
@@ -276,13 +224,7 @@ namespace dnv::vista::sdk
 		 * @return true if completed, false if stopped early
 		 */
 		template <typename TState>
-		bool traverse( TState& state, const Gmod& gmodInstance, TraverseHandlerWithState<TState> handler, const TraversalOptions& options = {} )
-		{
-			detail::Parents parentsStack;
-			detail::TraversalContext<TState> context( parentsStack, handler, state, options.maxTraversalOccurrence );
-
-			return detail::traverseNodeRecursive( context, gmodInstance.rootNode() ) == TraversalHandlerResult::Continue;
-		}
+		bool traverse( TState& state, const Gmod& gmodInstance, TraverseHandlerWithState<TState> handler, const TraversalOptions& options = {} );
 
 		/**
 		 * @brief Traverse GMOD tree from specific node with stateful handler
@@ -295,100 +237,8 @@ namespace dnv::vista::sdk
 		 * @return true if completed, false if stopped early
 		 */
 		template <typename TState>
-		bool traverse( TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, const TraversalOptions& options = {} )
-		{
-			detail::Parents parentsStack;
-			detail::TraversalContext<TState> context( parentsStack, handler, state, options.maxTraversalOccurrence );
-
-			return detail::traverseNodeRecursive( context, rootNode ) == TraversalHandlerResult::Continue;
-		}
+		bool traverse( TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, const TraversalOptions& options = {} );
 	}
 }
 
-namespace dnv::vista::sdk
-{
-	//=====================================================================
-	// Traversal algorithms
-	//=====================================================================
-
-	namespace GmodTraversal
-	{
-		namespace detail
-		{
-			//----------------------------------------------
-			// GmodTraversal::Parents class
-			//----------------------------------------------
-
-			inline Parents::Parents()
-			{
-				m_parents.reserve( 64 );
-				m_occurrences.reserve( 4 );
-			}
-
-			//----------------------------
-			// Stack operations
-			//----------------------------
-
-			inline void Parents::push( const GmodNode* parent )
-			{
-				m_parents.push_back( parent );
-
-				std::string_view key = parent->code();
-				if ( auto it = m_occurrences.find( key ); it != m_occurrences.end() )
-				{
-					++it->second;
-				}
-				else
-				{
-					m_occurrences[key] = 1;
-				}
-			}
-
-			inline void Parents::pop()
-			{
-				if ( m_parents.empty() )
-				{
-					return;
-				}
-
-				const GmodNode* parent = m_parents.back();
-				m_parents.pop_back();
-
-				std::string_view key = parent->code();
-				if ( auto it = m_occurrences.find( key ); it != m_occurrences.end() )
-				{
-					if ( it->second == 1 )
-					{
-						m_occurrences.erase( it );
-					}
-					else
-					{
-						--it->second;
-					}
-				}
-			}
-
-			inline size_t Parents::occurrences( const GmodNode& node ) const noexcept
-			{
-				std::string_view key = node.code();
-				if ( auto it = m_occurrences.find( key ); it != m_occurrences.end() )
-				{
-					return it->second;
-				}
-
-				return 0;
-			}
-
-			inline const GmodNode* Parents::lastOrDefault() const noexcept
-			{
-				return m_parents.empty() ? nullptr : m_parents.back();
-			}
-
-			const std::vector<const GmodNode*>& Parents::asList() const noexcept
-			{
-				return m_parents;
-			}
-
-		}
-	}
-}
+#include "GmodTraversal.inl"

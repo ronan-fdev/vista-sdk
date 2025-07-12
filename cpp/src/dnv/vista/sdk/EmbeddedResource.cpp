@@ -94,10 +94,10 @@ namespace dnv::vista::sdk
 		return visVersions;
 	}
 
-	const std::optional<std::unordered_map<std::string, GmodVersioningDto>>& EmbeddedResource::gmodVersioning()
+	const std::optional<StringMap<GmodVersioningDto>>& EmbeddedResource::gmodVersioning()
 	{
 		static std::mutex gmodVersioningCacheMutex;
-		static std::optional<std::unordered_map<std::string, GmodVersioningDto>> gmodVersioningCache;
+		static std::optional<StringMap<GmodVersioningDto>> gmodVersioningCache;
 		static bool cacheInitialized = false;
 
 		{
@@ -121,7 +121,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		std::unordered_map<std::string, GmodVersioningDto> resultMap;
+		StringMap<GmodVersioningDto> resultMap;
 		std::mutex resultMutex;
 		bool foundAnyResource = false;
 
@@ -180,7 +180,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex gmodCacheMutex;
 
-		static std::unordered_map<std::string, std::optional<GmodDto>, StringViewHash, StringViewEqual> gmodCache;
+		static StringMap<std::optional<GmodDto>> gmodCache;
 
 		{
 			std::lock_guard<std::mutex> lock( gmodCacheMutex );
@@ -244,7 +244,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex codebooksCacheMutex;
 
-		static std::unordered_map<std::string, std::optional<CodebooksDto>, StringViewHash, StringViewEqual> codebooksCache;
+		static StringMap<std::optional<CodebooksDto>> codebooksCache;
 
 		{
 			std::lock_guard<std::mutex> lock( codebooksCacheMutex );
@@ -306,7 +306,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex locationsCacheMutex;
 
-		static std::unordered_map<std::string, std::optional<LocationsDto>, StringViewHash, StringViewEqual> locationsCache;
+		static StringMap<std::optional<LocationsDto>> locationsCache;
 
 		{
 			std::lock_guard<std::mutex> lock( locationsCacheMutex );
@@ -367,7 +367,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex dataChannelTypeNamesCacheMutex;
 
-		static std::unordered_map<std::string, std::optional<DataChannelTypeNamesDto>, StringViewHash, StringViewEqual> dataChannelTypeNamesCache;
+		static StringMap<std::optional<DataChannelTypeNamesDto>> dataChannelTypeNamesCache;
 
 		{
 			std::lock_guard<std::mutex> lock( dataChannelTypeNamesCacheMutex );
@@ -428,7 +428,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex fdTypesCacheMutex;
 
-		static std::unordered_map<std::string, std::optional<FormatDataTypesDto>, StringViewHash, StringViewEqual> fdTypesCache;
+		static StringMap<std::optional<FormatDataTypesDto>> fdTypesCache;
 
 		{
 			std::lock_guard<std::mutex> lock( fdTypesCacheMutex );

@@ -16,7 +16,6 @@ endif()
 
 # --- Benchmarks source files ---
 set(BENCHMARK_SOURCES
-	BM_ChdDictionary.cpp
 	BM_CodebooksLookup.cpp
 	BM_GmodLoad.cpp
 	BM_GmodLookup.cpp
@@ -32,35 +31,6 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 
 	if(NOT TARGET ${benchmark_target_name})
 		add_executable(${benchmark_target_name} ${benchmark_source})
-
-		target_precompile_headers(${benchmark_target_name} PRIVATE pch.h)
-
-		target_link_libraries(${benchmark_target_name} PRIVATE
-			vista-sdk-cpp
-			spdlog::spdlog
-			benchmark::benchmark
-	        cpuid
-			fmt::fmt
-			nlohmann_json::nlohmann_json
-		)
-
-		target_compile_definitions(${benchmark_target_name} PRIVATE
-			$<$<CONFIG:Release>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
-			$<$<AND:$<CONFIG:Debug>,$<BOOL:${CI_FORCE_DEBUG_SPDLOG_WARN}>>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_WARN>
-		)
-
-		target_include_directories(${benchmark_target_name} PRIVATE
-			${VISTA_SDK_CPP_INCLUDE_DIR}
-		)
-
-		# --- Properties with LTO disabled ---
-		set_target_properties(${benchmark_target_name} PROPERTIES
-			CXX_STANDARD 20
-			CXX_STANDARD_REQUIRED ON
-			RUNTIME_OUTPUT_DIRECTORY "${VISTA_SDK_CPP_BIN_DIR}/$<CONFIG>"
-			EXCLUDE_FROM_ALL FALSE
-			#INTERPROCEDURAL_OPTIMIZATION FALSE
-		)
 
 		# --- Target-specific MSVC optimisation ---
 		if(MSVC)
@@ -83,7 +53,7 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 				$<$<CONFIG:Release>:/O2>               # Maximum speed optimization
 				$<$<CONFIG:Release>:/Oi>               # Enable intrinsic functions
 				$<$<CONFIG:Release>:/Ot>               # Favor fast code over small code
-				$<$<CONFIG:Release>:/Ob3>              # Aggressive inlining
+#				$<$<CONFIG:Release>:/Ob3>              # Aggressive inlining
 				$<$<CONFIG:Release>:/Gy>               # Function-Level Linking
 				$<$<CONFIG:Release>:/Qpar>             # Auto-parallelization
 				$<$<CONFIG:Release>:/DNDEBUG>          # Disable debug assertions
@@ -99,9 +69,13 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 				/wd4514                                # unreferenced inline function has been removed
 				/wd4625                                # copy constructor was implicitly defined as deleted
 				/wd4626                                # assignment operator was implicitly defined as deleted
+				/wd4710                                # function not inlined
+				/wd4711                                # function 'function' selected for inline expansion
+				/wd4820                                # padding
 				/wd4834                                # discarding return value of function with 'nodiscard' attribute
 				/wd5026                                # move constructor was implicitly defined as deleted
 				/wd5027                                # move assignment operator was implicitly defined as deleted
+				/wd5045                                # Qspectre
 			)
 
 			target_link_options(${benchmark_target_name} PRIVATE
@@ -110,6 +84,36 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 				$<$<CONFIG:Release>:/INCREMENTAL:NO>   # Disable incremental linking
 			)
 		endif()
+
+		target_precompile_headers(${benchmark_target_name} PRIVATE pch.h)
+
+		target_link_libraries(${benchmark_target_name} PRIVATE
+			vista-sdk-cpp
+			spdlog::spdlog
+			benchmark::benchmark
+			cpuid
+			fmt::fmt
+			nlohmann_json::nlohmann_json
+		)
+
+		target_compile_definitions(${benchmark_target_name} PRIVATE
+			$<$<CONFIG:Release>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
+			$<$<CONFIG:RelWithDebInfo>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
+			$<$<AND:$<CONFIG:Debug>,$<BOOL:${CI_FORCE_DEBUG_SPDLOG_WARN}>>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_WARN>
+		)
+
+		target_include_directories(${benchmark_target_name} PRIVATE
+			${VISTA_SDK_CPP_INCLUDE_DIR}
+		)
+
+		# --- Properties with LTO disabled ---
+		set_target_properties(${benchmark_target_name} PROPERTIES
+			CXX_STANDARD 20
+			CXX_STANDARD_REQUIRED ON
+			RUNTIME_OUTPUT_DIRECTORY "${VISTA_SDK_CPP_BIN_DIR}/$<CONFIG>"
+			EXCLUDE_FROM_ALL FALSE
+			#INTERPROCEDURAL_OPTIMIZATION FALSE
+		)
 
 		# --- Add to benchmark target ---
 		if(NOT TARGET benchmarks)

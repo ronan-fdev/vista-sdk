@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical LocalIdBuilder operations
  */
 
+#pragma once
+
 #include "CodebookName.h"
 
 namespace dnv::vista::sdk

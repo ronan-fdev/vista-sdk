@@ -5,6 +5,8 @@
  *          fast resource access operations.
  */
 
+#pragma once
+
 namespace dnv::vista::sdk
 {
 	/**

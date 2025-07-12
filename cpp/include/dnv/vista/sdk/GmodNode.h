@@ -61,7 +61,7 @@ namespace dnv::vista::sdk
 			const std::optional<std::string>& definition = std::nullopt,
 			const std::optional<std::string>& commonDefinition = std::nullopt,
 			const std::optional<bool>& installSubstructure = std::nullopt,
-			const std::unordered_map<std::string, std::string>& normalAssignmentNames = {} ) noexcept;
+			const StringMap<std::string>& normalAssignmentNames = {} ) noexcept;
 
 		/** @brief Default constructor. */
 		GmodNodeMetadata() = default;
@@ -163,7 +163,7 @@ namespace dnv::vista::sdk
 		 * @brief Get the normal assignment names mapping
 		 * @return Reference to the map of normal assignment names
 		 */
-		[[nodiscard]] inline const std::unordered_map<std::string, std::string>& normalAssignmentNames() const noexcept;
+		[[nodiscard]] inline const StringMap<std::string>& normalAssignmentNames() const noexcept;
 
 	private:
 		//----------------------------------------------
@@ -192,7 +192,7 @@ namespace dnv::vista::sdk
 		std::optional<bool> m_installSubstructure;
 
 		/** @brief Optional mapping of normal assignment names. */
-		std::unordered_map<std::string, std::string> m_normalAssignmentNames;
+		StringMap<std::string> m_normalAssignmentNames;
 
 		/** @brief Combined category and type string, e.g., "PRODUCT TYPE", generated at construction. */
 		std::string m_fullType;
@@ -288,7 +288,7 @@ namespace dnv::vista::sdk
 		 * @brief Get the unique code identifier
 		 * @return Reference to the code string
 		 */
-		[[nodiscard]] inline std::string_view code() const noexcept;
+		[[nodiscard]] inline const std::string& code() const noexcept;
 
 		/**
 		 * @brief Get the location information

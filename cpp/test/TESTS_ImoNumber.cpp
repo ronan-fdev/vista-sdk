@@ -1,5 +1,5 @@
 /**
- * @file ImoNumberTests.cpp
+ * @file TESTS_ImoNumber.cpp
  * @brief Unit tests for the ImoNumber class.
  */
 

@@ -4,7 +4,9 @@
  */
 
 #include "Gmod.h"
-#include "dnv/vista/sdk/VISVersion.h"
+#include "Locations.h"
+#include "VIS.h"
+#include "VISVersion.h"
 
 namespace dnv::vista::sdk
 {
@@ -382,7 +384,103 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
-	// GmodPath enumerator
+	// Inline parsing methods
+	//----------------------------------------------
+
+	inline GmodPath GmodPath::parse( std::string_view item, VisVersion visVersion )
+	{
+		std::optional<GmodPath> path;
+		if ( !tryParse( item, visVersion, path ) )
+		{
+			throw std::invalid_argument( "Couldnt parse path" );
+		}
+
+		return path.value();
+	}
+
+	inline GmodPath GmodPath::parse( std::string_view item, const Gmod& gmod, const Locations& locations )
+	{
+		GmodParsePathResult result = parseInternal( item, gmod, locations );
+
+		if ( result.isOk() )
+		{
+			return std::move( result.ok().path );
+		}
+		else
+		{
+			throw std::invalid_argument( result.error().error );
+		}
+	}
+
+	inline GmodPath GmodPath::parseFullPath( std::string_view item, VisVersion visVersion )
+	{
+		VIS& vis = VIS::instance();
+		const Gmod& gmod = vis.gmod( visVersion );
+		const Locations& locations = vis.locations( visVersion );
+		GmodParsePathResult result = parseFullPathInternal( item, gmod, locations );
+
+		if ( result.isOk() )
+		{
+			return std::move( result.ok().path );
+		}
+		else
+		{
+			throw std::invalid_argument( result.error().error );
+		}
+	}
+
+	inline bool GmodPath::tryParse( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath )
+	{
+		outPath.reset();
+
+		VIS& vis = VIS::instance();
+		const Gmod& gmod = vis.gmod( visVersion );
+		const Locations& locations = vis.locations( visVersion );
+
+		return tryParse( item, gmod, locations, outPath );
+	}
+
+	inline bool GmodPath::tryParse( std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath )
+	{
+		GmodParsePathResult result = parseInternal( item, gmod, locations );
+		outPath.reset();
+
+		if ( result.isOk() )
+		{
+			outPath.emplace( std::move( result.ok().path ) );
+			return true;
+		}
+
+		return false;
+	}
+
+	inline bool GmodPath::tryParseFullPath( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath )
+	{
+		outPath.reset();
+
+		VIS& vis = VIS::instance();
+		const Gmod& gmod = vis.gmod( visVersion );
+		const Locations& locations = vis.locations( visVersion );
+
+		return tryParseFullPath( item, gmod, locations, outPath );
+	}
+
+	inline bool GmodPath::tryParseFullPath( std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath )
+	{
+		GmodParsePathResult result = parseFullPathInternal( item, gmod, locations );
+
+		if ( result.isOk() )
+		{
+			outPath.emplace( std::move( result.ok().path ) );
+			return true;
+		}
+
+		outPath.reset();
+		return false;
+	}
+
+	//----------------------------------------------
+	// GmodPath::enumerator
 	//----------------------------------------------
 
 	//----------------------------
@@ -459,5 +557,59 @@ namespace dnv::vista::sdk
 		const GmodNode& firstNode = m_path[static_cast<size_t>( firstNodeIdx )];
 
 		return firstNode.location();
+	}
+
+	//=====================================================================
+	// GmodParsePathResult
+	//=====================================================================
+
+	inline GmodParsePathResult::Ok::Ok( GmodPath p )
+		: path{ std::move( p ) }
+	{
+	}
+
+	inline GmodParsePathResult::Error::Error( std::string e )
+		: error{ std::move( e ) }
+	{
+	}
+
+	inline GmodParsePathResult::GmodParsePathResult( Ok ok )
+		: result{ std::move( ok ) }
+	{
+	}
+
+	inline GmodParsePathResult::GmodParsePathResult( Error err )
+		: result{ std::move( err ) }
+	{
+	}
+
+	inline bool GmodParsePathResult::isOk() const noexcept
+	{
+		return std::holds_alternative<Ok>( result );
+	}
+
+	inline bool GmodParsePathResult::isError() const noexcept
+	{
+		return std::holds_alternative<Error>( result );
+	}
+
+	inline GmodParsePathResult::Ok& GmodParsePathResult::ok()
+	{
+		return std::get<Ok>( result );
+	}
+
+	inline const GmodParsePathResult::Ok& GmodParsePathResult::ok() const
+	{
+		return std::get<Ok>( result );
+	}
+
+	inline GmodParsePathResult::Error& GmodParsePathResult::error()
+	{
+		return std::get<Error>( result );
+	}
+
+	inline const GmodParsePathResult::Error& GmodParsePathResult::error() const
+	{
+		return std::get<Error>( result );
 	}
 }

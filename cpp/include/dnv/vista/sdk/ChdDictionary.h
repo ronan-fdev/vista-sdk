@@ -31,7 +31,7 @@ namespace dnv::vista::sdk
 		 *          via static initialization for zero runtime overhead.
 		 * @return `true` if SSE4.2 is supported, `false` otherwise.
 		 */
-		[[nodiscard]] inline bool hasSSE42Support();
+		[[nodiscard]] inline bool hasSSE42Support() noexcept;
 
 		//----------------------------------------------
 		// ThrowHelper class
@@ -264,7 +264,7 @@ namespace dnv::vista::sdk
 		 * @throws std::invalid_argument if duplicate keys are found.
 		 * @throws std::runtime_error if perfect hash construction fails.
 		 */
-		explicit ChdDictionary( std::vector<std::pair<std::string, TValue>>&& items );
+		inline explicit ChdDictionary( std::vector<std::pair<std::string, TValue>>&& items );
 
 		/** @brief Default constructor */
 		ChdDictionary() = default;
@@ -353,7 +353,7 @@ namespace dnv::vista::sdk
 		 *                      set to the address of the found value. On failure, it will be set to `nullptr`.
 		 * @return `true` if the `key` was found and `outValue` was updated, `false` otherwise.
 		 */
-		[[nodiscard]] inline bool tryGetValue( std::string_view key, const TValue*& outValue ) const;
+		[[nodiscard]] inline bool tryGetValue( std::string_view key, const TValue*& outValue ) const noexcept;
 
 		//----------------------------------------------
 		// Iteration
@@ -364,14 +364,14 @@ namespace dnv::vista::sdk
 		 * @return An `Iterator` positioned at the beginning of the dictionary's data.
 		 *         If the dictionary is empty, this will be equal to `end()`.
 		 */
-		[[nodiscard]] inline Iterator begin() const;
+		[[nodiscard]] inline Iterator begin() const noexcept;
 
 		/**
 		 * @brief Gets an iterator pointing past the last element of the dictionary.
 		 * @return An `Iterator` representing the position after the last element.
 		 *         This iterator should not be dereferenced.
 		 */
-		[[nodiscard]] inline Iterator end() const;
+		[[nodiscard]] inline Iterator end() const noexcept;
 
 		//----------------------------------------------
 		// Enumeration
@@ -382,7 +382,7 @@ namespace dnv::vista::sdk
 		 * @return An enumerator for iterating through the key-value pairs.
 		 * @details The enumerator starts positioned before the first element.
 		 */
-		[[nodiscard]] inline Enumerator enumerator() const;
+		[[nodiscard]] inline Enumerator enumerator() const noexcept;
 
 		//----------------------------------------------
 		// Public helper methods
@@ -401,7 +401,7 @@ namespace dnv::vista::sdk
 		 * @param[in] key ASCII string key to hash
 		 * @return 32-bit hash value.
 		 */
-		static inline uint32_t hash( std::string_view key ) noexcept;
+		[[nodiscard]] static inline uint32_t hash( std::string_view key ) noexcept;
 
 	private:
 		//----------------------------------------------
@@ -459,7 +459,7 @@ namespace dnv::vista::sdk
 			 * @param[in] index The index within the table this iterator should point to.
 			 * @note If index >= table->size(), the iterator represents an end iterator.
 			 */
-			explicit Iterator( const std::vector<std::pair<std::string, TValue>>* table, size_t index );
+			explicit Iterator( const std::vector<std::pair<std::string, TValue>>* table, size_t index ) noexcept;
 
 			/** @brief Default constructor */
 			Iterator() = default;
@@ -507,13 +507,13 @@ namespace dnv::vista::sdk
 			 * @brief Advances the iterator to the next element (pre-increment).
 			 * @return A reference to this iterator after advancing.
 			 */
-			inline Iterator& operator++();
+			inline Iterator& operator++() noexcept;
 
 			/**
 			 * @brief Advances the iterator to the next element (post-increment).
 			 * @return A copy of the iterator *before* it was advanced.
 			 */
-			inline Iterator operator++( int );
+			[[nodiscard]] inline Iterator operator++( int ) noexcept;
 
 			//---------------------------
 			// Comparison
@@ -589,7 +589,7 @@ namespace dnv::vista::sdk
 			 * @brief Constructs an enumerator for the given dictionary table.
 			 * @param table Pointer to the dictionary's internal storage vector.
 			 */
-			explicit Enumerator( const std::vector<std::pair<std::string, TValue>>* table );
+			explicit Enumerator( const std::vector<std::pair<std::string, TValue>>* table ) noexcept;
 
 			/** @brief Default constructor */
 			Enumerator() = delete;
@@ -639,7 +639,7 @@ namespace dnv::vista::sdk
 			[[nodiscard]] inline const std::pair<std::string, TValue>& current() const;
 
 			/** @brief Resets the enumerator to its initial position. */
-			void reset() noexcept;
+			inline void reset() noexcept;
 
 		private:
 			//----------------------------

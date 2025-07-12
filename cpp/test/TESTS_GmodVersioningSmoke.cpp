@@ -1,5 +1,5 @@
 /**
- * @file GmodVersioningSmokeTests.cpp
+ * @file TESTS_GmodVersioningSmoke.cpp
  * @brief Unit tests for the GmodVersioningSmokeTests class.
  */
 

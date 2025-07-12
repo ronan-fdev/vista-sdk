@@ -239,7 +239,7 @@ namespace dnv::vista::sdk
 		for ( size_t i = length() - 1;; --i )
 		{
 			const GmodNode& child = ( *this )[i];
-			auto it = normalAssignmentNames.find( child.code().data() );
+			auto it = normalAssignmentNames.find( child.code() );
 			if ( it != normalAssignmentNames.end() )
 			{
 				return it->second;
@@ -293,7 +293,7 @@ namespace dnv::vista::sdk
 			{
 				if ( m_node.has_value() )
 				{
-					auto nodeCodeIt = normalAssignmentNames.find( m_node->code().data() );
+					auto nodeCodeIt = normalAssignmentNames.find( m_node->code() );
 					if ( nodeCodeIt != normalAssignmentNames.end() )
 					{
 						name = nodeCodeIt->second;
@@ -305,7 +305,7 @@ namespace dnv::vista::sdk
 					for ( size_t i = m_parents.size() - 1; i >= depth; --i )
 					{
 						const GmodNode& parent = m_parents[i];
-						auto parentCodeIt = normalAssignmentNames.find( parent.code().data() );
+						auto parentCodeIt = normalAssignmentNames.find( parent.code() );
 						if ( parentCodeIt != normalAssignmentNames.end() )
 						{
 							name = parentCodeIt->second;
@@ -412,122 +412,10 @@ namespace dnv::vista::sdk
 	}
 
 	//----------------------------------------------
-	// Parsing methods
-	//----------------------------------------------
-
-	GmodPath GmodPath::parse( std::string_view item, VisVersion visVersion )
-	{
-		std::optional<GmodPath> path;
-		if ( !tryParse( item, visVersion, path ) )
-		{
-			throw std::invalid_argument( "Couldnt parse path" );
-		}
-
-		return path.value();
-	}
-
-	GmodPath GmodPath::parse( std::string_view item, const Gmod& gmod, const Locations& locations )
-	{
-		std::unique_ptr<GmodParsePathResult> result = parseInternal( item, gmod, locations );
-
-		if ( auto* okResult = dynamic_cast<GmodParsePathResult::Ok*>( result.get() ) )
-		{
-			return std::move( okResult->path );
-		}
-		else if ( auto* errResult = dynamic_cast<GmodParsePathResult::Err*>( result.get() ) )
-		{
-			throw std::invalid_argument( errResult->error );
-		}
-		else
-		{
-			throw std::runtime_error( "Unexpected result" );
-		}
-	}
-
-	GmodPath GmodPath::parseFullPath( std::string_view item, VisVersion visVersion )
-	{
-		VIS& vis = VIS::instance();
-		const Gmod& gmod = vis.gmod( visVersion );
-		const Locations& locations = vis.locations( visVersion );
-		std::unique_ptr<GmodParsePathResult> result = parseFullPathInternal( item, gmod, locations );
-
-		if ( !result )
-		{
-			throw std::runtime_error( fmt::format( "GmodPath::parseFullPath: parseFullPathInternal returned nullptr for item '{}'.", std::string( item ) ) );
-		}
-
-		if ( auto* okResult = dynamic_cast<GmodParsePathResult::Ok*>( result.get() ) )
-		{
-			return std::move( okResult->path );
-		}
-		else if ( [[maybe_unused]] auto* errResult = dynamic_cast<GmodParsePathResult::Err*>( result.get() ) )
-		{
-			throw std::invalid_argument( errResult->error );
-		}
-		else
-		{
-			throw std::runtime_error( fmt::format( "GmodPath::parseFullPath: Unexpected result type from parseFullPathInternal for item '{}'.", std::string( item ) ) );
-		}
-	}
-
-	bool GmodPath::tryParse( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath )
-	{
-		outPath.reset();
-
-		VIS& vis = VIS::instance();
-		const Gmod& gmod = vis.gmod( visVersion );
-		const Locations& locations = vis.locations( visVersion );
-
-		return tryParse( item, gmod, locations, outPath );
-	}
-
-	bool GmodPath::tryParse( std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath )
-	{
-		std::unique_ptr<GmodParsePathResult> result = parseInternal( item, gmod, locations );
-		outPath.reset();
-
-		if ( auto* okResult = dynamic_cast<GmodParsePathResult::Ok*>( result.get() ) )
-		{
-			outPath.emplace( std::move( okResult->path ) );
-
-			return true;
-		}
-
-		return false;
-	}
-
-	bool GmodPath::tryParseFullPath( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath )
-	{
-		outPath.reset();
-
-		VIS& vis = VIS::instance();
-		const Gmod& gmod = vis.gmod( visVersion );
-		const Locations& locations = vis.locations( visVersion );
-
-		return tryParseFullPath( item, gmod, locations, outPath );
-	}
-
-	bool GmodPath::tryParseFullPath( std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath )
-	{
-		std::unique_ptr<GmodParsePathResult> result = parseFullPathInternal( item, gmod, locations );
-
-		if ( auto* okResult = dynamic_cast<GmodParsePathResult::Ok*>( result.get() ) )
-		{
-			outPath.emplace( std::move( okResult->path ) );
-
-			return true;
-		}
-
-		outPath.reset();
-
-		return false;
-	}
-
-	//----------------------------------------------
 	// Private static parsing methods
 	//----------------------------------------------
 
-	std::unique_ptr<GmodParsePathResult> GmodPath::parseFullPathInternal(
+	GmodParsePathResult GmodPath::parseFullPathInternal(
 		std::string_view item, const Gmod& gmod, const Locations& locations )
 	{
 		constexpr size_t MAX_NODES = 32;
@@ -562,13 +450,13 @@ namespace dnv::vista::sdk
 				const GmodNode* nodePtr;
 				if ( !gmod.tryGetNode( codePart, nodePtr ) )
 				{
-					return std::make_unique<GmodParsePathResult::Err>( "Node lookup failed" );
+					return GmodParsePathResult::Error( "Node lookup failed" );
 				}
 
 				Location parsedLocation;
 				if ( !locations.tryParse( locationPart, parsedLocation ) )
 				{
-					return std::make_unique<GmodParsePathResult::Err>( "Location parse failed" );
+					return GmodParsePathResult::Error( "Location parse failed" );
 				}
 
 				nodes.emplace_back( nodePtr->withLocation( parsedLocation ) );
@@ -578,7 +466,7 @@ namespace dnv::vista::sdk
 				const GmodNode* nodePtr;
 				if ( !gmod.tryGetNode( segment, nodePtr ) )
 				{
-					return std::make_unique<GmodParsePathResult::Err>( "Node lookup failed" );
+					return GmodParsePathResult::Error( "Node lookup failed" );
 				}
 
 				nodes.emplace_back( *nodePtr );
@@ -593,32 +481,32 @@ namespace dnv::vista::sdk
 
 		if ( nodes.empty() )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "No nodes found" );
+			return GmodParsePathResult::Error( "No nodes found" );
 		}
 
 		GmodNode endNode = std::move( nodes.back() );
 		nodes.pop_back();
 
-		return std::make_unique<GmodParsePathResult::Ok>(
+		return GmodParsePathResult::Ok(
 			GmodPath( gmod, std::move( endNode ), std::move( nodes ) ) );
 	}
 
-	std::unique_ptr<GmodParsePathResult> GmodPath::parseInternal( std::string_view item, const Gmod& gmod, const Locations& locations )
+	GmodParsePathResult GmodPath::parseInternal( std::string_view item, const Gmod& gmod, const Locations& locations )
 	{
 		if ( gmod.visVersion() != locations.visVersion() )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Got different VIS versions for Gmod and Locations arguments" );
+			return GmodParsePathResult::Error( "Got different VIS versions for Gmod and Locations arguments" );
 		}
 
 		if ( item.empty() )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
+			return GmodParsePathResult::Error( "Item is empty" );
 		}
 
 		size_t start = item.find_first_not_of( " \t\n\r\f\v" );
 		if ( start == std::string_view::npos )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
+			return GmodParsePathResult::Error( "Item is empty" );
 		}
 
 		item = item.substr( start );
@@ -632,7 +520,7 @@ namespace dnv::vista::sdk
 
 		if ( item.empty() )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Item is empty" );
+			return GmodParsePathResult::Error( "Item is empty" );
 		}
 
 		struct PathNode
@@ -651,7 +539,7 @@ namespace dnv::vista::sdk
 
 			if ( part.empty() )
 			{
-				return std::make_unique<GmodParsePathResult::Err>( "Failed find any parts" );
+				return GmodParsePathResult::Error( "Failed find any parts" );
 			}
 
 			PathNode pathNode;
@@ -667,15 +555,15 @@ namespace dnv::vista::sdk
 				const GmodNode* tempNode = nullptr;
 				if ( !gmod.tryGetNode( codePart, tempNode ) || !tempNode )
 				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Failed to get GmodNode for {}", std::string( codePart ) ) );
+					return GmodParsePathResult::Error(
+						fmt::format( "Failed to get GmodNode for {}", std::string{ codePart } ) );
 				}
 
 				Location parsedLocation;
 				if ( !locations.tryParse( locationPart, parsedLocation ) )
 				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Failed to parse location {}", std::string( locationPart ) ) );
+					return GmodParsePathResult::Error(
+						fmt::format( "Failed to parse location {}", std::string{ locationPart } ) );
 				}
 
 				pathNode.location = parsedLocation;
@@ -687,8 +575,8 @@ namespace dnv::vista::sdk
 				const GmodNode* tempNode = nullptr;
 				if ( !gmod.tryGetNode( part, tempNode ) || !tempNode )
 				{
-					return std::make_unique<GmodParsePathResult::Err>(
-						fmt::format( "Failed to get GmodNode for {}", std::string( part ) ) );
+					return GmodParsePathResult::Error(
+						fmt::format( "Failed to get GmodNode for {}", std::string{ part } ) );
 				}
 			}
 
@@ -703,20 +591,20 @@ namespace dnv::vista::sdk
 
 		if ( parts.empty() )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Failed find any parts" );
+			return GmodParsePathResult::Error( "Failed find any parts" );
 		}
 
 		const GmodNode* baseNode = nullptr;
 		if ( !gmod.tryGetNode( parts[0].code, baseNode ) || !baseNode )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Failed to find base node" );
+			return GmodParsePathResult::Error( "Failed to find base node" );
 		}
 
 		struct ParseContext
 		{
 			std::vector<PathNode> parts;
 			size_t currentPartIndex = 0;
-			std::unordered_map<std::string_view, Location> locationMap;
+			StringMap<Location> locationMap;
 			std::vector<GmodNode> foundPathParents;
 			std::optional<GmodNode> foundEndNode;
 			bool pathFound = false;
@@ -774,33 +662,52 @@ namespace dnv::vista::sdk
 
 				GmodNode endNode = nodeWithLocation;
 
-				const GmodNode* startNode = nullptr;
-				if ( pathParents.size() > 0 && pathParents[0].parents().size() == 1 )
+				std::optional<GmodNode> startNodeOpt;
+				if ( pathParents.size() > 0 )
 				{
-					startNode = pathParents[0].parents()[0];
+					const auto& parentsOfFirst = pathParents[0].parents();
+					if ( parentsOfFirst.size() == 1 )
+					{
+						startNodeOpt = *parentsOfFirst[0];
+					}
 				}
-				else if ( endNode.parents().size() == 1 )
+				else
 				{
-					startNode = endNode.parents()[0];
+					const auto& endParents = endNode.parents();
+					if ( endParents.size() == 1 )
+					{
+						startNodeOpt = *endParents[0];
+					}
 				}
 
-				if ( !startNode || startNode->parents().size() > 1 )
+				if ( !startNodeOpt.has_value() )
+				{
+					return TraversalHandlerResult::Stop;
+				}
+
+				const auto& startNodeParents = startNodeOpt->parents();
+				if ( startNodeParents.size() > 1 )
 				{
 					return TraversalHandlerResult::Stop;
 				}
 
 				std::vector<GmodNode> reverseHierarchy;
 
-				while ( startNode && startNode->parents().size() == 1 )
+				GmodNode currentNode = *startNodeOpt;
+				auto currentParents = currentNode.parents();
+				while ( currentParents.size() == 1 )
 				{
-					GmodNode nodeToAdd = *startNode;
-					if ( ctx.locationMap.find( startNode->code() ) != ctx.locationMap.end() )
+					GmodNode nodeToAdd = currentNode;
+					if ( ctx.locationMap.find( currentNode.code() ) != ctx.locationMap.end() )
 					{
-						nodeToAdd = startNode->withLocation( ctx.locationMap[startNode->code()] );
+						nodeToAdd = currentNode.withLocation( ctx.locationMap[currentNode.code()] );
 					}
 					reverseHierarchy.push_back( nodeToAdd );
-					startNode = startNode->parents()[0];
-					if ( startNode->parents().size() > 1 )
+
+					currentNode = *currentParents[0];
+					currentParents = currentNode.parents();
+
+					if ( currentParents.size() > 1 )
 					{
 						return TraversalHandlerResult::Stop;
 					}
@@ -825,7 +732,7 @@ namespace dnv::vista::sdk
 
 		if ( !context.pathFound )
 		{
-			return std::make_unique<GmodParsePathResult::Err>( "Failed to find path after traversal" );
+			return GmodParsePathResult::Error( "Failed to find path after traversal" );
 		}
 
 		internal::LocationSetsVisitor locationVisitor;
@@ -846,7 +753,7 @@ namespace dnv::vista::sdk
 			{
 				if ( node.location().has_value() )
 				{
-					return std::make_unique<GmodParsePathResult::Err>( "Invalid location set configuration" );
+					return GmodParsePathResult::Error( "Invalid location set configuration" );
 				}
 
 				continue;
@@ -874,11 +781,11 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		return std::make_unique<GmodParsePathResult::Ok>( GmodPath( gmod, std::move( context.foundEndNode.value() ), std::move( context.foundPathParents ) ) );
+		return GmodParsePathResult::Ok( GmodPath( gmod, std::move( context.foundEndNode.value() ), std::move( context.foundPathParents ) ) );
 	}
 
 	//----------------------------------------------
-	// GmodPath enumerator
+	// GmodPath::enumerator
 	//----------------------------------------------
 
 	//----------------------------
@@ -929,7 +836,7 @@ namespace dnv::vista::sdk
 			if ( !currentNode.isIndividualizable( isTargetNode, isInSet ) )
 			{
 				throw std::invalid_argument( "GmodIndividualizableSet constructor: Node '" +
-											 std::string( currentNode.code().data() ) + "' (at index " +
+											 std::string{ currentNode.code().data() } + "' (at index " +
 											 std::to_string( nodeIdx ) + ") is not individualizable in the given context." );
 			}
 		}
@@ -946,7 +853,7 @@ namespace dnv::vista::sdk
 				if ( currentNode.location() != expectedLocation )
 				{
 					throw std::invalid_argument( "GmodIndividualizableSet constructor: Nodes have different locations. Node '" +
-												 std::string( currentNode.code().data() ) + "' (at index " +
+												 std::string{ currentNode.code().data() } + "' (at index " +
 												 std::to_string( currentIdx ) + ") has location while first node in set had different or no location." );
 				}
 			}
@@ -1064,21 +971,5 @@ namespace dnv::vista::sdk
 		}
 
 		return fmt::to_string( builder );
-	}
-
-	//=====================================================================
-	// GmodParsePathResult class
-	//=====================================================================
-
-	GmodParsePathResult::Ok::Ok( GmodPath path )
-		: GmodParsePathResult{},
-		  path{ std::move( path ) }
-	{
-	}
-
-	GmodParsePathResult::Err::Err( std::string errorString )
-		: GmodParsePathResult{},
-		  error{ std::move( errorString ) }
-	{
 	}
 }

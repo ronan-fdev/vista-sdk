@@ -18,197 +18,64 @@
 namespace dnv::vista::sdk
 {
 	//=====================================================================
-	// Constants
-	//=====================================================================
-
-	namespace
-	{
-		constexpr const char* VERSIONING = "<versioning>";
-	}
-
-	//=====================================================================
 	// VIS singleton
 	//=====================================================================
-
-	//----------------------------------------------
-	// Construction
-	//----------------------------------------------
-
-	VIS::VIS() : IVIS{}
-	{
-	}
-
-	//----------------------------------------------
-	// Singleton access
-	//----------------------------------------------
-
-	VIS& VIS::instance()
-	{
-		static VIS instance;
-		return instance;
-	}
 
 	//----------------------------------------------
 	// Accessors
 	//----------------------------------------------
 
-	std::vector<VisVersion> VIS::visVersions()
-	{
-		return VisVersionExtensions::allVersions();
-	}
+	//-----------------------------
+	// Cached objects
+	//-----------------------------
 
-	GmodVersioning VIS::gmodVersioning()
+	const GmodVersioning& VIS::gmodVersioning()
 	{
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_gmodVersioningCache.find( VERSIONING ); it != m_gmodVersioningCache.end() )
+		static GmodVersioning staticGmodVersioning = []() {
+			auto dto = EmbeddedResource::gmodVersioning();
+			if ( !dto )
 			{
-				return it->second;
+				throw std::runtime_error( "Failed to load GMOD versioning data" );
 			}
-		}
+			return GmodVersioning( *dto );
+		}();
 
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_gmodVersioningCache.find( VERSIONING ); it != m_gmodVersioningCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = EmbeddedResource::gmodVersioning();
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load GMOD versioning data" );
-		}
-
-		auto [inserted_it, success] = m_gmodVersioningCache.emplace( VERSIONING, GmodVersioning( *dto ) );
-		return inserted_it->second;
+		return staticGmodVersioning;
 	}
 
-	VisVersion IVIS::latestVisVersion() const noexcept
-	{
-		return VisVersionExtensions::latestVersion();
-	}
+	//-----------------------------
+	// Cached maps
+	//-----------------------------
 
-	const Gmod& VIS::gmod( VisVersion visVersion ) const
+	std::unordered_map<VisVersion, Gmod> VIS::gmodsMap( const std::vector<VisVersion>& visVersions )
 	{
-		if ( !VisVersionExtensions::isValid( visVersion ) )
+		std::unordered_map<VisVersion, Gmod> result;
+		result.reserve( visVersions.size() );
+
+		for ( const auto& version : visVersions )
 		{
-			throw std::invalid_argument( "Invalid VIS version: " + std::to_string( static_cast<int>( visVersion ) ) );
-		}
-
-		{ /* Hot path: Try shared lock first */
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_gmodCache.find( visVersion ); it != m_gmodCache.end() )
+			if ( !VisVersionExtensions::isValid( version ) )
 			{
-				return it->second;
+				throw std::invalid_argument( fmt::format( "Invalid VIS version provided: {}", VisVersionExtensions::toVersionString( version ) ) );
 			}
+			result.try_emplace( version, gmod( version ) );
 		}
 
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_gmodCache.find( visVersion ); it != m_gmodCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = loadGmodDto( visVersion );
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load GMOD DTO for version: " + VisVersionExtensions::toVersionString( visVersion ) );
-		}
-
-		auto [inserted_it, success] = m_gmodCache.emplace( visVersion, Gmod( visVersion, std::move( *dto ) ) );
-		return inserted_it->second;
-	}
-
-	const Codebooks& VIS::codebooks( VisVersion visVersion )
-	{
-		if ( !VisVersionExtensions::isValid( visVersion ) )
-		{
-			throw std::invalid_argument( "Invalid VIS version: " + std::to_string( static_cast<int>( visVersion ) ) );
-		}
-
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_codebooksCache.find( visVersion ); it != m_codebooksCache.end() )
-			{
-				return it->second;
-			}
-		}
-
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_codebooksCache.find( visVersion ); it != m_codebooksCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = EmbeddedResource::codebooks( VisVersionExtensions::toVersionString( visVersion ) );
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load codebooks DTO for version: " + VisVersionExtensions::toVersionString( visVersion ) );
-		}
-
-		auto [inserted_it, success] = m_codebooksCache.emplace( visVersion, Codebooks( visVersion, *dto ) );
-		return inserted_it->second;
-	}
-
-	const Locations& VIS::locations( VisVersion visVersion )
-	{
-		if ( !VisVersionExtensions::isValid( visVersion ) )
-		{
-			throw std::invalid_argument( "Invalid VIS version: " + std::to_string( static_cast<int>( visVersion ) ) );
-		}
-
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_locationsCache.find( visVersion ); it != m_locationsCache.end() )
-			{
-				return it->second;
-			}
-		}
-
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_locationsCache.find( visVersion ); it != m_locationsCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = EmbeddedResource::locations( VisVersionExtensions::toVersionString( visVersion ) );
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load locations DTO for version: " + VisVersionExtensions::toVersionString( visVersion ) );
-		}
-
-		auto [inserted_it, success] = m_locationsCache.emplace( visVersion, Locations( visVersion, *dto ) );
-		return inserted_it->second;
+		return result;
 	}
 
 	std::unordered_map<VisVersion, Codebooks> VIS::codebooksMap( const std::vector<VisVersion>& visVersions )
 	{
-		for ( auto version : visVersions )
-		{
-			if ( !VisVersionExtensions::isValid( version ) )
-			{
-				throw std::invalid_argument( "Invalid VIS version provided: " + VisVersionExtensions::toVersionString( version ) );
-			}
-		}
-
 		std::unordered_map<VisVersion, Codebooks> result;
 		result.reserve( visVersions.size() );
 
-		for ( auto version : visVersions )
+		for ( const auto& version : visVersions )
 		{
-			auto dto = EmbeddedResource::codebooks( VisVersionExtensions::toVersionString( version ) );
-			if ( !dto )
+			if ( !VisVersionExtensions::isValid( version ) )
 			{
-				throw std::runtime_error( "Failed to load codebooks DTO for version: " + VisVersionExtensions::toVersionString( version ) );
+				throw std::invalid_argument( fmt::format( "Invalid VIS version provided: {}", VisVersionExtensions::toVersionString( version ) ) );
 			}
-
-			result.emplace( std::piecewise_construct,
-				std::forward_as_tuple( version ),
-				std::forward_as_tuple( version, std::move( *dto ) ) );
+			result.try_emplace( version, codebooks( version ) );
 		}
 
 		return result;
@@ -216,193 +83,51 @@ namespace dnv::vista::sdk
 
 	std::unordered_map<VisVersion, Locations> VIS::locationsMap( const std::vector<VisVersion>& visVersions )
 	{
-		for ( auto version : visVersions )
-		{
-			if ( !VisVersionExtensions::isValid( version ) )
-			{
-				throw std::invalid_argument( "Invalid VIS version provided: " + VisVersionExtensions::toVersionString( version ) );
-			}
-		}
-
 		std::unordered_map<VisVersion, Locations> result;
 		result.reserve( visVersions.size() );
 
-		for ( auto version : visVersions )
-		{
-			auto dto = EmbeddedResource::locations( VisVersionExtensions::toVersionString( version ) );
-			if ( !dto )
-			{
-				throw std::runtime_error( "Failed to load locations DTO for version: " + VisVersionExtensions::toVersionString( version ) );
-			}
-
-			result.emplace( std::piecewise_construct,
-				std::forward_as_tuple( version ),
-				std::forward_as_tuple( version, std::move( *dto ) ) );
-		}
-
-		return result;
-	}
-
-	std::unordered_map<VisVersion, Gmod> VIS::gmodsMap( const std::vector<VisVersion>& visVersions ) const
-	{
-		for ( auto version : visVersions )
+		for ( const auto& version : visVersions )
 		{
 			if ( !VisVersionExtensions::isValid( version ) )
 			{
-				throw std::invalid_argument( "Invalid VIS version provided: " + VisVersionExtensions::toVersionString( version ) );
+				throw std::invalid_argument( fmt::format( "Invalid VIS version provided: {}", VisVersionExtensions::toVersionString( version ) ) );
 			}
-		}
-
-		std::unordered_map<VisVersion, Gmod> result;
-		result.reserve( visVersions.size() );
-
-		for ( auto version : visVersions )
-		{
-			auto dto = loadGmodDto( version );
-			if ( !dto )
-			{
-				throw std::runtime_error( "Failed to load GMOD DTO for version: " + VisVersionExtensions::toVersionString( version ) );
-			}
-
-			result.emplace( std::piecewise_construct,
-				std::forward_as_tuple( version ),
-				std::forward_as_tuple( version, std::move( *dto ) ) );
+			result.try_emplace( version, locations( version ) );
 		}
 
 		return result;
 	}
 
 	//----------------------------------------------
-	// DTO accessors
+	// DTO Loading
 	//----------------------------------------------
 
-	GmodDto VIS::gmodDto( VisVersion visVersion ) const
+	const StringMap<GmodVersioningDto>& VIS::gmodVersioningDto()
 	{
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_gmodDtoCache.find( visVersion ); it != m_gmodDtoCache.end() )
+		static auto versioningDto = []() -> StringMap<GmodVersioningDto> {
+			auto dto = EmbeddedResource::gmodVersioning();
+			if ( !dto )
 			{
-				return it->second;
+				throw std::runtime_error( "Failed to load GMOD versioning data" );
 			}
-		}
+			return std::move( *dto );
+		}();
 
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_gmodDtoCache.find( visVersion ); it != m_gmodDtoCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = loadGmodDto( visVersion );
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load GMOD DTO for version: " + VisVersionExtensions::toVersionString( visVersion ) );
-		}
-
-		auto [inserted_it, success] = m_gmodDtoCache.emplace( visVersion, *dto );
-		return inserted_it->second;
-	}
-
-	std::optional<GmodDto> VIS::loadGmodDto( VisVersion visVersion )
-	{
-		return EmbeddedResource::gmod( VisVersionExtensions::toVersionString( visVersion ) );
-	}
-
-	std::unordered_map<std::string, GmodVersioningDto> VIS::gmodVersioningDto()
-	{
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_gmodVersioningDtoCache.find( VERSIONING ); it != m_gmodVersioningDtoCache.end() )
-			{
-				return it->second;
-			}
-		}
-
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_gmodVersioningDtoCache.find( VERSIONING ); it != m_gmodVersioningDtoCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = EmbeddedResource::gmodVersioning();
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load GMOD versioning data" );
-		}
-
-		auto [inserted_it, success] = m_gmodVersioningDtoCache.emplace( VERSIONING, *dto );
-		return inserted_it->second;
-	}
-
-	CodebooksDto VIS::codebooksDto( VisVersion visVersion )
-	{
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_codebooksDtoCache.find( visVersion ); it != m_codebooksDtoCache.end() )
-			{
-				return it->second;
-			}
-		}
-
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_codebooksDtoCache.find( visVersion ); it != m_codebooksDtoCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = EmbeddedResource::codebooks( VisVersionExtensions::toVersionString( visVersion ) );
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load codebooks DTO for version: " + VisVersionExtensions::toVersionString( visVersion ) );
-		}
-
-		auto [inserted_it, success] = m_codebooksDtoCache.emplace( visVersion, *dto );
-		return inserted_it->second;
-	}
-
-	LocationsDto VIS::locationsDto( VisVersion visVersion )
-	{
-		{
-			std::shared_lock lock( m_cacheMutex );
-			if ( auto it = m_locationsDtoCache.find( visVersion ); it != m_locationsDtoCache.end() )
-			{
-				return it->second;
-			}
-		}
-
-		std::unique_lock lock( m_cacheMutex );
-
-		if ( auto it = m_locationsDtoCache.find( visVersion ); it != m_locationsDtoCache.end() )
-		{
-			return it->second;
-		}
-
-		auto dto = EmbeddedResource::locations( VisVersionExtensions::toVersionString( visVersion ) );
-		if ( !dto )
-		{
-			throw std::runtime_error( "Failed to load locations DTO for version: " + VisVersionExtensions::toVersionString( visVersion ) );
-		}
-
-		auto [inserted_it, success] = m_locationsDtoCache.emplace( visVersion, *dto );
-		return inserted_it->second;
+		return versioningDto;
 	}
 
 	//----------------------------------------------
 	// Conversion
 	//----------------------------------------------
 
+	//-----------------------------
+	// GmodNode
+	//-----------------------------
+
 	std::optional<GmodNode> VIS::convertNode( VisVersion sourceVersion, const GmodNode& sourceNode,
 		VisVersion targetVersion )
 	{
 		return gmodVersioning().convertNode( sourceVersion, sourceNode, targetVersion );
-	}
-
-	std::optional<GmodPath> VIS::convertPath( VisVersion sourceVersion, const GmodPath& sourcePath,
-		VisVersion targetVersion )
-	{
-		return gmodVersioning().convertPath( sourceVersion, sourcePath, targetVersion );
 	}
 
 	std::optional<GmodNode> VIS::convertNode( const GmodNode& sourceNode, VisVersion targetVersion,
@@ -411,10 +136,24 @@ namespace dnv::vista::sdk
 		return convertNode( sourceNode.visVersion(), sourceNode, targetVersion );
 	}
 
+	//-----------------------------
+	// GmodPath
+	//-----------------------------
+
+	std::optional<GmodPath> VIS::convertPath( VisVersion sourceVersion, const GmodPath& sourcePath,
+		VisVersion targetVersion )
+	{
+		return gmodVersioning().convertPath( sourceVersion, sourcePath, targetVersion );
+	}
+
 	std::optional<GmodPath> VIS::convertPath( const GmodPath& sourcePath, VisVersion targetVersion )
 	{
 		return convertPath( sourcePath.visVersion(), sourcePath, targetVersion );
 	}
+
+	//-----------------------------
+	// LocalId
+	//-----------------------------
 
 	std::optional<LocalIdBuilder> VIS::convertLocalId( const LocalIdBuilder& sourceLocalId,
 		VisVersion targetVersion )

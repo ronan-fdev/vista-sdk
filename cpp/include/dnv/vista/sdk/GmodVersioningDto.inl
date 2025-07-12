@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical GmodVersioning operations
  */
 
+#pragma once
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================

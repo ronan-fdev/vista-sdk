@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "utils/StringUtils.h"
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -32,8 +34,8 @@ namespace dnv::vista::sdk
 		/** @brief Type representing a collection of values within a group */
 		using ValueGroup = std::vector<std::string>;
 
-		/** @brief Type representing a mapping of group names to their values */
-		using ValuesMap = std::unordered_map<std::string, ValueGroup>;
+		/** @brief Type representing a mapping of group names to their values with heterogeneous lookup */
+		using ValuesMap = StringMap<ValueGroup>;
 
 		//----------------------------------------------
 		// Construction

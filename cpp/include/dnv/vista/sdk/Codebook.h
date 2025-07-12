@@ -116,7 +116,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Iterator type for traversing standard values
 		 */
-		using Iterator = std::unordered_set<std::string, StringViewHash, StringViewEqual>::const_iterator;
+		using Iterator = StringSet::const_iterator;
 
 		//----------------------------------------------
 		// Construction
@@ -125,9 +125,9 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Construct with name and values
 		 * @param name The codebook name
-		 * @param standardValues The set of standard values
+		 * @param standardValues The set of standard values with zero-copy string_view access
 		 */
-		explicit CodebookStandardValues( CodebookName name, std::unordered_set<std::string, StringViewHash, StringViewEqual>&& standardValues );
+		inline explicit CodebookStandardValues( CodebookName name, StringSet&& standardValues ) noexcept;
 
 		/** @brief Default constructor. */
 		CodebookStandardValues() = default;
@@ -170,7 +170,7 @@ namespace dnv::vista::sdk
 		 * @param tagValue The value to check
 		 * @return True if the value is in standard values or is a numeric position
 		 */
-		bool contains( std::string_view tagValue ) const noexcept;
+		inline bool contains( std::string_view tagValue ) const noexcept;
 
 		//----------------------------------------------
 		// Iteration
@@ -197,7 +197,7 @@ namespace dnv::vista::sdk
 		CodebookName m_name;
 
 		/** @brief The set of standard values */
-		std::unordered_set<std::string, StringViewHash, StringViewEqual> m_standardValues;
+		StringSet m_standardValues;
 	};
 
 	//=====================================================================
@@ -219,7 +219,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Iterator type for traversing groups
 		 */
-		using Iterator = std::unordered_set<std::string, StringViewHash, StringViewEqual>::const_iterator;
+		using Iterator = StringSet::const_iterator;
 
 		//----------------------------------------------
 		// Construction
@@ -227,9 +227,9 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Construct with groups
-		 * @param groups The set of groups
+		 * @param groups The set of groups with zero-copy string_view access
 		 */
-		explicit CodebookGroups( std::unordered_set<std::string, StringViewHash, StringViewEqual>&& groups );
+		inline explicit CodebookGroups( StringSet&& groups ) noexcept;
 
 		/** @brief Default constructor. */
 		CodebookGroups() = default;
@@ -296,7 +296,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief The set of groups */
-		std::unordered_set<std::string, StringViewHash, StringViewEqual> m_groups;
+		StringSet m_groups;
 	};
 
 	//=====================================================================
@@ -358,7 +358,7 @@ namespace dnv::vista::sdk
 		 * @brief Get the codebook name
 		 * @return The codebook name
 		 */
-		[[nodiscard]] inline CodebookName name() const noexcept;
+		[[nodiscard]] constexpr inline CodebookName name() const noexcept;
 
 		/**
 		 * @brief Get the groups
@@ -374,9 +374,9 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Get the raw data
-		 * @return Map of groups to their values
+		 * @return Map of groups to their values with zero-copy string_view access
 		 */
-		[[nodiscard]] inline const std::unordered_map<std::string, std::vector<std::string>>& rawData() const noexcept;
+		[[nodiscard]] inline const StringMap<std::vector<std::string>>& rawData() const noexcept;
 
 		//----------------------------------------------
 		// State inspection methods
@@ -440,7 +440,7 @@ namespace dnv::vista::sdk
 		CodebookName m_name;
 
 		/** @brief Mapping from values to their group names */
-		std::unordered_map<std::string, std::string, StringViewHash, StringViewEqual> m_groupMap;
+		StringMap<std::string> m_groupMap;
 
 		/** @brief Container for standard values */
 		CodebookStandardValues m_standardValues;
@@ -449,7 +449,7 @@ namespace dnv::vista::sdk
 		CodebookGroups m_groups;
 
 		/** @brief Raw mapping of groups to their values */
-		std::unordered_map<std::string, std::vector<std::string>> m_rawData;
+		StringMap<std::vector<std::string>> m_rawData;
 	};
 }
 

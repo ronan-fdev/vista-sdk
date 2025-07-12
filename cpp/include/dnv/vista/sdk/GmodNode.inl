@@ -67,7 +67,7 @@ namespace dnv::vista::sdk
 		const std::optional<std::string>& definition,
 		const std::optional<std::string>& commonDefinition,
 		const std::optional<bool>& installSubstructure,
-		const std::unordered_map<std::string, std::string>& normalAssignmentNames ) noexcept
+		const StringMap<std::string>& normalAssignmentNames ) noexcept
 		: m_category{ category },
 		  m_type{ type },
 		  m_name{ name },
@@ -182,7 +182,7 @@ namespace dnv::vista::sdk
 		return m_installSubstructure;
 	}
 
-	inline const std::unordered_map<std::string, std::string>& GmodNodeMetadata::normalAssignmentNames() const noexcept
+	inline const StringMap<std::string>& GmodNodeMetadata::normalAssignmentNames() const noexcept
 	{
 		return m_normalAssignmentNames;
 	}
@@ -207,7 +207,7 @@ namespace dnv::vista::sdk
 			  dto.definition(),
 			  dto.commonDefinition(),
 			  dto.installSubstructure(),
-			  dto.normalAssignmentNames().has_value() ? *dto.normalAssignmentNames() : std::unordered_map<std::string, std::string>() },
+			  dto.normalAssignmentNames().has_value() ? *dto.normalAssignmentNames() : StringMap<std::string>() },
 		  m_children{},
 		  m_parents{},
 		  m_childrenSet{}
@@ -290,7 +290,7 @@ namespace dnv::vista::sdk
 	// Accessors
 	//----------------------------------------------
 
-	inline std::string_view GmodNode::code() const noexcept
+	inline const std::string& GmodNode::code() const noexcept
 	{
 		return m_code;
 	}
@@ -385,7 +385,7 @@ namespace dnv::vista::sdk
 			return nullptr;
 		}
 
-		if ( child->m_metadata.category().find( GMODNODE_CATEGORY_PRODUCT ) == std::string::npos )
+		if ( !contains( child->m_metadata.category(), GMODNODE_CATEGORY_PRODUCT ) )
 		{
 			return nullptr;
 		}

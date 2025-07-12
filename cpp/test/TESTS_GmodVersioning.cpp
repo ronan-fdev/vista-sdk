@@ -1,5 +1,5 @@
 /**
- * @file GmodVersioningTests.cpp
+ * @file TESTS_GmodVersioning.cpp
  * @brief Unit tests for the GmodVersioning class.
  */
 
@@ -41,7 +41,7 @@ namespace dnv::vista::sdk::tests
 				}
 				catch ( [[maybe_unused]] const std::exception& ex )
 				{
-					std::unordered_map<std::string, GmodVersioningDto> emptyDto;
+					StringMap<GmodVersioningDto> emptyDto;
 					m_gmodVersioning = std::make_unique<GmodVersioning>( emptyDto );
 				}
 

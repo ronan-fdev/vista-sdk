@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical UniversalIdBuilder operations
  */
 
+#pragma once
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================

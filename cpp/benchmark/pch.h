@@ -15,6 +15,7 @@
 #include <mutex>
 #include <shared_mutex>
 #include <unordered_set>
+#include <variant>
 
 /* Libs */
 #include <fmt/format.h>

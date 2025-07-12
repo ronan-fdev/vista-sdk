@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "utils/StringUtils.h"
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -30,8 +32,8 @@ namespace dnv::vista::sdk
 		// Types and aliases
 		//----------------------------------------------
 
-		/** @brief Shorthand for the normal assignment names map type */
-		using NormalAssignmentNamesMap = std::unordered_map<std::string, std::string>;
+		/** @brief Shorthand for the normal assignment names map type with heterogeneous lookup */
+		using NormalAssignmentNamesMap = StringMap<std::string>;
 
 		//----------------------------------------------
 		// Construction

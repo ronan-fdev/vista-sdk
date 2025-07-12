@@ -1,5 +1,5 @@
 /**
- * @file CodebooksTests.cpp
+ * @file TESTS_Codebooks.cpp
  * @brief Unit tests for the Codebooks and CodebookName functionalities.
  */
 
@@ -27,7 +27,7 @@ namespace dnv::vista::sdk
 				if ( version == VisVersion::Unknown )
 					continue;
 
-				SCOPED_TRACE( "Testing VisVersion: " + VisVersionExtensions::toVersionString( version ) );
+				// SCOPED_TRACE( "Testing VisVersion: " + VisVersionExtensions::toVersionString( version ) );
 
 				const Codebooks* codebooksPtr = nullptr;
 				ASSERT_NO_THROW( {

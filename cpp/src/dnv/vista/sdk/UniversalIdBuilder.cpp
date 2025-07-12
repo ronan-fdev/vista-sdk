@@ -181,8 +181,7 @@ namespace dnv::vista::sdk
 		std::optional<UniversalIdBuilder> builder;
 		if ( !tryParse( universalIdStr, errors, builder ) )
 		{
-			std::string errorMessage = "Couldn't parse universal ID from: '" + std::string( universalIdStr ) + "'. " + errors.toString();
-			throw std::invalid_argument( errorMessage );
+			throw std::invalid_argument( fmt::format( "Couldn't parse universal ID from: '{}'. {}", universalIdStr, errors.toString() ) );
 		}
 		return builder.value();
 	}

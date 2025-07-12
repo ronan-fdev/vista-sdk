@@ -8,6 +8,7 @@
 #include <queue>
 #include <shared_mutex>
 #include <unordered_set>
+#include <variant>
 
 /* Libs */
 #include <spdlog/spdlog.h>

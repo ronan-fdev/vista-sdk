@@ -1,5 +1,5 @@
 /**
- * @file GmodTests.cpp
+ * @file TESTS_Gmod.cpp
  * @brief Unit tests for the Generic Product Model (GMOD) functionality
  */
 
@@ -235,7 +235,7 @@ namespace dnv::vista::sdk::tests
 			};
 
 			MaxOccurrenceState state;
-			size_t maxExpected = 2;
+			size_t maxExpected = 1;
 			TraversalOptions options;
 			options.maxTraversalOccurrence = maxExpected;
 

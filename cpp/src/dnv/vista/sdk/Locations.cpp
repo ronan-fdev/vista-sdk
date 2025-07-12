@@ -170,7 +170,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				throw std::runtime_error( std::string( "Unsupported code: " ) + relLocDto.code() );
+				throw std::invalid_argument( fmt::format( "Unsupported code: ", relLocDto.code() ) );
 			}
 
 			if ( m_groups.find( key ) == m_groups.end() )
@@ -221,7 +221,7 @@ namespace dnv::vista::sdk
 		Location location;
 		if ( !tryParse( locationStr, location ) )
 		{
-			throw std::invalid_argument( "Invalid location: " + std::string( locationStr ) );
+			throw std::invalid_argument( fmt::format( "Invalid location: ", locationStr ) );
 		}
 
 		return location;

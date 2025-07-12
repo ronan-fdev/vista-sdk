@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical ISO19848Dtos operations
  */
 
+#pragma once
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================

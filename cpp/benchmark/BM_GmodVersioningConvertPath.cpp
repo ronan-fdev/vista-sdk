@@ -45,7 +45,6 @@ namespace dnv::vista::sdk::benchmarks
 
 	BENCHMARK_F( GmodVersioningFixture, ConvertPath )( benchmark::State& state )
 	{
-
 		for ( auto _ : state )
 		{
 			auto result = m_vis->convertPath( VisVersion::v3_4a, m_gmodPath, VisVersion::v3_5a );

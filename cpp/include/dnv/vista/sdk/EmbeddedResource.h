@@ -40,7 +40,7 @@ namespace dnv::vista::sdk
 		// Type aliases for heterogeneous containers
 		//----------------------------------------------
 
-		using PathCache = std::unordered_map<std::string, std::filesystem::path, StringViewHash, StringViewEqual>;
+		using PathCache = StringMap<std::filesystem::path>;
 
 		//----------------------------------------------
 		// Public interface
@@ -61,9 +61,9 @@ namespace dnv::vista::sdk
 		 *
 		 * Loads and caches all Global Model versioning information.
 		 *
-		 * @return Dictionary of versioning DTOs by version string if found, std::nullopt otherwise
+		 * @return Dictionary of versioning DTOs by version string with heterogeneous lookup if found, std::nullopt otherwise
 		 */
-		static const std::optional<std::unordered_map<std::string, GmodVersioningDto>>& gmodVersioning();
+		static const std::optional<StringMap<GmodVersioningDto>>& gmodVersioning();
 
 		/**
 		 * @brief Get GMOD for specific VIS version

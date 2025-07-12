@@ -104,7 +104,7 @@ namespace dnv::vista::sdk
 					}
 					break;
 			}
-			throw std::invalid_argument( "Unknown codebook name: " + std::string( name ) );
+			throw std::invalid_argument( "Unknown codebook name: " + std::string{ name } );
 		}
 	}
 
@@ -221,54 +221,8 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		throw std::invalid_argument( "Unknown PositionValidationResult name: '" + std::string( name ) +
+		throw std::invalid_argument( "Unknown PositionValidationResult name: '" + std::string{ name } +
 									 "'. Valid values are: Invalid, InvalidOrder, InvalidGrouping, Valid, Custom" );
-	}
-
-	//=====================================================================
-	// CodebookStandardValues class
-	//=====================================================================
-
-	//----------------------------------------------
-	// Construction
-	//----------------------------------------------
-
-	CodebookStandardValues::CodebookStandardValues( CodebookName name, std::unordered_set<std::string, StringViewHash, StringViewEqual>&& standardValues )
-		: m_name{ name },
-		  m_standardValues{ std::move( standardValues ) }
-	{
-	}
-
-	//----------------------------------------------
-	// Public methods
-	//----------------------------------------------
-
-	bool CodebookStandardValues::contains( std::string_view tagValue ) const noexcept
-	{
-		if ( m_standardValues.contains( tagValue ) )
-		{
-			return true;
-		}
-
-		if ( m_name == CodebookName::Position )
-		{
-			return !tagValue.empty() && std::all_of( tagValue.begin(), tagValue.end(), isDigit );
-		}
-
-		return false;
-	}
-
-	//=====================================================================
-	// CodebookGroups class
-	//=====================================================================
-
-	//----------------------------------------------
-	// Construction
-	//----------------------------------------------
-
-	CodebookGroups::CodebookGroups( std::unordered_set<std::string, StringViewHash, StringViewEqual>&& groups )
-		: m_groups{ std::move( groups ) }
-	{
 	}
 
 	//=====================================================================
@@ -302,12 +256,12 @@ namespace dnv::vista::sdk
 		m_groupMap.reserve( capacity );
 		m_rawData.reserve( groupCount + ( groupCount >> 2 ) ); /* 1.25x */
 
-		std::unordered_set<std::string, StringViewHash, StringViewEqual> valueSet;
-		std::unordered_set<std::string, StringViewHash, StringViewEqual> groupSet;
+		StringSet valueSet;
+		StringSet groupSet;
 		valueSet.reserve( capacity );
 		groupSet.reserve( groupCount + ( groupCount >> 2 ) );
 
-		for ( const auto& [groupKey, values] : dtoValues )
+		for ( auto& [groupKey, values] : dto.values() )
 		{
 			std::string_view groupTrimmed = trimString( groupKey );
 			std::string groupStr{ groupTrimmed };
@@ -315,7 +269,7 @@ namespace dnv::vista::sdk
 			std::vector<std::string> trimmedValues;
 			trimmedValues.reserve( values.size() );
 
-			for ( const auto& value : values )
+			for ( auto& value : values )
 			{
 				std::string_view valueTrimmed = trimString( value );
 				std::string valueStr{ valueTrimmed };
@@ -385,7 +339,7 @@ namespace dnv::vista::sdk
 		auto tagOpt = tryCreateTag( value );
 		if ( !tagOpt )
 		{
-			throw std::invalid_argument( "Invalid value for metadata tag: codebook=" + std::to_string( static_cast<int>( m_name ) ) + ", value=" + std::string( value ) );
+			throw std::invalid_argument( "Invalid value for metadata tag: codebook=" + std::to_string( static_cast<int>( m_name ) ) + ", value=" + std::string{ value } );
 		}
 
 		return tagOpt.value();
@@ -524,7 +478,7 @@ namespace dnv::vista::sdk
 
 		if ( worstResult == PositionValidationResult::Valid )
 		{
-			std::unordered_set<std::string_view> uniqueGroups;
+			StringSet uniqueGroups;
 			uniqueGroups.reserve( MAX_GROUPS );
 			bool hasDefaultGroup = false;
 
@@ -542,7 +496,7 @@ namespace dnv::vista::sdk
 					group = ( it != m_groupMap.end() ) ? std::string_view{ it->second } : CODEBOOK_GROUP_UNKNOWN;
 				}
 
-				uniqueGroups.insert( group );
+				uniqueGroups.emplace( group );
 
 				if ( group == CODEBOOK_GROUP_DEFAULT )
 				{

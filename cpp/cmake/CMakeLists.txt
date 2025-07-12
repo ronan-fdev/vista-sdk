@@ -13,9 +13,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 # --- Dependencies ---
 include(Dependencies.cmake)
 
-# --- Compiler settings ---
-include(CompilersSettings.cmake)
-
 # --- Build options ---
 option(VISTA_SDK_CPP_BUILD_STATIC          "Build static libraries instead of shared"                  OFF    )
 option(VISTA_SDK_CPP_BUILD_TESTS           "Build tests"                                               ON     )
@@ -117,6 +114,9 @@ if(WIN32 AND NOT VISTA_SDK_CPP_BUILD_STATIC)
 	target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR}/version.rc)
 endif()
 
+# --- Compiler settings ---
+include(CompilersSettings.cmake)
+
 # --- Precompiled headers ---
 target_precompile_headers(${PROJECT_NAME} PRIVATE ${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/pch.h)
 target_include_directories(${PROJECT_NAME}
@@ -138,6 +138,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 target_compile_definitions(${PROJECT_NAME} PRIVATE
 	$<$<CONFIG:Release>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
+	$<$<CONFIG:RelWithDebInfo>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF>
 	$<$<AND:$<CONFIG:Debug>,$<BOOL:${CI_FORCE_DEBUG_SPDLOG_WARN}>>:SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_WARN>
 )
 

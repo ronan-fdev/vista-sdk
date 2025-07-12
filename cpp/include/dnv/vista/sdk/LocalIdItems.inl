@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical LocalIdItems operations
  */
 
+#pragma once
+
 #include "VIS.h"
 
 namespace dnv::vista::sdk

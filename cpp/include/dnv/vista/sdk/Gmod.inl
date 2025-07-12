@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical Gmod operations
  */
 
+#pragma once
+
 #include "Config.h"
 #include "utils/StringUtils.h"
 

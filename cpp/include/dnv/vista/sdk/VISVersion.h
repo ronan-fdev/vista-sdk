@@ -33,39 +33,39 @@ namespace dnv::vista::sdk
 		inline static bool isValid( VisVersion version );
 
 		/**
+		 * @brief Get all valid VisVersion values (zero-copy)
+		 * @return Const reference to vector containing all valid VisVersion values
+		 */
+		inline static const std::vector<VisVersion>& allVersions();
+
+		/**
 		 * @brief Get the latest available VIS version
 		 * @return The latest VIS version
 		 */
 		inline static VisVersion latestVersion();
 
 		/**
-		 * @brief Convert a VisVersion to its string representation
+		 * @brief Convert a VisVersion to its string representation (zero-copy)
 		 * @param version The version to convert
-		 * @return String representation of the version
+		 * @return String view representation of the version (no allocation)
 		 */
-		inline static std::string toVersionString( VisVersion version );
+		inline static std::string_view toVersionString( VisVersion version );
 
 		/**
-		 * @brief Try to parse a string to a VisVersion
-		 * @param versionString The string to parse
+		 * @brief Try to parse a string_view to a VisVersion (zero-copy version)
+		 * @param versionString The string_view to parse
 		 * @param version Output parameter for the parsed version
 		 * @return true if parsing succeeded, false otherwise
 		 */
-		static bool tryParse( const std::string& versionString, VisVersion& version );
+		inline static bool tryParse( std::string_view versionString, VisVersion& version );
 
 		/**
-		 * @brief Parse a string to a VisVersion
-		 * @param versionString The string to parse
+		 * @brief Parse a string_view to a VisVersion (zero-copy version)
+		 * @param versionString The string_view to parse
 		 * @return The parsed VisVersion
 		 * @throws std::invalid_argument if parsing fails
 		 */
-		static VisVersion parse( const std::string& versionString );
-
-		/**
-		 * @brief Get all valid VisVersion values
-		 * @return Vector containing all valid VisVersion values
-		 */
-		static std::vector<VisVersion> allVersions();
+		inline static VisVersion parse( std::string_view versionString );
 	};
 }
 

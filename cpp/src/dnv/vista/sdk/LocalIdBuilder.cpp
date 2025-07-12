@@ -390,7 +390,7 @@ namespace dnv::vista::sdk
 
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "invalid metadata codebook name: " + std::string( CodebookNames::toPrefix( metadataTag.name() ) ) );
+			throw std::invalid_argument( "Invalid metadata codebook name: " + std::string{ CodebookNames::toPrefix( metadataTag.name() ) } );
 		}
 
 		return localIdBuilder;
@@ -650,7 +650,7 @@ namespace dnv::vista::sdk
 
 		if ( !tryParse( localIdStr, errors, localId ) )
 		{
-			throw std::invalid_argument( "Couldn't parse local ID from: '" + std::string( localIdStr ) + "'. " + errors.toString() );
+			throw std::invalid_argument( "Couldn't parse local ID from: '" + std::string{ localIdStr } + "'. " + errors.toString() );
 		}
 
 		return std::move( *localId );
@@ -775,7 +775,7 @@ namespace dnv::vista::sdk
 						return false;
 					}
 
-					std::string versionStr( segment.substr( 4 ) );
+					std::string_view versionStr = segment.substr( 4 );
 					if ( !VisVersionExtensions::tryParse( versionStr, visVersion ) )
 					{
 						errorBuilder.addError( LocalIdParsingState::VisVersion, predefinedMessage );
@@ -808,14 +808,14 @@ namespace dnv::vista::sdk
 
 							std::string_view path = span.substr( primaryItemStart, i - 1 - primaryItemStart );
 							std::optional<GmodPath> parsedPath;
-							if ( !gmod->tryParsePath( std::string( path ), parsedPath ) )
+							if ( !gmod->tryParsePath( path, parsedPath ) )
 							{
 								parsedPath = std::nullopt;
 							}
 							if ( !parsedPath )
 							{
 								errorBuilder.addError( LocalIdParsingState::PrimaryItem,
-									"Invalid GmodPath in Primary item: " + std::string( path ) );
+									"Invalid GmodPath in Primary item: " + std::string{ path } );
 							}
 							else
 							{
@@ -843,10 +843,10 @@ namespace dnv::vista::sdk
 					if ( primaryItemStart == std::numeric_limits<size_t>::max() )
 					{
 						const GmodNode* nodePtr = nullptr;
-						if ( !gmod->tryGetNode( std::string( code ), nodePtr ) )
+						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
 							errorBuilder.addError( LocalIdParsingState::PrimaryItem,
-								"Invalid start GmodNode in Primary item: " + std::string( code ) );
+								"Invalid start GmodNode in Primary item: " + std::string{ code } );
 						}
 						primaryItemStart = i;
 						advanceParser( i, segment );
@@ -872,14 +872,14 @@ namespace dnv::vista::sdk
 						{
 							std::string_view path = span.substr( primaryItemStart, i - 1 - primaryItemStart );
 							std::optional<GmodPath> parsedPath;
-							if ( !gmod->tryParsePath( std::string( path ), parsedPath ) )
+							if ( !gmod->tryParsePath( path, parsedPath ) )
 							{
 								parsedPath = std::nullopt;
 							}
 							if ( !parsedPath )
 							{
 								errorBuilder.addError( LocalIdParsingState::PrimaryItem,
-									"Invalid GmodPath in Primary item: " + std::string( path ) );
+									"Invalid GmodPath in Primary item: " + std::string{ path } );
 
 								auto [_, endOfNextStateIndex] = nextStateIndexes( span, state );
 								i = endOfNextStateIndex;
@@ -899,10 +899,10 @@ namespace dnv::vista::sdk
 						}
 
 						const GmodNode* nodePtr = nullptr;
-						if ( !gmod->tryGetNode( std::string( code ), nodePtr ) )
+						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
 							errorBuilder.addError( LocalIdParsingState::PrimaryItem,
-								"Invalid GmodNode in Primary item: " + std::string( code ) );
+								"Invalid GmodNode in Primary item: " + std::string{ code } );
 
 							auto [nextStateIndex, endOfNextStateIndex] = nextStateIndexes( span, state );
 
@@ -931,7 +931,7 @@ namespace dnv::vista::sdk
 
 							std::string_view invalidPrimaryItemPath = span.substr( i, nextStateIndex - i );
 							errorBuilder.addError( LocalIdParsingState::PrimaryItem,
-								"Invalid GmodPath: Last part in Primary item: " + std::string( invalidPrimaryItemPath ) );
+								"Invalid GmodPath: Last part in Primary item: " + std::string{ invalidPrimaryItemPath } );
 
 							i = endOfNextStateIndex;
 							advanceParser( state, nextState );
@@ -962,10 +962,10 @@ namespace dnv::vista::sdk
 					if ( secondaryItemStart == std::numeric_limits<size_t>::max() )
 					{
 						const GmodNode* nodePtr = nullptr;
-						if ( !gmod->tryGetNode( std::string( code ), nodePtr ) )
+						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
 							errorBuilder.addError( LocalIdParsingState::SecondaryItem,
-								"Invalid start GmodNode in Secondary item: " + std::string( code ) );
+								"Invalid start GmodNode in Secondary item: " + std::string{ code } );
 						}
 
 						secondaryItemStart = i;
@@ -984,7 +984,7 @@ namespace dnv::vista::sdk
 						{
 							std::string_view path = span.substr( secondaryItemStart, i - 1 - secondaryItemStart );
 							std::optional<GmodPath> parsedPath;
-							if ( !gmod->tryParsePath( std::string( path ), parsedPath ) )
+							if ( !gmod->tryParsePath( path, parsedPath ) )
 							{
 								parsedPath = std::nullopt;
 							}
@@ -992,7 +992,7 @@ namespace dnv::vista::sdk
 							{
 								invalidSecondaryItem = true;
 								errorBuilder.addError( LocalIdParsingState::SecondaryItem,
-									"Invalid GmodPath in Secondary item: " + std::string( path ) );
+									"Invalid GmodPath in Secondary item: " + std::string{ path } );
 
 								auto [_, endOfNextStateIndex] = nextStateIndexes( span, state );
 								i = endOfNextStateIndex;
@@ -1012,11 +1012,11 @@ namespace dnv::vista::sdk
 						}
 
 						const GmodNode* nodePtr = nullptr;
-						if ( !gmod->tryGetNode( std::string( code ), nodePtr ) )
+						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
 							invalidSecondaryItem = true;
 							errorBuilder.addError( LocalIdParsingState::SecondaryItem,
-								"Invalid GmodNode in Secondary item: " + std::string( code ) );
+								"Invalid GmodNode in Secondary item: " + std::string{ code } );
 
 							auto [nextStateIndex, endOfNextStateIndex] = nextStateIndexes( span, state );
 							if ( nextStateIndex == std::numeric_limits<size_t>::max() )
@@ -1036,7 +1036,7 @@ namespace dnv::vista::sdk
 
 							std::string_view invalidSecondaryItemPath = span.substr( i, nextStateIndex - i );
 							errorBuilder.addError( LocalIdParsingState::SecondaryItem,
-								"Invalid GmodPath: Last part in Secondary item: " + std::string( invalidSecondaryItemPath ) );
+								"Invalid GmodPath: Last part in Secondary item: " + std::string{ invalidSecondaryItemPath } );
 
 							i = endOfNextStateIndex;
 							advanceParser( state, nextState );
@@ -1382,7 +1382,7 @@ namespace dnv::vista::sdk
 		if ( prefixIndex == std::string_view::npos )
 		{
 			errorBuilder.addError( state,
-				"Invalid metadata tag: missing prefix '-' or '~' in " + std::string( segment ) );
+				"Invalid metadata tag: missing prefix '-' or '~' in " + std::string{ segment } );
 			advanceParser( i, segment, state );
 
 			return true;
@@ -1394,7 +1394,7 @@ namespace dnv::vista::sdk
 		if ( !actualState.has_value() || actualState.value() < state )
 		{
 			errorBuilder.addError( state,
-				"Invalid metadata tag: unknown prefix " + std::string( actualPrefix ) );
+				"Invalid metadata tag: unknown prefix " + std::string{ actualPrefix } );
 
 			return false;
 		}
@@ -1418,7 +1418,7 @@ namespace dnv::vista::sdk
 			return false;
 		}
 
-		tag = codebooks->tryCreateTag( codebookName, std::string( value ) );
+		tag = codebooks->tryCreateTag( codebookName, std::string{ value } );
 		if ( !tag.has_value() )
 		{
 			auto codebookStr = codebookNametoString( codebookName );
@@ -1426,12 +1426,12 @@ namespace dnv::vista::sdk
 			if ( prefixIndex == tildeIndex )
 			{
 				errorBuilder.addError( state,
-					"Invalid custom " + codebookStr + " metadata tag: failed to create " + std::string( value ) );
+					"Invalid custom " + codebookStr + " metadata tag: failed to create " + std::string{ value } );
 			}
 			else
 			{
 				errorBuilder.addError( state,
-					"Invalid " + codebookStr + " metadata tag: failed to create " + std::string( value ) );
+					"Invalid " + codebookStr + " metadata tag: failed to create " + std::string{ value } );
 			}
 
 			advanceParser( i, segment, state );
@@ -1443,7 +1443,7 @@ namespace dnv::vista::sdk
 		{
 			auto codebookStr = codebookNametoString( codebookName );
 			errorBuilder.addError( state,
-				"Invalid " + codebookStr + " metadata tag: '" + std::string( value ) + "'. Use prefix '~' for custom values" );
+				"Invalid " + codebookStr + " metadata tag: '" + std::string{ value } + "'. Use prefix '~' for custom values" );
 		}
 
 		if ( !nextState.has_value() )

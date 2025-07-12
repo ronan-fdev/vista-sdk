@@ -1,5 +1,5 @@
 /**
- * @file LocationsTests.cpp
+ * @file TESTS_Locations.cpp
  * @brief Unit tests for the Locations and Location classes.
  */
 

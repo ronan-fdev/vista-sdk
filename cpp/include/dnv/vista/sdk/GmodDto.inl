@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical GmodDto operations
  */
 
+#pragma once
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================

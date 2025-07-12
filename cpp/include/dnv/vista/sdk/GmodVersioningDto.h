@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "utils/StringUtils.h"
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -355,8 +357,8 @@ namespace dnv::vista::sdk
 		// Types and aliases
 		//----------------------------------------------
 
-		/** @brief Type representing a mapping of node codes to conversion information */
-		using ItemsMap = std::unordered_map<std::string, GmodNodeConversionDto>;
+		/** @brief Type representing a mapping of node codes to conversion information with heterogeneous lookup */
+		using ItemsMap = StringMap<GmodNodeConversionDto>;
 
 		//----------------------------------------------
 		// Construction
