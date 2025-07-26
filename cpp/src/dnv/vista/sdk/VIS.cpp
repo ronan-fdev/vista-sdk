@@ -33,6 +33,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<VisVersion, GmodDto> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -40,6 +41,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<VisVersion, CodebooksDto> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -47,6 +49,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<VisVersion, LocationsDto> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -54,6 +57,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<VisVersion, Codebooks> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -61,6 +65,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<VisVersion, Gmod> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -68,6 +73,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<VisVersion, Locations> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -75,6 +81,7 @@ namespace dnv::vista::sdk
 	{
 		static MemoryCache<int, GmodVersioning> cache{
 			MemoryCacheOptions{ 10, std::chrono::hours( 0 ), std::chrono::hours( 1 ) } };
+
 		return cache;
 	}
 
@@ -106,6 +113,7 @@ namespace dnv::vista::sdk
 			{
 				throw std::invalid_argument( fmt::format( "Invalid VIS version provided: {}", VisVersionExtensions::toVersionString( version ) ) );
 			}
+
 			result.try_emplace( version, gmod( version ) );
 		}
 
@@ -123,6 +131,7 @@ namespace dnv::vista::sdk
 			{
 				throw std::invalid_argument( fmt::format( "Invalid VIS version provided: {}", VisVersionExtensions::toVersionString( version ) ) );
 			}
+
 			result.try_emplace( version, codebooks( version ) );
 		}
 
@@ -140,6 +149,7 @@ namespace dnv::vista::sdk
 			{
 				throw std::invalid_argument( fmt::format( "Invalid VIS version provided: {}", VisVersionExtensions::toVersionString( version ) ) );
 			}
+
 			result.try_emplace( version, locations( version ) );
 		}
 

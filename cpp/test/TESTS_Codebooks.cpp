@@ -27,8 +27,6 @@ namespace dnv::vista::sdk
 				if ( version == VisVersion::Unknown )
 					continue;
 
-				// SCOPED_TRACE( "Testing VisVersion: " + VisVersionExtensions::toVersionString( version ) );
-
 				const Codebooks* codebooksPtr = nullptr;
 				ASSERT_NO_THROW( {
 					codebooksPtr = &vis.codebooks( version );

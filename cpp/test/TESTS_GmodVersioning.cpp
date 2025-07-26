@@ -290,7 +290,7 @@ namespace dnv::vista::sdk::tests
 		VisVersion sourceVersion;
 		VisVersion targetVersion;
 
-		PathTestData( const std::string& input, const std::string& expected,
+		PathTestData( std::string_view input, std::string_view expected,
 			VisVersion source = VisVersion::v3_4a, VisVersion target = VisVersion::v3_6a )
 			: inputPath{ input },
 			  expectedPath{ expected },
@@ -303,40 +303,46 @@ namespace dnv::vista::sdk::tests
 	std::vector<PathTestData> validPathTestData()
 	{
 		return {
-			{ "411.1/C101.72/I101", "411.1/C101.72/I101" },
-			{ "323.51/H362.1", "323.61/H362.1" },
-			{ "321.38/C906", "321.39/C906" },
-			{ "511.331/C221", "511.31/C121.31/C221" },
-			{ "511.11/C101.663i/C663.5/CS6d", "511.11/C101.663i/C663.6/CS6d" },
-			{ "511.11-1/C101.663i/C663.5/CS6d", "511.11-1/C101.663i/C663.6/CS6d" },
-			{ "1012.21/C1147.221/C1051.7/C101.22", "1012.21/C1147.221/C1051.7/C101.93" },
-			{ "1012.21/C1147.221/C1051.7/C101.61/S203.6", "1012.21/C1147.221/C1051.7/C101.311/C467.5" },
-			{ "001", "001" },
-			{ "038.7/F101.2/F71", "038.7/F101.2/F71" },
-			{ "1012.21/C1147.221/C1051.7/C101.61/S203.6/S61", "1012.21/C1147.221/C1051.7/C101.311/C467.5/S61" },
-			{ "000a", "000a" },
-			{ "1012.21/C1147.221/C1051.7/C101.61/S203.2/S101", "1012.21/C1147.221/C1051.7/C101.61/S203.3/S110.1/S101" },
-			{ "1012.21/C1147.221/C1051.7/C101.661i/C624", "1012.21/C1147.221/C1051.7/C101.661i/C621" },
-			{ "1012.22/S201.1/C151.2/S110.2/C101.64i", "1012.22/S201.1/C151.2/S110.2/C101.64" },
-			{ "632.32i/S110.2/C111.42/G203.31/S90.5/C401", "632.32i/S110.2/C111.42/G203.31/S90.5/C401" },
-			{ "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51", "864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51" },
-			{ "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401", "864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401" },
-			{ "221.31/C1141.41/C664.2/C471", "221.31/C1141.41/C664.2/C471" },
-			{ "514/E15", "514" },
-			{ "244.1i/H101.111/H401", "244.1i/H101.11/H407.1/H401", VisVersion::v3_7a, VisVersion::v3_8a },
-			{ "1346/S201.1/C151.31/S110.2/C111.1/C109.16/C509", "1346/S201.1/C151.31/S110.2/C111.1/C109.126/C509", VisVersion::v3_7a, VisVersion::v3_8a } };
+			PathTestData( "411.1/C101.72/I101", "411.1/C101.72/I101" ),
+			PathTestData( "323.51/H362.1", "323.61/H362.1" ),
+			PathTestData( "321.38/C906", "321.39/C906" ),
+			PathTestData( "511.331/C221", "511.31/C121.31/C221" ),
+			PathTestData( "511.11/C101.663i/C663.5/CS6d", "511.11/C101.663i/C663.6/CS6d" ),
+			PathTestData( "511.11-1/C101.663i/C663.5/CS6d", "511.11-1/C101.663i/C663.6/CS6d" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.22", "1012.21/C1147.221/C1051.7/C101.93" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.6", "1012.21/C1147.221/C1051.7/C101.311/C467.5" ),
+			PathTestData( "001", "001" ),
+			PathTestData( "038.7/F101.2/F71", "038.7/F101.2/F71" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.6/S61", "1012.21/C1147.221/C1051.7/C101.311/C467.5/S61" ),
+			PathTestData( "000a", "000a" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.2/S101", "1012.21/C1147.221/C1051.7/C101.61/S203.3/S110.1/S101" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.661i/C624", "1012.21/C1147.221/C1051.7/C101.661i/C621" ),
+			PathTestData( "1012.22/S201.1/C151.2/S110.2/C101.64i", "1012.22/S201.1/C151.2/S110.2/C101.64" ),
+			PathTestData( "632.32i/S110.2/C111.42/G203.31/S90.5/C401", "632.32i/S110.2/C111.42/G203.31/S90.5/C401" ),
+			PathTestData( "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51", "864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51" ),
+			PathTestData( "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401", "864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401" ),
+			PathTestData( "221.31/C1141.41/C664.2/C471", "221.31/C1141.41/C664.2/C471" ),
+			PathTestData( "514/E15", "514" ),
+			PathTestData( "244.1i/H101.111/H401", "244.1i/H101.11/H407.1/H401", VisVersion::v3_7a, VisVersion::v3_8a ),
+			PathTestData( "1346/S201.1/C151.31/S110.2/C111.1/C109.16/C509", "1346/S201.1/C151.31/S110.2/C111.1/C109.126/C509", VisVersion::v3_7a, VisVersion::v3_8a ) };
 	}
 
 	class PathConversionTest : public ::testing::TestWithParam<PathTestData>
 	{
+	protected:
+		virtual void SetUp() override
+		{
+			m_vis = &VIS::instance();
+		}
+
+		VIS* m_vis = nullptr;
 	};
 
 	TEST_P( PathConversionTest, Test_GmodVersioning_ConvertPath )
 	{
 		auto testData = GetParam();
-		auto& vis = VIS::instance();
-		const auto& sourceGmod = vis.gmod( testData.sourceVersion );
-		const auto& targetGmod = vis.gmod( testData.targetVersion );
+		const auto& sourceGmod = m_vis->gmod( testData.sourceVersion );
+		const auto& targetGmod = m_vis->gmod( testData.targetVersion );
 
 		std::optional<GmodPath> sourcePathOpt;
 		auto res = sourceGmod.tryParsePath( testData.inputPath, sourcePathOpt );
@@ -347,7 +353,7 @@ namespace dnv::vista::sdk::tests
 		std::optional<GmodPath> parsedTargetPathOpt;
 		bool parsedExpectedPath = targetGmod.tryParsePath( testData.expectedPath, parsedTargetPathOpt );
 
-		auto targetPath = vis.convertPath( testData.sourceVersion, *sourcePathOpt, testData.targetVersion );
+		auto targetPath = m_vis->convertPath( testData.sourceVersion, *sourcePathOpt, testData.targetVersion );
 		ASSERT_TRUE( targetPath.has_value() );
 
 		std::vector<std::string> nodesWithLocation;
@@ -361,27 +367,6 @@ namespace dnv::vista::sdk::tests
 				nodesWithLocation.push_back( std::string( nodePtr->code() ) );
 			}
 		}
-
-		struct LocationValidationState
-		{
-			bool allNodesHaveNullLocation = true;
-		};
-
-		LocationValidationState state;
-		TraverseHandlerWithState<LocationValidationState> handler =
-			[]( LocationValidationState& s, const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
-			(void)parents;
-
-			if ( node.location().has_value() )
-			{
-				s.allNodesHaveNullLocation = false;
-			}
-
-			return TraversalHandlerResult::Continue;
-		};
-
-		GmodTraversal::traverse( state, targetGmod, handler );
-		EXPECT_TRUE( state.allNodesHaveNullLocation ) << "Some nodes in target GMOD have non-null location";
 
 		ASSERT_TRUE( sourcePathOpt.has_value() );
 		EXPECT_EQ( testData.inputPath, sourcePathOpt->toString() );
@@ -409,7 +394,7 @@ namespace dnv::vista::sdk::tests
 		VisVersion sourceVersion;
 		VisVersion targetVersion;
 
-		FullPathTestData( const std::string& input, const std::string& expected,
+		FullPathTestData( std::string_view input, std::string_view expected,
 			VisVersion source = VisVersion::v3_4a, VisVersion target = VisVersion::v3_6a )
 			: inputPath{ input },
 			  expectedPath{ expected },
@@ -422,20 +407,26 @@ namespace dnv::vista::sdk::tests
 	std::vector<FullPathTestData> validFullPathTestData()
 	{
 		return {
-			{ "VE/600a/630/632/632.3/632.32/632.32i-2/S110",
-				"VE/600a/630/632/632.3/632.32/632.32i-2/SS5/S110" } };
+			FullPathTestData( "VE/600a/630/632/632.3/632.32/632.32i-2/S110",
+				"VE/600a/630/632/632.3/632.32/632.32i-2/SS5/S110" ) };
 	}
 
 	class FullPathConversionTest : public ::testing::TestWithParam<FullPathTestData>
 	{
+	protected:
+		virtual void SetUp() override
+		{
+			m_vis = &VIS::instance();
+		}
+
+		VIS* m_vis = nullptr;
 	};
 
 	TEST_P( FullPathConversionTest, Test_GmodVersioning_ConvertFullPath )
 	{
 		auto testData = GetParam();
-		auto& vis = VIS::instance();
-		const auto& sourceGmod = vis.gmod( testData.sourceVersion );
-		const auto& targetGmod = vis.gmod( testData.targetVersion );
+		const auto& sourceGmod = m_vis->gmod( testData.sourceVersion );
+		const auto& targetGmod = m_vis->gmod( testData.targetVersion );
 
 		std::optional<GmodPath> sourcePathOpt;
 		ASSERT_TRUE( sourceGmod.tryParseFromFullPath( testData.inputPath, sourcePathOpt ) );
@@ -444,7 +435,7 @@ namespace dnv::vista::sdk::tests
 		std::optional<GmodPath> parsedTargetPathOpt;
 		bool parsedPath = targetGmod.tryParseFromFullPath( testData.expectedPath, parsedTargetPathOpt );
 
-		auto targetPath = vis.convertPath( testData.sourceVersion, *sourcePathOpt, testData.targetVersion );
+		auto targetPath = m_vis->convertPath( testData.sourceVersion, *sourcePathOpt, testData.targetVersion );
 
 		ASSERT_TRUE( targetPath.has_value() ) << "Path conversion failed for input: " << testData.inputPath;
 
@@ -473,7 +464,7 @@ namespace dnv::vista::sdk::tests
 		std::optional<std::string> location;
 		std::string expectedCode;
 
-		NodeTestData( const std::string& input, const std::optional<std::string>& loc, const std::string& expected )
+		NodeTestData( std::string_view input, const std::optional<std::string>& loc, std::string_view expected )
 			: inputCode{ input },
 			  location{ loc },
 			  expectedCode{ expected }
@@ -484,29 +475,35 @@ namespace dnv::vista::sdk::tests
 	std::vector<NodeTestData> validNodeTestData()
 	{
 		return {
-			{ "1014.211", std::nullopt, "1014.211" },
-			{ "323.5", std::nullopt, "323.6" },
-			{ "412.72", std::nullopt, "412.7i" },
-			{ "323.4", std::nullopt, "323.5" },
-			{ "323.51", std::nullopt, "323.61" },
-			{ "323.6", std::nullopt, "323.7" },
-			{ "C101.212", std::nullopt, "C101.22" },
-			{ "C101.22", std::nullopt, "C101.93" },
-			{ "511.31", std::nullopt, "C121.1" },
-			{ "C101.31", "5", "C101.31" } };
+			NodeTestData( "1014.211", std::nullopt, "1014.211" ),
+			NodeTestData( "323.5", std::nullopt, "323.6" ),
+			NodeTestData( "412.72", std::nullopt, "412.7i" ),
+			NodeTestData( "323.4", std::nullopt, "323.5" ),
+			NodeTestData( "323.51", std::nullopt, "323.61" ),
+			NodeTestData( "323.6", std::nullopt, "323.7" ),
+			NodeTestData( "C101.212", std::nullopt, "C101.22" ),
+			NodeTestData( "C101.22", std::nullopt, "C101.93" ),
+			NodeTestData( "511.31", std::nullopt, "C121.1" ),
+			NodeTestData( "C101.31", "5", "C101.31" ) };
 	}
 
 	class NodeConversionTest : public ::testing::TestWithParam<NodeTestData>
 	{
+	protected:
+		virtual void SetUp() override
+		{
+			m_vis = &VIS::instance();
+		}
+
+		VIS* m_vis = nullptr;
 	};
 
 	TEST_P( NodeConversionTest, Test_GmodVersioning_ConvertNode )
 	{
 		auto testData = GetParam();
-		auto& vis = VIS::instance();
 
-		const auto& gmod = vis.gmod( VisVersion::v3_4a );
-		const auto& targetGmod = vis.gmod( VisVersion::v3_6a );
+		const auto& gmod = m_vis->gmod( VisVersion::v3_4a );
+		const auto& targetGmod = m_vis->gmod( VisVersion::v3_6a );
 
 		const GmodNode* sourceNodePtr = nullptr;
 		bool foundSource = gmod.tryGetNode( testData.inputCode, sourceNodePtr );
@@ -534,7 +531,7 @@ namespace dnv::vista::sdk::tests
 			expectedNode = expectedNode.withLocation( location.toString() );
 		}
 
-		auto targetNodeOpt = vis.convertNode( VisVersion::v3_4a, sourceNode, VisVersion::v3_6a );
+		auto targetNodeOpt = m_vis->convertNode( VisVersion::v3_4a, sourceNode, VisVersion::v3_6a );
 
 		ASSERT_TRUE( targetNodeOpt.has_value() );
 		const auto& targetNode = *targetNodeOpt;

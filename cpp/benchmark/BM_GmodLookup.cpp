@@ -9,6 +9,7 @@
 #include "dnv/vista/sdk/VIS.h"
 
 #include "dnv/vista/sdk/utils/StringUtils.h"
+#include "dnv/vista/sdk/utils/HashMap.h"
 
 using namespace dnv::vista::sdk;
 
@@ -16,6 +17,7 @@ namespace dnv::vista::sdk::benchmarks
 {
 	static StringMap<const GmodNode*> g_dict;
 	static StringMap<const GmodNode*> g_frozenDict;
+	static HashMap<std::string, const GmodNode*> g_dictionary;
 	static const Gmod* g_gmod = nullptr;
 	static bool g_initialized = false;
 
@@ -35,6 +37,7 @@ namespace dnv::vista::sdk::benchmarks
 				const auto& node = enumerator.current();
 				g_dict[node.code()] = &node;
 				g_frozenDict[node.code()] = &node;
+				g_dictionary.insertOrAssign( std::string{ node.code() }, &node );
 			}
 			g_initialized = true;
 		}
@@ -100,6 +103,36 @@ namespace dnv::vista::sdk::benchmarks
 		}
 	}
 
+	static void BM_dictionary( benchmark::State& state )
+	{
+		initializeData();
+
+		for ( auto _ : state )
+		{
+			const GmodNode* node1 = nullptr;
+			const GmodNode* node2 = nullptr;
+			const GmodNode* node3 = nullptr;
+			const GmodNode* node4 = nullptr;
+
+			const GmodNode** ptr1 = &node1;
+			const GmodNode** ptr2 = &node2;
+			const GmodNode** ptr3 = &node3;
+			const GmodNode** ptr4 = &node4;
+
+			bool result =
+				g_dictionary.tryGetValue( "VE", ptr1 ) &&
+				g_dictionary.tryGetValue( "400a", ptr2 ) &&
+				g_dictionary.tryGetValue( "400", ptr3 ) &&
+				g_dictionary.tryGetValue( "H346.11112", ptr4 );
+
+			benchmark::DoNotOptimize( result );
+			benchmark::DoNotOptimize( node1 );
+			benchmark::DoNotOptimize( node2 );
+			benchmark::DoNotOptimize( node3 );
+			benchmark::DoNotOptimize( node4 );
+		}
+	}
+
 	static void BM_gmod( benchmark::State& state )
 	{
 		initializeData();
@@ -122,6 +155,10 @@ namespace dnv::vista::sdk::benchmarks
 		->Unit( benchmark::kNanosecond );
 
 	BENCHMARK( BM_frozenDict )
+		->MinTime( 10.0 )
+		->Unit( benchmark::kNanosecond );
+
+	BENCHMARK( BM_dictionary )
 		->MinTime( 10.0 )
 		->Unit( benchmark::kNanosecond );
 

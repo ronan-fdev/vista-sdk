@@ -10,6 +10,7 @@
 #include "dnv/vista/sdk/GmodTraversal.h"
 #include "dnv/vista/sdk/Locations.h"
 #include "dnv/vista/sdk/VIS.h"
+#include "dnv/vista/sdk/utils/StringUtils.h"
 
 namespace dnv::vista::sdk
 {
@@ -637,9 +638,8 @@ namespace dnv::vista::sdk
 				if ( !ctx.locations.has_value() )
 				{
 					ctx.locations = StringMap<Location>{};
-					ctx.locations->reserve( 8 );
 				}
-				ctx.locations->emplace( ctx.toFind.code, ctx.toFind.location.value() );
+				ctx.locations->emplace( std::string{ ctx.toFind.code }, ctx.toFind.location.value() );
 			}
 
 			if ( !ctx.parts.empty() )
@@ -656,10 +656,10 @@ namespace dnv::vista::sdk
 			{
 				if ( ctx.locations.has_value() )
 				{
-					auto it = ctx.locations->find( parent->code() );
-					if ( it != ctx.locations->end() )
+					auto locationIt = ctx.locations->find( parent->code() );
+					if ( locationIt != ctx.locations->end() )
 					{
-						pathParents.emplace_back( parent->withLocation( it->second ) );
+						pathParents.emplace_back( parent->withLocation( locationIt->second ) );
 						continue;
 					}
 				}
@@ -693,10 +693,10 @@ namespace dnv::vista::sdk
 			{
 				if ( ctx.locations.has_value() )
 				{
-					auto it = ctx.locations->find( startNode.code() );
-					if ( it != ctx.locations->end() )
+					auto locationIt = ctx.locations->find( startNode.code() );
+					if ( locationIt != ctx.locations->end() )
 					{
-						prefixChain.emplace_back( startNode.withLocation( it->second ) );
+						prefixChain.emplace_back( startNode.withLocation( locationIt->second ) );
 					}
 					else
 					{

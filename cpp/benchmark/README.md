@@ -55,48 +55,51 @@ dotnet run -c Release --project benchmark/Vista.SDK.Benchmarks/Vista.SDK.Benchma
 
 ### Windows Platform Performance
 
-| Operation Category           | C++ vs C# Performance            | Status | Key Findings                       |
-| :--------------------------- | :------------------------------- | :----: | :--------------------------------- |
-| **Hash Table Operations**    | **0.97-2.30x faster**            |   ✅   | C++ shows performance advantage    |
-| **Codebook Access (Direct)** | **7.07x faster** vs C# baseline  |   ✅   | Strong C++ performance advantage   |
-| **Codebook Access (API)**    | **1,408x slower** vs C# baseline |   ⚠️   | Expected method call overhead      |
-| **String Hashing (Short)**   | **1.24-1.74x mixed**             |   ✅   | Mixed results, algorithm dependent |
-| **String Hashing (Long)**    | **1.15x slower to 1.30x faster** |   ✅   | C++ advantage on longer strings    |
-| **GMOD Loading**             | **1.00x same**                   |   ✅   | Achieved C# performance parity     |
-| **GMOD Lookup**              | **1.14-2.30x faster**            |   ✅   | C++ shows performance advantage    |
-| **GMOD Traversal**           | **1.97x slower**                 |   ❌   | **Optimization opportunity**       |
-| **Path Parsing**             | **5.17-15.2x slower**            |  ❌❌  | **Optimization needed**            |
-| **Version Path Conversion**  | **19.6x slower**                 | ❌❌❌ | **Critical performance gap**       |
+| Operation Category           | C++ vs C# Performance            | Status | Key Findings                          |
+| :--------------------------- | :------------------------------- | :----: | :------------------------------------ |
+| **Hash Table Operations**    | **0.97-2.30x faster**            |   ✅   | C++ shows performance advantage       |
+| **Codebook Access (Direct)** | **1.08x faster** vs C# baseline  |   ✅   | Slight C++ performance advantage      |
+| **Codebook Access (API)**    | **1,149x slower** vs C# baseline |   ⚠️   | Expected method call overhead         |
+| **String Hashing (Short)**   | **1.24-1.74x mixed**             |   ✅   | Mixed results, algorithm dependent    |
+| **String Hashing (Long)**    | **1.15x slower to 1.30x faster** |   ✅   | C++ advantage on longer strings       |
+| **GMOD Loading**             | **1.06x faster**                 |   ✅   | Parity achieved                       |
+| **GMOD Lookup**              | **1.12-2.15x faster**            |   ✅   | C++ shows performance advantage       |
+| **GMOD Lookup (HashMap)**    | **1.12x slower**                 |   ❌   | **HashMap slower than C# on Windows** |
+| **GMOD Traversal**           | **1.97x slower**                 |   ❌   | **Optimization opportunity**          |
+| **Path Parsing**             | **5.17-15.2x slower**            |  ❌❌  | **Optimization needed**               |
+| **Version Path Conversion**  | **5.37x slower**                 |  ❌❌  | **Optimization needed**               |
 
 ### Linux Platform Performance
 
 | Operation Category           | C++ vs C# Performance            | Status | Key Findings                                      |
 | :--------------------------- | :------------------------------- | :----: | :------------------------------------------------ |
 | **Hash Table Operations**    | **1.20-3.37x faster**            |   ✅   | Strong C++ advantage on Linux                     |
-| **Codebook Access (Direct)** | **7.73x faster** vs C# baseline  |   ✅   | Excellent Linux performance boost                 |
-| **Codebook Access (API)**    | **330x slower** vs C# baseline   |   ⚠️   | Much better than Windows, still expected overhead |
+| **Codebook Access (Direct)** | **2.74x faster** vs C# baseline  |   ✅   | Strong C++ performance advantage                  |
+| **Codebook Access (API)**    | **133x slower** vs C# baseline   |   ⚠️   | Much better than Windows, still expected overhead |
 | **String Hashing (Short)**   | **1.03-2.40x mixed**             |   ✅   | Mixed results, some algorithms competitive        |
 | **String Hashing (Long)**    | **1.02x slower to 1.81x faster** |   ✅   | Generally better performance than Windows         |
-| **GMOD Loading**             | **2.73x faster**                 |   ✅   | Excellent performance advantage                   |
-| **GMOD Lookup**              | **1.31-2.56x faster**            |   ✅   | Excellent C++ advantage, especially GMOD API |
-| **GMOD Traversal**           | **1.67x slower**                 |   ❌   | **Better than Windows, needs optimization**        |
-| **Path Parsing**             | **3.18-7.03x slower**            |  ❌❌  | **Improvement but still optimization needed**                           |
-| **Version Path Conversion**  | **8.95x slower**                  | ❌❌❌ | **Major improvement but still critical**        |
+| **GMOD Loading**             | **2.68x faster**                 |   ✅   | Excellent performance advantage                   |
+| **GMOD Lookup**              | **1.47-2.45x faster**            |   ✅   | Excellent C++ advantage, especially GMOD API      |
+| **GMOD Lookup (HashMap)**    | **1.91x slower**                 |   ❌   | **HashMap slower than C# on Linux**               |
+| **GMOD Traversal**           | **1.67x slower**                 |   ❌   | **Better than Windows, needs optimization**       |
+| **Path Parsing**             | **3.18-7.03x slower**            |  ❌❌  | **Optimization needed**                           |
+| **Version Path Conversion**  | **2.88x slower**                 |  ❌❌  | **Optimization needed**                           |
 
 ### Cross-Platform Summary
 
-| Operation Category           | Linux vs Windows (C++) | Status | Platform Recommendation                  |
-| :--------------------------- | :--------------------- | :----: | :--------------------------------------- |
-| **Hash Table Operations**    | **1.13-11.9x faster**  |   ✅   | **Linux strongly preferred**             |
-| **Codebook Access (Direct)** | **1.47-3.99x faster**  |   ✅   | **Linux significantly better**           |
-| **Codebook Access (API)**    | **11.9x faster**       |   ✅   | **Linux dramatically better**            |
-| **String Hashing (Short)**   | **1.04-2.31x mixed**   |   ⚠️   | **Algorithm-dependent performance**      |
-| **String Hashing (Long)**    | **1.12-1.32x faster**  |   ✅   | **Linux slightly better**                |
-| **GMOD Loading**             | **2.01x faster**       |   ✅   | **Linux preferred**                      |
+| Operation Category           | Linux vs Windows (C++) | Status | Platform Recommendation                             |
+| :--------------------------- | :--------------------- | :----: | :-------------------------------------------------- |
+| **Hash Table Operations**    | **1.13-11.9x faster**  |   ✅   | **Linux strongly preferred**                        |
+| **Codebook Access (Direct)** | **3.02x faster**       |   ✅   | **Linux significantly better**                      |
+| **Codebook Access (API)**    | **10.4x faster**       |   ✅   | **Linux dramatically better**                       |
+| **String Hashing (Short)**   | **1.04-2.31x mixed**   |   ⚠️   | **Algorithm-dependent performance**                 |
+| **String Hashing (Long)**    | **1.12-1.32x faster**  |   ✅   | **Linux slightly better**                           |
+| **GMOD Loading**             | **2.59x faster**       |   ✅   | **Linux preferred**                                 |
 | **GMOD Lookup**              | **1.45-7.91x mixed**   |   ⚠️   | **Mixed results, significant GMOD API improvement** |
-| **GMOD Traversal**           | **1.03x slower**       |   ❌   | **Nearly identical cross-platform**              |
-| **Path Parsing**             | **1.73-2.04x faster**  |   ✅   | **Linux significant improvement** |
-| **Version Path Conversion**  | **2.23x faster**       |   ✅   | **Linux dramatically better** |
+| **GMOD Lookup (HashMap)**    | **Same performance**   |   ✅   | **HashMap consistent cross-platform**               |
+| **GMOD Traversal**           | **1.03x slower**       |   ❌   | **Nearly identical cross-platform**                 |
+| **Path Parsing**             | **1.73-2.04x faster**  |   ✅   | **Linux significant improvement**                   |
+| **Version Path Conversion**  | **6.92x faster**       |   ✅   | **Linux dramatically better**                       |
 
 ---
 
@@ -106,65 +109,65 @@ dotnet run -c Release --project benchmark/Vista.SDK.Benchmarks/Vista.SDK.Benchma
 
 Performance comparison between different C++ access methods for Vista SDK codebook operations:
 
-| Operation             | Windows C++ | vs Baseline  | Linux C++ | vs Baseline  | Cross-Platform   | Notes |
-| :-------------------- | :---------- | :----------: | :-------- | :----------: | :--------------- | :---- |
-| **SDK Instance**      | 0.689 ns    |  **1.00x**   | 0.212 ns  |  **1.00x**   | **3.25x faster** |       |
-| **SDK Reference**     | 0.855 ns    |  **1.24x**   | 0.210 ns  |  **0.99x**   | **4.07x faster** |       |
-| **Array Lookup**      | 1.60 ns     |  **2.32x**   | 0.699 ns  |  **3.30x**   | **2.29x faster** |       |
-| **Vector Lookup**     | 1.78 ns     |  **2.58x**   | 1.68 ns   |  **7.92x**   | **1.06x faster** |       |
-| **Hash Table Lookup** | 2.17 ns     |  **3.15x**   | 2.79 ns   |  **13.16x**  | **1.29x slower** |       |
-| **CHD Dictionary**    | 36.3 ns     |  **52.7x**   | 23.6 ns   |  **111x**    | **1.54x faster** |       |
-| **Tree Lookup**       | 7.13 ns     |  **10.3x**   | 3.04 ns   |  **14.34x**  | **2.35x faster** |       |
-| **SDK API Method**    | 859 ns      |  **1247x**  | 76.8 ns   |   **362x**   | **11.2x faster** |       |
-| **VIS Singleton**     | 122457 ns  | **177787x** | 92820 ns | **437830x** | **1.32x faster** |       |
+| Operation             | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Cross-Platform   |
+| :-------------------- | :---------- | :---------: | :-------- | :---------: | :--------------- |
+| **SDK Instance**      | 0.641 ns    |  **1.00x**  | 0.212 ns  |  **1.00x**  | **3.02x faster** |
+| **SDK Reference**     | 0.816 ns    |  **1.27x**  | 0.210 ns  |  **0.99x**  | **3.89x faster** |
+| **Array Lookup**      | 1.46 ns     |  **2.28x**  | 0.699 ns  |  **3.30x**  | **2.09x faster** |
+| **Vector Lookup**     | 1.72 ns     |  **2.68x**  | 1.68 ns   |  **7.92x**  | **1.02x faster** |
+| **Hash Table Lookup** | 2.09 ns     |  **3.26x**  | 2.79 ns   | **13.16x**  | **1.33x slower** |
+| **CHD Dictionary**    | 33.5 ns     |  **52.3x**  | 23.6 ns   |  **111x**   | **1.42x faster** |
+| **Tree Lookup**       | 7.47 ns     |  **11.7x**  | 3.04 ns   | **14.34x**  | **2.46x faster** |
+| **SDK API Method**    | 797 ns      |  **1243x**  | 76.8 ns   |  **362x**   | **10.4x faster** |
+| **VIS Singleton**     | 113201 ns   | **176627x** | 92820 ns  | **437830x** | **1.22x faster** |
 
 #### STL Container Performance
 
-| C++ Method        | Windows Time | Linux Time | Performance Ratio | Implementation                      | Performance vs Array | Status | Notes |
-| :---------------- | :----------- | :--------- | :---------------- | :---------------------------------- | :------------------- | :----- | :---- |
-| **Array**         | 1.60 ns      | 0.699 ns   | **2.29x faster**  | `std::array` linear search          | **Baseline**         | ✅     |       |
-| **Vector**        | 1.78 ns      | 1.68 ns    | **1.06x faster**  | `std::vector` linear search         | **2.40x slower**     | ✅     |       |
-| **UnorderedMap**  | 2.17 ns      | 2.79 ns    | **1.29x slower**  | `std::unordered_map::find()`        | **3.99x slower**     | ✅     |       |
-| **ChdDictionary** | 36.3 ns      | 23.6 ns    | **1.54x faster**  | CHD perfect hash table              | **33.8x slower**     | ✅     |       |
-| **Map**           | 7.13 ns      | 3.04 ns    | **2.35x faster**  | `std::map::find()` (red-black tree) | **4.35x slower**     | ⚠️     |       |
+| C++ Method        | Windows Time | Linux Time | Performance Ratio | Implementation                      | Performance vs Array | Status |
+| :---------------- | :----------- | :--------- | :---------------- | :---------------------------------- | :------------------- | :----- |
+| **Array**         | 1.46 ns      | 0.699 ns   | **2.09x faster**  | `std::array` linear search          | **Baseline**         | ✅     |
+| **Vector**        | 1.72 ns      | 1.68 ns    | **1.02x faster**  | `std::vector` linear search         | **2.40x slower**     | ✅     |
+| **UnorderedMap**  | 2.09 ns      | 2.79 ns    | **1.33x slower**  | `std::unordered_map::find()`        | **3.99x slower**     | ✅     |
+| **ChdDictionary** | 33.5 ns      | 23.6 ns    | **1.42x faster**  | CHD perfect hash table              | **33.8x slower**     | ✅     |
+| **Map**           | 7.47 ns      | 3.04 ns    | **2.46x faster**  | `std::map::find()` (red-black tree) | **4.07x slower**     | ⚠️     |
 
 #### Vista SDK Access Performance
 
-| C++ Method             | Windows Time   | Linux Time    | Performance Ratio | Implementation                     | Performance vs Array | Status | Notes |
-| :--------------------- | :------------- | :------------ | :---------------- | :--------------------------------- | :------------------- | :----- | :---- |
-| **CodebooksInstance**  | **0.689 ns**   | **0.212 ns**  | **3.25x faster**  | Owned instance + direct access     | **3.30x faster**     | ✅     |       |
-| **CodebooksReference** | **0.855 ns**   | **0.210 ns**  | **4.07x faster**  | Reference wrapper + direct access  | **3.33x faster**     | ✅     |       |
-| **CodebooksAPI**       | **859 ns**     | **76.8 ns**   | **11.2x faster**  | `codebook()` method call           | **110x slower**      | ⚠️     |       |
-| **CodebooksVISCall**   | **122457 ns** | **92820 ns** | **1.32x faster**  | `VIS::instance().codebooks()` call | **132755x slower**  | ⚠️     |       |
+| C++ Method             | Windows Time  | Linux Time   | Performance Ratio | Implementation                     | Performance vs Array | Status |
+| :--------------------- | :------------ | :----------- | :---------------- | :--------------------------------- | :------------------- | :----- |
+| **CodebooksInstance**  | **0.641 ns**  | **0.212 ns** | **3.02x faster**  | Owned instance + direct access     | **2.28x faster**     | ✅     |
+| **CodebooksReference** | **0.816 ns**  | **0.210 ns** | **3.89x faster**  | Reference wrapper + direct access  | **3.33x faster**     | ✅     |
+| **CodebooksAPI**       | **797 ns**    | **76.8 ns**  | **10.4x faster**  | `codebook()` method call           | **110x slower**      | ⚠️     |
+| **CodebooksVISCall**   | **113201 ns** | **92820 ns** | **1.22x faster**  | `VIS::instance().codebooks()` call | **132755x slower**   | ⚠️     |
 
 #### Detailed C++ Results
 
 ##### Windows Platform
 
-| Benchmark                 | Time           | CPU            | Iterations |
-| :------------------------ | :------------- | :------------- | :--------- |
-| **BM_CodebooksInstance**  | **0.689 ns**   | **0.688 ns**   | 20.2B      |
-| **BM_CodebooksReference** | **0.855 ns**   | **0.854 ns**   | 16.4B      |
-| **BM_Array**              | **1.60 ns**    | **1.60 ns**    | 8.96B      |
-| **BM_Vector**             | **1.78 ns**    | **1.78 ns**    | 7.93B      |
-| **BM_UnorderedMap**       | **2.17 ns**    | **2.17 ns**    | 6.45B      |
-| **BM_ChdDictionary**      | **35.9 ns**    | **35.9 ns**    | 388M       |
-| **BM_Map**                | **7.13 ns**    | **7.12 ns**    | 1.94B      |
-| **BM_CodebooksAPI**       | **859 ns**     | **859 ns**     | 16.3M      |
-| **BM_CodebooksVISCall**   | **117876 ns** | **117658 ns** | 115K       |
+| Benchmark                 | Time          | CPU           | Iterations |
+| :------------------------ | :------------ | :------------ | :--------- |
+| **BM_CodebooksInstance**  | **0.641 ns**  | **0.639 ns**  | 22.1B      |
+| **BM_CodebooksReference** | **0.816 ns**  | **0.815 ns**  | 17.2B      |
+| **BM_Array**              | **1.46 ns**   | **1.46 ns**   | 9.43B      |
+| **BM_Vector**             | **1.72 ns**   | **1.71 ns**   | 8.22B      |
+| **BM_UnorderedMap**       | **2.09 ns**   | **2.09 ns**   | 6.84B      |
+| **BM_ChdDictionary**      | **33.5 ns**   | **33.5 ns**   | 421M       |
+| **BM_Map**                | **7.47 ns**   | **7.45 ns**   | 1.86B      |
+| **BM_CodebooksAPI**       | **797 ns**    | **797 ns**    | 17.7M      |
+| **BM_CodebooksVISCall**   | **113201 ns** | **113043 ns** | 126K       |
 
 ##### Linux Platform
 
-| Benchmark                 | Time          | CPU           | Iterations |
-| :------------------------ | :------------ | :------------ | :--------- |
-| **BM_CodebooksInstance**  | **0.212 ns**  | **0.212 ns**  | 66.3B      |
-| **BM_CodebooksReference** | **0.210 ns**  | **0.210 ns**  | 66.9B      |
-| **BM_Array**              | **0.699 ns**  | **0.699 ns**  | 20.0B      |
-| **BM_Vector**             | **1.68 ns**   | **1.68 ns**   | 8.4B       |
-| **BM_UnorderedMap**       | **2.79 ns**   | **2.79 ns**   | 5.0B       |
-| **BM_ChdDictionary**      | **23.6 ns**   | **23.6 ns**   | 589M       |
-| **BM_Map**                | **3.04 ns**   | **3.04 ns**   | 4.6B       |
-| **BM_CodebooksAPI**       | **76.8 ns**   | **76.8 ns**   | 182M       |
+| Benchmark                 | Time         | CPU          | Iterations |
+| :------------------------ | :----------- | :----------- | :--------- |
+| **BM_CodebooksInstance**  | **0.212 ns** | **0.212 ns** | 66.3B      |
+| **BM_CodebooksReference** | **0.210 ns** | **0.210 ns** | 66.9B      |
+| **BM_Array**              | **0.699 ns** | **0.699 ns** | 20.0B      |
+| **BM_Vector**             | **1.68 ns**  | **1.68 ns**  | 8.4B       |
+| **BM_UnorderedMap**       | **2.79 ns**  | **2.79 ns**  | 5.0B       |
+| **BM_ChdDictionary**      | **23.6 ns**  | **23.6 ns**  | 589M       |
+| **BM_Map**                | **3.04 ns**  | **3.04 ns**  | 4.6B       |
+| **BM_CodebooksAPI**       | **76.8 ns**  | **76.8 ns**  | 182M       |
 | **BM_CodebooksVISCall**   | **92820 ns** | **92817 ns** | 145K       |
 
 #### Detailed C# Results (Windows)
@@ -189,15 +192,15 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 ### Cross-Platform Performance Comparison
 
-| Operation     | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Cross-Platform   | Notes                  |
-| :------------ | :---------- | :---------: | :-------- | :---------: | :--------------- | :--------------------- |
-| **GMOD Load** | 30.3 ms     |  **1.00x**  | 11.1 ms   |  **1.00x**  | **2.73x faster** | Full GMOD construction |
+| Operation     | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Cross-Platform   |
+| :------------ | :---------- | :---------: | :-------- | :---------: | :--------------- |
+| **GMOD Load** | 28.7 ms     |  **1.00x**  | 11.1 ms   |  **1.00x**  | **2.59x faster** |
 
 ### GMOD Load Performance Comparison
 
 | C++ Method   | Windows Time | Linux Time | Performance Ratio | C# Method | C# Time (Win) | C# Time (Linux) | C++ vs C# (Windows) | C++ vs C# (Linux)   |
 | :----------- | :----------- | :--------- | :---------------- | :-------- | :------------ | :-------------- | :------------------ | :------------------ |
-| **gmodLoad** | 30.3 ms      | 11.1 ms    | **2.73x faster**  | **Load**  | 30.40 ms      | 29.68 ms        | ✅ **1.00x same**   | ✅ **2.68x faster** |
+| **gmodLoad** | 28.7 ms      | 11.1 ms    | **2.59x faster**  | **Load**  | 30.40 ms      | 29.68 ms        | ✅ **1.06x faster** | ✅ **2.68x faster** |
 
 #### Detailed C++ Results
 
@@ -205,13 +208,13 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 | Benchmark    | Time    | CPU     | Iterations |
 | :----------- | :------ | :------ | :--------- |
-| **gmodLoad** | 30.3 ms | 30.3 ms | 385        |
+| **gmodLoad** | 28.7 ms | 28.6 ms | 405        |
 
 ##### Linux Platform
 
 | Benchmark    | Time    | CPU     | Iterations |
 | :----------- | :------ | :------ | :--------- |
-| **gmodLoad** | 11.1 ms | 11.1 ms | 1251      |
+| **gmodLoad** | 11.1 ms | 11.1 ms | 1251       |
 
 #### Detailed C# Results (Windows)
 
@@ -231,21 +234,23 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 ### Cross-Platform Performance Comparison
 
-| Operation             | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Cross-Platform   | Notes                            |
-| :-------------------- | :---------- | :---------: | :-------- | :---------: | :--------------- | :------------------------------- |
-| **Frozen Dictionary** | 17.4 ns     |  **1.00x**  | 52.8 ns   |  **1.00x**  | **3.04x slower** | ⚡ Baseline lookup method        |
-| **Hash Table Lookup** | 16.7 ns     |  **0.96x**  | 51.6 ns   |  **0.98x**  | **3.09x slower** | ⚡ Similar                       |
-| **GMOD API Lookup**   | 9.71 ns     |  **0.56x**  | 6.67 ns   |  **0.13x**  | **1.46x faster** | ✅ Expected method call overhead |
+| Operation              | Windows C++ | vs Baseline | Linux C++ | vs Baseline | Cross-Platform   | Notes                          |
+| :--------------------- | :---------- | :---------: | :-------- | :---------: | :--------------- | :----------------------------- |
+| **StringMap (Frozen)** | 17.9 ns     |  **1.00x**  | 54.8 ns   |  **1.00x**  | **3.06x slower** | ⚡ Legacy baseline method      |
+| **StringMap (Dict)**   | 17.8 ns     |  **0.99x**  | 55.6 ns   |  **1.01x**  | **3.12x slower** | ⚡ Similar to frozen           |
+| **HashMap (Robin)**    | 17.1 ns     |  **0.96x**  | 30.2 ns   |  **0.55x**  | **1.77x slower** | ✅ **1.82x faster** Robin Hood |
+| **GMOD API Lookup**    | 9.48 ns     |  **0.53x**  | 6.97 ns   |  **0.13x**  | **1.36x faster** | ✅ Direct GMOD API access      |
 
 ### GMOD Lookup Performance Comparison
 
 #### Cross-Platform C++ Results
 
-| C++ Method     | Windows Time | Linux Time | Performance Ratio | C# Method (Win) | C# Time (Win) | C# Method (Linux) | C# Time (Linux) | C++ vs C# (Windows) | C++ vs C# (Linux)   |
-| :------------- | :----------- | :--------- | :---------------- | :-------------- | :------------ | :---------------- | :-------------- | :------------------ | :------------------ |
-| **dict**       | 16.7 ns      | 51.6 ns    | **3.09x slower**  | **Dict**        | 38.34 ns      | **Dict**          | 37.85 ns        | ✅ **2.30x faster** | ❌ **1.36x slower** |
-| **frozenDict** | 17.4 ns      | 52.8 ns    | **3.03x slower**  | **FrozenDict**  | 15.21 ns      | **FrozenDict**    | 15.81 ns        | ❌ **1.14x slower** | ❌ **3.34x slower** |
-| **gmod**       | 10.2 ns      | 6.67 ns    | **1.53x faster**  | **Gmod**        | 15.62 ns      | **Gmod**          | 17.07 ns        | ✅ **1.53x faster** | ✅ **2.56x faster** |
+| C++ Method           | Windows Time | Linux Time | Performance Ratio | C# Method (Win) | C# Time (Win) | C# Method (Linux) | C# Time (Linux) | C++ vs C# (Windows) | C++ vs C# (Linux)   |
+| :------------------- | :----------- | :--------- | :---------------- | :-------------- | :------------ | :---------------- | :-------------- | :------------------ | :------------------ |
+| **StringMap (Dict)** | 17.8 ns      | 55.6 ns    | **3.12x slower**  | **Dict**        | 38.34 ns      | **Dict**          | 37.85 ns        | ✅ **2.15x faster** | ❌ **1.47x slower** |
+| **frozenDict**       | 17.9 ns      | 54.8 ns    | **3.06x slower**  | **FrozenDict**  | 15.21 ns      | **FrozenDict**    | 15.81 ns        | ❌ **1.18x slower** | ❌ **3.47x slower** |
+| **HashMap (Robin)**  | 17.1 ns      | 30.2 ns    | **1.77x slower**  | **FrozenDict**  | 15.21 ns      | **FrozenDict**    | 15.81 ns        | ❌ **1.12x slower** | ❌ **1.91x slower** |
+| **gmod**             | 9.48 ns      | 6.97 ns    | **1.36x faster**  | **Gmod**        | 15.62 ns      | **Gmod**          | 17.07 ns        | ✅ **1.65x faster** | ✅ **2.45x faster** |
 
 #### Detailed C++ Results
 
@@ -253,17 +258,19 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 | Benchmark      | Time    | CPU     | Iterations |
 | :------------- | :------ | :------ | :--------- |
-| **Dict**       | 16.7 ns | 16.6 ns | 861M       |
-| **FrozenDict** | 17.4 ns | 17.4 ns | 815M       |
-| **Gmod**       | 9.71 ns | 9.62 ns | 1.47B      |
+| **Dict**       | 17.8 ns | 17.7 ns | 779M       |
+| **FrozenDict** | 17.9 ns | 17.8 ns | 786M       |
+| **HashMap**    | 17.1 ns | 17.0 ns | 815M       |
+| **Gmod**       | 9.48 ns | 9.44 ns | 1.48B      |
 
 ##### Linux Platform
 
 | Benchmark      | Time    | CPU     | Iterations |
 | :------------- | :------ | :------ | :--------- |
-| **Dict**       | 51.6 ns | 51.6 ns | 273M       |
-| **FrozenDict** | 52.8 ns | 52.7 ns | 266M       |
-| **Gmod**       | 6.67 ns | 6.67 ns | 2.12B      |
+| **Dict**       | 55.6 ns | 55.6 ns | 256M       |
+| **FrozenDict** | 54.8 ns | 54.7 ns | 258M       |
+| **HashMap**    | 30.2 ns | 30.1 ns | 476M       |
+| **Gmod**       | 6.97 ns | 6.96 ns | 1.99B      |
 
 #### Detailed C# Results (Windows)
 
@@ -287,12 +294,12 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 ### Cross-Platform Performance Comparison
 
-| Operation                          | Windows C++ | Linux C++ | Performance Ratio | Status | Notes |
-| :--------------------------------- | :---------- | :-------- | :---------------- | :----: | :---- |
-| **TryParse**                       | 19.5 μs     | 11.3 μs   | **1.73x slower**  |   ✅   |       |
-| **TryParseFullPath**               | 8.67 μs     | 4.43 μs   | **1.96x slower**  |   ✅   |       |
-| **TryParseIndividualized**         | 17.9 μs     | 9.17 μs   | **1.95x slower**  |   ✅   |       |
-| **TryParseFullPathIndividualized** | 8.75 μs     | 4.29 μs   | **2.04x slower**  |   ✅   |       |
+| Operation                          | Windows C++ | Linux C++ | Performance Ratio | Status |
+| :--------------------------------- | :---------- | :-------- | :---------------- | :----: |
+| **TryParse**                       | 19.5 μs     | 11.3 μs   | **1.73x slower**  |   ✅   |
+| **TryParseFullPath**               | 8.67 μs     | 4.43 μs   | **1.96x slower**  |   ✅   |
+| **TryParseIndividualized**         | 17.9 μs     | 9.17 μs   | **1.95x slower**  |   ✅   |
+| **TryParseFullPathIndividualized** | 8.75 μs     | 4.29 μs   | **2.04x slower**  |   ✅   |
 
 ### GMOD Path Parsing Performance Comparison
 
@@ -327,20 +334,20 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 #### Detailed C# Results (Windows)
 
-| Method                             | Mean       | Error    | StdDev   | Categories    | Gen0   | Allocated |
-| :--------------------------------- | :--------- | :------- | :------- | :------------ | :----- | :-------- |
-| **TryParse**                       | 3360.8 ns  | 41.66 ns | 38.97 ns | No location   | 0.2213 | 2792 B   |
-| **TryParseFullPath**               | 571.2 ns   | 7.45 ns  | 5.82 ns  | No location   | 0.0601 | 760 B     |
-| **TryParseIndividualized**         | 1492.2 ns  | 28.77 ns | 51.14 ns | With location | 0.2251 | 2,832 B   |
-| **TryParseFullPathIndividualized** | 694.1 ns   | 4.33 ns  | 3.84 ns  | With location | 0.0935 | 1176 B   |
+| Method                             | Mean      | Error    | StdDev   | Categories    | Gen0   | Allocated |
+| :--------------------------------- | :-------- | :------- | :------- | :------------ | :----- | :-------- |
+| **TryParse**                       | 3360.8 ns | 41.66 ns | 38.97 ns | No location   | 0.2213 | 2792 B    |
+| **TryParseFullPath**               | 571.2 ns  | 7.45 ns  | 5.82 ns  | No location   | 0.0601 | 760 B     |
+| **TryParseIndividualized**         | 1492.2 ns | 28.77 ns | 51.14 ns | With location | 0.2251 | 2,832 B   |
+| **TryParseFullPathIndividualized** | 694.1 ns  | 4.33 ns  | 3.84 ns  | With location | 0.0935 | 1176 B    |
 
 #### Detailed C# Results (Linux)
 
-| Method                             | Categories    |       Mean |    Error |   StdDev |   Gen0 | Allocated |
-| ---------------------------------- | ------------- | ---------: | -------: | -------: | -----: | --------: |
-| **TryParseFullPath**               | No location   |   630.4 ns |  2.53 ns |  2.11 ns | 0.0601 |     760 B |
+| Method                             | Categories    |      Mean |    Error |   StdDev |   Gen0 | Allocated |
+| ---------------------------------- | ------------- | --------: | -------: | -------: | -----: | --------: |
+| **TryParseFullPath**               | No location   |  630.4 ns |  2.53 ns |  2.11 ns | 0.0601 |     760 B |
 | **TryParse**                       | No location   | 3548.7 ns | 14.72 ns | 11.49 ns | 0.2213 |    2792 B |
-| **TryParseFullPathIndividualized** | With location |   787.9 ns |  2.30 ns |  1.92 ns | 0.0935 |    1176 B |
+| **TryParseFullPathIndividualized** | With location |  787.9 ns |  2.30 ns |  1.92 ns | 0.0935 |    1176 B |
 | **TryParseIndividualized**         | With location | 1598.6 ns | 13.64 ns | 12.76 ns | 0.2251 |    2832 B |
 
 ---
@@ -349,9 +356,9 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 ### Cross-Platform Performance Comparison
 
-| Operation          | Windows C++ | Linux C++ | Performance Ratio | Status | Notes |
-| :----------------- | :---------- | :-------- | :---------------- | :----: | :---- |
-| **Full Traversal** | 263 ms      | 270 ms    | **1.03x slower**  |   ✅   |       |
+| Operation          | Windows C++ | Linux C++ | Performance Ratio | Status |
+| :----------------- | :---------- | :-------- | :---------------- | :----: |
+| **Full Traversal** | 263 ms      | 270 ms    | **1.03x slower**  |   ✅   |
 
 ### GMOD Traversal Performance Comparison
 
@@ -393,17 +400,17 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 ### Cross-Platform Performance Comparison
 
-| Operation        | Windows C++ | Linux C++ | Performance Ratio | Status | Notes |
-| :--------------- | :---------- | :-------- | :---------------- | :----: | :---- |
-| **Convert Path** | 29.2 μs     | 13.1 μs   | **2.23x slower**  |   ✅   |       |
+| Operation        | Windows C++ | Linux C++ | Performance Ratio | Status |
+| :--------------- | :---------- | :-------- | :---------------- | :----: |
+| **Convert Path** | 8.00 μs     | 4.22 μs   | **1.90x slower**  |   ✅   |
 
 ### GMOD Versioning Path Conversion Performance Comparison
 
 #### Cross-Platform C++ Results
 
-| C++ Method      | Windows Time | Linux Time | Performance Ratio | C# Method (Win) | C# Time (Win) | C# Method (Linux) | C# Time (Linux) | C++ vs C# (Windows) | C++ vs C# (Linux)  |
-| :-------------- | :----------- | :--------- | :---------------- | :-------------- | :------------ | :---------------- | :-------------- | :------------------ | :----------------- |
-| **convertPath** | 29.2 μs      | 13.1 μs    | **2.23x slower**  | **ConvertPath** | 1.489 μs      | **ConvertPath**   | 1.464 μs        | ❌ **19.6x slower** | ❌ **8.95x slower** |
+| C++ Method      | Windows Time | Linux Time | Performance Ratio | C# Method (Win) | C# Time (Win) | C# Method (Linux) | C# Time (Linux) | C++ vs C# (Windows) | C++ vs C# (Linux)   |
+| :-------------- | :----------- | :--------- | :---------------- | :-------------- | :------------ | :---------------- | :-------------- | :------------------ | :------------------ |
+| **convertPath** | 8.00 μs      | 4.22 μs    | **1.90x slower**  | **ConvertPath** | 1.489 μs      | **ConvertPath**   | 1.464 μs        | ❌ **5.37x slower** | ❌ **2.88x slower** |
 
 #### Detailed C++ Results
 
@@ -411,13 +418,13 @@ Performance comparison between different C++ access methods for Vista SDK codebo
 
 | Benchmark       | Time    | CPU     | Iterations |
 | :-------------- | :------ | :------ | :--------- |
-| **convertPath** | 29.2 μs | 28.9 μs | 482K       |
+| **convertPath** | 8.00 μs | 7.98 μs | 1.75M      |
 
 ##### Linux Platform
 
 | Benchmark       | Time    | CPU     | Iterations |
 | :-------------- | :------ | :------ | :--------- |
-| **convertPath** | 13.1 μs | 13.1 μs | 1.07M      |
+| **convertPath** | 4.22 μs | 4.21 μs | 3.45M      |
 
 #### Detailed C# Results (Windows)
 

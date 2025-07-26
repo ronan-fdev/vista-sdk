@@ -39,7 +39,7 @@
 //----------------------------------------------
 
 /** @brief Conditional constexpr support for GCC 11.x which has incomplete constexpr std::string support */
-#if defined(__GNUC__) && __GNUC__ >= 11 && __GNUC__ < 12
+#if defined( __GNUC__ ) && __GNUC__ >= 11 && __GNUC__ < 12
 #	define VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR
 #else
 #	define VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR constexpr

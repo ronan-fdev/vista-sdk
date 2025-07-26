@@ -15,6 +15,7 @@
 #include "LocalId.h"
 
 #include "utils/StringUtils.h"
+#include "utils/HashMap.h"
 
 namespace dnv::vista::sdk
 {
@@ -232,6 +233,13 @@ namespace dnv::vista::sdk
 		 */
 		[[nodiscard]] std::optional<GmodNode> convertNodeInternal(
 			VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion, const Gmod& targetGmod ) const;
+
+		/**
+		 * @brief Internal path conversion implementation (without caching)
+		 * @details Used by the cached convertPath method to perform actual conversion work
+		 */
+		[[nodiscard]] std::optional<GmodPath> convertPathInternal(
+			VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) const;
 
 		/**
 		 * @brief Try to get a versioning node for a specific VIS version

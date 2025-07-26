@@ -5,18 +5,20 @@
 
 #include "pch.h"
 #include "TestDataLoader.h"
+#include "dnv/vista/sdk/utils/HashMap.h"
 
 namespace dnv::vista::sdk
 {
-	static std::unordered_map<std::string, nlohmann::json> g_testDataCache;
+	static HashMap<std::string, nlohmann::json> g_testDataCache;
 
 	const nlohmann::json& loadTestData( const char* testDataPath )
 	{
 		std::string_view pathView{ testDataPath };
 
-		if ( auto it = g_testDataCache.find( std::string{ pathView } ); it != g_testDataCache.end() )
+		nlohmann::json* cachedData = nullptr;
+		if ( g_testDataCache.tryGetValue( pathView, cachedData ) )
 		{
-			return it->second;
+			return *cachedData;
 		}
 
 		std::ifstream jsonFile( testDataPath );
@@ -30,9 +32,15 @@ namespace dnv::vista::sdk
 			nlohmann::json data;
 			jsonFile >> data;
 
-			auto [inserted_it, success] = g_testDataCache.emplace( std::string{ pathView }, std::move( data ) );
+			g_testDataCache.insertOrAssign( std::string{ pathView }, std::move( data ) );
 
-			return inserted_it->second;
+			nlohmann::json* result = nullptr;
+			if ( g_testDataCache.tryGetValue( pathView, result ) )
+			{
+				return *result;
+			}
+
+			throw std::runtime_error( "Failed to retrieve cached test data after insertion" );
 		}
 		catch ( const nlohmann::json::parse_error& ex )
 		{

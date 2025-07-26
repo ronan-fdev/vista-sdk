@@ -16,6 +16,7 @@
 #include "dnv/vista/sdk/MetadataTag.h"
 #include "dnv/vista/sdk/VIS.h"
 #include "dnv/vista/sdk/VISVersion.h"
+#include "dnv/vista/sdk/utils/PathConversionCache.h"
 
 namespace dnv::vista::sdk
 {
@@ -195,6 +196,24 @@ namespace dnv::vista::sdk
 	//----------------------------
 
 	std::optional<GmodPath> GmodVersioning::convertPath( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) const
+	{
+		auto& pathCache = PathConversionCache::instance();
+		const std::string pathString = sourcePath.toString();
+
+		std::optional<GmodPath> cachedResult;
+		if ( pathCache.tryGetCachedConversion( sourceVersion, pathString, targetVersion, cachedResult ) )
+		{
+			return cachedResult;
+		}
+
+		auto result = convertPathInternal( sourceVersion, sourcePath, targetVersion );
+
+		pathCache.cacheConversion( sourceVersion, pathString, targetVersion, result );
+
+		return result;
+	}
+
+	std::optional<GmodPath> GmodVersioning::convertPathInternal( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) const
 	{
 		std::optional<GmodNode> targetEndNode = convertNode( sourceVersion, sourcePath.node(), targetVersion );
 		if ( !targetEndNode.has_value() )

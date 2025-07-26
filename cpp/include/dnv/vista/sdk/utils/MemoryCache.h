@@ -42,18 +42,18 @@ namespace dnv::vista::sdk
 		std::chrono::milliseconds slidingExpiration;
 		std::size_t size = 1;
 
-		CacheEntry( std::chrono::milliseconds expiration = std::chrono::hours( 1 ) )
+		VISTA_SDK_CPP_FORCE_INLINE CacheEntry( std::chrono::milliseconds expiration = std::chrono::hours( 1 ) )
 			: lastAccessed( std::chrono::steady_clock::now() ), slidingExpiration( expiration )
 		{
 		}
 
-		[[nodiscard]] bool isExpired() const noexcept
+		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool isExpired() const noexcept
 		{
 			auto now = std::chrono::steady_clock::now();
 			return ( now - lastAccessed ) > slidingExpiration;
 		}
 
-		void updateAccess() noexcept
+		void VISTA_SDK_CPP_FORCE_INLINE updateAccess() noexcept
 		{
 			lastAccessed = std::chrono::steady_clock::now();
 		}
@@ -71,11 +71,17 @@ namespace dnv::vista::sdk
 		using FactoryFunction = std::function<TValue()>;
 		using ConfigFunction = std::function<void( CacheEntry& )>;
 
+		MemoryCache( const MemoryCache& ) = delete;
+		MemoryCache& operator=( const MemoryCache& ) = delete;
+
+		MemoryCache( MemoryCache&& ) = delete;
+		MemoryCache& operator=( MemoryCache&& ) = delete;
+
 		/**
 		 * @brief Construct memory cache with specified options
 		 * @param options Configuration options for cache behavior
 		 */
-		explicit MemoryCache( const MemoryCacheOptions& options = {} )
+		VISTA_SDK_CPP_FORCE_INLINE explicit MemoryCache( const MemoryCacheOptions& options = {} )
 			: m_options( options )
 		{
 			if ( m_options.sizeLimit > 0 )
@@ -84,6 +90,9 @@ namespace dnv::vista::sdk
 			}
 		}
 
+		// Default destructor
+		~MemoryCache() = default;
+
 		/**
 		 * @brief Get or create a cache entry using factory function
 		 * @param key The cache key
@@ -91,7 +100,7 @@ namespace dnv::vista::sdk
 		 * @param configure Optional function to configure cache entry
 		 * @return Reference to the cached value
 		 */
-		TValue& getOrCreate( const TKey& key, FactoryFunction factory, ConfigFunction configure = nullptr )
+		VISTA_SDK_CPP_FORCE_INLINE TValue& getOrCreate( const TKey& key, FactoryFunction factory, ConfigFunction configure = nullptr )
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -131,7 +140,7 @@ namespace dnv::vista::sdk
 		 * @param key The cache key
 		 * @return Optional containing the value if found and not expired
 		 */
-		std::optional<std::reference_wrapper<TValue>> tryGet( const TKey& key )
+		VISTA_SDK_CPP_FORCE_INLINE std::optional<std::reference_wrapper<TValue>> tryGet( const TKey& key )
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -156,7 +165,7 @@ namespace dnv::vista::sdk
 		 * @param key The cache key to remove
 		 * @return True if entry was removed, false if not found
 		 */
-		bool remove( const TKey& key )
+		VISTA_SDK_CPP_FORCE_INLINE bool remove( const TKey& key )
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -166,7 +175,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Clear all cache entries
 		 */
-		void clear()
+		VISTA_SDK_CPP_FORCE_INLINE void clear()
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 			m_cache.clear();
@@ -176,7 +185,7 @@ namespace dnv::vista::sdk
 		 * @brief Get current cache size
 		 * @return Number of entries in cache
 		 */
-		std::size_t size() const
+		VISTA_SDK_CPP_FORCE_INLINE std::size_t size() const
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -187,7 +196,7 @@ namespace dnv::vista::sdk
 		 * @brief Check if cache is empty
 		 * @return True if cache contains no entries
 		 */
-		bool empty() const
+		VISTA_SDK_CPP_FORCE_INLINE bool empty() const
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -197,7 +206,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Manually trigger cleanup of expired entries
 		 */
-		void cleanupExpired()
+		VISTA_SDK_CPP_FORCE_INLINE void cleanupExpired()
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -231,7 +240,7 @@ namespace dnv::vista::sdk
 		std::unordered_map<TKey, CachedItem> m_cache;
 		MemoryCacheOptions m_options;
 
-		void evictLeastRecentlyUsed()
+		VISTA_SDK_CPP_FORCE_INLINE void evictLeastRecentlyUsed()
 		{
 			if ( m_cache.empty() )
 			{
