@@ -162,7 +162,7 @@ namespace dnv::vista::sdk
 			}
 		};
 
-		static inline TraversalHandlerResult parseInternalHandler(
+		inline static TraversalHandlerResult parseInternalHandler(
 			ParseContext& context, const std::vector<const GmodNode*>& parents, const GmodNode& current )
 		{
 			PathNode& toFind = context.toFind;

@@ -56,44 +56,44 @@ namespace dnv::vista::sdk::datatypes
 		// Comparison operators
 		//----------------------------------------------
 
-		constexpr inline bool operator==( const TimeSpan& other ) const noexcept;
-		constexpr inline bool operator!=( const TimeSpan& other ) const noexcept;
-		constexpr inline bool operator<( const TimeSpan& other ) const noexcept;
-		constexpr inline bool operator<=( const TimeSpan& other ) const noexcept;
-		constexpr inline bool operator>( const TimeSpan& other ) const noexcept;
-		constexpr inline bool operator>=( const TimeSpan& other ) const noexcept;
+		inline constexpr bool operator==( const TimeSpan& other ) const noexcept;
+		inline constexpr bool operator!=( const TimeSpan& other ) const noexcept;
+		inline constexpr bool operator<( const TimeSpan& other ) const noexcept;
+		inline constexpr bool operator<=( const TimeSpan& other ) const noexcept;
+		inline constexpr bool operator>( const TimeSpan& other ) const noexcept;
+		inline constexpr bool operator>=( const TimeSpan& other ) const noexcept;
 
 		//----------------------------------------------
 		// Arithmetic operators
 		//----------------------------------------------
 
-		constexpr inline TimeSpan operator+( const TimeSpan& other ) const noexcept;
-		constexpr inline TimeSpan operator-( const TimeSpan& other ) const noexcept;
-		constexpr inline TimeSpan operator-() const noexcept;
-		constexpr inline TimeSpan& operator+=( const TimeSpan& other ) noexcept;
-		constexpr inline TimeSpan& operator-=( const TimeSpan& other ) noexcept;
+		inline constexpr TimeSpan operator+( const TimeSpan& other ) const noexcept;
+		inline constexpr TimeSpan operator-( const TimeSpan& other ) const noexcept;
+		inline constexpr TimeSpan operator-() const noexcept;
+		inline constexpr TimeSpan& operator+=( const TimeSpan& other ) noexcept;
+		inline constexpr TimeSpan& operator-=( const TimeSpan& other ) noexcept;
 
 		//----------------------------------------------
 		// Property accessors
 		//----------------------------------------------
 
 		/** @brief Get tick count */
-		[[nodiscard]] constexpr inline std::int64_t ticks() const noexcept;
+		[[nodiscard]] inline constexpr std::int64_t ticks() const noexcept;
 
 		/** @brief Get total days */
-		[[nodiscard]] constexpr inline double totalDays() const noexcept;
+		[[nodiscard]] inline constexpr double totalDays() const noexcept;
 
 		/** @brief Get total hours */
-		[[nodiscard]] constexpr inline double totalHours() const noexcept;
+		[[nodiscard]] inline constexpr double totalHours() const noexcept;
 
 		/** @brief Get total minutes */
-		[[nodiscard]] constexpr inline double totalMinutes() const noexcept;
+		[[nodiscard]] inline constexpr double totalMinutes() const noexcept;
 
 		/** @brief Get total seconds */
-		[[nodiscard]] constexpr inline double totalSeconds() const noexcept;
+		[[nodiscard]] inline constexpr double totalSeconds() const noexcept;
 
 		/** @brief Get total milliseconds */
-		[[nodiscard]] constexpr inline double totalMilliseconds() const noexcept;
+		[[nodiscard]] inline constexpr double totalMilliseconds() const noexcept;
 
 		//----------------------------------------------
 		// Static factory methods

@@ -21,7 +21,7 @@ namespace dnv::vista::sdk::benchmarks
 	}
 
 	template <typename THasher>
-	[[nodiscard]] static inline uint32_t hash( std::string_view inputStr ) noexcept
+	[[nodiscard]] inline static uint32_t hash( std::string_view inputStr ) noexcept
 	{
 		uint32_t hash = constants::algorithm::FNV_OFFSET_BASIS;
 

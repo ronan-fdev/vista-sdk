@@ -359,7 +359,7 @@ namespace dnv::vista::sdk
 		 * @brief Get the codebook name
 		 * @return The codebook name
 		 */
-		[[nodiscard]] constexpr inline CodebookName name() const noexcept;
+		[[nodiscard]] inline constexpr CodebookName name() const noexcept;
 
 		/**
 		 * @brief Get the groups

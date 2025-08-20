@@ -27,32 +27,32 @@ namespace dnv::vista::sdk::datatypes
 	// Comparison operators
 	//----------------------------------------------
 
-	constexpr inline bool TimeSpan::operator==( const TimeSpan& other ) const noexcept
+	inline constexpr bool TimeSpan::operator==( const TimeSpan& other ) const noexcept
 	{
 		return m_ticks == other.m_ticks;
 	}
 
-	constexpr inline bool TimeSpan::operator!=( const TimeSpan& other ) const noexcept
+	inline constexpr bool TimeSpan::operator!=( const TimeSpan& other ) const noexcept
 	{
 		return m_ticks != other.m_ticks;
 	}
 
-	constexpr inline bool TimeSpan::operator<( const TimeSpan& other ) const noexcept
+	inline constexpr bool TimeSpan::operator<( const TimeSpan& other ) const noexcept
 	{
 		return m_ticks < other.m_ticks;
 	}
 
-	constexpr inline bool TimeSpan::operator<=( const TimeSpan& other ) const noexcept
+	inline constexpr bool TimeSpan::operator<=( const TimeSpan& other ) const noexcept
 	{
 		return m_ticks <= other.m_ticks;
 	}
 
-	constexpr inline bool TimeSpan::operator>( const TimeSpan& other ) const noexcept
+	inline constexpr bool TimeSpan::operator>( const TimeSpan& other ) const noexcept
 	{
 		return m_ticks > other.m_ticks;
 	}
 
-	constexpr inline bool TimeSpan::operator>=( const TimeSpan& other ) const noexcept
+	inline constexpr bool TimeSpan::operator>=( const TimeSpan& other ) const noexcept
 	{
 		return m_ticks >= other.m_ticks;
 	}
@@ -61,29 +61,29 @@ namespace dnv::vista::sdk::datatypes
 	// Arithmetic operators
 	//----------------------------------------------
 
-	constexpr inline TimeSpan TimeSpan::operator+( const TimeSpan& other ) const noexcept
+	inline constexpr TimeSpan TimeSpan::operator+( const TimeSpan& other ) const noexcept
 	{
 		return TimeSpan{ m_ticks + other.m_ticks };
 	}
 
-	constexpr inline TimeSpan TimeSpan::operator-( const TimeSpan& other ) const noexcept
+	inline constexpr TimeSpan TimeSpan::operator-( const TimeSpan& other ) const noexcept
 	{
 		return TimeSpan{ m_ticks - other.m_ticks };
 	}
 
-	constexpr inline TimeSpan TimeSpan::operator-() const noexcept
+	inline constexpr TimeSpan TimeSpan::operator-() const noexcept
 	{
 		return TimeSpan{ -m_ticks };
 	}
 
-	constexpr inline TimeSpan& TimeSpan::operator+=( const TimeSpan& other ) noexcept
+	inline constexpr TimeSpan& TimeSpan::operator+=( const TimeSpan& other ) noexcept
 	{
 		m_ticks += other.m_ticks;
 
 		return *this;
 	}
 
-	constexpr inline TimeSpan& TimeSpan::operator-=( const TimeSpan& other ) noexcept
+	inline constexpr TimeSpan& TimeSpan::operator-=( const TimeSpan& other ) noexcept
 	{
 		m_ticks -= other.m_ticks;
 
@@ -94,32 +94,32 @@ namespace dnv::vista::sdk::datatypes
 	// Property accessors
 	//----------------------------------------------
 
-	constexpr inline std::int64_t TimeSpan::ticks() const noexcept
+	inline constexpr std::int64_t TimeSpan::ticks() const noexcept
 	{
 		return m_ticks;
 	}
 
-	constexpr inline double TimeSpan::totalDays() const noexcept
+	inline constexpr double TimeSpan::totalDays() const noexcept
 	{
 		return static_cast<double>( m_ticks ) / constants::datetime::TICKS_PER_DAY;
 	}
 
-	constexpr inline double TimeSpan::totalHours() const noexcept
+	inline constexpr double TimeSpan::totalHours() const noexcept
 	{
 		return static_cast<double>( m_ticks ) / constants::datetime::TICKS_PER_HOUR;
 	}
 
-	constexpr inline double TimeSpan::totalMinutes() const noexcept
+	inline constexpr double TimeSpan::totalMinutes() const noexcept
 	{
 		return static_cast<double>( m_ticks ) / constants::datetime::TICKS_PER_MINUTE;
 	}
 
-	constexpr inline double TimeSpan::totalSeconds() const noexcept
+	inline constexpr double TimeSpan::totalSeconds() const noexcept
 	{
 		return static_cast<double>( m_ticks ) / constants::datetime::TICKS_PER_SECOND;
 	}
 
-	constexpr inline double TimeSpan::totalMilliseconds() const noexcept
+	inline constexpr double TimeSpan::totalMilliseconds() const noexcept
 	{
 		return static_cast<double>( m_ticks ) / constants::datetime::TICKS_PER_MILLISECOND;
 	}
@@ -319,17 +319,17 @@ namespace dnv::vista::sdk::datatypes
 	// Construction
 	//----------------------------------------------
 
-	constexpr inline DateTimeOffset::DateTimeOffset() noexcept
+	inline constexpr DateTimeOffset::DateTimeOffset() noexcept
 		: m_dateTime{ DateTime::minValue() },
 		  m_offset{ 0 }
 	{
 	}
 
-	constexpr inline DateTimeOffset::DateTimeOffset( const DateTime& dateTime, const TimeSpan& offset ) noexcept
+	inline constexpr DateTimeOffset::DateTimeOffset( const DateTime& dateTime, const TimeSpan& offset ) noexcept
 		: m_dateTime{ dateTime },
 		  m_offset{ offset } {}
 
-	constexpr inline DateTimeOffset::DateTimeOffset( std::int64_t ticks, const TimeSpan& offset ) noexcept
+	inline constexpr DateTimeOffset::DateTimeOffset( std::int64_t ticks, const TimeSpan& offset ) noexcept
 		: m_dateTime{ ticks },
 		  m_offset{ offset } {}
 
@@ -407,17 +407,17 @@ namespace dnv::vista::sdk::datatypes
 	// Property accessors
 	//----------------------------------------------
 
-	constexpr inline const DateTime& DateTimeOffset::dateTime() const noexcept
+	inline constexpr const DateTime& DateTimeOffset::dateTime() const noexcept
 	{
 		return m_dateTime;
 	}
 
-	constexpr inline const TimeSpan& DateTimeOffset::offset() const noexcept
+	inline constexpr const TimeSpan& DateTimeOffset::offset() const noexcept
 	{
 		return m_offset;
 	}
 
-	constexpr inline std::int64_t DateTimeOffset::ticks() const noexcept
+	inline constexpr std::int64_t DateTimeOffset::ticks() const noexcept
 	{
 		return m_dateTime.ticks();
 	}
@@ -572,17 +572,17 @@ namespace dnv::vista::sdk::datatypes
 	// Static factory methods
 	//----------------------------------------------
 
-	constexpr inline DateTimeOffset DateTimeOffset::minValue() noexcept
+	inline constexpr DateTimeOffset DateTimeOffset::minValue() noexcept
 	{
 		return DateTimeOffset{ DateTime::minValue(), TimeSpan{ 0 } };
 	}
 
-	constexpr inline DateTimeOffset DateTimeOffset::maxValue() noexcept
+	inline constexpr DateTimeOffset DateTimeOffset::maxValue() noexcept
 	{
 		return DateTimeOffset{ DateTime::maxValue(), TimeSpan{ 0 } };
 	}
 
-	constexpr inline DateTimeOffset DateTimeOffset::unixEpoch() noexcept
+	inline constexpr DateTimeOffset DateTimeOffset::unixEpoch() noexcept
 	{
 		return DateTimeOffset{ DateTime::epoch(), TimeSpan{ 0 } };
 	}

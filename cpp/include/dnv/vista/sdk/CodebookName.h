@@ -112,7 +112,7 @@ namespace dnv::vista::sdk
 		 * @return The corresponding CodebookName.
 		 * @throws std::invalid_argument If the prefix is empty or unknown.
 		 */
-		[[nodiscard]] static inline CodebookName fromPrefix( std::string_view prefix );
+		[[nodiscard]] inline static CodebookName fromPrefix( std::string_view prefix );
 
 		/**
 		 * @brief Convert a CodebookName to its string prefix view
@@ -120,7 +120,7 @@ namespace dnv::vista::sdk
 		 * @return The corresponding string prefix view (e.g., "pos" for Position)
 		 * @throws std::invalid_argument If the name is unknown
 		 */
-		[[nodiscard]] static inline std::string_view toPrefix( CodebookName name );
+		[[nodiscard]] inline static std::string_view toPrefix( CodebookName name );
 	};
 }
 

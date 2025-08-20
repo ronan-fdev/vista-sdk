@@ -110,7 +110,7 @@ namespace dnv::vista::sdk
 	// Accessors
 	//----------------------------------------------
 
-	constexpr inline CodebookName Codebook::name() const noexcept
+	inline constexpr CodebookName Codebook::name() const noexcept
 	{
 		return m_name;
 	}

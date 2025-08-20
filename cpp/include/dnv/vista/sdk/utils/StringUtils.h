@@ -55,19 +55,25 @@ namespace dnv::vista::sdk::utils
 	 */
 	struct StringViewEqual
 	{
+		/**
+		 * @brief Enables heterogeneous lookup in unordered containers
+		 * @details This type alias allows the equality functor to work with different
+		 *          but compatible key types (std::string, std::string_view, const char*)
+		 *          without requiring conversion to the container's key type.
+		 */
 		using is_transparent = void;
 
-		[[nodiscard]] VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR inline bool operator()( const std::string& lhs, const std::string& rhs ) const noexcept
+		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const std::string& lhs, const std::string& rhs ) const noexcept
 		{
 			return lhs.size() == rhs.size() && lhs == rhs;
 		}
 
-		[[nodiscard]] VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR inline bool operator()( const std::string& lhs, std::string_view rhs ) const noexcept
+		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const std::string& lhs, std::string_view rhs ) const noexcept
 		{
 			return lhs.size() == rhs.size() && lhs == rhs;
 		}
 
-		[[nodiscard]] VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR inline bool operator()( std::string_view lhs, const std::string& rhs ) const noexcept
+		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( std::string_view lhs, const std::string& rhs ) const noexcept
 		{
 			return lhs.size() == rhs.size() && lhs == rhs;
 		}
@@ -77,31 +83,31 @@ namespace dnv::vista::sdk::utils
 			return lhs.size() == rhs.size() && lhs == rhs;
 		}
 
-		[[nodiscard]] VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR inline bool operator()( const char* lhs, const std::string& rhs ) const noexcept
+		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const char* lhs, const std::string& rhs ) const noexcept
 		{
 			std::string_view lhs_view{ lhs };
 			return lhs_view.size() == rhs.size() && lhs_view == rhs;
 		}
 
-		[[nodiscard]] VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR inline bool operator()( const std::string& lhs, const char* rhs ) const noexcept
+		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const std::string& lhs, const char* rhs ) const noexcept
 		{
 			std::string_view rhs_view{ rhs };
 			return lhs.size() == rhs_view.size() && lhs == rhs_view;
 		}
 
-		[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool operator()( const char* lhs, std::string_view rhs ) const noexcept
+		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool operator()( const char* lhs, std::string_view rhs ) const noexcept
 		{
 			std::string_view lhs_view{ lhs };
 			return lhs_view.size() == rhs.size() && lhs_view == rhs;
 		}
 
-		[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool operator()( std::string_view lhs, const char* rhs ) const noexcept
+		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool operator()( std::string_view lhs, const char* rhs ) const noexcept
 		{
 			std::string_view rhs_view{ rhs };
 			return lhs.size() == rhs_view.size() && lhs == rhs_view;
 		}
 
-		[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool operator()( const char* lhs, const char* rhs ) const noexcept
+		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool operator()( const char* lhs, const char* rhs ) const noexcept
 		{
 			std::string_view lhs_view{ lhs };
 			std::string_view rhs_view{ rhs };
@@ -119,7 +125,7 @@ namespace dnv::vista::sdk::utils
 	 * @param suffix Suffix to find
 	 * @return True if str ends with suffix
 	 */
-	[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool endsWith( std::string_view str, std::string_view suffix ) noexcept
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool endsWith( std::string_view str, std::string_view suffix ) noexcept
 	{
 		return str.size() >= suffix.size() && str.compare( str.size() - suffix.size(), suffix.size(), suffix ) == 0;
 	}
@@ -130,7 +136,7 @@ namespace dnv::vista::sdk::utils
 	 * @param prefix Prefix to find
 	 * @return True if str starts with prefix
 	 */
-	[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool startsWith( std::string_view str, std::string_view prefix ) noexcept
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool startsWith( std::string_view str, std::string_view prefix ) noexcept
 	{
 		return str.size() >= prefix.size() && str.compare( 0, prefix.size(), prefix ) == 0;
 	}
@@ -141,7 +147,7 @@ namespace dnv::vista::sdk::utils
 	 * @param substr Substring to find
 	 * @return True if str contains substr
 	 */
-	[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool contains( std::string_view str, std::string_view substr ) noexcept
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool contains( std::string_view str, std::string_view substr ) noexcept
 	{
 		return str.find( substr ) != std::string_view::npos;
 	}
@@ -152,7 +158,7 @@ namespace dnv::vista::sdk::utils
 	 * @param rhs Second string
 	 * @return True if strings are exactly equal
 	 */
-	[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool equals( std::string_view lhs, std::string_view rhs ) noexcept
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool equals( std::string_view lhs, std::string_view rhs ) noexcept
 	{
 		return lhs == rhs;
 	}
@@ -305,7 +311,7 @@ namespace dnv::vista::sdk::utils
 	 * @param expectedLength Expected length
 	 * @return True if string has exact expected length
 	 */
-	[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool hasExactLength( std::string_view str, std::size_t expectedLength ) noexcept
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool hasExactLength( std::string_view str, std::size_t expectedLength ) noexcept
 	{
 		return str.size() == expectedLength;
 	}
@@ -315,7 +321,7 @@ namespace dnv::vista::sdk::utils
 	 * @param str String to check
 	 * @return True if string is empty
 	 */
-	[[nodiscard]] constexpr VISTA_SDK_CPP_FORCE_INLINE bool isEmpty( std::string_view str ) noexcept
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool isEmpty( std::string_view str ) noexcept
 	{
 		return str.empty();
 	}

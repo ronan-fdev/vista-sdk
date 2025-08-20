@@ -21,8 +21,8 @@ namespace dnv::vista::sdk
 		// Constants
 		//=====================================================================
 
-		static inline constexpr std::string_view VIS_RELEASE_KEY = "visRelease";
-		static inline constexpr std::string_view RESOURCES_DIR = "resources";
+		inline static constexpr std::string_view VIS_RELEASE_KEY = "visRelease";
+		inline static constexpr std::string_view RESOURCES_DIR = "resources";
 
 		static constexpr size_t CHUNK_IN_SIZE = 65536;
 		static constexpr size_t CHUNK_OUT_SIZE = 131072;

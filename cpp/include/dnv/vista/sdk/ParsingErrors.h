@@ -109,7 +109,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Gets an empty set of parsing errors. */
-		static inline const ParsingErrors& empty();
+		inline static const ParsingErrors& empty();
 
 		//----------------------------------------------
 		// Accessors

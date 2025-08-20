@@ -258,7 +258,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Parse a conversion type from a string
 		 */
-		static inline ConversionType parseConversionType( std::string_view type );
+		inline static ConversionType parseConversionType( std::string_view type );
 	};
 }
 
