@@ -72,7 +72,7 @@ set(FMT_HEADER_ONLY     ON   CACHE BOOL  "Build fmt as header-only library"  FOR
 set(FMT_MODULE          OFF  CACHE BOOL  "Enable fmt C++20 module support"   FORCE)
 set(FMT_OS              OFF  CACHE BOOL  "Enable fmt OS-specific features"   FORCE)
 set(FMT_SYSTEM_HEADERS  OFF  CACHE BOOL  "Use system headers for fmt"        FORCE)
-set(FMT_UNICODE         OFF  CACHE BOOL  "Enable Unicode support in fmt"     FORCE)
+set(FMT_UNICODE         ON   CACHE BOOL  "Enable Unicode support in fmt"     FORCE)
 
 FetchContent_Declare(
 	fmt
