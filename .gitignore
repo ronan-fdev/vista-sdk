@@ -91,7 +91,18 @@ lerna-debug.log
 .DS_Store
 Thumbs.db
 
-.vs
-
 # Python test files
 *.pytest_cache/
+
+# IDE - VisualStudio IDE
+.vs
+
+# C++ files
+## Dependencies
+.deps
+
+## Build dirs
+build
+out
+cpp/build
+cpp/out
