@@ -185,7 +185,10 @@ namespace dnv::vista::sdk
 	// Enumeration
 	//----------------------------------------------
 
-	inline Gmod::Enumerator Gmod::enumerator() const { return Enumerator( &m_nodeMap ); }
+	inline Gmod::Enumerator Gmod::enumerator() const
+	{
+		return Enumerator( &m_nodeMap );
+	}
 
 	//----------------------------------------------
 	// Gmod::Enumerator class

@@ -7,8 +7,8 @@
 
 #include "dnv/vista/sdk/GmodPath.h"
 
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 #include "dnv/vista/sdk/utils/StringUtils.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/Locations.h"
 #include "dnv/vista/sdk/VIS.h"
@@ -1027,7 +1027,7 @@ namespace dnv::vista::sdk
 
 	std::string GmodIndividualizableSet::toString() const
 	{
-		auto lease = utils::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::instance();
 		bool firstNodeAppended = false;
 
 		for ( size_t j = 0; j < m_nodeIndices.size(); ++j )

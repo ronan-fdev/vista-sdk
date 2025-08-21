@@ -7,7 +7,7 @@
 
 #include "config/Platform.h"
 #include "constants/GmodConstants.h"
-#include "utils/StringBuilderPool.h"
+#include "internal/StringBuilderPool.h"
 
 namespace dnv::vista::sdk
 {
@@ -486,7 +486,7 @@ namespace dnv::vista::sdk
 
 	inline std::string GmodNode::toString() const noexcept
 	{
-		auto lease = utils::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::instance();
 		lease.builder().append( m_code );
 		if ( m_location.has_value() )
 		{
@@ -497,7 +497,7 @@ namespace dnv::vista::sdk
 		return lease.toString();
 	}
 
-	inline void GmodNode::toString( utils::StringBuilderWrapper& builder ) const noexcept
+	inline void GmodNode::toString( internal::StringBuilderWrapper& builder ) const noexcept
 	{
 		builder.append( m_code );
 		if ( m_location.has_value() )

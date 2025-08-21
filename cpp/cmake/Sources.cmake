@@ -26,14 +26,18 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/HashMap.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.h
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.inl
 
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringBuilderPool.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringMap.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringUtils.h
 
@@ -68,12 +72,10 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdBuilder.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdItems.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdItems.inl
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdParsingErrorBuilder.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdParsingErrorBuilder.inl
+
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationBuilder.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationBuilder.inl
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationParsingErrorBuilder.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationParsingErrorBuilder.inl
+
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Locations.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Locations.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationsDto.h
@@ -96,6 +98,9 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/Decimal128.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/Int128.cpp
 
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.cpp
+
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.cpp
 
@@ -112,9 +117,7 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/ImoNumber.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalIdBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalIdParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Locations.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationsDto.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/MetadataTag.cpp

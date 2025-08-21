@@ -7,7 +7,7 @@
 
 #include "dnv/vista/sdk/VIS.h"
 
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/CodebooksDto.h"
@@ -27,7 +27,7 @@ namespace dnv::vista::sdk
 
 		[[noreturn]] void throwInvalidVersionError( VisVersion version )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Invalid VIS version provided: " );
 			builder.append( VisVersionExtensions::toVersionString( version ) );

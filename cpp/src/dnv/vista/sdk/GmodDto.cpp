@@ -8,7 +8,7 @@
 #include "dnv/vista/sdk/GmodDto.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 namespace dnv::vista::sdk
 {
@@ -76,7 +76,7 @@ namespace dnv::vista::sdk
 			const auto codeIt = json.find( constants::dto::GMOD_DTO_KEY_CODE );
 			if ( codeIt == json.end() || !codeIt->is_string() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "ERROR: GMOD Node JSON missing required '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_CODE );
@@ -88,7 +88,7 @@ namespace dnv::vista::sdk
 			const auto categoryIt = json.find( constants::dto::GMOD_DTO_KEY_CATEGORY );
 			if ( categoryIt == json.end() || !categoryIt->is_string() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "ERROR: GMOD Node JSON missing required '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_CATEGORY );
@@ -101,7 +101,7 @@ namespace dnv::vista::sdk
 			const auto typeIt = json.find( constants::dto::GMOD_DTO_KEY_TYPE );
 			if ( typeIt == json.end() || !typeIt->is_string() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "ERROR: GMOD Node JSON missing required '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_TYPE );
@@ -126,7 +126,7 @@ namespace dnv::vista::sdk
 				}
 				else
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "ERROR: GMOD Node JSON (code='" );
 					builder.append( tempCode );
@@ -141,7 +141,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node JSON (code='" );
 				builder.append( tempCode );
@@ -156,7 +156,7 @@ namespace dnv::vista::sdk
 
 			if ( tempCode.empty() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty code field found in GMOD node\n" );
 
@@ -164,7 +164,7 @@ namespace dnv::vista::sdk
 			}
 			if ( tempCategory.empty() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty category field found in GMOD node code='" );
 				builder.append( tempCode );
@@ -174,7 +174,7 @@ namespace dnv::vista::sdk
 			}
 			if ( tempType.empty() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty type field found in GMOD node code='" );
 				builder.append( tempCode );
@@ -184,7 +184,7 @@ namespace dnv::vista::sdk
 			}
 			if ( tempName.empty() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty name field used for GMOD node code='" );
 				builder.append( tempCode );
@@ -203,7 +203,7 @@ namespace dnv::vista::sdk
 				}
 				else if ( !commonNameIt->is_null() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: GMOD Node code='" );
 					builder.append( tempCode );
@@ -225,7 +225,7 @@ namespace dnv::vista::sdk
 				}
 				else if ( !definitionIt->is_null() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: GMOD Node code='" );
 					builder.append( tempCode );
@@ -247,7 +247,7 @@ namespace dnv::vista::sdk
 				}
 				else if ( !commonDefinitionIt->is_null() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: GMOD Node code='" );
 					builder.append( tempCode );
@@ -269,7 +269,7 @@ namespace dnv::vista::sdk
 				}
 				else if ( !installIt->is_null() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: GMOD Node code='" );
 					builder.append( tempCode );
@@ -297,7 +297,7 @@ namespace dnv::vista::sdk
 					}
 					catch ( const nlohmann::json::exception& ex )
 					{
-						auto lease = utils::StringBuilderPool::instance();
+						auto lease = internal::StringBuilderPool::instance();
 						auto builder = lease.builder();
 						builder.append( "WARN: GMOD Node code='" );
 						builder.append( tempCode );
@@ -312,7 +312,7 @@ namespace dnv::vista::sdk
 				}
 				else if ( !assignmentIt->is_null() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: GMOD Node code='" );
 					builder.append( tempCode );
@@ -339,7 +339,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: JSON exception during GmodNodeDto parsing (hint: code='" );
 			builder.append( codeHint );
@@ -353,7 +353,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Standard exception during GmodNodeDto parsing (hint: code='" );
 			builder.append( codeHint );
@@ -373,7 +373,7 @@ namespace dnv::vista::sdk
 		auto dtoOpt = GmodNodeDto::tryFromJson( json );
 		if ( !dtoOpt.has_value() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Failed to deserialize GmodNodeDto from JSON (hint: code='" );
 			builder.append( codeHint );
@@ -403,7 +403,7 @@ namespace dnv::vista::sdk
 		const auto categoryIt = j.find( constants::dto::GMOD_DTO_KEY_CATEGORY );
 		if ( categoryIt == j.end() || !categoryIt->is_string() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "GMOD Node JSON missing required '" );
 			builder.append( constants::dto::GMOD_DTO_KEY_CATEGORY );
@@ -415,7 +415,7 @@ namespace dnv::vista::sdk
 		const auto typeIt = j.find( constants::dto::GMOD_DTO_KEY_TYPE );
 		if ( typeIt == j.end() || !typeIt->is_string() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "GMOD Node JSON missing required '" );
 			builder.append( constants::dto::GMOD_DTO_KEY_TYPE );
@@ -427,7 +427,7 @@ namespace dnv::vista::sdk
 		const auto codeIt = j.find( constants::dto::GMOD_DTO_KEY_CODE );
 		if ( codeIt == j.end() || !codeIt->is_string() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "GMOD Node JSON missing required '" );
 			builder.append( constants::dto::GMOD_DTO_KEY_CODE );
@@ -452,7 +452,7 @@ namespace dnv::vista::sdk
 			}
 			else if ( nameIt->is_null() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node JSON (code='" );
 				builder.append( tempCode );
@@ -464,7 +464,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node JSON (code='" );
 				builder.append( tempCode );
@@ -477,7 +477,7 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "WARN: GMOD Node JSON (code='" );
 			builder.append( tempCode );
@@ -500,7 +500,7 @@ namespace dnv::vista::sdk
 			}
 			else if ( !commonNameIt->is_null() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node code='" );
 				builder.append( tempCode );
@@ -522,7 +522,7 @@ namespace dnv::vista::sdk
 			}
 			else if ( !definitionIt->is_null() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node code='" );
 				builder.append( tempCode );
@@ -544,7 +544,7 @@ namespace dnv::vista::sdk
 			}
 			else if ( !commonDefinitionIt->is_null() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node code='" );
 				builder.append( tempCode );
@@ -566,7 +566,7 @@ namespace dnv::vista::sdk
 			}
 			else if ( !installIt->is_null() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node code='" );
 				builder.append( tempCode );
@@ -594,7 +594,7 @@ namespace dnv::vista::sdk
 				}
 				catch ( const nlohmann::json::exception& ex )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: GMOD Node code='" );
 					builder.append( tempCode );
@@ -609,7 +609,7 @@ namespace dnv::vista::sdk
 			}
 			else if ( !assignmentIt->is_null() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: GMOD Node code='" );
 				builder.append( tempCode );
@@ -678,7 +678,7 @@ namespace dnv::vista::sdk
 			const auto visReleaseIt = json.find( constants::dto::GMOD_DTO_KEY_VIS_RELEASE );
 			if ( visReleaseIt == json.end() || !visReleaseIt->is_string() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "ERROR: GMOD JSON missing required '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_VIS_RELEASE );
@@ -700,7 +700,7 @@ namespace dnv::vista::sdk
 			{
 				if ( !itemsIt->is_array() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: '" );
 					builder.append( constants::dto::GMOD_DTO_KEY_ITEMS );
@@ -726,7 +726,7 @@ namespace dnv::vista::sdk
 						}
 						else
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "WARN: Skipping malformed GMOD node during GmodDto parsing for VIS version " );
 							builder.append( tempVisVersion );
@@ -747,7 +747,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: No '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_ITEMS );
@@ -767,7 +767,7 @@ namespace dnv::vista::sdk
 			{
 				if ( !relationsIt->is_array() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: '" );
 					builder.append( constants::dto::GMOD_DTO_KEY_RELATIONS );
@@ -799,7 +799,7 @@ namespace dnv::vista::sdk
 								}
 								else
 								{
-									auto lease = utils::StringBuilderPool::instance();
+									auto lease = internal::StringBuilderPool::instance();
 									auto builder = lease.builder();
 									builder.append( "WARN: Non-string value found in relation entry for VIS version " );
 									builder.append( tempVisVersion );
@@ -819,7 +819,7 @@ namespace dnv::vista::sdk
 						}
 						else
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "WARN: Non-array entry found in '" );
 							builder.append( constants::dto::GMOD_DTO_KEY_RELATIONS );
@@ -843,7 +843,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: No '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_RELATIONS );
@@ -865,7 +865,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: JSON exception during GmodDto parsing (hint: visRelease='" );
 			builder.append( visHint );
@@ -879,7 +879,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Standard exception during GmodDto parsing (hint: visRelease='" );
 			builder.append( visHint );
@@ -899,7 +899,7 @@ namespace dnv::vista::sdk
 		auto dtoOpt = GmodDto::tryFromJson( json );
 		if ( !dtoOpt.has_value() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Failed to deserialize GmodDto from JSON (hint: visRelease='" );
 			builder.append( visHint );
@@ -929,7 +929,7 @@ namespace dnv::vista::sdk
 		const auto visIt = j.find( constants::dto::GMOD_DTO_KEY_VIS_RELEASE );
 		if ( visIt == j.end() || !visIt->is_string() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "GMOD JSON missing required '" );
 			builder.append( constants::dto::GMOD_DTO_KEY_VIS_RELEASE );
@@ -941,7 +941,7 @@ namespace dnv::vista::sdk
 		const auto itemsIt = j.find( constants::dto::GMOD_DTO_KEY_ITEMS );
 		if ( itemsIt == j.end() || !itemsIt->is_array() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "GMOD JSON missing required '" );
 			builder.append( constants::dto::GMOD_DTO_KEY_ITEMS );
@@ -953,7 +953,7 @@ namespace dnv::vista::sdk
 		const auto relationsIt = j.find( constants::dto::GMOD_DTO_KEY_RELATIONS );
 		if ( relationsIt == j.end() || !relationsIt->is_array() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "GMOD JSON missing required '" );
 			builder.append( constants::dto::GMOD_DTO_KEY_RELATIONS );
@@ -980,7 +980,7 @@ namespace dnv::vista::sdk
 				}
 				else
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "ERROR: Failed to parse GMOD item in collection during from_json" );
 
@@ -1007,7 +1007,7 @@ namespace dnv::vista::sdk
 					}
 					catch ( const nlohmann::json::exception& ex )
 					{
-						auto lease = utils::StringBuilderPool::instance();
+						auto lease = internal::StringBuilderPool::instance();
 						auto builder = lease.builder();
 						builder.append( "ERROR: Failed to parse GMOD relation in collection during from_json: " );
 						builder.append( ex.what() );
@@ -1017,7 +1017,7 @@ namespace dnv::vista::sdk
 				}
 				else
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "ERROR: GMOD relation must be an array during from_json" );
 

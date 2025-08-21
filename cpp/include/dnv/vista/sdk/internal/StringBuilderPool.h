@@ -8,7 +8,7 @@
 
 #include "dnv/vista/sdk/config/Platform.h"
 
-namespace dnv::vista::sdk::utils
+namespace dnv::vista::sdk::internal
 {
 	namespace detail
 	{

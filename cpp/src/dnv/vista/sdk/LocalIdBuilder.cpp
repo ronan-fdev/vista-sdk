@@ -8,14 +8,14 @@
 #include "dnv/vista/sdk/LocalIdBuilder.h"
 
 #include "dnv/vista/sdk/constants/LocalIdConstants.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/CodebookName.h"
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/LocalId.h"
 #include "dnv/vista/sdk/LocalIdBuilder.h"
-#include "dnv/vista/sdk/LocalIdParsingErrorBuilder.h"
 #include "dnv/vista/sdk/ParsingErrors.h"
 #include "dnv/vista/sdk/VIS.h"
 
@@ -27,29 +27,29 @@ namespace dnv::vista::sdk
 		// Static lookup tables
 		//=====================================================================
 
-		inline static const std::unordered_map<std::string_view, LocalIdParsingState> prefixMap = {
-			{ constants::localId::META_QTY_SHORT, LocalIdParsingState::MetaQuantity },
-			{ constants::localId::META_QTY_LONG, LocalIdParsingState::MetaQuantity },
-			{ constants::localId::META_CNT_SHORT, LocalIdParsingState::MetaContent },
-			{ constants::localId::META_CNT_LONG, LocalIdParsingState::MetaContent },
-			{ constants::localId::META_CALC_SHORT, LocalIdParsingState::MetaCalculation },
-			{ constants::localId::META_CALC_LONG, LocalIdParsingState::MetaCalculation },
-			{ constants::localId::META_STATE_SHORT, LocalIdParsingState::MetaState },
-			{ constants::localId::META_STATE_LONG, LocalIdParsingState::MetaState },
-			{ constants::localId::META_CMD_SHORT, LocalIdParsingState::MetaCommand },
-			{ constants::localId::META_CMD_LONG, LocalIdParsingState::MetaCommand },
-			{ constants::localId::META_TYPE_SHORT, LocalIdParsingState::MetaType },
-			{ constants::localId::META_TYPE_LONG, LocalIdParsingState::MetaType },
-			{ constants::localId::META_POS_SHORT, LocalIdParsingState::MetaPosition },
-			{ constants::localId::META_POS_LONG, LocalIdParsingState::MetaPosition },
-			{ constants::localId::META_DETAIL_SHORT, LocalIdParsingState::MetaDetail },
-			{ constants::localId::META_DETAIL_LONG, LocalIdParsingState::MetaDetail } };
+		inline static const std::unordered_map<std::string_view, internal::LocalIdParsingState> prefixMap{
+			{ constants::localId::META_QTY_SHORT, internal::LocalIdParsingState::MetaQuantity },
+			{ constants::localId::META_QTY_LONG, internal::LocalIdParsingState::MetaQuantity },
+			{ constants::localId::META_CNT_SHORT, internal::LocalIdParsingState::MetaContent },
+			{ constants::localId::META_CNT_LONG, internal::LocalIdParsingState::MetaContent },
+			{ constants::localId::META_CALC_SHORT, internal::LocalIdParsingState::MetaCalculation },
+			{ constants::localId::META_CALC_LONG, internal::LocalIdParsingState::MetaCalculation },
+			{ constants::localId::META_STATE_SHORT, internal::LocalIdParsingState::MetaState },
+			{ constants::localId::META_STATE_LONG, internal::LocalIdParsingState::MetaState },
+			{ constants::localId::META_CMD_SHORT, internal::LocalIdParsingState::MetaCommand },
+			{ constants::localId::META_CMD_LONG, internal::LocalIdParsingState::MetaCommand },
+			{ constants::localId::META_TYPE_SHORT, internal::LocalIdParsingState::MetaType },
+			{ constants::localId::META_TYPE_LONG, internal::LocalIdParsingState::MetaType },
+			{ constants::localId::META_POS_SHORT, internal::LocalIdParsingState::MetaPosition },
+			{ constants::localId::META_POS_LONG, internal::LocalIdParsingState::MetaPosition },
+			{ constants::localId::META_DETAIL_SHORT, internal::LocalIdParsingState::MetaDetail },
+			{ constants::localId::META_DETAIL_LONG, internal::LocalIdParsingState::MetaDetail } };
 
 		//=====================================================================
 		// Static helper functions
 		//=====================================================================
 
-		std::pair<size_t, size_t> nextStateIndexes( std::string_view span, LocalIdParsingState state )
+		std::pair<size_t, size_t> nextStateIndexes( std::string_view span, internal::LocalIdParsingState state )
 		{
 			size_t customIndex = span.find( constants::localId::PREFIX_TILDE );
 			size_t endOfCustomIndex = ( customIndex != std::string_view::npos ) ? ( customIndex + constants::localId::PREFIX_TILDE.length() + 1 )
@@ -65,7 +65,7 @@ namespace dnv::vista::sdk
 
 			switch ( state )
 			{
-				case LocalIdParsingState::PrimaryItem:
+				case internal::LocalIdParsingState::PrimaryItem:
 				{
 					size_t secIndex = span.find( constants::localId::PATH_SEC );
 					size_t endOfSecIndex =
@@ -84,7 +84,7 @@ namespace dnv::vista::sdk
 
 					return { metaIndex, endOfMetaIndex };
 				}
-				case LocalIdParsingState::SecondaryItem:
+				case internal::LocalIdParsingState::SecondaryItem:
 				{
 					if ( isVerbose && customIndex != std::string_view::npos )
 					{
@@ -93,22 +93,22 @@ namespace dnv::vista::sdk
 
 					return { metaIndex, endOfMetaIndex };
 				}
-				case LocalIdParsingState::NamingRule:
-				case LocalIdParsingState::VisVersion:
-				case LocalIdParsingState::ItemDescription:
-				case LocalIdParsingState::MetaQuantity:
-				case LocalIdParsingState::MetaContent:
-				case LocalIdParsingState::MetaCalculation:
-				case LocalIdParsingState::MetaState:
-				case LocalIdParsingState::MetaCommand:
-				case LocalIdParsingState::MetaType:
-				case LocalIdParsingState::MetaPosition:
-				case LocalIdParsingState::MetaDetail:
-				case LocalIdParsingState::EmptyState:
-				case LocalIdParsingState::Formatting:
-				case LocalIdParsingState::Completeness:
-				case LocalIdParsingState::NamingEntity:
-				case LocalIdParsingState::IMONumber:
+				case internal::LocalIdParsingState::NamingRule:
+				case internal::LocalIdParsingState::VisVersion:
+				case internal::LocalIdParsingState::ItemDescription:
+				case internal::LocalIdParsingState::MetaQuantity:
+				case internal::LocalIdParsingState::MetaContent:
+				case internal::LocalIdParsingState::MetaCalculation:
+				case internal::LocalIdParsingState::MetaState:
+				case internal::LocalIdParsingState::MetaCommand:
+				case internal::LocalIdParsingState::MetaType:
+				case internal::LocalIdParsingState::MetaPosition:
+				case internal::LocalIdParsingState::MetaDetail:
+				case internal::LocalIdParsingState::EmptyState:
+				case internal::LocalIdParsingState::Formatting:
+				case internal::LocalIdParsingState::Completeness:
+				case internal::LocalIdParsingState::NamingEntity:
+				case internal::LocalIdParsingState::IMONumber:
 				default:
 				{
 					return { metaIndex, endOfMetaIndex };
@@ -458,7 +458,7 @@ namespace dnv::vista::sdk
 
 		if ( !succeeded )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Invalid metadata codebook name: " );
 			builder.append( CodebookNames::toPrefix( metadataTag.name() ) );
@@ -758,7 +758,7 @@ namespace dnv::vista::sdk
 
 		if ( !tryParse( localIdStr, errors, localId ) )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Couldn't parse local ID from: '" );
 			builder.append( localIdStr );
@@ -780,7 +780,7 @@ namespace dnv::vista::sdk
 	bool LocalIdBuilder::tryParse( std::string_view localIdStr, ParsingErrors& errors, std::optional<LocalIdBuilder>& localId )
 	{
 		localId = std::nullopt;
-		LocalIdParsingErrorBuilder errorBuilder = LocalIdParsingErrorBuilder::create();
+		auto errorBuilder = internal::LocalIdParsingErrorBuilder::create();
 		bool success = tryParseInternal( localIdStr, errorBuilder, localId );
 
 		errors = errorBuilder.build();
@@ -793,7 +793,7 @@ namespace dnv::vista::sdk
 	//----------------------------------------------
 
 	bool LocalIdBuilder::tryParseInternal(
-		std::string_view localIdStr, LocalIdParsingErrorBuilder& errorBuilder, std::optional<LocalIdBuilder>& localIdBuilder )
+		std::string_view localIdStr, internal::LocalIdParsingErrorBuilder& errorBuilder, std::optional<LocalIdBuilder>& localIdBuilder )
 	{
 		localIdBuilder = std::nullopt;
 
@@ -804,7 +804,7 @@ namespace dnv::vista::sdk
 
 		if ( localIdStr[0] != '/' )
 		{
-			errorBuilder.addError( LocalIdParsingState::Formatting, "Invalid format: missing '/' as first character" );
+			errorBuilder.addError( internal::LocalIdParsingState::Formatting, "Invalid format: missing '/' as first character" );
 
 			return false;
 		}
@@ -828,7 +828,7 @@ namespace dnv::vista::sdk
 		size_t primaryItemStart = std::numeric_limits<size_t>::max();
 		size_t secondaryItemStart = std::numeric_limits<size_t>::max();
 
-		LocalIdParsingState state = LocalIdParsingState::NamingRule;
+		auto state = internal::LocalIdParsingState::NamingRule;
 		size_t i = 1;
 
 		VIS& vis = VIS::instance();
@@ -836,7 +836,7 @@ namespace dnv::vista::sdk
 		const Gmod* gmod = nullptr;
 		const Codebooks* codebooks = nullptr;
 
-		while ( state <= LocalIdParsingState::MetaDetail )
+		while ( state <= internal::LocalIdParsingState::MetaDetail )
 		{
 			size_t nextStart = std::min( span.length(), i );
 			size_t nextSlashPos = span.substr( nextStart ).find( '/' );
@@ -845,18 +845,18 @@ namespace dnv::vista::sdk
 
 			switch ( state )
 			{
-				case LocalIdParsingState::NamingRule:
+				case internal::LocalIdParsingState::NamingRule:
 				{
 					if ( segment.empty() )
 					{
-						errorBuilder.addError( LocalIdParsingState::NamingRule, predefinedMessage );
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						errorBuilder.addError( internal::LocalIdParsingState::NamingRule, predefinedMessage );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
 					if ( segment != constants::localId::NAMING_RULE )
 					{
-						errorBuilder.addError( LocalIdParsingState::NamingRule, predefinedMessage );
+						errorBuilder.addError( internal::LocalIdParsingState::NamingRule, predefinedMessage );
 
 						return false;
 					}
@@ -864,18 +864,18 @@ namespace dnv::vista::sdk
 					advanceParser( i, segment, state );
 					break;
 				}
-				case LocalIdParsingState::VisVersion:
+				case internal::LocalIdParsingState::VisVersion:
 				{
 					if ( segment.empty() )
 					{
-						errorBuilder.addError( LocalIdParsingState::VisVersion, predefinedMessage );
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						errorBuilder.addError( internal::LocalIdParsingState::VisVersion, predefinedMessage );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
 					if ( !segment.starts_with( constants::localId::PREFIX_VIS ) )
 					{
-						errorBuilder.addError( LocalIdParsingState::VisVersion, predefinedMessage );
+						errorBuilder.addError( internal::LocalIdParsingState::VisVersion, predefinedMessage );
 
 						return false;
 					}
@@ -883,7 +883,7 @@ namespace dnv::vista::sdk
 					std::string_view versionStr = segment.substr( constants::localId::PREFIX_VIS.length() );
 					if ( !VisVersionExtensions::tryParse( versionStr, visVersion ) )
 					{
-						errorBuilder.addError( LocalIdParsingState::VisVersion, predefinedMessage );
+						errorBuilder.addError( internal::LocalIdParsingState::VisVersion, predefinedMessage );
 
 						return false;
 					}
@@ -899,7 +899,7 @@ namespace dnv::vista::sdk
 					advanceParser( i, segment, state );
 					break;
 				}
-				case LocalIdParsingState::PrimaryItem:
+				case internal::LocalIdParsingState::PrimaryItem:
 				{
 					if ( segment.empty() )
 					{
@@ -918,11 +918,11 @@ namespace dnv::vista::sdk
 							}
 							if ( !parsedPath )
 							{
-								auto lease = utils::StringBuilderPool::instance();
+								auto lease = internal::StringBuilderPool::instance();
 								auto builder = lease.builder();
 								builder.append( "Invalid GmodPath in Primary item: " );
 								builder.append( path );
-								errorBuilder.addError( LocalIdParsingState::PrimaryItem, lease.toString() );
+								errorBuilder.addError( internal::LocalIdParsingState::PrimaryItem, lease.toString() );
 							}
 							else
 							{
@@ -931,14 +931,14 @@ namespace dnv::vista::sdk
 						}
 						else
 						{
-							errorBuilder.addError( LocalIdParsingState::PrimaryItem );
+							errorBuilder.addError( internal::LocalIdParsingState::PrimaryItem );
 						}
 
 						errorBuilder.addError(
-							LocalIdParsingState::PrimaryItem,
+							internal::LocalIdParsingState::PrimaryItem,
 							"Invalid or missing '/meta' prefix after Primary item" );
 
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
@@ -955,11 +955,11 @@ namespace dnv::vista::sdk
 						const GmodNode* nodePtr = nullptr;
 						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "Invalid start GmodNode in Primary item: " );
 							builder.append( code );
-							errorBuilder.addError( LocalIdParsingState::PrimaryItem, lease.toString() );
+							errorBuilder.addError( internal::LocalIdParsingState::PrimaryItem, lease.toString() );
 						}
 
 						primaryItemStart = i;
@@ -967,19 +967,19 @@ namespace dnv::vista::sdk
 					}
 					else
 					{
-						LocalIdParsingState nextState = state;
+						internal::LocalIdParsingState nextState = state;
 
 						if ( segment.starts_with( constants::localId::PREFIX_SEC ) )
 						{
-							nextState = LocalIdParsingState::SecondaryItem;
+							nextState = internal::LocalIdParsingState::SecondaryItem;
 						}
 						else if ( segment.starts_with( constants::localId::PREFIX_META ) )
 						{
-							nextState = LocalIdParsingState::MetaQuantity;
+							nextState = internal::LocalIdParsingState::MetaQuantity;
 						}
 						else if ( !segment.empty() && segment[0] == constants::localId::CHAR_TILDE )
 						{
-							nextState = LocalIdParsingState::ItemDescription;
+							nextState = internal::LocalIdParsingState::ItemDescription;
 						}
 
 						if ( nextState != state )
@@ -992,11 +992,11 @@ namespace dnv::vista::sdk
 							}
 							if ( !parsedPath )
 							{
-								auto lease = utils::StringBuilderPool::instance();
+								auto lease = internal::StringBuilderPool::instance();
 								auto builder = lease.builder();
 								builder.append( "Invalid GmodPath in Primary item: " );
 								builder.append( path );
-								errorBuilder.addError( LocalIdParsingState::PrimaryItem, lease.toString() );
+								errorBuilder.addError( internal::LocalIdParsingState::PrimaryItem, lease.toString() );
 
 								auto [_, endOfNextStateIndex] = nextStateIndexes( span, state );
 								i = endOfNextStateIndex;
@@ -1022,18 +1022,18 @@ namespace dnv::vista::sdk
 						const GmodNode* nodePtr = nullptr;
 						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "Invalid GmodNode in Primary item: " );
 							builder.append( code );
-							errorBuilder.addError( LocalIdParsingState::PrimaryItem, lease.toString() );
+							errorBuilder.addError( internal::LocalIdParsingState::PrimaryItem, lease.toString() );
 
 							auto [nextStateIndex, endOfNextStateIndex] = nextStateIndexes( span, state );
 
 							if ( nextStateIndex == std::numeric_limits<size_t>::max() )
 							{
 								errorBuilder.addError(
-									LocalIdParsingState::PrimaryItem,
+									internal::LocalIdParsingState::PrimaryItem,
 									"Invalid or missing '/meta' prefix after Primary item" );
 
 								return false;
@@ -1043,23 +1043,23 @@ namespace dnv::vista::sdk
 
 							if ( nextSegment.starts_with( constants::localId::PREFIX_SEC ) )
 							{
-								nextState = LocalIdParsingState::SecondaryItem;
+								nextState = internal::LocalIdParsingState::SecondaryItem;
 							}
 							else if ( nextSegment.starts_with( constants::localId::PREFIX_META ) )
 							{
-								nextState = LocalIdParsingState::MetaQuantity;
+								nextState = internal::LocalIdParsingState::MetaQuantity;
 							}
 							else if ( !nextSegment.empty() && nextSegment[0] == constants::localId::CHAR_TILDE )
 							{
-								nextState = LocalIdParsingState::ItemDescription;
+								nextState = internal::LocalIdParsingState::ItemDescription;
 							}
 
 							std::string_view invalidPrimaryItemPath = span.substr( i, nextStateIndex - i );
-							auto lease2 = utils::StringBuilderPool::instance();
+							auto lease2 = internal::StringBuilderPool::instance();
 							auto builder2 = lease2.builder();
 							builder2.append( "Invalid GmodPath: Last part in Primary item: " );
 							builder2.append( invalidPrimaryItemPath );
-							errorBuilder.addError( LocalIdParsingState::PrimaryItem, lease2.toString() );
+							errorBuilder.addError( internal::LocalIdParsingState::PrimaryItem, lease2.toString() );
 
 							i = endOfNextStateIndex;
 							advanceParser( state, nextState );
@@ -1070,11 +1070,11 @@ namespace dnv::vista::sdk
 					}
 					break;
 				}
-				case LocalIdParsingState::SecondaryItem:
+				case internal::LocalIdParsingState::SecondaryItem:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
@@ -1092,11 +1092,11 @@ namespace dnv::vista::sdk
 						const GmodNode* nodePtr = nullptr;
 						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "Invalid start GmodNode in Secondary item: " );
 							builder.append( code );
-							errorBuilder.addError( LocalIdParsingState::SecondaryItem, lease.toString() );
+							errorBuilder.addError( internal::LocalIdParsingState::SecondaryItem, lease.toString() );
 						}
 
 						secondaryItemStart = i;
@@ -1104,15 +1104,15 @@ namespace dnv::vista::sdk
 					}
 					else
 					{
-						LocalIdParsingState nextState = state;
+						internal::LocalIdParsingState nextState = state;
 
 						if ( segment.starts_with( constants::localId::PREFIX_META ) )
 						{
-							nextState = LocalIdParsingState::MetaQuantity;
+							nextState = internal::LocalIdParsingState::MetaQuantity;
 						}
 						else if ( !segment.empty() && segment[0] == constants::localId::CHAR_TILDE )
 						{
-							nextState = LocalIdParsingState::ItemDescription;
+							nextState = internal::LocalIdParsingState::ItemDescription;
 						}
 
 						if ( nextState != state )
@@ -1126,11 +1126,11 @@ namespace dnv::vista::sdk
 							if ( !parsedPath )
 							{
 								invalidSecondaryItem = true;
-								auto lease = utils::StringBuilderPool::instance();
+								auto lease = internal::StringBuilderPool::instance();
 								auto builder = lease.builder();
 								builder.append( "Invalid GmodPath in Secondary item: " );
 								builder.append( path );
-								errorBuilder.addError( LocalIdParsingState::SecondaryItem, lease.toString() );
+								errorBuilder.addError( internal::LocalIdParsingState::SecondaryItem, lease.toString() );
 
 								auto [_, endOfNextStateIndex] = nextStateIndexes( span, state );
 								i = endOfNextStateIndex;
@@ -1158,16 +1158,16 @@ namespace dnv::vista::sdk
 						if ( !gmod->tryGetNode( code, nodePtr ) )
 						{
 							invalidSecondaryItem = true;
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "Invalid GmodNode in Secondary item: " );
 							builder.append( code );
-							errorBuilder.addError( LocalIdParsingState::SecondaryItem, lease.toString() );
+							errorBuilder.addError( internal::LocalIdParsingState::SecondaryItem, lease.toString() );
 
 							auto [nextStateIndex, endOfNextStateIndex] = nextStateIndexes( span, state );
 							if ( nextStateIndex == std::numeric_limits<size_t>::max() )
 							{
-								errorBuilder.addError( LocalIdParsingState::SecondaryItem, "Invalid or missing '/meta' prefix after Secondary item" );
+								errorBuilder.addError( internal::LocalIdParsingState::SecondaryItem, "Invalid or missing '/meta' prefix after Secondary item" );
 
 								return false;
 							}
@@ -1176,19 +1176,19 @@ namespace dnv::vista::sdk
 
 							if ( nextSegment.starts_with( constants::localId::PREFIX_META ) )
 							{
-								nextState = LocalIdParsingState::MetaQuantity;
+								nextState = internal::LocalIdParsingState::MetaQuantity;
 							}
 							else if ( !nextSegment.empty() && nextSegment[0] == constants::localId::CHAR_TILDE )
 							{
-								nextState = LocalIdParsingState::ItemDescription;
+								nextState = internal::LocalIdParsingState::ItemDescription;
 							}
 
 							std::string_view invalidSecondaryItemPath = span.substr( i, nextStateIndex - i );
-							auto lease2 = utils::StringBuilderPool::instance();
+							auto lease2 = internal::StringBuilderPool::instance();
 							auto builder2 = lease2.builder();
 							builder2.append( "Invalid GmodPath: Last part in Secondary item: " );
 							builder2.append( invalidSecondaryItemPath );
-							errorBuilder.addError( LocalIdParsingState::SecondaryItem, lease2.toString() );
+							errorBuilder.addError( internal::LocalIdParsingState::SecondaryItem, lease2.toString() );
 
 							i = endOfNextStateIndex;
 							advanceParser( state, nextState );
@@ -1199,11 +1199,11 @@ namespace dnv::vista::sdk
 					}
 					break;
 				}
-				case LocalIdParsingState::ItemDescription:
+				case internal::LocalIdParsingState::ItemDescription:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 
 						break;
 					}
@@ -1213,7 +1213,7 @@ namespace dnv::vista::sdk
 					size_t metaIndex = span.find( constants::localId::PATH_META );
 					if ( metaIndex == std::string_view::npos )
 					{
-						errorBuilder.addError( LocalIdParsingState::ItemDescription, predefinedMessage );
+						errorBuilder.addError( internal::LocalIdParsingState::ItemDescription, predefinedMessage );
 
 						return false;
 					}
@@ -1223,11 +1223,11 @@ namespace dnv::vista::sdk
 					advanceParser( i, segment, state );
 					break;
 				}
-				case LocalIdParsingState::MetaQuantity:
+				case internal::LocalIdParsingState::MetaQuantity:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 
 						break;
 					}
@@ -1240,11 +1240,11 @@ namespace dnv::vista::sdk
 
 					break;
 				}
-				case LocalIdParsingState::MetaContent:
+				case internal::LocalIdParsingState::MetaContent:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 
 						break;
 					}
@@ -1257,11 +1257,11 @@ namespace dnv::vista::sdk
 
 					break;
 				}
-				case LocalIdParsingState::MetaCalculation:
+				case internal::LocalIdParsingState::MetaCalculation:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 
 						break;
 					}
@@ -1274,11 +1274,11 @@ namespace dnv::vista::sdk
 
 					break;
 				}
-				case LocalIdParsingState::MetaState:
+				case internal::LocalIdParsingState::MetaState:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 
 						break;
 					}
@@ -1291,11 +1291,11 @@ namespace dnv::vista::sdk
 
 					break;
 				}
-				case LocalIdParsingState::MetaCommand:
+				case internal::LocalIdParsingState::MetaCommand:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
@@ -1307,11 +1307,11 @@ namespace dnv::vista::sdk
 
 					break;
 				}
-				case LocalIdParsingState::MetaType:
+				case internal::LocalIdParsingState::MetaType:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 
 						break;
 					}
@@ -1324,11 +1324,11 @@ namespace dnv::vista::sdk
 
 					break;
 				}
-				case LocalIdParsingState::MetaPosition:
+				case internal::LocalIdParsingState::MetaPosition:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
@@ -1339,11 +1339,11 @@ namespace dnv::vista::sdk
 					}
 					break;
 				}
-				case LocalIdParsingState::MetaDetail:
+				case internal::LocalIdParsingState::MetaDetail:
 				{
 					if ( segment.empty() )
 					{
-						state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+						state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 						break;
 					}
 
@@ -1354,11 +1354,11 @@ namespace dnv::vista::sdk
 					}
 					break;
 				}
-				case LocalIdParsingState::EmptyState:
-				case LocalIdParsingState::Formatting:
-				case LocalIdParsingState::Completeness:
-				case LocalIdParsingState::NamingEntity:
-				case LocalIdParsingState::IMONumber:
+				case internal::LocalIdParsingState::EmptyState:
+				case internal::LocalIdParsingState::Formatting:
+				case internal::LocalIdParsingState::Completeness:
+				case internal::LocalIdParsingState::NamingEntity:
+				case internal::LocalIdParsingState::IMONumber:
 				default:
 				{
 					advanceParser( i, segment, state );
@@ -1367,7 +1367,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		LocalIdBuilder builder = LocalIdBuilder::create( visVersion );
+		auto builder = LocalIdBuilder::create( visVersion );
 
 		if ( primaryItem.has_value() )
 		{
@@ -1422,7 +1422,7 @@ namespace dnv::vista::sdk
 			 !pos.has_value() &&
 			 !detail.has_value() )
 		{
-			errorBuilder.addError( LocalIdParsingState::Completeness, "No metadata tags specified. Local IDs require atleast 1 metadata tag." );
+			errorBuilder.addError( internal::LocalIdParsingState::Completeness, "No metadata tags specified. Local IDs require atleast 1 metadata tag." );
 		}
 
 		localIdBuilder = std::move( builder );
@@ -1430,9 +1430,9 @@ namespace dnv::vista::sdk
 		return ( !errorBuilder.hasError() && !invalidSecondaryItem );
 	}
 
-	void LocalIdBuilder::advanceParser( size_t& i, std::string_view segment, LocalIdParsingState& state )
+	void LocalIdBuilder::advanceParser( size_t& i, std::string_view segment, internal::LocalIdParsingState& state )
 	{
-		state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+		state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 		i += segment.length() + 1;
 	}
 
@@ -1441,69 +1441,69 @@ namespace dnv::vista::sdk
 		i += segment.length() + 1;
 	}
 
-	void LocalIdBuilder::advanceParser( LocalIdParsingState& state, LocalIdParsingState to )
+	void LocalIdBuilder::advanceParser( internal::LocalIdParsingState& state, internal::LocalIdParsingState to )
 	{
 		state = to;
 	}
 
-	void LocalIdBuilder::advanceParser( size_t& i, std::string_view segment, LocalIdParsingState& state, LocalIdParsingState to )
+	void LocalIdBuilder::advanceParser( size_t& i, std::string_view segment, internal::LocalIdParsingState& state, internal::LocalIdParsingState to )
 	{
 		i += segment.length() + 1;
 		state = to;
 	}
 
-	std::optional<LocalIdParsingState> LocalIdBuilder::metaPrefixToState( std::string_view prefix )
+	std::optional<internal::LocalIdParsingState> LocalIdBuilder::metaPrefixToState( std::string_view prefix )
 	{
 		auto it = prefixMap.find( prefix );
 		return ( it != prefixMap.end() ) ? std::make_optional( it->second ) : std::nullopt;
 	}
 
-	std::optional<LocalIdParsingState> LocalIdBuilder::nextParsingState( LocalIdParsingState prev )
+	std::optional<internal::LocalIdParsingState> LocalIdBuilder::nextParsingState( internal::LocalIdParsingState prev )
 	{
 		switch ( prev )
 		{
-			case LocalIdParsingState::MetaQuantity:
+			case internal::LocalIdParsingState::MetaQuantity:
 			{
-				return LocalIdParsingState::MetaContent;
+				return internal::LocalIdParsingState::MetaContent;
 			}
-			case LocalIdParsingState::MetaContent:
+			case internal::LocalIdParsingState::MetaContent:
 			{
-				return LocalIdParsingState::MetaCalculation;
+				return internal::LocalIdParsingState::MetaCalculation;
 			}
-			case LocalIdParsingState::MetaCalculation:
+			case internal::LocalIdParsingState::MetaCalculation:
 			{
-				return LocalIdParsingState::MetaState;
+				return internal::LocalIdParsingState::MetaState;
 			}
-			case LocalIdParsingState::MetaState:
+			case internal::LocalIdParsingState::MetaState:
 			{
-				return LocalIdParsingState::MetaCommand;
+				return internal::LocalIdParsingState::MetaCommand;
 			}
-			case LocalIdParsingState::MetaCommand:
+			case internal::LocalIdParsingState::MetaCommand:
 			{
-				return LocalIdParsingState::MetaType;
+				return internal::LocalIdParsingState::MetaType;
 			}
-			case LocalIdParsingState::MetaType:
+			case internal::LocalIdParsingState::MetaType:
 			{
-				return LocalIdParsingState::MetaPosition;
+				return internal::LocalIdParsingState::MetaPosition;
 			}
-			case LocalIdParsingState::MetaPosition:
+			case internal::LocalIdParsingState::MetaPosition:
 			{
-				return LocalIdParsingState::MetaDetail;
+				return internal::LocalIdParsingState::MetaDetail;
 			}
-			case LocalIdParsingState::MetaDetail:
+			case internal::LocalIdParsingState::MetaDetail:
 			{
 				return std::nullopt;
 			}
-			case LocalIdParsingState::NamingRule:
-			case LocalIdParsingState::VisVersion:
-			case LocalIdParsingState::PrimaryItem:
-			case LocalIdParsingState::SecondaryItem:
-			case LocalIdParsingState::ItemDescription:
-			case LocalIdParsingState::EmptyState:
-			case LocalIdParsingState::Formatting:
-			case LocalIdParsingState::Completeness:
-			case LocalIdParsingState::NamingEntity:
-			case LocalIdParsingState::IMONumber:
+			case internal::LocalIdParsingState::NamingRule:
+			case internal::LocalIdParsingState::VisVersion:
+			case internal::LocalIdParsingState::PrimaryItem:
+			case internal::LocalIdParsingState::SecondaryItem:
+			case internal::LocalIdParsingState::ItemDescription:
+			case internal::LocalIdParsingState::EmptyState:
+			case internal::LocalIdParsingState::Formatting:
+			case internal::LocalIdParsingState::Completeness:
+			case internal::LocalIdParsingState::NamingEntity:
+			case internal::LocalIdParsingState::IMONumber:
 			default:
 			{
 				return std::nullopt;
@@ -1512,8 +1512,8 @@ namespace dnv::vista::sdk
 	}
 
 	bool LocalIdBuilder::parseMetaTag(
-		CodebookName codebookName, LocalIdParsingState& state, size_t& i, std::string_view segment,
-		std::optional<MetadataTag>& tag, const Codebooks* codebooks, LocalIdParsingErrorBuilder& errorBuilder )
+		CodebookName codebookName, internal::LocalIdParsingState& state, size_t& i, std::string_view segment,
+		std::optional<MetadataTag>& tag, const Codebooks* codebooks, internal::LocalIdParsingErrorBuilder& errorBuilder )
 	{
 		if ( !codebooks )
 		{
@@ -1526,7 +1526,7 @@ namespace dnv::vista::sdk
 
 		if ( prefixIndex == std::string_view::npos )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 
 			builder.append( "Invalid metadata tag: missing prefix '" );
@@ -1547,7 +1547,7 @@ namespace dnv::vista::sdk
 		auto actualState = metaPrefixToState( actualPrefix );
 		if ( !actualState.has_value() || actualState.value() < state )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Invalid metadata tag: unknown prefix " );
 			builder.append( actualPrefix );
@@ -1578,7 +1578,7 @@ namespace dnv::vista::sdk
 		if ( !tag.has_value() )
 		{
 			auto codebookStr = codebookNametoString( codebookName );
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 
 			if ( prefixIndex == tildeIndex )
@@ -1606,7 +1606,7 @@ namespace dnv::vista::sdk
 		if ( prefixIndex == dashIndex && tag.value().prefix() == constants::localId::CHAR_TILDE )
 		{
 			auto codebookStr = codebookNametoString( codebookName );
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Invalid " );
 			builder.append( codebookStr );

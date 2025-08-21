@@ -3,11 +3,11 @@
 #include "dnv/vista/sdk/UniversalIdBuilder.h"
 
 #include "dnv/vista/sdk/constants/UniversalIdConstants.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/ImoNumber.h"
 #include "dnv/vista/sdk/LocalIdBuilder.h"
-#include "dnv/vista/sdk/LocalIdParsingErrorBuilder.h"
 #include "dnv/vista/sdk/ParsingErrors.h"
 #include "dnv/vista/sdk/UniversalId.h"
 #include "dnv/vista/sdk/VISVersion.h"
@@ -49,7 +49,7 @@ namespace dnv::vista::sdk
 			throw std::invalid_argument( "Invalid Universal Id state: Missing LocalId" );
 		}
 
-		auto lease = utils::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::instance();
 		auto builder = lease.builder();
 
 		builder.append( constants::universalId::NAMING_ENTITY );
@@ -192,11 +192,11 @@ namespace dnv::vista::sdk
 	bool UniversalIdBuilder::tryParse( std::string_view universalId, ParsingErrors& errors, std::optional<UniversalIdBuilder>& universalIdBuilder )
 	{
 		universalIdBuilder = std::nullopt;
-		auto errorBuilder = LocalIdParsingErrorBuilder::create();
+		auto errorBuilder = internal::LocalIdParsingErrorBuilder::create();
 
 		if ( universalId.empty() )
 		{
-			errorBuilder.addError( LocalIdParsingState::NamingRule, std::string{ "Failed to find localId start segment" } );
+			errorBuilder.addError( internal::LocalIdParsingState::NamingRule, std::string{ "Failed to find localId start segment" } );
 			errors = errorBuilder.build();
 			return false;
 		}
@@ -204,7 +204,7 @@ namespace dnv::vista::sdk
 		auto localIdStartIndex = universalId.find( "/dnv-v" );
 		if ( localIdStartIndex == std::string::npos )
 		{
-			errorBuilder.addError( LocalIdParsingState::NamingRule, std::string{ "Failed to find localId start segment" } );
+			errorBuilder.addError( internal::LocalIdParsingState::NamingRule, std::string{ "Failed to find localId start segment" } );
 			errors = errorBuilder.build();
 			return false;
 		}
@@ -219,17 +219,20 @@ namespace dnv::vista::sdk
 		if ( !LocalIdBuilder::tryParse( localIdSegment, localIdErrors, localIdBuilder ) )
 		{
 			errors = errorBuilder.build();
+
 			return false;
 		}
 
 		std::string_view span = universalIdSegment;
-		LocalIdParsingState state = LocalIdParsingState::NamingEntity;
+		auto state = internal::LocalIdParsingState::NamingEntity;
 		size_t i = 0;
 
-		while ( state <= LocalIdParsingState::IMONumber )
+		while ( state <= internal::LocalIdParsingState::IMONumber )
 		{
 			if ( i >= span.length() )
+			{
 				break;
+			}
 
 			auto nextSlash = span.substr( i ).find( '/' );
 			std::string_view segment = ( nextSlash == std::string_view::npos ) ? span.substr( i )
@@ -237,26 +240,26 @@ namespace dnv::vista::sdk
 
 			switch ( state )
 			{
-				case LocalIdParsingState::NamingRule:
-				case LocalIdParsingState::VisVersion:
-				case LocalIdParsingState::PrimaryItem:
-				case LocalIdParsingState::SecondaryItem:
-				case LocalIdParsingState::ItemDescription:
-				case LocalIdParsingState::MetaQuantity:
-				case LocalIdParsingState::MetaContent:
-				case LocalIdParsingState::MetaCalculation:
-				case LocalIdParsingState::MetaState:
-				case LocalIdParsingState::MetaCommand:
-				case LocalIdParsingState::MetaType:
-				case LocalIdParsingState::MetaPosition:
-				case LocalIdParsingState::MetaDetail:
-				case LocalIdParsingState::EmptyState:
-				case LocalIdParsingState::Formatting:
-				case LocalIdParsingState::Completeness:
+				case internal::LocalIdParsingState::NamingRule:
+				case internal::LocalIdParsingState::VisVersion:
+				case internal::LocalIdParsingState::PrimaryItem:
+				case internal::LocalIdParsingState::SecondaryItem:
+				case internal::LocalIdParsingState::ItemDescription:
+				case internal::LocalIdParsingState::MetaQuantity:
+				case internal::LocalIdParsingState::MetaContent:
+				case internal::LocalIdParsingState::MetaCalculation:
+				case internal::LocalIdParsingState::MetaState:
+				case internal::LocalIdParsingState::MetaCommand:
+				case internal::LocalIdParsingState::MetaType:
+				case internal::LocalIdParsingState::MetaPosition:
+				case internal::LocalIdParsingState::MetaDetail:
+				case internal::LocalIdParsingState::EmptyState:
+				case internal::LocalIdParsingState::Formatting:
+				case internal::LocalIdParsingState::Completeness:
 				{
 					break;
 				}
-				case LocalIdParsingState::NamingEntity:
+				case internal::LocalIdParsingState::NamingEntity:
 				{
 					if ( segment != constants::universalId::NAMING_ENTITY )
 					{
@@ -267,7 +270,7 @@ namespace dnv::vista::sdk
 					}
 					break;
 				}
-				case LocalIdParsingState::IMONumber:
+				case internal::LocalIdParsingState::IMONumber:
 				{
 					auto imoResult = ImoNumber::tryParse( segment );
 					if ( !imoResult.has_value() )
@@ -282,14 +285,14 @@ namespace dnv::vista::sdk
 				}
 				break;
 			}
-			state = static_cast<LocalIdParsingState>( static_cast<int>( state ) + 1 );
+			state = static_cast<internal::LocalIdParsingState>( static_cast<int>( state ) + 1 );
 			i += segment.length() + 1;
 		}
 
 		auto visVersion = localIdBuilder->visVersion();
 		if ( !visVersion.has_value() )
 		{
-			errorBuilder.addError( LocalIdParsingState::VisVersion );
+			errorBuilder.addError( internal::LocalIdParsingState::VisVersion );
 			errors = errorBuilder.build();
 			return false;
 		}

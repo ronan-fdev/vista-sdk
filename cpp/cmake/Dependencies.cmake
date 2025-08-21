@@ -115,16 +115,11 @@ endif()
 
 message(STATUS "Fetching dependencies...")
 
-set(SAVED_SKIP_INSTALL_RULES "${CMAKE_SKIP_INSTALL_RULES}")
-set(CMAKE_SKIP_INSTALL_RULES ON)
-
 FetchContent_MakeAvailable(
 	nlohmann_json
 	zlib-ng
 	fmt
 )
-
-set(CMAKE_SKIP_INSTALL_RULES "${SAVED_SKIP_INSTALL_RULES}")
 
 if(VISTA_SDK_CPP_BUILD_TESTS)
 	FetchContent_MakeAvailable(
@@ -137,7 +132,6 @@ if(VISTA_SDK_CPP_BUILD_BENCHMARKS)
 		googlebenchmark
 	)
 endif()
-
 
 #----------------------------------------------
 # Target configuration and version extraction

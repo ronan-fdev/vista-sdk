@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "utils/StringBuilderPool.h"
+#include "internal/StringBuilderPool.h"
 #include "utils/StringMap.h"
 
 #include "GmodDto.h"
@@ -499,7 +499,7 @@ namespace dnv::vista::sdk
 		 * @brief Appends the node's string representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toString( utils::StringBuilderWrapper& builder ) const noexcept;
+		inline void toString( internal::StringBuilderWrapper& builder ) const noexcept;
 
 	private:
 		//----------------------------------------------

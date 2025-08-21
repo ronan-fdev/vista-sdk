@@ -8,7 +8,7 @@
 #include "dnv/vista/sdk/LocationBuilder.h"
 
 #include "dnv/vista/sdk/constants/LocationsConstants.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/Exceptions.h"
 #include "dnv/vista/sdk/Locations.h"
@@ -36,7 +36,7 @@ namespace dnv::vista::sdk
 
 	std::string LocationBuilder::toString() const
 	{
-		auto lease = utils::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::instance();
 		auto builder = lease.builder();
 
 		if ( m_number.has_value() )

@@ -3,9 +3,7 @@
  * @brief Implementation of the LocationParsingErrorBuilder class.
  */
 
-#include "pch.h"
-
-#include "dnv/vista/sdk/LocationParsingErrorBuilder.h"
+#include "dnv/vista/sdk/internal/LocationParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/ParsingErrors.h"
 

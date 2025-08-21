@@ -7,12 +7,13 @@
 
 #include "TestDataLoader.h"
 
+#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/ImoNumber.h"
 
 #include "dnv/vista/sdk/LocalIdBuilder.h"
-#include "dnv/vista/sdk/LocalIdParsingErrorBuilder.h"
 #include "dnv/vista/sdk/Locations.h"
 #include "dnv/vista/sdk/ParsingErrors.h"
 #include "dnv/vista/sdk/UniversalId.h"
@@ -26,7 +27,7 @@ namespace dnv::vista::sdk::tests::test
 	// Test Data
 	//----------------------------------------------
 
-	static const std::vector<std::string> testData = { "data.dnv.com/IMO1234567/dnv-v2/vis-3-4a/621.21/S90/sec/411.1/C101/meta/qty-mass/cnt-fuel.oil/pos-inlet",
+	static const std::vector<std::string> testData{ "data.dnv.com/IMO1234567/dnv-v2/vis-3-4a/621.21/S90/sec/411.1/C101/meta/qty-mass/cnt-fuel.oil/pos-inlet",
 		"data.dnv.com/IMO1234567/dnv-v2/vis-3-7a/612.21/C701.23/C633/meta/calc~accumulate" };
 
 	//----------------------------------------------

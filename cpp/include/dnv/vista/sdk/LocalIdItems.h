@@ -4,7 +4,7 @@
  */
 #pragma once
 
-#include "utils/StringBuilderPool.h"
+#include "internal/StringBuilderPool.h"
 
 #include "GmodPath.h"
 
@@ -134,7 +134,7 @@ namespace dnv::vista::sdk
 		// Public methods
 		//----------------------------------------------
 
-		inline void append( utils::StringBuilderWrapper& builder, bool verboseMode ) const;
+		inline void append( internal::StringBuilderWrapper& builder, bool verboseMode ) const;
 
 	private:
 		//----------------------------------------------
@@ -142,7 +142,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		inline static void appendCommonName(
-			utils::StringBuilderWrapper& builder,
+			internal::StringBuilderWrapper& builder,
 			std::string_view commonName,
 			const std::optional<std::string>& location );
 

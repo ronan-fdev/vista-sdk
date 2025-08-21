@@ -8,7 +8,7 @@
 #include "config/Platform.h"
 #include "constants/AlgorithmConstants.h"
 #include "constants/LocalIdConstants.h"
-#include "utils/StringBuilderPool.h"
+#include "internal/StringBuilderPool.h"
 
 #include "CodebookName.h"
 
@@ -266,7 +266,7 @@ namespace dnv::vista::sdk
 	inline std::string LocalIdBuilder::toString() const
 	{
 		/* LocalId format: /dnv-v2/vis-{version}/{primary-item}[/sec/{secondary-item}][~{description}]/meta/{metadata-tags} */
-		auto lease = utils::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::instance();
 		auto builder = lease.builder();
 
 		toString( builder );

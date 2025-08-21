@@ -3,13 +3,11 @@
  * @brief Implementation of the LocalIdParsingErrorBuilder class.
  */
 
-#include "pch.h"
-
-#include "dnv/vista/sdk/LocalIdParsingErrorBuilder.h"
+#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/ParsingErrors.h"
 
-namespace dnv::vista::sdk
+namespace dnv::vista::sdk::internal
 {
 	namespace
 	{

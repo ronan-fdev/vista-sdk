@@ -10,7 +10,7 @@
 #include "GmodNode.h"
 
 #include "config/Platform.h"
-#include "utils/StringBuilderPool.h"
+#include "internal/StringBuilderPool.h"
 
 namespace dnv::vista::sdk
 {
@@ -28,29 +28,12 @@ namespace dnv::vista::sdk
 	enum class TraversalHandlerResult;
 	enum class VisVersion;
 
-	namespace internal
-	{
-		struct ParseContext;
-
-		dnv::vista::sdk::TraversalHandlerResult parseInternalTraversalHandler(
-			ParseContext& context, const std::vector<const GmodNode*>& traversedParents, const GmodNode& currentNode );
-	}
-
 	//=====================================================================
 	// GmodPath class
 	//=====================================================================
 
 	class GmodPath final
 	{
-		//----------------------------------------------
-		// Forward declarations
-		//----------------------------------------------
-
-		friend class GmodIndividualizableSet;
-
-		friend dnv::vista::sdk::TraversalHandlerResult internal::parseInternalTraversalHandler(
-			internal::ParseContext&, const std::vector<const GmodNode*>&, const GmodNode& );
-
 	public:
 		class Enumerator;
 
@@ -181,7 +164,7 @@ namespace dnv::vista::sdk
 		 * @param builder The StringBuilder to write to.
 		 * @param separator Character to use between path segments (default: '/').
 		 */
-		inline void toString( utils::StringBuilderWrapper& builder, char separator = '/' ) const;
+		inline void toString( internal::StringBuilderWrapper& builder, char separator = '/' ) const;
 
 		/**
 		 * @brief Converts the path to full hierarchical string representation
@@ -193,7 +176,7 @@ namespace dnv::vista::sdk
 		 * @brief Writes the path's full hierarchical string representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toFullPathString( utils::StringBuilderWrapper& builder ) const;
+		inline void toFullPathString( internal::StringBuilderWrapper& builder ) const;
 
 		/**
 		 * @brief Creates detailed debug representation of the path
@@ -205,7 +188,7 @@ namespace dnv::vista::sdk
 		 * @brief Writes the path's detailed debug representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toStringDump( utils::StringBuilderWrapper& builder ) const;
+		inline void toStringDump( internal::StringBuilderWrapper& builder ) const;
 
 		//----------------------------------------------
 		// Path manipulation methods

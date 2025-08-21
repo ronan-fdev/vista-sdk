@@ -20,12 +20,17 @@ namespace dnv::vista::sdk
 
 	class Codebooks;
 	class LocalId;
-	class LocalIdParsingErrorBuilder;
 	class ParsingErrors;
 
 	enum class CodebookName;
-	enum class LocalIdParsingState;
 	enum class VisVersion;
+
+	namespace internal
+	{
+		class LocalIdParsingErrorBuilder;
+		class LocationParsingErrorBuilder;
+		enum class LocalIdParsingState;
+	}
 
 	//=====================================================================
 	// LocalIdBuilder class
@@ -701,7 +706,7 @@ namespace dnv::vista::sdk
 		 * @return True if parsing succeeded (potentially with non-critical errors recorded), false if a critical error occurred.
 		 */
 		[[nodiscard]] static bool tryParseInternal(
-			std::string_view localIdStr, LocalIdParsingErrorBuilder& errorBuilder, std::optional<LocalIdBuilder>& localIdBuilder );
+			std::string_view localIdStr, internal::LocalIdParsingErrorBuilder& errorBuilder, std::optional<LocalIdBuilder>& localIdBuilder );
 
 		/**
 		 * @brief Advances the parsing index `i` past the current `segment` and the following separator '/'.
@@ -716,7 +721,7 @@ namespace dnv::vista::sdk
 		 * @param[in] segment The segment just processed.
 		 * @param[in,out] state The current parsing state (will be updated based on standard progression).
 		 */
-		static void advanceParser( size_t& i, std::string_view segment, LocalIdParsingState& state );
+		static void advanceParser( size_t& i, std::string_view segment, internal::LocalIdParsingState& state );
 
 		/**
 		 * @brief Advances the parsing index `i` and explicitly sets the parsing `state` to `to`.
@@ -725,14 +730,14 @@ namespace dnv::vista::sdk
 		 * @param[in,out] state The current parsing state (will be set to `to`).
 		 * @param[in] to The target `LocalIdParsingState` to transition to.
 		 */
-		static void advanceParser( size_t& i, std::string_view segment, LocalIdParsingState& state, LocalIdParsingState to );
+		static void advanceParser( size_t& i, std::string_view segment, internal::LocalIdParsingState& state, internal::LocalIdParsingState to );
 
 		/**
 		 * @brief Explicitly sets the parsing `state` to `to`.
 		 * @param[in,out] state The current parsing state (will be set to `to`).
 		 * @param[in] to The target `LocalIdParsingState` to transition to.
 		 */
-		static void advanceParser( LocalIdParsingState& state, LocalIdParsingState to );
+		static void advanceParser( internal::LocalIdParsingState& state, internal::LocalIdParsingState to );
 
 		/**
 		 * @brief Converts a metadata prefix string (e.g., "q", "qty") to its corresponding `LocalIdParsingState`.
@@ -740,7 +745,7 @@ namespace dnv::vista::sdk
 		 * @return An `std::optional<LocalIdParsingState>` containing the state if the prefix is recognized,
 		 *         or `std::nullopt` otherwise.
 		 */
-		static std::optional<LocalIdParsingState> metaPrefixToState( std::string_view prefix );
+		static std::optional<internal::LocalIdParsingState> metaPrefixToState( std::string_view prefix );
 
 		/**
 		 * @brief Determines the expected next parsing state in the standard metadata sequence.
@@ -748,7 +753,7 @@ namespace dnv::vista::sdk
 		 * @return An `std::optional<LocalIdParsingState>` containing the next expected state,
 		 *         or `std::nullopt` if `prev` is the last state in the sequence (e.g., MetaDetail).
 		 */
-		static std::optional<LocalIdParsingState> nextParsingState( LocalIdParsingState prev );
+		static std::optional<internal::LocalIdParsingState> nextParsingState( internal::LocalIdParsingState prev );
 
 		/**
 		 * @brief Parses a single metadata tag segment (e.g., "q-value" or "qty-value").
@@ -761,8 +766,8 @@ namespace dnv::vista::sdk
 		 * @param[in,out] errorBuilder Used to record errors encountered during parsing.
 		 * @return True if the segment was successfully parsed as the expected tag, false otherwise.
 		 */
-		static bool parseMetaTag( CodebookName codebookName, LocalIdParsingState& state, size_t& i, std::string_view segment, std::optional<MetadataTag>& tag,
-			const Codebooks* codebooks, LocalIdParsingErrorBuilder& errorBuilder );
+		static bool parseMetaTag( CodebookName codebookName, internal::LocalIdParsingState& state, size_t& i, std::string_view segment, std::optional<MetadataTag>& tag,
+			const Codebooks* codebooks, internal::LocalIdParsingErrorBuilder& errorBuilder );
 
 	private:
 		//----------------------------------------------

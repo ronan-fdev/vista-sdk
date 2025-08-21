@@ -8,7 +8,7 @@
 #include "dnv/vista/sdk/CodebooksDto.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 namespace dnv::vista::sdk
 {
@@ -76,7 +76,7 @@ namespace dnv::vista::sdk
 			const auto nameIt = json.find( constants::dto::CODEBOOK_DTO_KEY_NAME );
 			if ( nameIt == json.end() || !nameIt->is_string() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "ERROR: Codebook JSON missing required '" );
 				builder.append( constants::dto::CODEBOOK_DTO_KEY_NAME );
@@ -96,7 +96,7 @@ namespace dnv::vista::sdk
 			{
 				if ( !valuesIt->is_object() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: No '" );
 					builder.append( constants::dto::CODEBOOK_DTO_KEY_VALUES );
@@ -116,7 +116,7 @@ namespace dnv::vista::sdk
 					{
 						if ( !groupValueJson.is_array() )
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "WARN: Group '" );
 							builder.append( std::string_view{ groupName } );
@@ -139,7 +139,7 @@ namespace dnv::vista::sdk
 						}
 						catch ( const nlohmann::json::exception& ex )
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "WARN: Error parsing values for group '" );
 							builder.append( std::string_view{ groupName } );
@@ -156,7 +156,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: No '" );
 				builder.append( constants::dto::CODEBOOK_DTO_KEY_VALUES );
@@ -174,7 +174,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: JSON exception during CodebookDto parsing (hint: name='" );
 			builder.append( nameHint );
@@ -188,7 +188,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Standard exception during CodebookDto parsing (hint: name='" );
 			builder.append( nameHint );
@@ -208,7 +208,7 @@ namespace dnv::vista::sdk
 		auto dtoOpt = CodebookDto::tryFromJson( json );
 		if ( !dtoOpt.has_value() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Failed to deserialize CodebookDto from JSON (hint: name='" );
 			builder.append( nameHint );
@@ -238,7 +238,7 @@ namespace dnv::vista::sdk
 		const auto nameIt = j.find( constants::dto::CODEBOOK_DTO_KEY_NAME );
 		if ( nameIt == j.end() || !nameIt->is_string() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "CodebookDto JSON missing required '" );
 			builder.append( constants::dto::CODEBOOK_DTO_KEY_NAME );
@@ -251,7 +251,7 @@ namespace dnv::vista::sdk
 		std::string tempName = nameIt->get<std::string>();
 		if ( tempName.empty() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "WARN: Empty name field found in CodebookDto\n" );
 
@@ -293,7 +293,7 @@ namespace dnv::vista::sdk
 			const auto visIt = json.find( constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE );
 			if ( visIt == json.end() || !visIt->is_string() )
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "ERROR: Codebooks JSON missing required '" );
 				builder.append( constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE );
@@ -315,7 +315,7 @@ namespace dnv::vista::sdk
 			{
 				if ( !itemsIt->is_array() )
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "WARN: '" );
 					builder.append( constants::dto::CODEBOOK_DTO_KEY_ITEMS );
@@ -343,7 +343,7 @@ namespace dnv::vista::sdk
 						}
 						else
 						{
-							auto lease = utils::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::instance();
 							auto builder = lease.builder();
 							builder.append( "WARN: Skipping invalid codebook item during CodebooksDto parsing for VIS version " );
 							builder.append( std::string_view{ tempVisVersion } );
@@ -365,7 +365,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = utils::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::instance();
 				auto builder = lease.builder();
 				builder.append( "WARN: No '" );
 				builder.append( constants::dto::CODEBOOK_DTO_KEY_ITEMS );
@@ -383,7 +383,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: JSON exception during CodebooksDto parsing (hint: visRelease='" );
 			builder.append( visHint );
@@ -397,7 +397,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Standard exception during CodebooksDto parsing (hint: visRelease='" );
 			builder.append( visHint );
@@ -417,7 +417,7 @@ namespace dnv::vista::sdk
 		auto dtoOpt = CodebooksDto::tryFromJson( json );
 		if ( !dtoOpt.has_value() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Failed to deserialize CodebooksDto from JSON (hint: visRelease='" );
 			builder.append( visHint );
@@ -447,7 +447,7 @@ namespace dnv::vista::sdk
 		const auto visIt = j.find( constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE );
 		if ( visIt == j.end() || !visIt->is_string() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Codebooks JSON missing required '" );
 			builder.append( constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE );
@@ -459,7 +459,7 @@ namespace dnv::vista::sdk
 		const auto itemsIt = j.find( constants::dto::CODEBOOK_DTO_KEY_ITEMS );
 		if ( itemsIt == j.end() || !itemsIt->is_array() )
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "Codebooks JSON missing required '" );
 			builder.append( constants::dto::CODEBOOK_DTO_KEY_ITEMS );
@@ -485,7 +485,7 @@ namespace dnv::vista::sdk
 				}
 				else
 				{
-					auto lease = utils::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::instance();
 					auto builder = lease.builder();
 					builder.append( "ERROR: Failed to parse Codebook item in collection during from_json" );
 
@@ -496,7 +496,7 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			auto lease = utils::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::instance();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Expected '" );
 			builder.append( constants::dto::CODEBOOK_DTO_KEY_ITEMS );

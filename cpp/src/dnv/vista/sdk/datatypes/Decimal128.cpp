@@ -7,7 +7,7 @@
 #include "dnv/vista/sdk/pch.h"
 
 #include "dnv/vista/sdk/constants/Decimal128Constants.h"
-#include "dnv/vista/sdk/utils/StringBuilderPool.h"
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/datatypes/Decimal128.h"
 
@@ -526,7 +526,7 @@ namespace dnv::vista::sdk::datatypes
 			return "0";
 		}
 
-		auto lease = utils::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::instance();
 		auto builder = lease.builder();
 		Int128 mantissa = getMantissa().abs();
 		std::uint8_t currentScale = scale();

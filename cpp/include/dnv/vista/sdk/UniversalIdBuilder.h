@@ -17,9 +17,13 @@ namespace dnv::vista::sdk
 
 	class ParsingErrors;
 	class UniversalId;
-	class LocalIdParsingErrorBuilder;
-	enum class LocalIdParsingState;
 	enum class VISVersion;
+
+	namespace internal
+	{
+		class LocalIdParsingErrorBuilder;
+		enum class LocalIdParsingState;
+	}
 
 	//=====================================================================
 	// UniversalIdBuilder class

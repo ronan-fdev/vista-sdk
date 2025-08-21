@@ -7,11 +7,12 @@
 
 #include "TestDataLoader.h"
 
+#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/LocalIdBuilder.h"
-#include "dnv/vista/sdk/LocalIdParsingErrorBuilder.h"
 #include "dnv/vista/sdk/Locations.h"
 #include "dnv/vista/sdk/ParsingErrors.h"
 #include "dnv/vista/sdk/VIS.h"
@@ -34,20 +35,20 @@ namespace dnv::vista::sdk::tests
 
 	TEST( ParsingErrorsTests, Comparisons )
 	{
-		LocalIdParsingErrorBuilder builder1;
-		builder1.addError( LocalIdParsingState::NamingRule, "M1" );
-		ParsingErrors e1 = builder1.build();
+		internal::LocalIdParsingErrorBuilder builder1;
+		builder1.addError( internal::LocalIdParsingState::NamingRule, "M1" );
+		auto e1 = builder1.build();
 
-		LocalIdParsingErrorBuilder builder2;
-		builder2.addError( LocalIdParsingState::NamingRule, "M1" );
-		ParsingErrors e2 = builder2.build();
+		internal::LocalIdParsingErrorBuilder builder2;
+		builder2.addError( internal::LocalIdParsingState::NamingRule, "M1" );
+		auto e2 = builder2.build();
 
-		LocalIdParsingErrorBuilder builder3;
-		builder3.addError( LocalIdParsingState::NamingRule, "M1" );
-		builder3.addError( LocalIdParsingState::VisVersion, "M1" );
-		ParsingErrors e3 = builder3.build();
+		internal::LocalIdParsingErrorBuilder builder3;
+		builder3.addError( internal::LocalIdParsingState::NamingRule, "M1" );
+		builder3.addError( internal::LocalIdParsingState::VisVersion, "M1" );
+		auto e3 = builder3.build();
 
-		ParsingErrors e4 = ParsingErrors::empty();
+		auto e4 = ParsingErrors::empty();
 
 		EXPECT_EQ( e1, e2 );
 		EXPECT_TRUE( e1 == e2 );
@@ -61,7 +62,7 @@ namespace dnv::vista::sdk::tests
 		EXPECT_EQ( e4, ParsingErrors::empty() );
 		EXPECT_TRUE( e4.equals( ParsingErrors::empty() ) );
 
-		ParsingErrors empty = ParsingErrors::empty();
+		auto empty = ParsingErrors::empty();
 		EXPECT_TRUE( e4.equals( empty ) );
 	}
 
@@ -71,16 +72,17 @@ namespace dnv::vista::sdk::tests
 
 	TEST( ParsingErrorsTests, Enumerator )
 	{
-		LocalIdParsingErrorBuilder builder1;
-		builder1.addError( LocalIdParsingState::NamingRule, "M1" );
-		ParsingErrors e1 = builder1.build();
+		internal::LocalIdParsingErrorBuilder builder1;
+		builder1.addError( internal::LocalIdParsingState::NamingRule, "M1" );
 
-		LocalIdParsingErrorBuilder builder2;
-		builder2.addError( LocalIdParsingState::NamingRule, "M1" );
-		builder2.addError( LocalIdParsingState::VisVersion, "M1" );
-		ParsingErrors e2 = builder2.build();
+		auto e1 = builder1.build();
 
-		ParsingErrors e3 = ParsingErrors::empty();
+		internal::LocalIdParsingErrorBuilder builder2;
+		builder2.addError( internal::LocalIdParsingState::NamingRule, "M1" );
+		builder2.addError( internal::LocalIdParsingState::VisVersion, "M1" );
+
+		auto e2 = builder2.build();
+		auto e3 = ParsingErrors::empty();
 
 		EXPECT_EQ( 1, e1.count() );
 		EXPECT_EQ( 2, e2.count() );
@@ -108,15 +110,10 @@ namespace dnv::vista::sdk::tests
 		static std::vector<std::pair<Input, std::string>> testData()
 		{
 			return { { Input{ "411.1/C101.31-2" }, "/dnv-v2/vis-3-4a/411.1/C101.31-2/meta" },
-				{ Input{ "411.1/C101.31-2", "", "temperature", "exhaust.gas", "inlet" },
-					"/dnv-v2/vis-3-4a/411.1/C101.31-2/meta/qty-temperature/cnt-exhaust.gas/pos-inlet" },
-				{ Input{ "411.1/C101.63/S206", "", "temperature", "exhaust.gas", "inlet", VisVersion::v3_4a, true },
-					"/dnv-v2/vis-3-4a/411.1/C101.63/S206/~propulsion.engine/~cooling.system/meta/qty-temperature/cnt-exhaust.gas/pos-inlet" },
-				{ Input{ "411.1/C101.63/S206", "411.1/C101.31-5", "temperature", "exhaust.gas", "inlet", VisVersion::v3_4a, true },
-					"/dnv-v2/vis-3-4a/411.1/C101.63/S206/sec/411.1/C101.31-5/~propulsion.engine/~cooling.system/~for.propulsion.engine/~cylinder.5/meta/"
-					"qty-temperature/cnt-exhaust.gas/pos-inlet" },
-				{ Input{ "511.11/C101.67/S208", "", "pressure", "starting.air", "inlet", VisVersion::v3_6a, true },
-					"/dnv-v2/vis-3-6a/511.11/C101.67/S208/~main.generator.engine/~starting.system.pneumatic/meta/qty-pressure/cnt-starting.air/pos-inlet" } };
+				{ Input{ "411.1/C101.31-2", "", "temperature", "exhaust.gas", "inlet" }, "/dnv-v2/vis-3-4a/411.1/C101.31-2/meta/qty-temperature/cnt-exhaust.gas/pos-inlet" },
+				{ Input{ "411.1/C101.63/S206", "", "temperature", "exhaust.gas", "inlet", VisVersion::v3_4a, true }, "/dnv-v2/vis-3-4a/411.1/C101.63/S206/~propulsion.engine/~cooling.system/meta/qty-temperature/cnt-exhaust.gas/pos-inlet" },
+				{ Input{ "411.1/C101.63/S206", "411.1/C101.31-5", "temperature", "exhaust.gas", "inlet", VisVersion::v3_4a, true }, "/dnv-v2/vis-3-4a/411.1/C101.63/S206/sec/411.1/C101.31-5/~propulsion.engine/~cooling.system/~for.propulsion.engine/~cylinder.5/meta/qty-temperature/cnt-exhaust.gas/pos-inlet" },
+				{ Input{ "511.11/C101.67/S208", "", "pressure", "starting.air", "inlet", VisVersion::v3_6a, true }, "/dnv-v2/vis-3-6a/511.11/C101.67/S208/~main.generator.engine/~starting.system.pneumatic/meta/qty-pressure/cnt-starting.air/pos-inlet" } };
 		}
 	};
 
