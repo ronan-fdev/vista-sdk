@@ -194,7 +194,6 @@ if(VISTA_SDK_CPP_BUILD_SHARED)
 		PUBLIC
 			${PUBLIC_HEADERS}
 		PRIVATE
-			${PRIVATE_HEADERS}
 			${PRIVATE_SOURCES}
 	)
 
@@ -213,7 +212,6 @@ if(VISTA_SDK_CPP_BUILD_STATIC)
 		PUBLIC
 			${PUBLIC_HEADERS}
 		PRIVATE
-			${PRIVATE_HEADERS}
 			${PRIVATE_SOURCES}
 	)
 
@@ -243,7 +241,6 @@ function(configure_vista_target target_name)
 	target_link_libraries(${target_name} PRIVATE
 		nlohmann_json::nlohmann_json
 		zlib
-		cpuid
 		fmt::fmt-header-only
 	)
 
@@ -290,10 +287,38 @@ endif()
 include(CompilersSettings)
 
 #----------------------------------------------
+# Install rules
+#----------------------------------------------
+
+# --- Install shared library if built ---
+if(VISTA_SDK_CPP_BUILD_SHARED)
+	install(TARGETS ${PROJECT_NAME}
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+endif()
+
+# --- Install static library if built ---
+if(VISTA_SDK_CPP_BUILD_STATIC)
+	install(TARGETS ${PROJECT_NAME}-static
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+endif()
+
+# --- Install public headers ---
+install(DIRECTORY ${VISTA_SDK_CPP_INCLUDE_DIR}/
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	FILES_MATCHING PATTERN "*.h" PATTERN "*.inl"
+)
+
+#----------------------------------------------
 # Subdirectories
 #----------------------------------------------
 
-#add_subdirectory(${VISTA_SDK_CPP_DOCUMENTATION_DIR} doc)
+add_subdirectory(${VISTA_SDK_CPP_DOCUMENTATION_DIR} doc)
 add_subdirectory(${VISTA_SDK_CPP_SAMPLES_DIR} samples)
 add_subdirectory(${VISTA_SDK_CPP_TEST_DIR} test)
 add_subdirectory(${VISTA_SDK_CPP_BENCHMARK_DIR} benchmark)
@@ -362,7 +387,6 @@ message(STATUS "--- Dependencies ---")
 message(STATUS "nlohmann/json version           : ${NLOHMANN_VERSION}")
 message(STATUS "{fmt} version                   : ${FMT_VERSION}")
 message(STATUS "zlib-ng version                 : ${ZLIBNG_HEADER_VERSION}")
-message(STATUS "libcpuid version                : ${CPUID_VERSION}")
 message(STATUS "GoogleTest version              : ${GTEST_VERSION}")
 message(STATUS "Google Benchmark version        : ${BENCHMARK_VERSION}")
 message(STATUS "")

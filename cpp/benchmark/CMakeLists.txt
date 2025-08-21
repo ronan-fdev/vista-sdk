@@ -112,7 +112,6 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 			benchmark::benchmark
 			nlohmann_json::nlohmann_json
 			zlib
-			cpuid
 			fmt::fmt-header-only
 		)
 

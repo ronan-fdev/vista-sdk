@@ -49,19 +49,6 @@ FetchContent_Declare(
 	GIT_SHALLOW    TRUE
 )
 
-# --- libcpuid ---
-set(LIBCPUID_ENABLE_TESTS   OFF  CACHE BOOL  "Build libcpuid tests"          FORCE)
-set(LIBCPUID_BUILD_DRIVERS  OFF  CACHE BOOL  "Build libcpuid drivers"        FORCE)
-set(LIBCPUID_ENABLE_DOCS    OFF  CACHE BOOL  "Build libcpuid documentation"  FORCE)
-set(LIBCPUID_SHARED         OFF  CACHE BOOL  "Build libcpuid shared library" FORCE)
-
-FetchContent_Declare(
-	cpuid
-	GIT_REPOSITORY https://github.com/anrieff/libcpuid.git
-	GIT_TAG        v0.8.0
-	GIT_SHALLOW    TRUE
-)
-
 # --- {fmt} ---
 set(FMT_FUZZ            OFF  CACHE BOOL  "Build fmt fuzzing tests"           FORCE)
 set(FMT_TEST            OFF  CACHE BOOL  "Build fmt unit tests"              FORCE)
@@ -128,12 +115,16 @@ endif()
 
 message(STATUS "Fetching dependencies...")
 
+set(SAVED_SKIP_INSTALL_RULES "${CMAKE_SKIP_INSTALL_RULES}")
+set(CMAKE_SKIP_INSTALL_RULES ON)
+
 FetchContent_MakeAvailable(
 	nlohmann_json
 	zlib-ng
-	cpuid
 	fmt
 )
+
+set(CMAKE_SKIP_INSTALL_RULES "${SAVED_SKIP_INSTALL_RULES}")
 
 if(VISTA_SDK_CPP_BUILD_TESTS)
 	FetchContent_MakeAvailable(
@@ -179,7 +170,8 @@ endif()
 if(TARGET zlib)
 	set_target_properties(zlib PROPERTIES
 		EXCLUDE_FROM_ALL TRUE
-		EXCLUDE_FROM_DEFAULT_BUILD TRUE)
+		EXCLUDE_FROM_DEFAULT_BUILD TRUE
+	)
 endif()
 
 if(zlib-ng_BINARY_DIR AND EXISTS "${zlib-ng_BINARY_DIR}/zlib.h")
@@ -188,32 +180,6 @@ if(zlib-ng_BINARY_DIR AND EXISTS "${zlib-ng_BINARY_DIR}/zlib.h")
 	if(ZLIBNG_VER_LINES)
 		string(REGEX REPLACE "^#define[ \t]+ZLIBNG_VERSION[ \t]+\"([^\"]*)\".*" "\\1"
 			ZLIBNG_HEADER_VERSION "${ZLIBNG_VER_LINES}")
-	endif()
-endif()
-
-#----------------------------
-# cpuid configuration
-#----------------------------
-
-if(TARGET cpuid_tool)
-	set_target_properties(cpuid_tool PROPERTIES
-		 EXCLUDE_FROM_ALL TRUE
-		 EXCLUDE_FROM_DEFAULT_BUILD TRUE
-	)
-endif()
-
-if(TARGET cpuid)
-	set(CPUID_VERSION "")
-	if(cpuid_SOURCE_DIR AND EXISTS "${cpuid_SOURCE_DIR}/CMakeLists.txt")
-		file(STRINGS "${cpuid_SOURCE_DIR}/CMakeLists.txt" CPUID_VER_LINES
-			REGEX "^set\\(VERSION \"[^\"]*\"\\)$")
-		if(CPUID_VER_LINES)
-			string(REGEX REPLACE "^set\\(VERSION \"([^\"]*)\"\\)$" "\\1"
-				CPUID_VERSION "${CPUID_VER_LINES}")
-		endif()
-	endif()
-	if(NOT CPUID_VERSION)
-		get_target_property(CPUID_VERSION cpuid VERSION)
 	endif()
 endif()
 

@@ -146,7 +146,6 @@ foreach(test_source ${TEST_SOURCES})
 			GTest::gtest_main
 			nlohmann_json::nlohmann_json
 			zlib
-			cpuid
 			fmt::fmt-header-only
 		)
 
