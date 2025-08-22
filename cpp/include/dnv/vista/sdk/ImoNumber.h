@@ -44,7 +44,7 @@ namespace dnv::vista::sdk
 		 * @throws std::invalid_argument If the provided string is not a valid IMO number
 		 *         (e.g., incorrect format, non-numeric characters, or failed checksum).
 		 */
-		explicit ImoNumber( const std::string& value );
+		explicit ImoNumber( std::string_view value );
 
 		/** @brief Default constructor. */
 		ImoNumber() = delete;
@@ -130,16 +130,7 @@ namespace dnv::vista::sdk
 		 * @return The parsed ImoNumber object.
 		 * @throws std::invalid_argument If the string is not a valid IMO number.
 		 */
-		[[nodiscard]] static ImoNumber parse( const std::string& value );
-
-		/**
-		 * @brief Parses a C-style string representation into an ImoNumber object.
-		 * @param value The C-style string to parse (e.g., "IMO9074729" or "9074729").
-		 *              Must be null-terminated. Can optionally be prefixed with "IMO".
-		 * @return The parsed ImoNumber object.
-		 * @throws std::invalid_argument If the string is not a valid IMO number or is null.
-		 */
-		[[nodiscard]] static ImoNumber parse( const char* value );
+		[[nodiscard]] static ImoNumber parse( std::string_view value );
 
 		/**
 		 * @brief Tries to parse a string representation into an ImoNumber object.

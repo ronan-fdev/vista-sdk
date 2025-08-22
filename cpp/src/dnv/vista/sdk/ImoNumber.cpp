@@ -29,12 +29,12 @@ namespace dnv::vista::sdk
 		m_value = value;
 	}
 
-	ImoNumber::ImoNumber( const std::string& value )
+	ImoNumber::ImoNumber( std::string_view value )
 	{
 		auto result = tryParse( value );
 		if ( !result )
 		{
-			throw std::invalid_argument( "Invalid IMO number: " + value );
+			throw std::invalid_argument( "Invalid IMO number: " + std::string{ value } );
 		}
 
 		m_value = result->m_value;
@@ -96,24 +96,7 @@ namespace dnv::vista::sdk
 	// Parsing
 	//----------------------------------------------
 
-	ImoNumber ImoNumber::parse( const char* value )
-	{
-		if ( value == nullptr )
-		{
-			throw std::invalid_argument( "Null IMO number string" );
-		}
-		auto result = tryParse( std::string_view( value ) );
-		if ( !result )
-		{
-			std::string error_message = "Failed to parse ImoNumber: ";
-			error_message += value;
-			throw std::invalid_argument( error_message );
-		}
-
-		return *result;
-	}
-
-	ImoNumber ImoNumber::parse( const std::string& value )
+	ImoNumber ImoNumber::parse( std::string_view value )
 	{
 		if ( value.empty() )
 		{
@@ -123,7 +106,7 @@ namespace dnv::vista::sdk
 		auto result = tryParse( value );
 		if ( !result )
 		{
-			throw std::invalid_argument( "Failed to parse ImoNumber: " + value );
+			throw std::invalid_argument( "Failed to parse ImoNumber: " + std::string{ value } );
 		}
 
 		return *result;

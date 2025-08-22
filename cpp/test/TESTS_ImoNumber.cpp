@@ -23,8 +23,12 @@ namespace dnv::vista::sdk::test
 
 		virtual void SetUp() override
 		{
-			std::vector<std::string> possiblePaths = { "testdata/ImoNumbers.json", "../testdata/ImoNumbers.json", "../../testdata/ImoNumbers.json",
-				"../../../testdata/ImoNumbers.json", "./ImoNumbers.json" };
+			std::vector<std::string> possiblePaths{
+				"testdata/ImoNumbers.json",
+				"../testdata/ImoNumbers.json",
+				"../../testdata/ImoNumbers.json",
+				"../../../testdata/ImoNumbers.json",
+				"./ImoNumbers.json" };
 
 			std::ifstream file;
 			std::string attemptedPaths;
@@ -103,5 +107,79 @@ namespace dnv::vista::sdk::test
 				EXPECT_EQ( parsedImo->toString(), item.output.value() );
 			}
 		}
+	}
+
+	TEST_F( ImoNumberTests, Test_ConstCharInputs )
+	{
+		const char* validImo = "IMO9074729";
+		const char* invalidImo = "IMO123";
+		const char* numericOnly = "9074729";
+
+		auto parsed1 = ImoNumber::tryParse( validImo );
+		EXPECT_TRUE( parsed1.has_value() );
+		EXPECT_EQ( parsed1->toString(), "IMO9074729" );
+
+		auto parsed2 = ImoNumber::tryParse( invalidImo );
+		EXPECT_FALSE( parsed2.has_value() );
+
+		auto parsed3 = ImoNumber::tryParse( numericOnly );
+		EXPECT_TRUE( parsed3.has_value() );
+		EXPECT_EQ( parsed3->toString(), "IMO9074729" );
+
+		EXPECT_NO_THROW( ImoNumber{ validImo } );
+		EXPECT_THROW( ImoNumber{ invalidImo }, std::invalid_argument );
+
+		auto parsed4 = ImoNumber::parse( validImo );
+		EXPECT_EQ( parsed4.toString(), "IMO9074729" );
+
+		EXPECT_THROW( ImoNumber::parse( invalidImo ), std::invalid_argument );
+	}
+
+	TEST_F( ImoNumberTests, Test_StdStringInputs )
+	{
+		std::string validImo = "IMO9074729";
+		std::string invalidImo = "IMO123";
+		std::string numericOnly = "9074729";
+		std::string caseVariant = "imo9074729";
+
+		auto parsed1 = ImoNumber::tryParse( validImo );
+		EXPECT_TRUE( parsed1.has_value() );
+		EXPECT_EQ( parsed1->toString(), "IMO9074729" );
+
+		auto parsed2 = ImoNumber::tryParse( invalidImo );
+		EXPECT_FALSE( parsed2.has_value() );
+
+		auto parsed3 = ImoNumber::tryParse( numericOnly );
+		EXPECT_TRUE( parsed3.has_value() );
+		EXPECT_EQ( parsed3->toString(), "IMO9074729" );
+
+		auto parsed4 = ImoNumber::tryParse( caseVariant );
+		EXPECT_TRUE( parsed4.has_value() );
+		EXPECT_EQ( parsed4->toString(), "IMO9074729" );
+
+		EXPECT_NO_THROW( ImoNumber{ validImo } );
+		EXPECT_THROW( ImoNumber{ invalidImo }, std::invalid_argument );
+
+		auto parsed5 = ImoNumber::parse( validImo );
+		EXPECT_EQ( parsed5.toString(), "IMO9074729" );
+
+		EXPECT_THROW( ImoNumber::parse( invalidImo ), std::invalid_argument );
+	}
+
+	TEST_F( ImoNumberTests, Test_StringLiteralInputs )
+	{
+		auto parsed1 = ImoNumber::tryParse( "IMO9074729" );
+		EXPECT_TRUE( parsed1.has_value() );
+		EXPECT_EQ( parsed1->toString(), "IMO9074729" );
+
+		auto parsed2 = ImoNumber::tryParse( "9074729" );
+		EXPECT_TRUE( parsed2.has_value() );
+		EXPECT_EQ( parsed2->toString(), "IMO9074729" );
+
+		EXPECT_NO_THROW( ImoNumber{ "IMO9074729" } );
+		EXPECT_THROW( ImoNumber{ "invalid" }, std::invalid_argument );
+
+		auto parsed3 = ImoNumber::parse( "IMO9074729" );
+		EXPECT_EQ( parsed3.toString(), "IMO9074729" );
 	}
 }
