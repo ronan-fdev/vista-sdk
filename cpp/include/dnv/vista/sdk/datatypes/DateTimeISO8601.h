@@ -369,10 +369,23 @@ namespace dnv::vista::sdk::datatypes
 		// std::chrono interoperability
 		//----------------------------------------------
 
-		/** @brief Convert to std::chrono::system_clock::time_point */
+		/**
+		 * @brief Convert to std::chrono::system_clock::time_point
+		 * @details Values outside the representable range of std::chrono::system_clock
+		 *          (approximately years 1677-2262 on 64-bit Linux systems) will be
+		 *          clamped to the nearest representable value. This means extreme dates
+		 *          (near year 1 or year 9999) cannot round-trip through chrono.
+		 * @return A system_clock::time_point representing this DateTime
+		 */
 		[[nodiscard]] std::chrono::system_clock::time_point toChrono() const noexcept;
 
-		/** @brief Create DateTime from std::chrono::system_clock::time_point */
+		/**
+		 * @brief Create DateTime from std::chrono::system_clock::time_point
+		 * @details Values outside the representable range of DateTime
+		 *          will be clamped to the nearest valid DateTime value.
+		 * @param timePoint The system_clock time point to convert
+		 * @return A DateTime representing the same instant in time
+		 */
 		[[nodiscard]] static DateTime fromChrono( const std::chrono::system_clock::time_point& timePoint ) noexcept;
 
 	private:

@@ -50,7 +50,6 @@
 #include <nlohmann/json.hpp>
 #include <fmt/format.h>
 #include <zlib.h>
-#if defined(__GNUC__)
+#if defined( __GNUC__ )
 #	include <cpuid.h>
 #endif
-

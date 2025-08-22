@@ -1,4 +1,3 @@
-
 /**
  * @file ChdDictionary.inl
  * @brief Template implementation of CHD Dictionary class

@@ -130,9 +130,9 @@ namespace dnv::vista::sdk::constants::datetime
 	 */
 	inline constexpr std::size_t MIN_ISO8601_LENGTH = 20;
 
-	//=====================================================================
+	//----------------------------------------------
 	// Unix epoch format limits
-	//=====================================================================
+	//----------------------------------------------
 
 	/** @brief Maximum length of Unix timestamp in seconds (10 digits for year 2286) */
 	inline constexpr std::size_t MAX_UNIX_SECONDS_LENGTH = 10;
@@ -142,4 +142,26 @@ namespace dnv::vista::sdk::constants::datetime
 
 	/** @brief Current typical length of Unix timestamp in seconds (10 digits until 2286) */
 	inline constexpr std::size_t CURRENT_UNIX_SECONDS_LENGTH = 10;
+
+	//=====================================================================
+	// std::chrono interoperability limits
+	//=====================================================================
+
+	/**
+	 * @brief Minimum DateTime value that can safely round-trip through std::chrono::system_clock
+	 * @details This is platform-dependent; on systems with 64-bit nanosecond precision,
+	 *          this is approximately year 1678.
+	 */
+	inline constexpr std::int64_t MIN_CHRONO_SAFE_TICKS =
+		std::max( MIN_DATETIME_TICKS,
+			UNIX_EPOCH_TICKS + ( std::numeric_limits<std::int64_t>::min() / 100 ) );
+
+	/**
+	 * @brief Maximum DateTime value that can safely round-trip through std::chrono::system_clock
+	 * @details This is platform-dependent; on systems with 64-bit nanosecond precision,
+	 *          this is approximately year 2262.
+	 */
+	inline constexpr std::int64_t MAX_CHRONO_SAFE_TICKS =
+		std::min( MAX_DATETIME_TICKS,
+			UNIX_EPOCH_TICKS + ( std::numeric_limits<std::int64_t>::max() / 100 ) );
 }

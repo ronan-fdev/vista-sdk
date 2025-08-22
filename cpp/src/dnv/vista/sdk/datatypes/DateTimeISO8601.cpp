@@ -14,6 +14,21 @@
 namespace dnv::vista::sdk::datatypes
 {
 	//=====================================================================
+	// std::chrono interoperability limits
+	//=====================================================================
+
+	/**
+	 * @brief Check if a DateTime value can safely round-trip through std::chrono::system_clock
+	 * @details This is platform-dependent; on 64-bit systems with nanosecond precision,
+	 *          the safe range is approximately years 1677-2262.
+	 * @return true if this DateTime is within the safe chrono range
+	 */
+	inline constexpr bool isChronoSafeTicks( std::int64_t ticks ) noexcept
+	{
+		return ticks >= constants::datetime::MIN_CHRONO_SAFE_TICKS && ticks <= constants::datetime::MAX_CHRONO_SAFE_TICKS;
+	}
+
+	//=====================================================================
 	// DateTime class
 	//=====================================================================
 
@@ -522,8 +537,19 @@ namespace dnv::vista::sdk::datatypes
 
 	std::chrono::system_clock::time_point DateTime::toChrono() const noexcept
 	{
+		/* Clamp to chrono-safe range */
+		std::int64_t safeTicks = m_ticks;
+		if ( safeTicks < constants::datetime::MIN_CHRONO_SAFE_TICKS )
+		{
+			safeTicks = constants::datetime::MIN_CHRONO_SAFE_TICKS;
+		}
+		else if ( safeTicks > constants::datetime::MAX_CHRONO_SAFE_TICKS )
+		{
+			safeTicks = constants::datetime::MAX_CHRONO_SAFE_TICKS;
+		}
+
 		/* Calculate duration since Unix epoch in 100-nanosecond ticks */
-		std::int64_t ticksSinceEpoch = m_ticks - constants::datetime::UNIX_EPOCH_TICKS;
+		std::int64_t ticksSinceEpoch = safeTicks - constants::datetime::UNIX_EPOCH_TICKS;
 
 		/* Convert to std::chrono duration (100ns precision) */
 		using ticks_duration = std::chrono::duration<std::int64_t, std::ratio<1, 10000000>>;
