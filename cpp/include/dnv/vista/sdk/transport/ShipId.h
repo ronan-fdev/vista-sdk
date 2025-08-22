@@ -7,10 +7,7 @@
 
 #pragma once
 
-#include "dnv/vista/sdk/config/Platform.h"
-
 #include "dnv/vista/sdk/ImoNumber.h"
-#include "dnv/vista/sdk/Exceptions.h"
 
 namespace dnv::vista::sdk::transport
 {
@@ -133,7 +130,7 @@ namespace dnv::vista::sdk::transport
 		 * @return Result of the matched function
 		 */
 		template <typename T>
-		[[nodiscard]] T matchOn(
+		[[nodiscard]] inline T matchOn(
 			std::function<T( const ImoNumber& )> onImoNumber,
 			std::function<T( std::string_view )> onOtherId ) const;
 
@@ -142,7 +139,7 @@ namespace dnv::vista::sdk::transport
 		 * @param onImoNumber Function to call if ShipId contains IMO number
 		 * @param onOtherId Function to call if ShipId contains other identifier
 		 */
-		void switchOn(
+		inline void switchOn(
 			std::function<void( const ImoNumber& )> onImoNumber,
 			std::function<void( std::string_view )> onOtherId ) const;
 

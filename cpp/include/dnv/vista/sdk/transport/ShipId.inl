@@ -97,7 +97,7 @@ namespace dnv::vista::sdk::transport
 	//----------------------------------------------
 
 	template <typename T>
-	T ShipId::matchOn(
+	inline T ShipId::matchOn(
 		std::function<T( const ImoNumber& )> onImoNumber,
 		std::function<T( std::string_view )> onOtherId ) const
 	{

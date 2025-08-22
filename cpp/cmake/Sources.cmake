@@ -33,6 +33,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.h
 
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.h
@@ -103,6 +105,7 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.cpp
 
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ShipId.cpp
