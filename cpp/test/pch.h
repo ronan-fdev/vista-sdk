@@ -16,3 +16,6 @@
 #include <fmt/format.h>
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
+#if defined(__GNUC__)
+#	include <cpuid.h>
+#endif

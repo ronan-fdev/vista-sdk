@@ -102,14 +102,6 @@
 // Cross-platform time functions
 //----------------------------------------------
 
-/** @brief Windows + GCC specific fixes */
-// #if defined( _WIN32 ) && defined( __GNUC__ )
-// /* Fix missing POSIX functions on Windows with GCC */
-// #	ifndef _POSIX_THREAD_SAFE_FUNCTIONS
-// #		define _POSIX_THREAD_SAFE_FUNCTIONS
-// #	endif
-// #endif
-
 /** @brief Cross-platform thread-safe time conversion functions */
 #if defined( _WIN32 )
 /* Windows uses gmtime_s and localtime_s (different parameter order than POSIX) */
@@ -124,23 +116,3 @@
 #	define VISTA_SDK_CPP_GMTIME_R( timer, result ) ( ( *( result ) = *gmtime( timer ) ), true )
 #	define VISTA_SDK_CPP_LOCALTIME_R( timer, result ) ( ( *( result ) = *localtime( timer ) ), true )
 #endif
-
-// //----------------------------------------------
-// // C++20 timezone support detection
-// //----------------------------------------------
-
-// /** @brief C++20 timezone support availability */
-// #if defined( __cpp_lib_chrono ) && __cpp_lib_chrono >= 201907L
-// #	define VISTA_SDK_CPP_HAS_TIMEZONE 1
-// #else
-// #	define VISTA_SDK_CPP_HAS_TIMEZONE 0
-// #endif
-
-// /** @brief Conditional compilation for timezone-aware code */
-// #if VISTA_SDK_CPP_HAS_TIMEZONE
-// #	define VISTA_SDK_CPP_IF_TIMEZONE( code ) code
-// #	define VISTA_SDK_CPP_IF_NO_TIMEZONE( code )
-// #else
-// #	define VISTA_SDK_CPP_IF_TIMEZONE( code )
-// #	define VISTA_SDK_CPP_IF_NO_TIMEZONE( code ) code
-// #endif
