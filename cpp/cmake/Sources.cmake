@@ -37,6 +37,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ShipId.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ShipId.inl
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringMap.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringUtils.h
@@ -103,6 +105,7 @@ set(PRIVATE_SOURCES
 
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ShipId.cpp
 
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Codebook.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Codebooks.cpp

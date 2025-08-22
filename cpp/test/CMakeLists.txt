@@ -16,6 +16,7 @@ set(TEST_SOURCES
 	datatypes/TESTS_DateTime8601.cpp
 	datatypes/TESTS_Decimal128.cpp
 	datatypes/TESTS_Int128.cpp
+	transport/TESTS_ShipId.cpp
 	transport/TESTS_ISO19848.cpp
 	utils/TESTS_StringBuilderPoolTests.cpp
 
