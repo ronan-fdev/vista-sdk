@@ -36,6 +36,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.h
@@ -108,6 +110,7 @@ set(PRIVATE_SOURCES
 
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ShipId.cpp

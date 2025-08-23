@@ -66,7 +66,6 @@ namespace dnv::vista::sdk::transport
 		{
 		public:
 			inline explicit String( std::string_view value ) noexcept;
-			inline explicit String( std::string value ) noexcept;
 
 			/** @brief Default constructor */
 			String() = default;

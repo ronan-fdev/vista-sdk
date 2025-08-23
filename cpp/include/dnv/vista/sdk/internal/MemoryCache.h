@@ -216,11 +216,11 @@ namespace dnv::vista::sdk::internal
 		 * @brief Check if cache is empty
 		 * @return True if cache contains no entries
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE bool empty() const
+		VISTA_SDK_CPP_FORCE_INLINE bool isEmpty() const
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
-			return m_cache.empty();
+			return m_cache.isEmpty();
 		}
 
 		/**

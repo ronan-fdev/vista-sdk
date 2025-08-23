@@ -434,7 +434,9 @@ namespace dnv::vista::sdk
 		const size_t totalItems = jsonArray.size();
 		size_t successCount = 0;
 
-		const size_t reserveSize = totalItems < 1000 ? totalItems + totalItems / 4 : totalItems + totalItems / 16;
+		const size_t reserveSize = totalItems < 1000
+									   ? totalItems + totalItems / 4
+									   : totalItems + totalItems / 16;
 
 		dto.m_items.reserve( reserveSize );
 

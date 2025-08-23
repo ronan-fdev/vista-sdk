@@ -698,7 +698,9 @@ namespace dnv::vista::sdk
 
 				if ( ret != Z_OK && ret != Z_STREAM_END && ret != Z_BUF_ERROR )
 				{
-					std::string errorMsg = ( zs.msg ) ? zs.msg : "Unknown zlib error";
+					std::string errorMsg = ( zs.msg )
+											   ? zs.msg
+											   : "Unknown zlib error";
 					::inflateEnd( &zs );
 
 					throw std::runtime_error(

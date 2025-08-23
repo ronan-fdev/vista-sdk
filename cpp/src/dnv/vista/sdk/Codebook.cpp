@@ -204,7 +204,9 @@ namespace dnv::vista::sdk
 
 			for ( char c : input )
 			{
-				result.push_back( ( c >= 'A' && c <= 'Z' ) ? ( c + 32 ) : c );
+				result.push_back( ( c >= 'A' && c <= 'Z' )
+									  ? ( c + 32 )
+									  : c );
 			}
 
 			return result;

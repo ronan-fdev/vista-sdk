@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
+
 namespace dnv::vista::sdk::transport
 {
 	//=====================================================================
@@ -16,18 +18,22 @@ namespace dnv::vista::sdk::transport
 	//----------------------------------------------
 
 	inline DataChannelId::DataChannelId( const LocalId& localId ) noexcept
-		: m_tag{ 1 },
+		: m_tag{ Tag::LocalId },
 		  m_localId{ localId }
 	{
 	}
 
 	inline DataChannelId::DataChannelId( std::string_view shortId )
-		: m_tag{ 2 },
+		: m_tag{ Tag::ShortId },
 		  m_shortId{ shortId }
 	{
 		if ( m_shortId->empty() )
 		{
-			throw std::invalid_argument( "DataChannelId shortId cannot be empty" );
+			auto lease = internal::StringBuilderPool::instance();
+			auto builder = lease.builder();
+			builder.append( "DataChannelId shortId cannot be empty" );
+
+			throw std::invalid_argument( lease.toString() );
 		}
 	}
 
@@ -44,11 +50,11 @@ namespace dnv::vista::sdk::transport
 
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::LocalId:
 			{
 				return m_localId == other.m_localId;
 			}
-			case 2:
+			case Tag::ShortId:
 			{
 				return m_shortId == other.m_shortId;
 			}
@@ -70,12 +76,12 @@ namespace dnv::vista::sdk::transport
 
 	inline bool DataChannelId::isLocalId() const noexcept
 	{
-		return m_tag == 1;
+		return m_tag == Tag::LocalId;
 	}
 
 	inline bool DataChannelId::isShortId() const noexcept
 	{
-		return m_tag == 2;
+		return m_tag == Tag::ShortId;
 	}
 
 	//----------------------------------------------
@@ -84,7 +90,7 @@ namespace dnv::vista::sdk::transport
 
 	inline std::optional<LocalId> DataChannelId::localId() const noexcept
 	{
-		if ( m_tag == 1 )
+		if ( m_tag == Tag::LocalId )
 		{
 			return m_localId;
 		}
@@ -94,7 +100,7 @@ namespace dnv::vista::sdk::transport
 
 	inline std::optional<std::string_view> DataChannelId::shortId() const noexcept
 	{
-		if ( m_tag == 2 )
+		if ( m_tag == Tag::ShortId )
 		{
 			return std::string_view{ *m_shortId };
 		}
@@ -106,47 +112,54 @@ namespace dnv::vista::sdk::transport
 	// Pattern matching
 	//----------------------------------------------
 
-	template <typename T>
-	T inline DataChannelId::matchOn(
-		std::function<T( const LocalId& )> onLocalId,
-		std::function<T( std::string_view )> onShortId ) const
+	template <typename T, typename LocalIdFunc, typename ShortIdFunc>
+	T inline DataChannelId::matchOn( LocalIdFunc&& onLocalId, ShortIdFunc&& onShortId ) const
 	{
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::LocalId:
 			{
-				return onLocalId( *m_localId );
+				return std::forward<LocalIdFunc>( onLocalId )( *m_localId );
 			}
-			case 2:
+			case Tag::ShortId:
 			{
-				return onShortId( std::string_view{ *m_shortId } );
+				return std::forward<ShortIdFunc>( onShortId )( std::string_view{ *m_shortId } );
 			}
 			default:
 			{
-				throw std::runtime_error( "Invalid DataChannelId state: corrupted tag" );
+				auto lease = internal::StringBuilderPool::instance();
+				auto builder = lease.builder();
+				builder.append( "Invalid DataChannelId state: corrupted tag " );
+				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
+
+				throw std::runtime_error( lease.toString() );
 			}
 		}
 	}
 
-	inline void DataChannelId::switchOn(
-		std::function<void( const LocalId& )> onLocalId,
-		std::function<void( std::string_view )> onShortId ) const
+	template <typename LocalIdFunc, typename ShortIdFunc>
+	inline void DataChannelId::switchOn( LocalIdFunc&& onLocalId, ShortIdFunc&& onShortId ) const
 	{
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::LocalId:
 			{
-				onLocalId( *m_localId );
+				std::forward<LocalIdFunc>( onLocalId )( *m_localId );
 				break;
 			}
-			case 2:
+			case Tag::ShortId:
 			{
-				onShortId( std::string_view{ *m_shortId } );
+				std::forward<ShortIdFunc>( onShortId )( std::string_view{ *m_shortId } );
 				break;
 			}
 			default:
 			{
-				throw std::runtime_error( "Invalid DataChannelId state: corrupted tag" );
+				auto lease = internal::StringBuilderPool::instance();
+				auto builder = lease.builder();
+				builder.append( "Invalid DataChannelId state: corrupted tag " );
+				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
+
+				throw std::runtime_error( lease.toString() );
 			}
 		}
 	}

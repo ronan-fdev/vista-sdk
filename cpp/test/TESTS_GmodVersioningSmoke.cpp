@@ -201,7 +201,10 @@ namespace dnv::vista::sdk::tests
 							counter = ++context.counter;
 							std::cout << "[" << std::setw( pad ) << counter << "][" << std::setw( 2 ) << thread
 									  << "] Failed to create valid path from: " << sourcePath.toString() << " -> "
-									  << ( targetPath ? targetPath->toString() : "N/A" ) << " - " << e.what() << std::endl;
+									  << ( targetPath
+												 ? targetPath->toString()
+												 : "N/A" )
+									  << " - " << e.what() << std::endl;
 
 							std::lock_guard<std::mutex> lock( context.failedConversionsMutex );
 							context.failedConversions.emplace_back( sourcePath, targetPath, std::current_exception() );

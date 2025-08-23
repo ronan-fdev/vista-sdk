@@ -18,6 +18,21 @@ namespace dnv::vista::sdk::datatypes
 
 	/**
 	 * @brief Represents a time interval in 100-nanosecond ticks
+	 * @details Provides high-precision time duration representation and arithmetic operations.
+	 *          Compatible with .NET TimeSpan semantics for cross-platform consistency.
+	 *
+	 *          Key features:
+	 *          - 100-nanosecond tick precision for maximum accuracy
+	 *          - Range: ±10,675,199 days (approximately ±29,247 years)
+	 *          - Arithmetic operations (addition, subtraction, comparison)
+	 *          - ISO 8601 duration parsing and formatting (P[n]Y[n]M[n]DT[n]H[n]M[n]S)
+	 *          - Factory methods for common time units (days, hours, minutes, seconds)
+	 *          - Conversion methods to various time units with fractional support
+	 *
+	 *          This class represents a duration or elapsed time interval, not a specific
+	 *          point in time. For absolute time values, use DateTime or DateTimeOffset.
+	 *
+	 * @note Design inspired by .NET TimeSpan to ensure API compatibility with the C# SDK.
 	 */
 	class TimeSpan final
 	{

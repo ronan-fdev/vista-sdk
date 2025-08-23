@@ -42,6 +42,11 @@ namespace dnv::vista::sdk::tests
 
 		header.setDateCreated( datatypes::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
 
+		/* Add custom headers */
+		utils::StringMap<transport::Value> customHeaders;
+		customHeaders["nr:CustomHeaderElement"] = transport::Value::String{ "Vendor specific headers" };
+		header.setCustomHeaders( customHeaders );
+
 		/* Create DataChannelList */
 		transport::datachannel::DataChannelList dataChannelList;
 
@@ -58,6 +63,12 @@ namespace dnv::vista::sdk::tests
 
 			transport::datachannel::NameObject nameObject;
 			nameObject.setNamingRule( "Naming_Rule" );
+
+			/* Add custom name objects */
+			utils::StringMap<transport::Value> customNameObjects;
+			customNameObjects["nr:CustomNameObject"] = transport::Value::String{ "Vendor specific NameObject" };
+			nameObject.setCustomNameObjects( customNameObjects );
+
 			dataChannelId.setNameObject( nameObject );
 
 			transport::datachannel::DataChannelType dataChannelType{ "Inst" };
@@ -75,10 +86,20 @@ namespace dnv::vista::sdk::tests
 			transport::datachannel::Unit unit{ "°C" };
 			unit.setQuantityName( "Temperature" );
 
+			/* Add custom elements to unit */
+			utils::StringMap<transport::Value> customElements;
+			customElements["nr:CustomUnitElement"] = transport::Value::String{ "Vendor specific unit element" };
+			unit.setCustomElements( customElements );
+
 			transport::datachannel::Property property{ dataChannelType, format, range, unit, std::nullopt };
 			property.setQualityCoding( "OPC_QUALITY" );
 			property.setName( "M/E #1 Air Cooler CFW OUT Temp" );
 			property.setRemarks( " Location: ECR, Manufacturer: AAA Company, Type: TYPE-AAA " );
+
+			/* Add custom properties */
+			utils::StringMap<transport::Value> customProperties;
+			customProperties["nr:CustomPropertyElement"] = transport::Value::String{ "Vendor specific property element" };
+			property.setCustomProperties( customProperties );
 
 			transport::datachannel::DataChannel dataChannel{ dataChannelId, property };
 			dataChannelList.add( dataChannel );
@@ -163,24 +184,21 @@ namespace dnv::vista::sdk::tests
 	TEST( IsoMessageTests, Test_DataChannelList )
 	{
 		auto message = createValidDataChannelList();
-		EXPECT_FALSE( message.dataChannelList().empty() );
+		EXPECT_FALSE( message.package().dataChannelList().isEmpty() );
 
-		auto& first = message.dataChannelList().dataChannels().front();
+		auto& first = message.package().dataChannelList().dataChannels().front();
 		EXPECT_TRUE( first.dataChannelId().localId().builder().isValid() );
-		/*
-		 * DataChannel should have valid property
-		 * Note: property() getter throws if not set, so this validates existence
-		 */
+
 		EXPECT_NO_THROW( first.property() );
 	}
 
 	TEST( IsoMessageTests, Test_LocalId_Lookup )
 	{
 		auto message = createValidDataChannelList();
-		const auto& dataChannel = message.dataChannelList()[0];
+		const auto& dataChannel = message.package().dataChannelList()[0];
 		const auto& localId = dataChannel.dataChannelId().localId();
-		const auto& lookup = message.dataChannelList()[localId];
-		const auto* lookup2 = message.dataChannelList().tryGetByLocalId( localId );
+		const auto& lookup = message.package().dataChannelList()[localId];
+		const auto* lookup2 = message.package().dataChannelList().tryGetByLocalId( localId );
 		EXPECT_NE( lookup2, nullptr );
 		EXPECT_EQ( &dataChannel, &lookup );
 		EXPECT_EQ( &dataChannel, lookup2 );
@@ -189,11 +207,11 @@ namespace dnv::vista::sdk::tests
 	TEST( IsoMessageTests, Test_ShortId_Lookup )
 	{
 		auto message = createValidDataChannelList();
-		const auto& dataChannel = message.dataChannelList()[0];
+		const auto& dataChannel = message.package().dataChannelList()[0];
 		const auto& shortId = dataChannel.dataChannelId().shortId();
 		EXPECT_TRUE( shortId.has_value() );
-		const auto& lookup = message.dataChannelList()[*shortId];
-		const auto* lookup2 = message.dataChannelList().tryGetByShortId( *shortId );
+		const auto& lookup = message.package().dataChannelList()[*shortId];
+		const auto* lookup2 = message.package().dataChannelList().tryGetByShortId( *shortId );
 		EXPECT_NE( lookup2, nullptr );
 		EXPECT_EQ( &dataChannel, &lookup );
 		EXPECT_EQ( &dataChannel, lookup2 );
@@ -202,13 +220,13 @@ namespace dnv::vista::sdk::tests
 	TEST( IsoMessageTests, Test_DataChannelList_Enumerator )
 	{
 		auto message = createValidDataChannelList();
-		const auto expectedLength = message.dataChannelList().dataChannels().size();
-		const auto actualLength = message.dataChannelList().size();
+		const auto expectedLength = message.package().dataChannelList().dataChannels().size();
+		const auto actualLength = message.package().dataChannelList().size();
 		size_t counter = 0;
 		EXPECT_EQ( expectedLength, actualLength );
 
 		/* Test range-based for loop iteration */
-		for ( const auto& dc : message.dataChannelList() )
+		for ( const auto& dc : message.package().dataChannelList() )
 		{
 			EXPECT_NE( &dc, nullptr );
 			counter++;
@@ -217,7 +235,7 @@ namespace dnv::vista::sdk::tests
 
 		/* Test iterator-based iteration */
 		counter = 0;
-		for ( auto it = message.dataChannelList().begin(); it != message.dataChannelList().end(); ++it )
+		for ( auto it = message.package().dataChannelList().begin(); it != message.package().dataChannelList().end(); ++it )
 		{
 			EXPECT_NE( &( *it ), nullptr );
 			counter++;
@@ -250,10 +268,19 @@ namespace dnv::vista::sdk::tests
 	{
 		auto dataChannelList = createValidFullyCustomDataChannelList();
 
-		EXPECT_EQ( dataChannelList.dataChannelList().size(), 2U );
+		EXPECT_EQ( dataChannelList.package().dataChannelList().size(), 2U );
+
+		/* Test custom headers */
+		const auto& header = dataChannelList.package().header();
+		EXPECT_TRUE( header.customHeaders().has_value() );
+		const auto& customHeaders = *header.customHeaders();
+		EXPECT_TRUE( customHeaders.contains( "nr:CustomHeaderElement" ) );
+		const auto& headerValue = customHeaders.at( "nr:CustomHeaderElement" );
+		EXPECT_EQ( headerValue.type(), transport::Value::Type::String );
+		EXPECT_EQ( headerValue.string().value(), "Vendor specific headers" );
 
 		/* Test first DataChannel (temperature sensor) */
-		const auto& tempChannel = dataChannelList.dataChannelList()[0];
+		const auto& tempChannel = dataChannelList.package().dataChannelList()[0];
 		const auto& tempProperty = tempChannel.property();
 
 		EXPECT_EQ( tempProperty.dataChannelType().type(), "Inst" );
@@ -291,7 +318,7 @@ namespace dnv::vista::sdk::tests
 		EXPECT_EQ( *tempProperty.remarks(), " Location: ECR, Manufacturer: AAA Company, Type: TYPE-AAA " );
 
 		/* Test second DataChannel (alert type) */
-		const auto& alertChannel = dataChannelList.dataChannelList()[1];
+		const auto& alertChannel = dataChannelList.package().dataChannelList()[1];
 		const auto& alertProperty = alertChannel.property();
 
 		EXPECT_EQ( alertProperty.dataChannelType().type(), "Alert" );
@@ -409,18 +436,18 @@ namespace dnv::vista::sdk::tests
 	TEST( DataChannelTests, Test_DataChannelList_Operations )
 	{
 		transport::datachannel::DataChannelList dataChannelList;
-		EXPECT_TRUE( dataChannelList.empty() );
+		EXPECT_TRUE( dataChannelList.isEmpty() );
 		EXPECT_EQ( dataChannelList.size(), 0U );
 
 		/* Add single DataChannel */
 		auto singleList = createValidDataChannelList();
-		const auto& originalChannel = singleList.dataChannelList()[0];
+		const auto& originalChannel = singleList.package().dataChannelList()[0];
 
 		/* Create a copy for adding */
 		transport::datachannel::DataChannel channelCopy = originalChannel;
 		dataChannelList.add( channelCopy );
 
-		EXPECT_FALSE( dataChannelList.empty() );
+		EXPECT_FALSE( dataChannelList.isEmpty() );
 		EXPECT_EQ( dataChannelList.size(), 1U );
 
 		/* Test lookups work */
@@ -430,7 +457,7 @@ namespace dnv::vista::sdk::tests
 
 		/* Test clear */
 		dataChannelList.clear();
-		EXPECT_TRUE( dataChannelList.empty() );
+		EXPECT_TRUE( dataChannelList.isEmpty() );
 		EXPECT_EQ( dataChannelList.size(), 0U );
 	}
 
@@ -453,7 +480,7 @@ namespace dnv::vista::sdk::tests
 		/* Test duplicate LocalId addition */
 		transport::datachannel::DataChannelList dataChannelList;
 		auto validList = createValidDataChannelList();
-		const auto& originalChannel = validList.dataChannelList()[0];
+		const auto& originalChannel = validList.package().dataChannelList()[0];
 
 		/* Add first channel */
 		transport::datachannel::DataChannel firstChannel = originalChannel;
@@ -466,7 +493,6 @@ namespace dnv::vista::sdk::tests
 
 	/**
 	 * @brief Test string optimization in error messages
-	 * @details Verifies that StringBuilderPool optimizations work correctly
 	 */
 	TEST( RestrictionTest, StringLengthRestrictionValidation )
 	{

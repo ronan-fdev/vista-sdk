@@ -91,11 +91,7 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Equality comparison operator.
-		 *
-		 * Compares the `m_primaryItem` and `m_secondaryItem` members for equality.
-		 * `std::optional` handles comparisons involving `std::nullopt` correctly.
-		 * Requires `GmodPath` to have `operator==` defined.
-		 *
+		 *        Compares the `m_primaryItem` and `m_secondaryItem` members for equality.
 		 * @param other The other LocalIdItems instance to compare with.
 		 * @return true if both primary and secondary items are equal, false otherwise.
 		 */

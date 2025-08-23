@@ -73,11 +73,6 @@ namespace dnv::vista::sdk::transport
 	{
 	}
 
-	inline Value::String::String( std::string value ) noexcept
-		: m_value{ std::move( value ) }
-	{
-	}
-
 	inline Value::Char::Char( char value ) noexcept
 		: m_value{ value }
 	{

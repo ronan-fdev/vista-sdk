@@ -20,8 +20,6 @@ namespace dnv::vista::sdk::transport
 	 * @brief Data transfer object (DTO) for a single ISO 19848 data channel type name.
 	 * @details Represents a specific data channel type name and its corresponding description,
 	 *          as defined in the ISO 19848 standard. Used for serialization to and from JSON.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class DataChannelTypeNameDto final
 	{
@@ -154,8 +152,6 @@ namespace dnv::vista::sdk::transport
 	 * @details Represents a list of `DataChannelTypeNameDto` objects, effectively serializing
 	 *          a set of data channel types and their descriptions as per ISO 19848.
 	 *          Used for serialization to and from JSON.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class DataChannelTypeNamesDto final
 	{
@@ -277,8 +273,6 @@ namespace dnv::vista::sdk::transport
 	 * @brief Data transfer object (DTO) for a single ISO 19848 format data type.
 	 * @details Represents a specific format data type and its corresponding description,
 	 *          as defined in the ISO 19848 standard. Used for serialization to and from JSON.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class FormatDataTypeDto final
 	{
@@ -411,8 +405,6 @@ namespace dnv::vista::sdk::transport
 	 * @details Represents a list of `FormatDataTypeDto` objects, effectively serializing
 	 *          a set of format data types and their descriptions as per ISO 19848.
 	 *          Used for serialization to and from JSON.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class FormatDataTypesDto final
 	{

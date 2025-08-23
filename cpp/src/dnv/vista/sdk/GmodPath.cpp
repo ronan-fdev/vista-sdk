@@ -56,7 +56,9 @@ namespace dnv::vista::sdk
 
 							for ( size_t j = currentParentStart + 1; j <= i; ++j )
 							{
-								const GmodNode* setNode = ( j < pathParents.size() ) ? pathParents[j] : &pathTargetNode;
+								const GmodNode* setNode = ( j < pathParents.size() )
+															  ? pathParents[j]
+															  : &pathTargetNode;
 
 								if ( !setNode->isIndividualizable( j == pathParents.size(), true ) )
 								{
@@ -85,8 +87,12 @@ namespace dnv::vista::sdk
 								}
 
 								auto location =
-									nodes.has_value() && std::get<2>( nodes.value() ).has_value() ? std::get<2>( nodes.value() ) : setNode->location();
-								size_t start = nodes.has_value() ? std::get<0>( nodes.value() ) : j;
+									nodes.has_value() && std::get<2>( nodes.value() ).has_value()
+										? std::get<2>( nodes.value() )
+										: setNode->location();
+								size_t start = nodes.has_value()
+												   ? std::get<0>( nodes.value() )
+												   : j;
 								size_t end = j;
 								nodes = std::make_tuple( start, end, location );
 							}
@@ -106,7 +112,9 @@ namespace dnv::vista::sdk
 
 							for ( size_t j = startIdx; j <= endIdx; ++j )
 							{
-								const GmodNode* setNode = ( j < pathParents.size() ) ? pathParents[j] : &pathTargetNode;
+								const GmodNode* setNode = ( j < pathParents.size() )
+															  ? pathParents[j]
+															  : &pathTargetNode;
 								if ( setNode->isLeafNode() || j == pathParents.size() )
 								{
 									hasLeafNode = true;
@@ -209,7 +217,9 @@ namespace dnv::vista::sdk
 				pathParents.emplace_back( *parent );
 			}
 
-			GmodNode endNode = toFind.location.has_value() ? current.withLocation( toFind.location.value() ) : current;
+			GmodNode endNode = toFind.location.has_value()
+								   ? current.withLocation( toFind.location.value() )
+								   : current;
 
 			const GmodNode* startNode = nullptr;
 			if ( !pathParents.empty() && pathParents[0].parents().size() == 1 )
@@ -244,7 +254,9 @@ namespace dnv::vista::sdk
 
 			for ( size_t i = 0; i < pathParents.size() + 1; ++i )
 			{
-				GmodNode& n = ( i < pathParents.size() ) ? pathParents[i] : endNode;
+				GmodNode& n = ( i < pathParents.size() )
+								  ? pathParents[i]
+								  : endNode;
 
 				tempParentsView.clear();
 				for ( auto& p : pathParents )
@@ -337,7 +349,9 @@ namespace dnv::vista::sdk
 
 		for ( size_t i = 0; i < length(); ++i )
 		{
-			const GmodNode& node = ( i < m_parents.size() ) ? m_parents[i] : *m_node;
+			const GmodNode& node = ( i < m_parents.size() )
+									   ? m_parents[i]
+									   : *m_node;
 
 			auto set = locationSetsVisitor.visit( node, i, tempParents, *m_node );
 			if ( !set.has_value() )
@@ -499,7 +513,9 @@ namespace dnv::vista::sdk
 		for ( size_t i = 0; i < parents.size(); ++i )
 		{
 			const GmodNode* parent = parents[i];
-			const GmodNode* child = ( i + 1 < parents.size() ) ? parents[i + 1] : &node;
+			const GmodNode* child = ( i + 1 < parents.size() )
+										? parents[i + 1]
+										: &node;
 
 			if ( !parent->isChild( *child ) )
 			{
@@ -530,7 +546,9 @@ namespace dnv::vista::sdk
 
 		for ( size_t i = 0; i < length(); ++i )
 		{
-			const GmodNode& node = ( i < m_parents.size() ) ? m_parents[i] : *m_node;
+			const GmodNode& node = ( i < m_parents.size() )
+									   ? m_parents[i]
+									   : *m_node;
 
 			auto set = locationSetsVisitor.visit( node, i, tempParents, *m_node );
 			if ( set.has_value() )
@@ -686,7 +704,9 @@ namespace dnv::vista::sdk
 
 		for ( size_t i = 0; i < nodes.size() + 1; ++i )
 		{
-			const GmodNode& n = ( i < nodes.size() ) ? nodes[i] : endNode;
+			const GmodNode& n = ( i < nodes.size() )
+									? nodes[i]
+									: endNode;
 
 			tempParentsSize = 0;
 			for ( auto& node : nodes )
@@ -716,7 +736,9 @@ namespace dnv::vista::sdk
 			{
 				for ( size_t j = prevNonNullLocation.value(); j < setStart; ++j )
 				{
-					const GmodNode& pn = ( j < nodes.size() ) ? nodes[j] : endNode;
+					const GmodNode& pn = ( j < nodes.size() )
+											 ? nodes[j]
+											 : endNode;
 					if ( pn.location().has_value() )
 					{
 						return GmodParsePathResult::Error{ "Expected all nodes in the set to be without individualization" };
@@ -757,11 +779,15 @@ namespace dnv::vista::sdk
 				currentSet = sets[currentSetIndex++];
 
 			bool insideSet = ( currentSet.first != SIZE_MAX && i >= currentSet.first && i <= currentSet.second );
-			const GmodNode& n = ( i < nodes.size() ) ? nodes[i] : endNode;
+			const GmodNode& n = ( i < nodes.size() )
+									? nodes[i]
+									: endNode;
 
 			if ( insideSet )
 			{
-				const GmodNode& expectedLocationNode = ( currentSet.second < nodes.size() ) ? nodes[currentSet.second] : endNode;
+				const GmodNode& expectedLocationNode = ( currentSet.second < nodes.size() )
+														   ? nodes[currentSet.second]
+														   : endNode;
 				if ( n.location() != expectedLocationNode.location() )
 				{
 					return GmodParsePathResult::Error{ "Expected all nodes in the set to be individualized the same" };

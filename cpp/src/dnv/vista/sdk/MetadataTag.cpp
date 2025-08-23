@@ -37,7 +37,9 @@ namespace dnv::vista::sdk
 		builder.reserve( currentSize + requiredSize );
 
 		builder.append( prefixView );
-		builder.push_back( m_custom ? '~' : '-' );
+		builder.push_back( m_custom
+							   ? '~'
+							   : '-' );
 		builder.append( m_value );
 		builder.push_back( separator );
 	}

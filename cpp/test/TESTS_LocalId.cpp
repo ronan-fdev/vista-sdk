@@ -217,14 +217,18 @@ namespace dnv::vista::sdk::tests
 
 		auto localId1 = LocalIdBuilder::create( visVersion )
 							.withPrimaryItem( gmod.parsePath( input.primaryItem ) )
-							.tryWithSecondaryItem( !input.secondaryItem.empty() ? std::make_optional( gmod.parsePath( input.secondaryItem ) ) : std::nullopt )
+							.tryWithSecondaryItem( !input.secondaryItem.empty()
+													   ? std::make_optional( gmod.parsePath( input.secondaryItem ) )
+													   : std::nullopt )
 							.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Quantity, input.quantity ) )
 							.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Content, input.content ) )
 							.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Position, input.position ) );
 
 		auto localId2 = LocalIdBuilder::create( visVersion )
 							.withPrimaryItem( gmod.parsePath( input.primaryItem ) )
-							.tryWithSecondaryItem( !input.secondaryItem.empty() ? std::make_optional( gmod.parsePath( input.secondaryItem ) ) : std::nullopt )
+							.tryWithSecondaryItem( !input.secondaryItem.empty()
+													   ? std::make_optional( gmod.parsePath( input.secondaryItem ) )
+													   : std::nullopt )
 							.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Quantity, input.quantity ) )
 							.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Content, input.content ) )
 							.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Position, input.position ) );
@@ -235,7 +239,9 @@ namespace dnv::vista::sdk::tests
 		auto modifiedLocalId =
 			LocalIdBuilder::create( visVersion )
 				.withPrimaryItem( gmod.parsePath( input.primaryItem ) )
-				.tryWithSecondaryItem( !input.secondaryItem.empty() ? std::make_optional( gmod.parsePath( input.secondaryItem ) ) : std::nullopt )
+				.tryWithSecondaryItem( !input.secondaryItem.empty()
+										   ? std::make_optional( gmod.parsePath( input.secondaryItem ) )
+										   : std::nullopt )
 				.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Quantity, input.quantity ) )
 				.tryWithMetadataTag( codebooks.tryCreateTag( CodebookName::Content, input.content ) )
 				.tryWithMetadataTag( codebooks.createTag( CodebookName::Position, "eqtestvalue" ) );

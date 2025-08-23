@@ -137,7 +137,7 @@ namespace dnv::vista::sdk::internal
 			return m_capacity;
 		}
 
-		[[nodiscard]] bool empty() const noexcept
+		[[nodiscard]] bool isEmpty() const noexcept
 		{
 			return m_size == 0;
 		}

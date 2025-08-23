@@ -245,7 +245,7 @@ namespace dnv::vista::sdk::datatypes
 	inline Int128 Int128::operator*( const Int128& other ) const noexcept
 	{
 		/*
-		 * 128-bit multiplication using Karatsuba-style algorithm
+		 * 128-bit multiplication using Karatsuba-style algorithm (https://en.wikipedia.org/wiki/Karatsuba_algorithm)
 		 * Performance: Breaks 64x64 multiplication into 32x32 operations
 		 * to leverage hardware multipliers efficiently on all platforms
 		 */

@@ -246,7 +246,9 @@ namespace dnv::vista::sdk
 		}
 
 		std::vector<GmodNode> potentialParents;
-		potentialParents.reserve( qualifyingNodes.size() > 0 ? qualifyingNodes.size() - 1 : 0 );
+		potentialParents.reserve( qualifyingNodes.size() > 0
+									  ? qualifyingNodes.size() - 1
+									  : 0 );
 
 		for ( size_t i = 0; i < qualifyingNodes.size() - 1; ++i )
 		{
@@ -442,7 +444,9 @@ namespace dnv::vista::sdk
 	{
 		auto builder = convertLocalId( sourceLocalId.builder(), targetVersion );
 
-		return builder.has_value() ? std::make_optional( builder->build() ) : std::nullopt;
+		return builder.has_value()
+				   ? std::make_optional( builder->build() )
+				   : std::nullopt;
 	}
 
 	//----------------------------------------------

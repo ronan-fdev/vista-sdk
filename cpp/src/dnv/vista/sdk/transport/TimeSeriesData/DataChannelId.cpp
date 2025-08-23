@@ -3,9 +3,9 @@
  * @brief Implementation of DataChannelId class
  */
 
-#include "dnv/vista/sdk/LocalIdBuilder.h"
-
+#include "dnv/vista/sdk/internal/StringBuilderPool.h"
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"
+#include "dnv/vista/sdk/LocalIdBuilder.h"
 
 namespace dnv::vista::sdk::transport
 {
@@ -21,17 +21,22 @@ namespace dnv::vista::sdk::transport
 	{
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::LocalId:
 			{
 				return m_localId->toString();
 			}
-			case 2:
+			case Tag::ShortId:
 			{
 				return *m_shortId;
 			}
 			default:
 			{
-				throw std::runtime_error( "Invalid DataChannelId state: corrupted tag" );
+				auto lease = internal::StringBuilderPool::instance();
+				auto builder = lease.builder();
+				builder.append( "Invalid DataChannelId state: corrupted tag " );
+				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
+
+				throw std::runtime_error( lease.toString() );
 			}
 		}
 	}
@@ -44,7 +49,11 @@ namespace dnv::vista::sdk::transport
 	{
 		if ( value.empty() )
 		{
-			throw std::invalid_argument( "DataChannelId::parse: value cannot be empty" );
+			auto lease = internal::StringBuilderPool::instance();
+			auto builder = lease.builder();
+			builder.append( "DataChannelId::parse: value cannot be empty" );
+
+			throw std::invalid_argument( lease.toString() );
 		}
 
 		/* Try to parse as LocalId first */
@@ -55,6 +64,6 @@ namespace dnv::vista::sdk::transport
 		}
 
 		/* If not a valid LocalId, treat as short identifier */
-		return DataChannelId{ std::string{ value } };
+		return DataChannelId{ value };
 	}
 }

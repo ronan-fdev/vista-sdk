@@ -124,7 +124,9 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		const GmodNode& startNode = lastAssetFunction ? *lastAssetFunction : rootNode();
+		const GmodNode& startNode = lastAssetFunction
+										? *lastAssetFunction
+										: rootNode();
 
 		struct PathExistsState
 		{

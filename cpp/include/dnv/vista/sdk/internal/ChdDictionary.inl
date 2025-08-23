@@ -230,7 +230,9 @@ namespace dnv::vista::sdk::internal
 			}
 			else
 			{
-				m_table[i] = { std::string{}, items.empty() ? TValue{} : items[0].second };
+				m_table[i] = { std::string{}, items.empty()
+												  ? TValue{}
+												  : items[0].second };
 				if ( i < indices.size() )
 				{
 					freeSlots.push_back( i );

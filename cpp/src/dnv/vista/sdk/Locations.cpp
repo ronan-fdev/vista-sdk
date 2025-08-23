@@ -315,7 +315,9 @@ namespace dnv::vista::sdk
 		std::string_view span, const std::optional<std::string>& originalStr, Location& location, internal::LocationParsingErrorBuilder& errorBuilder ) const
 	{
 		auto displayString =
-			[&span, &originalStr]() -> std::string { return originalStr.has_value() ? *originalStr : std::string{ span }; };
+			[&span, &originalStr]() -> std::string { return originalStr.has_value()
+																? *originalStr
+																: std::string{ span }; };
 
 		if ( span.empty() )
 		{
@@ -476,7 +478,9 @@ namespace dnv::vista::sdk
 			result.push_back( ch );
 		}
 
-		location = Location( originalStr.has_value() ? *originalStr : result );
+		location = Location( originalStr.has_value()
+								 ? *originalStr
+								 : result );
 
 		return true;
 	}

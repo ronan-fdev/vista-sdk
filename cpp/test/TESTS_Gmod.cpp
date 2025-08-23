@@ -184,7 +184,9 @@ namespace dnv::vista::sdk::tests
 					state.paths.emplace_back( state.gmodRef, node, std::move( parentValues ) );
 				}
 
-				const GmodNode* lastParent = parents.empty() ? nullptr : parents.back();
+				const GmodNode* lastParent = parents.empty()
+												 ? nullptr
+												 : parents.back();
 
 				bool skipOccurenceCheck = Gmod::isProductSelectionAssignment( lastParent, &node );
 				if ( skipOccurenceCheck )
@@ -228,7 +230,9 @@ namespace dnv::vista::sdk::tests
 
 			TraverseHandlerWithState<MaxOccurrenceState> handler = []( MaxOccurrenceState& state, const std::vector<const GmodNode*>& parents,
 																	   const GmodNode& node ) -> TraversalHandlerResult {
-				const GmodNode* lastParent = parents.empty() ? nullptr : parents.back();
+				const GmodNode* lastParent = parents.empty()
+												 ? nullptr
+												 : parents.back();
 				bool skipOccurenceCheck = Gmod::isProductSelectionAssignment( lastParent, &node );
 				if ( skipOccurenceCheck )
 				{

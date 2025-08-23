@@ -124,23 +124,24 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Pattern match on DataChannelId content
 		 * @tparam T Return type
+		 * @tparam LocalIdFunc Callable type for LocalId case
+		 * @tparam ShortIdFunc Callable type for short identifier case
 		 * @param onLocalId Function to call if DataChannelId contains LocalId
 		 * @param onShortId Function to call if DataChannelId contains short identifier
 		 * @return Result of the matched function
 		 */
-		template <typename T>
-		[[nodiscard]] inline T matchOn(
-			std::function<T( const LocalId& )> onLocalId,
-			std::function<T( std::string_view )> onShortId ) const;
+		template <typename T, typename LocalIdFunc, typename ShortIdFunc>
+		[[nodiscard]] inline T matchOn( LocalIdFunc&& onLocalId, ShortIdFunc&& onShortId ) const;
 
 		/**
-		 * @brief Pattern switch on DataChannelId content (void version)
+		 * @brief Pattern switch on DataChannelId content
+		 * @tparam LocalIdFunc Callable type for LocalId case
+		 * @tparam ShortIdFunc Callable type for short identifier case
 		 * @param onLocalId Function to call if DataChannelId contains LocalId
 		 * @param onShortId Function to call if DataChannelId contains short identifier
 		 */
-		inline void switchOn(
-			std::function<void( const LocalId& )> onLocalId,
-			std::function<void( std::string_view )> onShortId ) const;
+		template <typename LocalIdFunc, typename ShortIdFunc>
+		inline void switchOn( LocalIdFunc&& onLocalId, ShortIdFunc&& onShortId ) const;
 
 		//----------------------------------------------
 		// String conversion
@@ -165,17 +166,25 @@ namespace dnv::vista::sdk::transport
 		[[nodiscard]] static DataChannelId parse( std::string_view value );
 
 	private:
+	private:
 		//----------------------------------------------
 		// Private members
 		//----------------------------------------------
 
-		/** @brief Tag to identify which union member is active (1=LocalId, 2=shortId) */
-		int m_tag;
+		/** @brief Tag enumeration for discriminated union */
+		enum class Tag : bool
+		{
+			LocalId = 0,
+			ShortId
+		};
 
-		/** @brief LocalId storage (active when m_tag == 1) */
+		/** @brief Tag to identify which union member is active */
+		Tag m_tag;
+
+		/** @brief LocalId storage (active when m_tag == Tag::LocalId) */
 		std::optional<LocalId> m_localId;
 
-		/** @brief Short identifier storage (active when m_tag == 2) */
+		/** @brief Short identifier storage (active when m_tag == Tag::ShortId) */
 		std::optional<std::string> m_shortId;
 	};
 }

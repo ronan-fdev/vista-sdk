@@ -258,16 +258,16 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Construction
 	//----------------------------------------------
 
-	Format::Format( std::string type )
+	Format::Format( std::string_view type )
 	{
-		setType( std::move( type ) );
+		setType( type );
 	}
 
 	//----------------------------------------------
 	// Validation
 	//----------------------------------------------
 
-	ValidateResult Format::validateValue( const std::string& value, dnv::vista::sdk::transport::Value& parsedValue ) const
+	ValidateResult Format::validateValue( const std::string& value, transport::Value& parsedValue ) const
 	{
 		if ( !m_dataType )
 		{
@@ -298,9 +298,9 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Construction
 	//----------------------------------------------
 
-	DataChannelType::DataChannelType( std::string type )
+	DataChannelType::DataChannelType( std::string_view type )
 	{
-		setType( std::move( type ) );
+		setType( type );
 	}
 
 	//----------------------------------------------
@@ -320,18 +320,22 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Setters
 	//----------------------------------------------
 
-	void DataChannelType::setType( std::string type )
+	void DataChannelType::setType( std::string_view type )
 	{
 		/* Validate against ISO19848 data channel types */
 		auto channelTypes = ISO19848::instance().dataChannelTypeNames( ISO19848::LatestVersion );
-		auto result = channelTypes.parse( type );
+		auto result = channelTypes.parse( std::string( type ) );
 
 		if ( !result.isOk() )
 		{
-			throw std::invalid_argument( "Invalid data channel type: " + type );
+			auto lease = internal::StringBuilderPool::instance();
+			auto builder = lease.builder();
+			builder.append( "Invalid data channel type: " );
+			builder.append( type );
+			throw std::invalid_argument( lease.toString() );
 		}
 
-		m_type = std::move( type );
+		m_type = type;
 	}
 
 	void DataChannelType::setUpdateCycle( std::optional<double> updateCycle )
@@ -396,7 +400,19 @@ namespace dnv::vista::sdk::transport::datachannel
 	DataChannel::DataChannel( DataChannelId dataChannelId, Property property )
 		: m_dataChannelId{ std::move( dataChannelId ) }
 	{
-		setProperty( std::move( property ) );
+		auto validationResult = property.validate();
+		if ( !validationResult.isOk() )
+		{
+			/* Extract error message from Invalid result */
+			std::string errorMessage;
+			if ( !validationResult.invalid().errors().empty() )
+			{
+				errorMessage = validationResult.invalid().errors()[0];
+			}
+			throw std::invalid_argument( "Property validation failed: " + errorMessage );
+		}
+
+		m_property = std::move( property );
 	}
 
 	//----------------------------------------------
@@ -464,6 +480,17 @@ namespace dnv::vista::sdk::transport::datachannel
 		return nullptr;
 	}
 
+	const DataChannel* DataChannelList::tryGetByShortId( std::string_view shortId ) const
+	{
+		auto it = m_shortIdMap.find( shortId );
+		if ( it != m_shortIdMap.end() )
+		{
+			return &( it->second.get() );
+		}
+
+		return nullptr;
+	}
+
 	const DataChannel* DataChannelList::tryGetByLocalId( const LocalId& localId ) const
 	{
 		auto it = m_localIdMap.find( localId );
@@ -493,7 +520,12 @@ namespace dnv::vista::sdk::transport::datachannel
 			const auto& shortId = *dataChannel.dataChannelId().shortId();
 			if ( m_shortIdMap.find( shortId ) != m_shortIdMap.end() )
 			{
-				throw std::invalid_argument( "ShortId already exists in collection: " + shortId );
+				auto lease = internal::StringBuilderPool::instance();
+				auto builder = lease.builder();
+				builder.append( "ShortId already exists in collection: " );
+				builder.append( shortId );
+
+				throw std::invalid_argument( lease.toString() );
 			}
 		}
 

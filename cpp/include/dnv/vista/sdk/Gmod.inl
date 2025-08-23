@@ -324,7 +324,9 @@ namespace dnv::vista::sdk
 
 	inline const GmodNode* Gmod::Parents::lastOrDefault() const noexcept
 	{
-		return m_parents.empty() ? nullptr : m_parents.back();
+		return m_parents.empty()
+				   ? nullptr
+				   : m_parents.back();
 	}
 
 	inline const std::vector<const GmodNode*>& Gmod::Parents::asList() const noexcept

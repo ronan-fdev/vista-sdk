@@ -724,7 +724,9 @@ namespace dnv::vista::sdk::datatypes
 		year = 1;
 		while ( true )
 		{
-			std::int32_t daysInCurrentYear = isLeapYear( year ) ? 366 : 365;
+			std::int32_t daysInCurrentYear = isLeapYear( year )
+												 ? 366
+												 : 365;
 			if ( totalDays < daysInCurrentYear )
 			{
 				break;
@@ -776,7 +778,9 @@ namespace dnv::vista::sdk::datatypes
 		/* Add days for complete years before the given year */
 		for ( std::int32_t y = 1; y < year; ++y )
 		{
-			totalDays += isLeapYear( y ) ? 366 : 365;
+			totalDays += isLeapYear( y )
+							 ? 366
+							 : 365;
 		}
 
 		/* Add days for complete months in the given year */
@@ -1059,7 +1063,10 @@ namespace dnv::vista::sdk::datatypes
 					const auto absMinutes = std::abs( offsetMinutes );
 					const auto offsetHours = absMinutes / 60;
 					const auto offsetMins = absMinutes % 60;
-					oss << ( offsetMinutes >= 0 ? '+' : '-' ) << std::setw( 2 ) << offsetHours << ':' << std::setw( 2 ) << offsetMins;
+					oss << ( offsetMinutes >= 0
+								   ? '+'
+								   : '-' )
+						<< std::setw( 2 ) << offsetHours << ':' << std::setw( 2 ) << offsetMins;
 				}
 
 				return oss.str();
@@ -1087,7 +1094,10 @@ namespace dnv::vista::sdk::datatypes
 					const auto absMinutes = std::abs( offsetMinutes );
 					const auto offsetHours = absMinutes / 60;
 					const auto offsetMins = absMinutes % 60;
-					oss << ( offsetMinutes >= 0 ? '+' : '-' ) << std::setw( 2 ) << offsetHours << ':' << std::setw( 2 ) << offsetMins;
+					oss << ( offsetMinutes >= 0
+								   ? '+'
+								   : '-' )
+						<< std::setw( 2 ) << offsetHours << ':' << std::setw( 2 ) << offsetMins;
 				}
 
 				return oss.str();
@@ -1248,7 +1258,9 @@ namespace dnv::vista::sdk::datatypes
 							/* Maximum valid offset is ±14:00 (840 minutes) exactly */
 							if ( totalMinutes <= 840 )
 							{
-								offset = TimeSpan::fromMinutes( isNegative ? -totalMinutes : totalMinutes );
+								offset = TimeSpan::fromMinutes( isNegative
+																	? -totalMinutes
+																	: totalMinutes );
 								offsetParsed = true;
 							}
 						}

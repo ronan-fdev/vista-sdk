@@ -13,13 +13,14 @@ include(GoogleTest)
 
 # --- Tests source files ---
 set(TEST_SOURCES
-	datatypes/TESTS_DateTime8601.cpp
+	datatypes/TESTS_DateTimeISO8601.cpp
 	datatypes/TESTS_Decimal128.cpp
 	datatypes/TESTS_Int128.cpp
 	transport/TESTS_DataChannelId.cpp
 	transport/TESTS_DataChannelISOmessages.cpp
 	transport/TESTS_ISO19848.cpp
 	transport/TESTS_ShipId.cpp
+	transport/TESTS_TimeSeriesISOmessages.cpp
 	utils/TESTS_StringBuilderPoolTests.cpp
 
 	TESTS_Codebook.cpp

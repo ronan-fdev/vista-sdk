@@ -220,7 +220,9 @@ namespace dnv::vista::sdk::transport
 			size_t successCount = 0;
 
 			std::vector<DataChannelTypeNameDto> tempValues;
-			const size_t reserveSize = totalItems < 1000 ? totalItems + totalItems / 4 : totalItems + totalItems / 16;
+			const size_t reserveSize = totalItems < 1000
+										   ? totalItems + totalItems / 4
+										   : totalItems + totalItems / 16;
 			tempValues.reserve( reserveSize );
 
 			for ( const auto& itemJson : valuesArray )
@@ -321,7 +323,9 @@ namespace dnv::vista::sdk::transport
 		size_t successCount = 0;
 
 		dto.m_values.clear();
-		const size_t reserveSize = totalItems < 1000 ? totalItems + totalItems / 4 : totalItems + totalItems / 16;
+		const size_t reserveSize = totalItems < 1000
+									   ? totalItems + totalItems / 4
+									   : totalItems + totalItems / 16;
 		dto.m_values.reserve( reserveSize );
 
 		for ( const auto& itemJson : valuesArray )
@@ -536,7 +540,9 @@ namespace dnv::vista::sdk::transport
 			size_t successCount = 0;
 
 			std::vector<FormatDataTypeDto> tempValues;
-			const size_t reserveSize = totalItems < 1000 ? totalItems + totalItems / 4 : totalItems + totalItems / 16;
+			const size_t reserveSize = totalItems < 1000
+										   ? totalItems + totalItems / 4
+										   : totalItems + totalItems / 16;
 			tempValues.reserve( reserveSize );
 
 			for ( const auto& itemJson : valuesArray )
@@ -638,7 +644,9 @@ namespace dnv::vista::sdk::transport
 
 		dto.m_values.clear();
 
-		const size_t reserveSize = totalItems < 1000 ? totalItems + totalItems / 4 : totalItems + totalItems / 16;
+		const size_t reserveSize = totalItems < 1000
+									   ? totalItems + totalItems / 4
+									   : totalItems + totalItems / 16;
 		dto.m_values.reserve( reserveSize );
 
 		for ( const auto& itemJson : valuesArray )

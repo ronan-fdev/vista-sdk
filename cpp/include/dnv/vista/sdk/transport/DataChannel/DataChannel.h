@@ -246,7 +246,7 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Advanced validation restriction system
-		 * @details Implements enumeration, pattern, numeric bounds, length validation
+		 * @details Implements enumeration, pattern, numeric bounds, length validation.
 		 */
 		class Restriction final
 		{
@@ -494,8 +494,8 @@ namespace dnv::vista::sdk
 			// Construction
 			//----------------------------------------------
 
-			/** @brief Default constructor */
-			Range() = delete;
+			/** @brief Default constructor with min/max values*/
+			VISTA_SDK_CPP_FORCE_INLINE Range();
 
 			/**
 			 * @brief Constructs Range with validation
@@ -588,7 +588,7 @@ namespace dnv::vista::sdk
 			 * @brief Constructs Unit with required symbol
 			 * @param unitSymbol Unit symbol
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE explicit Unit( std::string unitSymbol );
+			VISTA_SDK_CPP_FORCE_INLINE explicit Unit( std::string_view unitSymbol );
 
 			/** @brief Copy constructor */
 			Unit( const Unit& ) = default;
@@ -629,7 +629,7 @@ namespace dnv::vista::sdk
 			 * @brief Get optional custom elements
 			 * @return Optional custom elements dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<transport::Value>>& customElements() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customElements() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -639,7 +639,7 @@ namespace dnv::vista::sdk
 			 * @brief Set unit symbol
 			 * @param unitSymbol New unit symbol
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setUnitSymbol( std::string unitSymbol );
+			VISTA_SDK_CPP_FORCE_INLINE void setUnitSymbol( std::string_view unitSymbol );
 
 			/**
 			 * @brief Set quantity name
@@ -690,6 +690,23 @@ namespace dnv::vista::sdk
 				ShipId shipId,
 				ConfigurationReference dataChannelListId,
 				std::optional<std::string> author );
+
+			/**
+			 * @brief Constructs Header with all fields
+			 * @param shipId Ship identifier
+			 * @param dataChannelListId Configuration reference for data channel list
+			 * @param versionInformation Version information
+			 * @param author Author information
+			 * @param dateCreated Creation timestamp
+			 * @param customHeaders Custom headers dictionary
+			 */
+			VISTA_SDK_CPP_FORCE_INLINE Header(
+				ShipId shipId,
+				ConfigurationReference dataChannelListId,
+				std::optional<VersionInformation> versionInformation,
+				std::optional<std::string> author,
+				std::optional<datatypes::DateTimeOffset> dateCreated,
+				std::optional<utils::StringMap<Value>> customHeaders );
 
 			/** @brief Copy constructor */
 			Header( const Header& ) = default;
@@ -901,7 +918,7 @@ namespace dnv::vista::sdk
 			 * @brief Constructs Format with required type
 			 * @param type Format type string (validates against ISO19848)
 			 */
-			explicit Format( std::string type );
+			explicit Format( std::string_view type );
 
 			/** @brief Copy constructor */
 			Format( const Format& ) = default;
@@ -954,7 +971,7 @@ namespace dnv::vista::sdk
 			 * @param type New format type
 			 * @throws std::invalid_argument If invalid format type
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setType( std::string type );
+			VISTA_SDK_CPP_FORCE_INLINE void setType( std::string_view type );
 
 			/**
 			 * @brief Set restriction
@@ -1005,7 +1022,7 @@ namespace dnv::vista::sdk
 			 * @brief Constructs DataChannelType with required type
 			 * @param type Channel type string (validates against ISO19848)
 			 */
-			explicit DataChannelType( std::string type );
+			explicit DataChannelType( std::string_view type );
 
 			/** @brief Copy constructor */
 			DataChannelType( const DataChannelType& ) = default;
@@ -1064,7 +1081,7 @@ namespace dnv::vista::sdk
 			 * @param type New channel type
 			 * @throws std::invalid_argument If invalid channel type
 			 */
-			void setType( std::string type );
+			void setType( std::string_view type );
 
 			/**
 			 * @brief Set update cycle
@@ -1111,9 +1128,9 @@ namespace dnv::vista::sdk
 			 * @brief Constructs Property with required fields
 			 * @param dataChannelType Channel type
 			 * @param format Data format
-			 * @param range Optional numeric range
-			 * @param unit Optional unit information
-			 * @param alertPriority Optional alert priority
+			 * @param range Numeric range
+			 * @param unit Unit information
+			 * @param alertPriority Alert priority
 			 */
 			VISTA_SDK_CPP_FORCE_INLINE Property(
 				DataChannelType dataChannelType,
@@ -1525,7 +1542,7 @@ namespace dnv::vista::sdk
 			 * @brief Check if collection is empty
 			 * @return True if no data channels
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool empty() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool isEmpty() const noexcept;
 
 			/**
 			 * @brief Clear all data channels
@@ -1570,6 +1587,13 @@ namespace dnv::vista::sdk
 			 * @return Pointer to data channel if found, nullptr otherwise
 			 */
 			[[nodiscard]] const DataChannel* tryGetByShortId( const std::string& shortId ) const;
+
+			/**
+			 * @brief Try to get data channel by short ID (string_view overload)
+			 * @param shortId Short identifier to search for
+			 * @return Pointer to data channel if found, nullptr otherwise
+			 */
+			[[nodiscard]] const DataChannel* tryGetByShortId( std::string_view shortId ) const;
 
 			/**
 			 * @brief Try to get data channel by local ID

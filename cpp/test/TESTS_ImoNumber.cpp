@@ -64,7 +64,9 @@ namespace dnv::vista::sdk::test
 
 			ASSERT_TRUE( data.is_object() || data.is_array() ) << "JSON data is not a valid object or array";
 
-			const nlohmann::json& testCases = data.is_array() ? data : ( data.contains( "imoNumbers" ) ? data.at( "imoNumbers" ) : data );
+			const nlohmann::json& testCases = data.is_array()
+												  ? data
+												  : ( data.contains( "imoNumbers" ) ? data.at( "imoNumbers" ) : data );
 
 			ASSERT_TRUE( testCases.is_array() ) << "Test cases must be an array";
 

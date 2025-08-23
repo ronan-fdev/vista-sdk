@@ -21,8 +21,6 @@ namespace dnv::vista::sdk
 	 * @brief Data transfer object for a single codebook
 	 * @details Represents serialized information about a codebook from the ISO 19848 standard.
 	 *          Each codebook contains a name identifier and a collection of values organized by groups.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class CodebookDto final
 	{
@@ -164,8 +162,6 @@ namespace dnv::vista::sdk
 	 * @brief Data transfer object for a collection of codebooks
 	 * @details Represents a complete set of codebooks for a specific VIS version,
 	 *          used for serialization to and from JSON format.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class CodebooksDto final
 	{

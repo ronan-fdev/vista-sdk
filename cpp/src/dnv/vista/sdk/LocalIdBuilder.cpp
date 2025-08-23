@@ -941,7 +941,9 @@ namespace dnv::vista::sdk
 					}
 
 					size_t dashIndex = segment.find( constants::localId::PREFIX_DASH );
-					std::string_view code = ( dashIndex == std::string_view::npos ) ? segment : segment.substr( 0, dashIndex );
+					std::string_view code = ( dashIndex == std::string_view::npos )
+												? segment
+												: segment.substr( 0, dashIndex );
 
 					if ( !gmod )
 					{
@@ -1453,7 +1455,9 @@ namespace dnv::vista::sdk
 	std::optional<internal::LocalIdParsingState> LocalIdBuilder::metaPrefixToState( std::string_view prefix )
 	{
 		auto it = prefixMap.find( prefix );
-		return ( it != prefixMap.end() ) ? std::make_optional( it->second ) : std::nullopt;
+		return ( it != prefixMap.end() )
+				   ? std::make_optional( it->second )
+				   : std::nullopt;
 	}
 
 	std::optional<internal::LocalIdParsingState> LocalIdBuilder::nextParsingState( internal::LocalIdParsingState prev )
@@ -1520,7 +1524,9 @@ namespace dnv::vista::sdk
 
 		auto dashIndex = segment.find( constants::localId::PREFIX_DASH );
 		auto tildeIndex = segment.find( constants::localId::PREFIX_TILDE );
-		auto prefixIndex = ( dashIndex == std::string_view::npos ) ? tildeIndex : dashIndex;
+		auto prefixIndex = ( dashIndex == std::string_view::npos )
+							   ? tildeIndex
+							   : dashIndex;
 
 		if ( prefixIndex == std::string_view::npos )
 		{

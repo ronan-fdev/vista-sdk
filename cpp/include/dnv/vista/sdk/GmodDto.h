@@ -22,8 +22,6 @@ namespace dnv::vista::sdk
 	 * @details Represents a node in the Generic Product Model as defined by ISO 19848.
 	 *          Contains all metadata associated with a node including its category, type, code, name,
 	 *          and optional attributes.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class GmodNodeDto final
 	{
@@ -235,8 +233,6 @@ namespace dnv::vista::sdk
 	 * @brief Data transfer object for a complete GMOD (Generic Product Model)
 	 * @details Represents the entire Generic Product Model for a specific VIS version,
 	 *          containing all nodes and their relationships as defined in ISO 19848.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class GmodDto final
 	{

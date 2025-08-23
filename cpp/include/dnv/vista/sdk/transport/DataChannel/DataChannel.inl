@@ -81,7 +81,9 @@ namespace dnv::vista::sdk::transport::datachannel
 	VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference::ConfigurationReference( std::string_view id, datatypes::DateTimeOffset timeStamp, std::optional<std::string_view> version )
 		: m_id{ id },
 		  m_timeStamp{ timeStamp },
-		  m_version{ version ? std::optional<std::string>{ *version } : std::nullopt }
+		  m_version{ version
+						 ? std::optional<std::string>{ *version }
+						 : std::nullopt }
 	{
 	}
 
@@ -260,6 +262,12 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Construction
 	//----------------------------------------------
 
+	VISTA_SDK_CPP_FORCE_INLINE Range::Range()
+		: m_low{ std::numeric_limits<double>::lowest() },
+		  m_high{ std::numeric_limits<double>::max() }
+	{
+	}
+
 	VISTA_SDK_CPP_FORCE_INLINE Range::Range( double low, double high )
 		: m_low{ low },
 		  m_high{ high }
@@ -302,8 +310,8 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Construction
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE Unit::Unit( std::string unitSymbol )
-		: m_unitSymbol{ std::move( unitSymbol ) }
+	VISTA_SDK_CPP_FORCE_INLINE Unit::Unit( std::string_view unitSymbol )
+		: m_unitSymbol{ unitSymbol }
 	{
 	}
 
@@ -321,7 +329,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_quantityName;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>>& Unit::customElements() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<transport::Value>>& Unit::customElements() const noexcept
 	{
 		return m_customElements;
 	}
@@ -330,9 +338,9 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Setters
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE void Unit::setUnitSymbol( std::string unitSymbol )
+	VISTA_SDK_CPP_FORCE_INLINE void Unit::setUnitSymbol( std::string_view unitSymbol )
 	{
-		m_unitSymbol = std::move( unitSymbol );
+		m_unitSymbol = unitSymbol;
 	}
 
 	VISTA_SDK_CPP_FORCE_INLINE void Unit::setQuantityName( std::optional<std::string> quantityName )
@@ -340,7 +348,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_quantityName = std::move( quantityName );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Unit::setCustomElements( std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>> customElements )
+	VISTA_SDK_CPP_FORCE_INLINE void Unit::setCustomElements( std::optional<utils::StringMap<transport::Value>> customElements )
 	{
 		m_customElements = std::move( customElements );
 	}
@@ -361,7 +369,24 @@ namespace dnv::vista::sdk::transport::datachannel
 		  m_dataChannelListId{ std::move( dataChannelListId ) },
 		  m_versionInformation{ VersionInformation{} },
 		  m_author{ std::move( author ) },
-		  m_dateCreated{ datatypes::DateTimeOffset::utcNow() }
+		  m_dateCreated{ datatypes::DateTimeOffset::utcNow() },
+		  m_customHeaders{ std::nullopt }
+	{
+	}
+
+	VISTA_SDK_CPP_FORCE_INLINE Header::Header(
+		ShipId shipId,
+		ConfigurationReference dataChannelListId,
+		std::optional<VersionInformation> versionInformation,
+		std::optional<std::string> author,
+		std::optional<datatypes::DateTimeOffset> dateCreated,
+		std::optional<utils::StringMap<Value>> customHeaders )
+		: m_shipId{ std::move( shipId ) },
+		  m_dataChannelListId{ std::move( dataChannelListId ) },
+		  m_versionInformation{ std::move( versionInformation ) },
+		  m_author{ std::move( author ) },
+		  m_dateCreated{ std::move( dateCreated ) },
+		  m_customHeaders{ std::move( customHeaders ) }
 	{
 	}
 
@@ -394,7 +419,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_dateCreated;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>>& Header::customHeaders() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<transport::Value>>& Header::customHeaders() const noexcept
 	{
 		return m_customHeaders;
 	}
@@ -428,7 +453,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_dateCreated = std::move( dateCreated );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Header::setCustomHeaders( std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>> customHeaders )
+	VISTA_SDK_CPP_FORCE_INLINE void Header::setCustomHeaders( std::optional<utils::StringMap<transport::Value>> customHeaders )
 	{
 		m_customHeaders = std::move( customHeaders );
 	}
@@ -455,7 +480,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_namingRule;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>>& NameObject::customNameObjects() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<transport::Value>>& NameObject::customNameObjects() const noexcept
 	{
 		return m_customNameObjects;
 	}
@@ -469,7 +494,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_namingRule = std::move( namingRule );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void NameObject::setCustomNameObjects( std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>> customNameObjects )
+	VISTA_SDK_CPP_FORCE_INLINE void NameObject::setCustomNameObjects( std::optional<utils::StringMap<transport::Value>> customNameObjects )
 	{
 		m_customNameObjects = std::move( customNameObjects );
 	}
@@ -505,18 +530,18 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Setters
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE void Format::setType( std::string type )
+	VISTA_SDK_CPP_FORCE_INLINE void Format::setType( std::string_view type )
 	{
 		/* Validate against ISO19848 format types */
 		auto formatTypes = ISO19848::instance().formatDataTypes( ISO19848::LatestVersion );
-		auto result = formatTypes.parse( type );
+		auto result = formatTypes.parse( std::string( type ) );
 
 		if ( !result.isOk() )
 		{
-			throw std::invalid_argument( "Invalid format type: " + type );
+			throw std::invalid_argument( "Invalid format type: " + std::string( type ) );
 		}
 
-		m_type = std::move( type );
+		m_type = type;
 		m_dataType = result.ok().typeName();
 	}
 
@@ -557,7 +582,10 @@ namespace dnv::vista::sdk::transport::datachannel
 	//----------------------------------------------
 
 	VISTA_SDK_CPP_FORCE_INLINE Property::Property(
-		DataChannelType dataChannelType, Format format, std::optional<Range> range, std::optional<Unit> unit, std::optional<std::string> alertPriority )
+		DataChannelType dataChannelType,
+		Format format, std::optional<Range> range,
+		std::optional<Unit> unit,
+		std::optional<std::string> alertPriority )
 		: m_dataChannelType{ std::move( dataChannelType ) },
 		  m_format{ std::move( format ) },
 		  m_range{ std::move( range ) },
@@ -612,7 +640,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_remarks;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>>& Property::customProperties() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<transport::Value>>& Property::customProperties() const noexcept
 	{
 		return m_customProperties;
 	}
@@ -661,7 +689,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_remarks = std::move( remarks );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Property::setCustomProperties( std::optional<utils::StringMap<dnv::vista::sdk::transport::Value>> customProperties )
+	VISTA_SDK_CPP_FORCE_INLINE void Property::setCustomProperties( std::optional<utils::StringMap<transport::Value>> customProperties )
 	{
 		m_customProperties = std::move( customProperties );
 	}
@@ -754,7 +782,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_dataChannels.size();
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE bool DataChannelList::empty() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE bool DataChannelList::isEmpty() const noexcept
 	{
 		return m_dataChannels.empty();
 	}

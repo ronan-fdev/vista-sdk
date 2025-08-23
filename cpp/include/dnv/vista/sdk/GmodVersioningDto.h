@@ -26,8 +26,6 @@ namespace dnv::vista::sdk
 	 * @details Represents the change in an assignment's value for a GMOD node when
 	 *          converting between VIS versions. It specifies the old and new
 	 *          values of a particular assignment.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class GmodVersioningAssignmentChangeDto final
 	{
@@ -160,8 +158,6 @@ namespace dnv::vista::sdk
 	 * @details Represents the set of rules for converting a specific GMOD node
 	 *          from one VIS version to another. This includes operations to apply,
 	 *          source and target node codes, and details about assignment changes.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class GmodNodeConversionDto final
 	{
@@ -342,8 +338,6 @@ namespace dnv::vista::sdk
 	 * @details Represents all GMOD node conversion rules for a specific target VIS version.
 	 *          It contains a map of GMOD node codes (typically from the source version)
 	 *          to their respective conversion details.
-	 * @todo Consider refactoring for stricter immutability (e.g., const members) if direct modification
-	 *       by deserialization (beyond initial construction) is not desired.
 	 */
 	class GmodVersioningDto final
 	{

@@ -922,7 +922,9 @@ namespace dnv::vista::sdk::tests
 					unexpectedInteger();
 					return "";
 				},
-				[]( bool b ) -> std::string { return b ? "boolean:true" : "boolean:false"; },
+				[]( bool b ) -> std::string { return b
+														 ? "boolean:true"
+														 : "boolean:false"; },
 				[]( std::string_view ) -> std::string {
 					unexpectedString();
 					return "";
@@ -1153,8 +1155,9 @@ namespace dnv::vista::sdk::tests
 		{
 			datatypes::Decimal128 value;
 			bool isNegative;
-			std::string toString() const { return isNegative ? "negative:" + value.toString()
-															 : "positive:" + value.toString(); }
+			std::string toString() const { return isNegative
+													  ? "negative:" + value.toString()
+													  : "positive:" + value.toString(); }
 		};
 
 		auto decimalResult = formatDataTypes.parse( "Decimal" );
