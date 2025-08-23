@@ -219,7 +219,7 @@ namespace dnv::vista::sdk::transport
 	// Validation
 	//----------------------------------------------
 
-	FormatDataType::ValidateResult FormatDataType::validate( std::string_view value, Value& outValue ) const
+	ValidateResult FormatDataType::validate( std::string_view value, Value& outValue ) const
 	{
 		outValue = Value{ Value::String{ value } };
 

@@ -7,11 +7,11 @@
 
 #include "dnv/vista/sdk/internal/MemoryCache.h"
 
-#include "dnv/vista/sdk/Exceptions.h"
-
 #include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
 #include "dnv/vista/sdk/datatypes/Decimal128.h"
 #include "dnv/vista/sdk/transport/ISO19848Dtos.h"
+#include "dnv/vista/sdk/Exceptions.h"
+#include "dnv/vista/sdk/Results.h"
 
 namespace dnv::vista::sdk::transport
 {
@@ -575,55 +575,6 @@ namespace dnv::vista::sdk::transport
 
 			/** @brief Variant storing the typed value */
 			std::variant<String, Char, Boolean, Integer, UnsignedInteger, Long, Double, Decimal, DateTime> m_value{ String{ std::string_view{ "" } } };
-		};
-
-		//----------------------------------------------
-		// FormatDataType::ValidateResult class
-		//----------------------------------------------
-
-		/** @brief Result of validation operation */
-		class ValidateResult
-		{
-		public:
-			class Ok final
-			{
-			public:
-				Ok() = default;
-			};
-
-			class Invalid final
-			{
-			public:
-				inline explicit Invalid( std::vector<std::string> errors ) noexcept;
-				[[nodiscard]] inline const std::vector<std::string>& errors() const noexcept;
-
-			private:
-				std::vector<std::string> m_errors;
-			};
-
-			//-----------------------------
-			// Construction from result
-			//-----------------------------
-
-			inline ValidateResult( Ok ok ) noexcept;
-			inline ValidateResult( Invalid invalid ) noexcept;
-
-			//-----------------------------
-			// Type checking
-			//-----------------------------
-
-			[[nodiscard]] inline bool isOk() const noexcept;
-			[[nodiscard]] inline bool isInvalid() const noexcept;
-
-			//-----------------------------
-			// Value access
-			//-----------------------------
-
-			[[nodiscard]] inline const Ok& ok() const;
-			[[nodiscard]] inline const Invalid& invalid() const;
-
-		private:
-			std::variant<Ok, Invalid> m_value;
 		};
 
 		//----------------------------------------------

@@ -352,40 +352,6 @@ namespace dnv::vista::sdk::transport
 		return m_value;
 	}
 
-	//----------------------------------------------
-	// FormatDataType::ValidateResult class
-	//----------------------------------------------
-
-	inline FormatDataType::ValidateResult::Invalid::Invalid( std::vector<std::string> errors ) noexcept
-		: m_errors{ std::move( errors ) }
-	{
-	}
-
-	inline const std::vector<std::string>& FormatDataType::ValidateResult::Invalid::errors() const noexcept
-	{
-		return m_errors;
-	}
-
-	inline FormatDataType::ValidateResult::ValidateResult( Ok ok ) noexcept
-		: m_value{ std::move( ok ) }
-	{
-	}
-
-	inline FormatDataType::ValidateResult::ValidateResult( Invalid invalid ) noexcept
-		: m_value{ std::move( invalid ) }
-	{
-	}
-
-	inline const std::string& FormatDataType::type() const noexcept
-	{
-		return m_type;
-	}
-
-	inline const std::string& FormatDataType::description() const noexcept
-	{
-		return m_description;
-	}
-
 	//=====================================================================
 	// FormatDataTypes class
 	//=====================================================================
@@ -397,6 +363,20 @@ namespace dnv::vista::sdk::transport
 	inline FormatDataTypes::FormatDataTypes( std::vector<FormatDataType> values ) noexcept
 		: m_values{ std::move( values ) }
 	{
+	}
+
+	//----------------------------------------------
+	// Accessors
+	//----------------------------------------------
+
+	inline const std::string& FormatDataType::type() const noexcept
+	{
+		return m_type;
+	}
+
+	inline const std::string& FormatDataType::description() const noexcept
+	{
+		return m_description;
 	}
 
 	//----------------------------------------------
@@ -528,38 +508,6 @@ namespace dnv::vista::sdk::transport
 	inline FormatDataTypes::const_iterator FormatDataTypes::cend() const noexcept
 	{
 		return m_values.cend();
-	}
-
-	//----------------------------------------------
-	// FormatDataType::ValidateResult class
-	//----------------------------------------------
-
-	//-----------------------------
-	// Type checking
-	//-----------------------------
-
-	inline bool FormatDataType::ValidateResult::isOk() const noexcept
-	{
-		return std::holds_alternative<Ok>( m_value );
-	}
-
-	inline bool FormatDataType::ValidateResult::isInvalid() const noexcept
-	{
-		return std::holds_alternative<Invalid>( m_value );
-	}
-
-	//----------------------------------------------
-	// Value access
-	//----------------------------------------------
-
-	inline const FormatDataType::ValidateResult::Ok& FormatDataType::ValidateResult::ok() const
-	{
-		return std::get<Ok>( m_value );
-	}
-
-	inline const FormatDataType::ValidateResult::Invalid& FormatDataType::ValidateResult::invalid() const
-	{
-		return std::get<Invalid>( m_value );
 	}
 
 	//----------------------------------------------
