@@ -3,8 +3,6 @@
  * @brief Helper utilities for loading test data from JSON files.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/internal/HashMap.h"
 
 #include "TestDataLoader.h"

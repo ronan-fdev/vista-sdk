@@ -3,10 +3,6 @@
  * @brief Implementation of the GmodVersioning class for converting GMOD objects between VIS versions.
  */
 
-#include "pch.h"
-
-// #include "dnv/vista/sdk/internal/PathConversionCache.h"
-
 #include "dnv/vista/sdk/GmodVersioning.h"
 
 #include "dnv/vista/sdk/Gmod.h"

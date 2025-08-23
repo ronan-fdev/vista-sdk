@@ -237,6 +237,15 @@ namespace dnv::vista::sdk::datatypes
 		//----------------------------------------------
 
 		/**
+		 * @brief Parse high-precision decimal from string
+		 * @param str String representation of decimal number (e.g., "123.456", "-0.001", "999999999999999999999999999.999")
+		 * @return Parsed Decimal128 value with exact precision
+		 * @throws std::invalid_argument if string format is invalid or represents value outside Decimal128 range
+		 * @note Provides exact decimal parsing up to 28-29 significant digits without floating-point rounding errors
+		 */
+		[[nodiscard]] static Decimal128 parse( std::string_view str );
+
+		/**
 		 * @brief Parse string to decimal with error handling
 		 * @param str String to parse
 		 * @param result Output decimal value

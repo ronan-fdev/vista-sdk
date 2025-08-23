@@ -3,8 +3,6 @@
  * @brief Implementation of the LocationBuilder class
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/LocationBuilder.h"
 
 #include "dnv/vista/sdk/constants/LocationsConstants.h"

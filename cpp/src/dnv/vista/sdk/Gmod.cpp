@@ -3,8 +3,6 @@
  * @brief Implementation of the Generic Product Model (GMOD) class.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/Gmod.h"
 
 #include "dnv/vista/sdk/GmodPath.h"

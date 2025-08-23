@@ -14,9 +14,6 @@ namespace dnv::vista::sdk::constants::localId
 	// LocalId prefix constants
 	//----------------------------------------------
 
-	/** @brief Standard naming rule prefix for Local IDs */
-	inline constexpr std::string_view NAMING_RULE = "dnv-v2";
-
 	/** @brief VIS version prefix */
 	inline constexpr std::string_view PREFIX_VIS = "vis-";
 

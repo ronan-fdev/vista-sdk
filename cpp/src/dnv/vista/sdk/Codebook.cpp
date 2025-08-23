@@ -3,8 +3,6 @@
  * @brief Implementation of codebook-related components
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/Codebook.h"
 
 #include "dnv/vista/sdk/constants/CodebookConstants.h"

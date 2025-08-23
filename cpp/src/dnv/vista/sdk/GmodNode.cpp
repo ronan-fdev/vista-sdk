@@ -3,8 +3,6 @@
  * @brief Implementation of the GmodNode and GmodNodeMetadata classes
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/GmodNode.h"
 
 #include "dnv/vista/sdk/Gmod.h"

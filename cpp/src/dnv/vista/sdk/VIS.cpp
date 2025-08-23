@@ -3,8 +3,6 @@
  * @brief Implementation of Vessel Information Structure (VIS) interface
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/VIS.h"
 
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"

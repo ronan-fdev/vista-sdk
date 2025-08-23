@@ -3,8 +3,6 @@
  * @brief Unit tests for LocalId and LocalIdBuilder classes.
  */
 
-#include "pch.h"
-
 #include "TestDataLoader.h"
 
 #include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"

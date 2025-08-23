@@ -2,7 +2,6 @@
  * @file DataChannelId.h
  * @brief Data channel identifier implementation using discriminated union pattern
  * @details Represents either a LocalId or a short string identifier for data channels
- *          following the pattern established in the C# Vista SDK
  */
 
 #pragma once

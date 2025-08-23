@@ -3,8 +3,6 @@
  * @brief Unit tests for the ImoNumber class.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/ImoNumber.h"
 
 namespace dnv::vista::sdk::test

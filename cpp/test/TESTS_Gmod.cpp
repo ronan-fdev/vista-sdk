@@ -3,8 +3,6 @@
  * @brief Unit tests for the Generic Product Model (GMOD) functionality
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/utils/StringUtils.h"
 
 #include "dnv/vista/sdk/GmodPath.h"

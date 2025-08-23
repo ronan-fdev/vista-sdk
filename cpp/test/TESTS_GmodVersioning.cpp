@@ -3,8 +3,6 @@
  * @brief Unit tests for the GmodVersioning class.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/utils/StringUtils.h"
 
 #include "TestDataLoader.h"

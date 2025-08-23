@@ -7,6 +7,7 @@
 
 #include "config/Platform.h"
 #include "constants/AlgorithmConstants.h"
+#include "constants/ISO19848Constants.h"
 #include "constants/LocalIdConstants.h"
 #include "internal/StringBuilderPool.h"
 
@@ -284,7 +285,7 @@ namespace dnv::vista::sdk
 
 		/* Naming rule prefix: "/dnv-v2" */
 		builder.append( "/" );
-		builder.append( constants::localId::NAMING_RULE );
+		builder.append( constants::iso19848::ANNEX_C_NAMING_RULE );
 		builder.append( "/" );
 
 		/* VIS version: "vis-{major}-{minor}{patch}" */

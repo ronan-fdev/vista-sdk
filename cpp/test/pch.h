@@ -9,6 +9,7 @@
 #include <future>
 #include <queue>
 #include <shared_mutex>
+#include <stdexcept>
 #include <unordered_set>
 #include <variant>
 

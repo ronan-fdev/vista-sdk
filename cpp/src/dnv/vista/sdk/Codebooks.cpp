@@ -3,8 +3,6 @@
  * @brief Implementation of Vessel Information Structure (VIS) codebooks
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/Codebooks.h"
 
 #include "dnv/vista/sdk/CodebooksDto.h"

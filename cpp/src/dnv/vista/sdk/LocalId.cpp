@@ -3,8 +3,6 @@
  * @brief Implementation of the LocalId class
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/LocalId.h"
 
 #include "dnv/vista/sdk/GmodPath.h"

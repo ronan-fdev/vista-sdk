@@ -71,51 +71,6 @@ namespace dnv::vista::sdk::test
 	}
 
 	//=====================================================================
-	// String Parsing Tests
-	//=====================================================================
-
-	TEST( Decimal128Test, StringConstruction )
-	{
-		/* Valid strings */
-		datatypes::Decimal128 d1( "123.456" );
-		EXPECT_EQ( d1.toString(), "123.456" );
-
-		datatypes::Decimal128 d2( "-789.123" );
-		EXPECT_TRUE( d2.isNegative() );
-
-		datatypes::Decimal128 d3( "0" );
-		EXPECT_TRUE( d3.isZero() );
-
-		datatypes::Decimal128 d4( "0.0001" );
-		EXPECT_FALSE( d4.isZero() );
-
-		/* Test with many Decimal128 places */
-		datatypes::Decimal128 d5( "123.1234567890123456789" );
-		EXPECT_FALSE( d5.isZero() );
-	}
-
-	TEST( Decimal128Test, TryParse )
-	{
-		datatypes::Decimal128 result;
-
-		/* Valid cases */
-		EXPECT_TRUE( datatypes::Decimal128::tryParse( "123.456", result ) );
-		EXPECT_EQ( result.toString(), "123.456" );
-
-		EXPECT_TRUE( datatypes::Decimal128::tryParse( "-789", result ) );
-		EXPECT_TRUE( result.isNegative() );
-
-		EXPECT_TRUE( datatypes::Decimal128::tryParse( "0", result ) );
-		EXPECT_TRUE( result.isZero() );
-
-		/* Invalid cases */
-		EXPECT_FALSE( datatypes::Decimal128::tryParse( "", result ) );
-		EXPECT_FALSE( datatypes::Decimal128::tryParse( "abc", result ) );
-		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12.34.56", result ) );
-		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12a34", result ) );
-	}
-
-	//=====================================================================
 	// Conversion Tests
 	//=====================================================================
 
@@ -798,6 +753,176 @@ namespace dnv::vista::sdk::test
 		/* Should maintain precision */
 		EXPECT_FALSE( preciseSum == precise1 );
 		EXPECT_TRUE( preciseSum > precise1 );
+	}
+
+	//----------------------------------------------
+	// Parse Method Tests
+	//----------------------------------------------
+
+	//=====================================================================
+	// String Parsing Tests
+	//=====================================================================
+
+	TEST( Decimal128Test, StringConstruction )
+	{
+		/* Valid strings */
+		datatypes::Decimal128 d1( "123.456" );
+		EXPECT_EQ( d1.toString(), "123.456" );
+
+		datatypes::Decimal128 d2( "-789.123" );
+		EXPECT_TRUE( d2.isNegative() );
+
+		datatypes::Decimal128 d3( "0" );
+		EXPECT_TRUE( d3.isZero() );
+
+		datatypes::Decimal128 d4( "0.0001" );
+		EXPECT_FALSE( d4.isZero() );
+
+		/* Test with many Decimal128 places */
+		datatypes::Decimal128 d5( "123.1234567890123456789" );
+		EXPECT_FALSE( d5.isZero() );
+	}
+
+	TEST( Decimal128Test, TryParseMethod )
+	{
+		datatypes::Decimal128 result;
+
+		// Valid positive number
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "123.456", result ) );
+		EXPECT_EQ( result.toString(), "123.456" );
+		EXPECT_FALSE( result.isNegative() );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid negative number
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "-789.123", result ) );
+		EXPECT_TRUE( result.isNegative() );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid zero
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "0", result ) );
+		EXPECT_TRUE( result.isZero() );
+		EXPECT_FALSE( result.isNegative() );
+
+		// Valid zero with decimal
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "0.0", result ) );
+		EXPECT_TRUE( result.isZero() );
+
+		// Valid number with positive sign
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "+456.789", result ) );
+		EXPECT_FALSE( result.isNegative() );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid integer
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "12345", result ) );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid decimal with leading zero
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "0.123", result ) );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid high precision number (within storage limits)
+		EXPECT_TRUE( datatypes::Decimal128::tryParse( "1.2345678901234567890123456789", result ) );
+		EXPECT_FALSE( result.isZero() );
+
+		// Invalid: empty string
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "", result ) );
+
+		// Invalid: non-numeric characters
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "abc", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12a34", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12.34abc", result ) );
+
+		// Invalid: multiple decimal points
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12.34.56", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "1.2.3", result ) );
+
+		// Invalid: multiple signs
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "+-123", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "--123", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "++123", result ) );
+
+		// Invalid: sign in wrong position
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12+34", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "12-34", result ) );
+
+		// Invalid: only decimal point
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( ".", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "..", result ) );
+
+		// Invalid: only sign
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "+", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "-", result ) );
+
+		// Invalid: whitespace
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( " 123", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "123 ", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "1 23", result ) );
+
+		// Invalid: scientific notation
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "1.23e10", result ) );
+		EXPECT_FALSE( datatypes::Decimal128::tryParse( "1.23E-5", result ) );
+	}
+
+	TEST( Decimal128Test, ParseMethod )
+	{
+		// Valid positive number
+		auto result = datatypes::Decimal128::parse( "123.456" );
+		EXPECT_EQ( result.toString(), "123.456" );
+		EXPECT_FALSE( result.isNegative() );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid negative number
+		result = datatypes::Decimal128::parse( "-789.123" );
+		EXPECT_TRUE( result.isNegative() );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid zero
+		result = datatypes::Decimal128::parse( "0" );
+		EXPECT_TRUE( result.isZero() );
+		EXPECT_FALSE( result.isNegative() );
+
+		// Valid number with positive sign
+		result = datatypes::Decimal128::parse( "+456.789" );
+		EXPECT_FALSE( result.isNegative() );
+		EXPECT_FALSE( result.isZero() );
+
+		// Valid high precision number (within storage limits)
+		result = datatypes::Decimal128::parse( "1.2345678901234567890123456789" );
+		EXPECT_FALSE( result.isZero() );
+
+		// Invalid: empty string should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "" ), std::invalid_argument );
+
+		// Invalid: non-numeric should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "abc" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "12a34" ), std::invalid_argument );
+
+		// Invalid: multiple decimal points should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "12.34.56" ), std::invalid_argument );
+
+		// Invalid: multiple signs should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "+-123" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "--123" ), std::invalid_argument );
+
+		// Invalid: sign in wrong position should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "12+34" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "12-34" ), std::invalid_argument );
+
+		// Invalid: only decimal point should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "." ), std::invalid_argument );
+
+		// Invalid: only sign should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "+" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "-" ), std::invalid_argument );
+
+		// Invalid: whitespace should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( " 123" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "123 " ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "1 23" ), std::invalid_argument );
+
+		// Invalid: scientific notation should throw
+		EXPECT_THROW( datatypes::Decimal128::parse( "1.23e10" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Decimal128::parse( "1.23E-5" ), std::invalid_argument );
 	}
 
 	//=====================================================================

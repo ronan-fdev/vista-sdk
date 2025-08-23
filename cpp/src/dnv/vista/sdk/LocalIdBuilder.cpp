@@ -3,8 +3,6 @@
  * @brief Implementation of the LocalIdBuilder class
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/LocalIdBuilder.h"
 
 #include "dnv/vista/sdk/constants/LocalIdConstants.h"
@@ -854,7 +852,7 @@ namespace dnv::vista::sdk
 						break;
 					}
 
-					if ( segment != constants::localId::NAMING_RULE )
+					if ( segment != constants::iso19848::ANNEX_C_NAMING_RULE )
 					{
 						errorBuilder.addError( internal::LocalIdParsingState::NamingRule, predefinedMessage );
 

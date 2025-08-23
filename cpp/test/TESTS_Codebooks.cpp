@@ -3,8 +3,6 @@
  * @brief Unit tests for the Codebooks and CodebookName functionalities.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/Codebook.h"
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/VIS.h"

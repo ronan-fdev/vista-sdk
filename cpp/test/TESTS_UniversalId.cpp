@@ -3,8 +3,6 @@
  * @brief Unit tests for LocalId and LocalIdBuilder classes.
  */
 
-#include "pch.h"
-
 #include "TestDataLoader.h"
 
 #include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
@@ -149,7 +147,7 @@ namespace dnv::vista::sdk::tests::test
 	//----------------------------------------------
 
 	TEST( UniversalIdTests, Test_UniversalBuilder_TryWith )
-	{ /* TODO Check this ! */
+	{ /* TODO: Check this ! */
 		auto universalBuilder = UniversalIdBuilder::create( VisVersion::v3_4a ).withoutLocalId().withoutImoNumber();
 
 		(void)universalBuilder.tryWithLocalId( std::nullopt );

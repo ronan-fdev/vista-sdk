@@ -205,6 +205,26 @@ namespace dnv::vista::sdk::datatypes
 		bool operator>=( const Int128& other ) const noexcept;
 
 		//----------------------------------------------
+		// String parsing and conversion
+		//----------------------------------------------
+
+		/**
+		 * @brief Parse 128-bit integer from decimal string
+		 * @param str String representation of decimal integer (e.g., "12345", "-9876543210")
+		 * @return Parsed Int128 value
+		 * @throws std::invalid_argument if string format is invalid or represents value outside Int128 range
+		 */
+		[[nodiscard]] static Int128 parse( std::string_view str );
+
+		/**
+		 * @brief Try to parse 128-bit integer from decimal string without throwing
+		 * @param str String representation of decimal integer (e.g., "12345", "-9876543210")
+		 * @param result Output parameter to store parsed value on success
+		 * @return true if parsing succeeded, false if string format is invalid or value is outside Int128 range
+		 */
+		[[nodiscard]] static bool tryParse( std::string_view str, Int128& result ) noexcept;
+
+		//----------------------------------------------
 		// State checking
 		//----------------------------------------------
 

@@ -3,8 +3,6 @@
  * @brief Implementation of data transfer objects for locations in the VIS standard
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/LocationsDto.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"

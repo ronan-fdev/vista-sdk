@@ -377,6 +377,91 @@ namespace dnv::vista::sdk::test
 	}
 
 	//----------------------------------------------
+	// String parsing tests
+	//----------------------------------------------
+
+	TEST_F( Int128Test, TryParseMethod )
+	{
+		datatypes::Int128 result;
+
+		/* Valid positive parsing */
+		EXPECT_TRUE( datatypes::Int128::tryParse( "12345", result ) );
+		EXPECT_EQ( 12345ULL, result.toLow() );
+		EXPECT_EQ( 0ULL, result.toHigh() );
+		EXPECT_FALSE( result.isNegative() );
+
+		/* Valid negative parsing */
+		EXPECT_TRUE( datatypes::Int128::tryParse( "-9876543210", result ) );
+		EXPECT_TRUE( result.isNegative() );
+
+		/* Zero parsing */
+		EXPECT_TRUE( datatypes::Int128::tryParse( "0", result ) );
+		EXPECT_TRUE( result.isZero() );
+		EXPECT_FALSE( result.isNegative() );
+
+		/* Large positive number */
+		EXPECT_TRUE( datatypes::Int128::tryParse( "123456789012345678901234567890", result ) );
+		EXPECT_FALSE( result.isZero() );
+		EXPECT_FALSE( result.isNegative() );
+
+		/* Large negative number */
+		EXPECT_TRUE( datatypes::Int128::tryParse( "-123456789012345678901234567890", result ) );
+		EXPECT_FALSE( result.isZero() );
+		EXPECT_TRUE( result.isNegative() );
+
+		/* Positive sign */
+		EXPECT_TRUE( datatypes::Int128::tryParse( "+42", result ) );
+		EXPECT_EQ( 42ULL, result.toLow() );
+		EXPECT_FALSE( result.isNegative() );
+
+		/* Invalid strings */
+		EXPECT_FALSE( datatypes::Int128::tryParse( "", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "abc", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "123abc", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "12.34", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "+", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "-", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "123 456", result ) );
+		EXPECT_FALSE( datatypes::Int128::tryParse( "1e10", result ) );
+	}
+
+	TEST_F( Int128Test, ParseMethod )
+	{
+		/* Valid positive parsing */
+		auto result1 = datatypes::Int128::parse( "12345" );
+		EXPECT_EQ( 12345ULL, result1.toLow() );
+		EXPECT_FALSE( result1.isNegative() );
+
+		/* Valid negative parsing */
+		auto result2 = datatypes::Int128::parse( "-9876543210" );
+		EXPECT_TRUE( result2.isNegative() );
+
+		/* Zero parsing */
+		auto result3 = datatypes::Int128::parse( "0" );
+		EXPECT_TRUE( result3.isZero() );
+
+		/* Large number parsing */
+		auto result4 = datatypes::Int128::parse( "123456789012345678901234567890" );
+		EXPECT_FALSE( result4.isZero() );
+		EXPECT_FALSE( result4.isNegative() );
+
+		/* Positive sign */
+		auto result5 = datatypes::Int128::parse( "+42" );
+		EXPECT_EQ( 42ULL, result5.toLow() );
+		EXPECT_FALSE( result5.isNegative() );
+
+		/* Invalid parsing should throw */
+		EXPECT_THROW( datatypes::Int128::parse( "" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "abc" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "123abc" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "12.34" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "+" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "-" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "123 456" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::Int128::parse( "1e10" ), std::invalid_argument );
+	}
+
+	//----------------------------------------------
 	// Edge Case Tests
 	//----------------------------------------------
 

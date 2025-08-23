@@ -114,6 +114,12 @@ namespace dnv::vista::sdk::datatypes
 		/** @brief Static factory: Create from milliseconds */
 		[[nodiscard]] inline static constexpr TimeSpan fromMilliseconds( double milliseconds ) noexcept;
 
+		/** @brief Parse TimeSpan from ISO 8601 duration string */
+		[[nodiscard]] static TimeSpan parse( std::string_view str );
+
+		/** @brief Try parse TimeSpan from ISO 8601 duration string without throwing */
+		[[nodiscard]] static bool tryParse( std::string_view str, TimeSpan& result ) noexcept;
+
 	private:
 		/** @brief 100-nanosecond ticks since January 1, 0001 UTC */
 		std::int64_t m_ticks;
@@ -355,6 +361,9 @@ namespace dnv::vista::sdk::datatypes
 
 		/** @brief Get Unix epoch DateTime (January 1, 1970 00:00:00 UTC) */
 		[[nodiscard]] static constexpr DateTime epoch() noexcept;
+
+		/** @brief Parse ISO 8601 string */
+		[[nodiscard]] static DateTime parse( std::string_view str );
 
 		/** @brief Try parse ISO 8601 string without throwing */
 		[[nodiscard]] static bool tryParse( std::string_view str, DateTime& result ) noexcept;
@@ -723,6 +732,9 @@ namespace dnv::vista::sdk::datatypes
 
 		/** @brief Compare two DateTimeOffset values */
 		[[nodiscard]] inline static std::int32_t compare( const DateTimeOffset& left, const DateTimeOffset& right ) noexcept;
+
+		/** @brief Parse ISO 8601 string with timezone offset */
+		[[nodiscard]] static DateTimeOffset parse( std::string_view str );
 
 		/** @brief Try parse ISO 8601 string without throwing */
 		[[nodiscard]] static bool tryParse( std::string_view str, DateTimeOffset& result ) noexcept;

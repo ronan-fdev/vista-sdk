@@ -3,8 +3,6 @@
  * @brief Implementation of ParsingErrors class
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/ParsingErrors.h"
 
 namespace dnv::vista::sdk

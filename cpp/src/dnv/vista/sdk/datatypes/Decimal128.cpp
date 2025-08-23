@@ -4,8 +4,6 @@
  * @details Provides exact decimal arithmetic with portable 128-bit operations
  */
 
-#include "dnv/vista/sdk/pch.h"
-
 #include "dnv/vista/sdk/constants/Decimal128Constants.h"
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
@@ -366,6 +364,16 @@ namespace dnv::vista::sdk::datatypes
 	// String parsing and conversion
 	//----------------------------------------------
 
+	Decimal128 Decimal128::parse( std::string_view str )
+	{
+		Decimal128 result;
+		if ( !tryParse( str, result ) )
+		{
+			throw std::invalid_argument( "Invalid decimal string format" );
+		}
+		return result;
+	}
+
 	bool Decimal128::tryParse( std::string_view str, Decimal128& result ) noexcept
 	{
 		try
@@ -428,6 +436,7 @@ namespace dnv::vista::sdk::datatypes
 			/* Optimized digit accumulation */
 			Int128 mantissaValue;
 			const Int128 ten{ 10 };
+			bool hasDigits = false;
 
 			for ( size_t i = pos; i < str.length(); ++i )
 			{
@@ -442,6 +451,7 @@ namespace dnv::vista::sdk::datatypes
 					return false;
 				}
 
+				hasDigits = true;
 				std::uint64_t digit = static_cast<std::uint64_t>( str[i] - '0' );
 
 				/* Fast overflow check and accumulation */
@@ -455,6 +465,12 @@ namespace dnv::vista::sdk::datatypes
 					/* Overflow */
 					return false;
 				}
+			}
+
+			/* Ensure we have at least one digit (prevents parsing ".", "+", "-", etc.) */
+			if ( !hasDigits )
+			{
+				return false;
 			}
 
 			/* Check if mantissa fits in our 96-bit storage */

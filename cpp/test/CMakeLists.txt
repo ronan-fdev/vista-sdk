@@ -17,6 +17,7 @@ set(TEST_SOURCES
 	datatypes/TESTS_Decimal128.cpp
 	datatypes/TESTS_Int128.cpp
 	transport/TESTS_DataChannelId.cpp
+	transport/TESTS_DataChannelISOmessages.cpp
 	transport/TESTS_ISO19848.cpp
 	transport/TESTS_ShipId.cpp
 	utils/TESTS_StringBuilderPoolTests.cpp
@@ -103,6 +104,7 @@ foreach(test_source ${TEST_SOURCES})
 				/wd4820                                # padding
 				/wd4834                                # discarding return value of function with 'nodiscard' attribute
 				/wd4866                                # compiler may not enforce left-to-right evaluation order for call to operator_name
+				/wd4868                                # compiler may not enforce left-to-right evaluation order in braced initializer list
 				/wd5026                                # move constructor was implicitly defined as deleted
 				/wd5027                                # move assignment operator was implicitly defined as deleted
 				/wd5045                                # Qspectre

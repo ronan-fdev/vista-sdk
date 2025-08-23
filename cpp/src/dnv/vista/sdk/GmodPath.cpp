@@ -3,8 +3,6 @@
  * @brief Implementation of GmodPath and related classes for representing paths in the Generic Product Model (GMOD).
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/GmodPath.h"
 
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"

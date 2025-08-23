@@ -239,7 +239,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( result.isOk() );
 		ASSERT_EQ( type, result.ok().typeName().type() );
 
-		transport::FormatDataType::Value outValue;
+		transport::Value outValue;
 		auto validateResult = result.ok().typeName().validate( value, outValue );
 
 		if ( expectedResult )
@@ -1285,10 +1285,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test String Value */
 		{
-			transport::FormatDataType::Value::String stringVal{ std::string_view{ "test" } };
+			transport::Value::String stringVal{ std::string_view{ "test" } };
 			ASSERT_EQ( stringVal.value(), "test" );
 
-			transport::FormatDataType::Value value{ stringVal };
+			transport::Value value{ stringVal };
 			ASSERT_TRUE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1303,10 +1303,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test Decimal Value */
 		{
-			transport::FormatDataType::Value::Decimal decimalVal{ 3.14 };
+			transport::Value::Decimal decimalVal{ 3.14 };
 			ASSERT_EQ( decimalVal.value(), datatypes::Decimal128( 3.14 ) );
 
-			transport::FormatDataType::Value value{ decimalVal };
+			transport::Value value{ decimalVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_TRUE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1321,10 +1321,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test Integer Value */
 		{
-			transport::FormatDataType::Value::Integer intVal{ 42 };
+			transport::Value::Integer intVal{ 42 };
 			ASSERT_EQ( intVal.value(), 42 );
 
-			transport::FormatDataType::Value value{ intVal };
+			transport::Value value{ intVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_TRUE( value.isInteger() );
@@ -1339,10 +1339,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test Boolean Value */
 		{
-			transport::FormatDataType::Value::Boolean boolVal{ true };
+			transport::Value::Boolean boolVal{ true };
 			ASSERT_EQ( boolVal.value(), true );
 
-			transport::FormatDataType::Value value{ boolVal };
+			transport::Value value{ boolVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1358,10 +1358,10 @@ namespace dnv::vista::sdk::tests
 		/* Test DateTime Value */
 		{
 			auto dateTimeOffset = datatypes::DateTimeOffset::now();
-			transport::FormatDataType::Value::DateTime dateTimeVal{ dateTimeOffset };
+			transport::Value::DateTime dateTimeVal{ dateTimeOffset };
 			ASSERT_EQ( dateTimeVal.value(), dateTimeOffset );
 
-			transport::FormatDataType::Value value{ dateTimeVal };
+			transport::Value value{ dateTimeVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1376,10 +1376,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test Char Value */
 		{
-			transport::FormatDataType::Value::Char charVal{ 'X' };
+			transport::Value::Char charVal{ 'X' };
 			ASSERT_EQ( charVal.value(), 'X' );
 
-			transport::FormatDataType::Value value{ charVal };
+			transport::Value value{ charVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1394,10 +1394,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test UnsignedInteger Value */
 		{
-			transport::FormatDataType::Value::UnsignedInteger uintVal{ 42u };
+			transport::Value::UnsignedInteger uintVal{ 42u };
 			ASSERT_EQ( uintVal.value(), 42u );
 
-			transport::FormatDataType::Value value{ uintVal };
+			transport::Value value{ uintVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1412,10 +1412,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test Long Value */
 		{
-			transport::FormatDataType::Value::Long longVal{ 9223372036854775807LL };
+			transport::Value::Long longVal{ 9223372036854775807LL };
 			ASSERT_EQ( longVal.value(), 9223372036854775807LL );
 
-			transport::FormatDataType::Value value{ longVal };
+			transport::Value value{ longVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );
@@ -1430,10 +1430,10 @@ namespace dnv::vista::sdk::tests
 
 		/* Test Double Value */
 		{
-			transport::FormatDataType::Value::Double doubleVal{ 2.71828 };
+			transport::Value::Double doubleVal{ 2.71828 };
 			ASSERT_EQ( doubleVal.value(), 2.71828 );
 
-			transport::FormatDataType::Value value{ doubleVal };
+			transport::Value value{ doubleVal };
 			ASSERT_FALSE( value.isString() );
 			ASSERT_FALSE( value.isDecimal() );
 			ASSERT_FALSE( value.isInteger() );

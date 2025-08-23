@@ -3,8 +3,6 @@
  * @brief Implementation of the ImoNumber class
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/ImoNumber.h"
 
 #include "dnv/vista/sdk/constants/AlgorithmConstants.h"

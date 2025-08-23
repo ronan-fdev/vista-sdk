@@ -10,14 +10,33 @@
 namespace dnv::vista::sdk::constants::iso19848
 {
 	//=====================================================================
+	// ISO 19848 Annex C naming constants
+	//=====================================================================
+
+	/** @brief ISO 19848 Annex C naming entity */
+	inline constexpr std::string_view ANNEX_C_NAMING_ENTITY = "data.dnv.com";
+
+	/** @brief Default reference URL for ISO 19848 documentation */
+	inline constexpr std::string_view ANNEX_C_REFERENCE_URL = "https://docs.vista.dnv.com";
+
+	/** @brief ISO 19848 Annex C naming rule identifier */
+	inline constexpr std::string_view ANNEX_C_NAMING_RULE_PREFIX = "dnv";
+
+	/** @brief ISO 19848 Annex C naming scheme version */
+	inline constexpr std::string_view ANNEX_C_NAMING_SCHEME_VERSION = "v2";
+
+	/** @brief ISO 19848 Annex C naming rule */
+	inline constexpr std::string_view ANNEX_C_NAMING_RULE = "dnv-v2";
+
+	//=====================================================================
 	// Version constants
 	//=====================================================================
 
 	/** @brief ISO 19848 version 2018 identifier */
-	inline constexpr std::string_view ISO19848_VERSION_2018 = "v2018";
+	inline constexpr std::string_view VERSION_2018 = "v2018";
 
 	/** @brief ISO 19848 version 2024 identifier */
-	inline constexpr std::string_view ISO19848_VERSION_2024 = "v2024";
+	inline constexpr std::string_view VERSION_2024 = "v2024";
 
 	//=====================================================================
 	// Format type constants

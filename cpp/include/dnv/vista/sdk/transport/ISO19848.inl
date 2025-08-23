@@ -8,6 +8,283 @@
 namespace dnv::vista::sdk::transport
 {
 	//=====================================================================
+	// Value class
+	//=====================================================================
+
+	//----------------------------------------------
+	// Construction from value types
+	//----------------------------------------------
+
+	//-----------------------------
+	// Converting constructors
+	//-----------------------------
+
+	inline Value::Value( String string ) noexcept
+		: m_value{ std::move( string ) }
+	{
+	}
+
+	inline Value::Value( Char charValue ) noexcept
+		: m_value{ std::move( charValue ) }
+	{
+	}
+
+	inline Value::Value( Boolean boolean ) noexcept
+		: m_value{ std::move( boolean ) }
+	{
+	}
+
+	inline Value::Value( Integer integer ) noexcept
+		: m_value{ std::move( integer ) }
+	{
+	}
+
+	inline Value::Value( UnsignedInteger unsignedInteger ) noexcept
+		: m_value{ std::move( unsignedInteger ) }
+	{
+	}
+
+	inline Value::Value( Long longValue ) noexcept
+		: m_value{ std::move( longValue ) }
+	{
+	}
+
+	inline Value::Value( Double doubleValue ) noexcept
+		: m_value{ std::move( doubleValue ) }
+	{
+	}
+
+	inline Value::Value( Decimal decimal ) noexcept
+		: m_value{ std::move( decimal ) }
+	{
+	}
+
+	inline Value::Value( DateTime dateTime ) noexcept
+		: m_value{ std::move( dateTime ) }
+	{
+	}
+
+	//----------------------------------------------
+	// Value type constructors
+	//----------------------------------------------
+
+	inline Value::String::String( std::string_view value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::String::String( std::string value ) noexcept
+		: m_value{ std::move( value ) }
+	{
+	}
+
+	inline Value::Char::Char( char value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::Boolean::Boolean( bool value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::Integer::Integer( int value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::UnsignedInteger::UnsignedInteger( std::uint32_t value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::Long::Long( std::int64_t value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::Double::Double( double value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::Decimal::Decimal( const datatypes::Decimal128& value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::Decimal::Decimal( double value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	inline Value::DateTime::DateTime( const datatypes::DateTimeOffset& value ) noexcept
+		: m_value{ value }
+	{
+	}
+
+	//----------------------------------------------
+	// Type checking
+	//----------------------------------------------
+
+	inline bool Value::isString() const noexcept
+	{
+		return std::holds_alternative<String>( m_value );
+	}
+
+	inline bool Value::isChar() const noexcept
+	{
+		return std::holds_alternative<Char>( m_value );
+	}
+
+	inline bool Value::isBoolean() const noexcept
+	{
+		return std::holds_alternative<Boolean>( m_value );
+	}
+
+	inline bool Value::isInteger() const noexcept
+	{
+		return std::holds_alternative<Integer>( m_value );
+	}
+
+	inline bool Value::isUnsignedInteger() const noexcept
+	{
+		return std::holds_alternative<UnsignedInteger>( m_value );
+	}
+
+	inline bool Value::isLong() const noexcept
+	{
+		return std::holds_alternative<Long>( m_value );
+	}
+
+	inline bool Value::isDouble() const noexcept
+	{
+		return std::holds_alternative<Double>( m_value );
+	}
+
+	inline bool Value::isDecimal() const noexcept
+	{
+		return std::holds_alternative<Decimal>( m_value );
+	}
+
+	inline bool Value::isDateTime() const noexcept
+	{
+		return std::holds_alternative<DateTime>( m_value );
+	}
+
+	//----------------------------------------------
+	// Value access
+	//----------------------------------------------
+
+	inline const std::string& Value::String::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline char Value::Char::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline bool Value::Boolean::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline int Value::Integer::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline std::uint32_t Value::UnsignedInteger::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline std::int64_t Value::Long::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline double Value::Double::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline const datatypes::Decimal128& Value::Decimal::value() const noexcept
+	{
+		return m_value;
+	}
+
+	inline const datatypes::DateTimeOffset& Value::DateTime::value() const noexcept
+	{
+		return m_value;
+	}
+
+	//----------------------------------------------
+	// Value access
+	//----------------------------------------------
+
+	inline const Value::String& Value::string() const
+	{
+		return std::get<String>( m_value );
+	}
+
+	inline const Value::Char& Value::charValue() const
+	{
+		return std::get<Char>( m_value );
+	}
+
+	inline const Value::Boolean& Value::boolean() const
+	{
+		return std::get<Boolean>( m_value );
+	}
+
+	inline const Value::Integer& Value::integer() const
+	{
+		return std::get<Integer>( m_value );
+	}
+
+	inline const Value::UnsignedInteger& Value::unsignedInteger() const
+	{
+		return std::get<UnsignedInteger>( m_value );
+	}
+
+	inline const Value::Decimal& Value::decimal() const
+	{
+		return std::get<Decimal>( m_value );
+	}
+
+	inline const Value::Long& Value::longValue() const
+	{
+		return std::get<Long>( m_value );
+	}
+
+	inline const Value::Double& Value::doubleValue() const
+	{
+		return std::get<Double>( m_value );
+	}
+
+	inline const Value::DateTime& Value::dateTime() const
+	{
+		return std::get<DateTime>( m_value );
+	}
+
+	//----------------------------------------------
+	// Variant index access
+	//----------------------------------------------
+
+	inline std::size_t Value::index() const noexcept
+	{
+		return m_value.index();
+	}
+
+	inline Value::Type Value::type() const noexcept
+	{
+		return static_cast<Type>( m_value.index() );
+	}
+
+	//=====================================================================
 	// DataChannelTypeName class
 	//=====================================================================
 
@@ -142,216 +419,6 @@ namespace dnv::vista::sdk::transport
 	{
 	}
 
-	//----------------------------------------------
-	// Construction from value types
-	//----------------------------------------------
-
-	//-----------------------------
-	// Converting constructors
-	//-----------------------------
-
-	inline FormatDataType::Value::Value( String string ) noexcept
-		: m_value{ std::move( string ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( Char charValue ) noexcept
-		: m_value{ std::move( charValue ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( Boolean boolean ) noexcept
-		: m_value{ std::move( boolean ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( Integer integer ) noexcept
-		: m_value{ std::move( integer ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( UnsignedInteger unsignedInteger ) noexcept
-		: m_value{ std::move( unsignedInteger ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( Long longValue ) noexcept
-		: m_value{ std::move( longValue ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( Double doubleValue ) noexcept
-		: m_value{ std::move( doubleValue ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( Decimal decimal ) noexcept
-		: m_value{ std::move( decimal ) }
-	{
-	}
-
-	inline FormatDataType::Value::Value( DateTime dateTime ) noexcept
-		: m_value{ std::move( dateTime ) }
-	{
-	}
-
-	//----------------------------------------------
-	// Value type constructors
-	//----------------------------------------------
-
-	inline FormatDataType::Value::String::String( std::string_view value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::String::String( std::string value ) noexcept
-		: m_value{ std::move( value ) }
-	{
-	}
-
-	inline FormatDataType::Value::Char::Char( char value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::Boolean::Boolean( bool value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::Integer::Integer( int value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::UnsignedInteger::UnsignedInteger( std::uint32_t value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::Long::Long( std::int64_t value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::Double::Double( double value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::Decimal::Decimal( const datatypes::Decimal128& value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::Decimal::Decimal( double value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	inline FormatDataType::Value::DateTime::DateTime( const datatypes::DateTimeOffset& value ) noexcept
-		: m_value{ value }
-	{
-	}
-
-	//----------------------------------------------
-	// Type checking
-	//----------------------------------------------
-
-	inline bool FormatDataType::Value::isString() const noexcept
-	{
-		return std::holds_alternative<String>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isChar() const noexcept
-	{
-		return std::holds_alternative<Char>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isBoolean() const noexcept
-	{
-		return std::holds_alternative<Boolean>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isInteger() const noexcept
-	{
-		return std::holds_alternative<Integer>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isUnsignedInteger() const noexcept
-	{
-		return std::holds_alternative<UnsignedInteger>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isLong() const noexcept
-	{
-		return std::holds_alternative<Long>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isDouble() const noexcept
-	{
-		return std::holds_alternative<Double>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isDecimal() const noexcept
-	{
-		return std::holds_alternative<Decimal>( m_value );
-	}
-
-	inline bool FormatDataType::Value::isDateTime() const noexcept
-	{
-		return std::holds_alternative<DateTime>( m_value );
-	}
-
-	//----------------------------------------------
-	// Value access
-	//----------------------------------------------
-
-	inline const std::string& FormatDataType::Value::String::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline char FormatDataType::Value::Char::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline bool FormatDataType::Value::Boolean::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline int FormatDataType::Value::Integer::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline std::uint32_t FormatDataType::Value::UnsignedInteger::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline std::int64_t FormatDataType::Value::Long::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline double FormatDataType::Value::Double::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline const datatypes::Decimal128& FormatDataType::Value::Decimal::value() const noexcept
-	{
-		return m_value;
-	}
-
-	inline const datatypes::DateTimeOffset& FormatDataType::Value::DateTime::value() const noexcept
-	{
-		return m_value;
-	}
-
 	//=====================================================================
 	// FormatDataTypes class
 	//=====================================================================
@@ -421,69 +488,6 @@ namespace dnv::vista::sdk::transport
 	inline const FormatDataTypes::ParseResult::Invalid& FormatDataTypes::ParseResult::invalid() const
 	{
 		return std::get<Invalid>( m_value );
-	}
-
-	//----------------------------------------------
-	// Value access
-	//----------------------------------------------
-
-	inline const FormatDataType::Value::String& FormatDataType::Value::string() const
-	{
-		return std::get<String>( m_value );
-	}
-
-	inline const FormatDataType::Value::Char& FormatDataType::Value::charValue() const
-	{
-		return std::get<Char>( m_value );
-	}
-
-	inline const FormatDataType::Value::Boolean& FormatDataType::Value::boolean() const
-	{
-		return std::get<Boolean>( m_value );
-	}
-
-	inline const FormatDataType::Value::Integer& FormatDataType::Value::integer() const
-	{
-		return std::get<Integer>( m_value );
-	}
-
-	inline const FormatDataType::Value::UnsignedInteger& FormatDataType::Value::unsignedInteger() const
-	{
-		return std::get<UnsignedInteger>( m_value );
-	}
-
-	inline const FormatDataType::Value::Decimal& FormatDataType::Value::decimal() const
-	{
-		return std::get<Decimal>( m_value );
-	}
-
-	inline const FormatDataType::Value::Long& FormatDataType::Value::longValue() const
-	{
-		return std::get<Long>( m_value );
-	}
-
-	inline const FormatDataType::Value::Double& FormatDataType::Value::doubleValue() const
-	{
-		return std::get<Double>( m_value );
-	}
-
-	inline const FormatDataType::Value::DateTime& FormatDataType::Value::dateTime() const
-	{
-		return std::get<DateTime>( m_value );
-	}
-
-	//----------------------------------------------
-	// Variant index access
-	//----------------------------------------------
-
-	inline std::size_t FormatDataType::Value::index() const noexcept
-	{
-		return m_value.index();
-	}
-
-	inline FormatDataType::Value::Type FormatDataType::Value::type() const noexcept
-	{
-		return static_cast<Type>( m_value.index() );
 	}
 
 	//----------------------------------------------

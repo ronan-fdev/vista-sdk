@@ -3,8 +3,6 @@
  * @brief Implementation of ISO 19848 data transfer objects
  */
 
-#include "dnv/vista/sdk/pch.h"
-
 #include "dnv/vista/sdk/transport/ISO19848Dtos.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"

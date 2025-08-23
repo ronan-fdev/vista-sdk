@@ -26,6 +26,7 @@ namespace dnv::vista::sdk::internal
 		//----------------------------------------------
 		// Robin Hood Hashing bucket structure
 		//----------------------------------------------
+
 		struct Bucket
 		{
 			TKey key{};
@@ -44,8 +45,7 @@ namespace dnv::vista::sdk::internal
 		size_t m_capacity = INITIAL_CAPACITY;
 		size_t m_mask = INITIAL_CAPACITY - 1;
 
-		VISTA_SDK_CPP_NO_UNIQUE_ADDRESS std::conditional_t<std::is_same_v<TKey, std::string> ||
-															   std::is_same_v<TKey, std::string_view>,
+		VISTA_SDK_CPP_NO_UNIQUE_ADDRESS std::conditional_t<std::is_same_v<TKey, std::string> || std::is_same_v<TKey, std::string_view>,
 			utils::StringViewHash, std::hash<TKey>>
 			m_hasher;
 

@@ -3,8 +3,6 @@
  * @brief Implementation of the MetadataTag class
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/MetadataTag.h"
 
 #include "dnv/vista/sdk/CodebookName.h"

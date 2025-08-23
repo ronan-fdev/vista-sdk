@@ -3,8 +3,6 @@
  * @brief Implementation of GMOD versioning data transfer objects
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/GmodVersioningDto.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"

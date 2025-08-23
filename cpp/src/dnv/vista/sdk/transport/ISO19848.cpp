@@ -3,8 +3,6 @@
  * @brief Implementation of ISO 19848 standard data access
  */
 
-#include "dnv/vista/sdk/pch.h"
-
 #include "dnv/vista/sdk/transport/ISO19848.h"
 
 #include "dnv/vista/sdk/constants/ISO19848Constants.h"
@@ -144,11 +142,11 @@ namespace dnv::vista::sdk::transport
 		{
 			case ISO19848Version::v2018:
 			{
-				return EmbeddedResource::dataChannelTypeNames( constants::iso19848::ISO19848_VERSION_2018 );
+				return EmbeddedResource::dataChannelTypeNames( constants::iso19848::VERSION_2018 );
 			}
 			case ISO19848Version::v2024:
 			{
-				return EmbeddedResource::dataChannelTypeNames( constants::iso19848::ISO19848_VERSION_2024 );
+				return EmbeddedResource::dataChannelTypeNames( constants::iso19848::VERSION_2024 );
 			}
 			default:
 			{
@@ -163,11 +161,11 @@ namespace dnv::vista::sdk::transport
 		{
 			case ISO19848Version::v2018:
 			{
-				return EmbeddedResource::formatDataTypes( constants::iso19848::ISO19848_VERSION_2018 );
+				return EmbeddedResource::formatDataTypes( constants::iso19848::VERSION_2018 );
 			}
 			case ISO19848Version::v2024:
 			{
-				return EmbeddedResource::formatDataTypes( constants::iso19848::ISO19848_VERSION_2024 );
+				return EmbeddedResource::formatDataTypes( constants::iso19848::VERSION_2024 );
 			}
 			default:
 			{

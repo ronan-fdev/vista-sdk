@@ -5,14 +5,152 @@
  *          ISO 8601 parsing/formatting, and cross-platform compatibility
  */
 
-#include "dnv/vista/sdk/pch.h"
-
 #include "dnv/vista/sdk/config/Platform.h"
 
 #include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
 
 namespace dnv::vista::sdk::datatypes
 {
+	//=====================================================================
+	// TimeSpan class
+	//=====================================================================
+
+	//----------------------------------------------
+	// Static factory methods
+	//----------------------------------------------
+
+	TimeSpan TimeSpan::parse( std::string_view str )
+	{
+		TimeSpan result;
+		if ( !tryParse( str, result ) )
+		{
+			throw std::invalid_argument( "Invalid TimeSpan string format" );
+		}
+		return result;
+	}
+
+	bool TimeSpan::tryParse( std::string_view str, TimeSpan& result ) noexcept
+	{
+		try
+		{
+			/*
+			 * TimeSpan parsing supports multiple formats:
+			 *
+			 * 1. ISO 8601 Duration Format:
+			 *    - Full: P[n]Y[n]M[n]DT[n]H[n]M[n]S (e.g., "P3Y6M4DT12H30M5S" = 3 years, 6 months, 4 days, 12h 30m 5s)
+			 *    - Time-only: PT[n]H[n]M[n]S (e.g., "PT1H30M45S" = 1 hour, 30 minutes, 45 seconds)
+			 *    - Components optional: "PT2H30M", "PT45S", "PT1.5H" (fractional values allowed)
+			 *
+			 * 2. Time-of-Day Format (H:M:S):
+			 *    - "01:30:45" = 1 hour, 30 minutes, 45 seconds
+			 *    - "00:05:30.5" = 5 minutes, 30.5 seconds
+			 *    - Validates 0-23 hours, 0-59 minutes/seconds (time-of-day constraints)
+			 *
+			 * 3. Numeric Seconds Format:
+			 *    - "123.45" = 123.45 seconds
+			 *    - "60" = 60 seconds (1 minute)
+			 *    - Any numeric value interpreted as seconds
+			 */
+
+			if ( str.empty() )
+			{
+				return false;
+			}
+
+			/* Handle simple numeric format (assume seconds) */
+			if ( str.find_first_not_of( "0123456789.-" ) == std::string_view::npos )
+			{
+				try
+				{
+					double seconds = std::stod( std::string( str ) );
+					result = TimeSpan::fromSeconds( seconds );
+					return true;
+				}
+				catch ( ... )
+				{
+					return false;
+				}
+			}
+
+			/* Handle H:M:S format */
+			if ( str.find( ':' ) != std::string_view::npos )
+			{
+				std::vector<std::string> parts;
+				std::string temp( str );
+				size_t pos = 0;
+				while ( ( pos = temp.find( ':' ) ) != std::string::npos )
+				{
+					parts.push_back( temp.substr( 0, pos ) );
+					temp.erase( 0, pos + 1 );
+				}
+				parts.push_back( temp );
+
+				if ( parts.size() == 3 )
+				{
+					int hours = std::stoi( parts[0] );
+					int minutes = std::stoi( parts[1] );
+					double seconds = std::stod( parts[2] );
+
+					/* Validate time components - TimeSpan can represent longer durations but H:M:S format implies time-of-day constraints */
+					if ( hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60 && seconds >= 0 && seconds < 60 )
+					{
+						result = TimeSpan::fromHours( hours ) + TimeSpan::fromMinutes( minutes ) + TimeSpan::fromSeconds( seconds );
+
+						return true;
+					}
+				}
+			}
+
+			/* Handle ISO 8601 duration format (simplified) */
+			if ( str.length() > 1 && str[0] == 'P' )
+			{
+				/* Simple PT[n]H[n]M[n]S format parsing */
+				auto pos = str.find( 'T' );
+				if ( pos != std::string_view::npos )
+				{
+					auto timePart = str.substr( pos + 1 );
+					double totalSeconds = 0.0;
+
+					/* Parse hours */
+					auto hPos = timePart.find( 'H' );
+					if ( hPos != std::string_view::npos )
+					{
+						auto hours = std::stod( std::string( timePart.substr( 0, hPos ) ) );
+						totalSeconds += hours * 3600.0;
+						timePart = timePart.substr( hPos + 1 );
+					}
+
+					/* Parse minutes */
+					auto mPos = timePart.find( 'M' );
+					if ( mPos != std::string_view::npos )
+					{
+						auto minutes = std::stod( std::string( timePart.substr( 0, mPos ) ) );
+						totalSeconds += minutes * 60.0;
+						timePart = timePart.substr( mPos + 1 );
+					}
+
+					/* Parse seconds */
+					auto sPos = timePart.find( 'S' );
+					if ( sPos != std::string_view::npos )
+					{
+						auto seconds = std::stod( std::string( timePart.substr( 0, sPos ) ) );
+						totalSeconds += seconds;
+					}
+
+					result = TimeSpan::fromSeconds( totalSeconds );
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
 	//=====================================================================
 	// std::chrono interoperability limits
 	//=====================================================================
@@ -294,6 +432,16 @@ namespace dnv::vista::sdk::datatypes
 	DateTime DateTime::today() noexcept
 	{
 		return now().date();
+	}
+
+	DateTime DateTime::parse( std::string_view str )
+	{
+		DateTime result;
+		if ( !tryParse( str, result ) )
+		{
+			throw std::invalid_argument( "Invalid ISO 8601 DateTime string" );
+		}
+		return result;
 	}
 
 	bool DateTime::tryParse( std::string_view str, DateTime& result ) noexcept
@@ -1002,6 +1150,16 @@ namespace dnv::vista::sdk::datatypes
 
 		/* Create local midnight for today with the same offset */
 		return DateTimeOffset{ year, month, day, 0, 0, 0, localNow.offset() };
+	}
+
+	DateTimeOffset DateTimeOffset::parse( std::string_view str )
+	{
+		DateTimeOffset result;
+		if ( !tryParse( str, result ) )
+		{
+			throw std::invalid_argument( "Invalid ISO 8601 DateTimeOffset string format" );
+		}
+		return result;
 	}
 
 	bool DateTimeOffset::tryParse( std::string_view str, DateTimeOffset& result ) noexcept

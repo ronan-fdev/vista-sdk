@@ -3,8 +3,6 @@
  * @brief Implementation of DataChannelId class
  */
 
-#include "dnv/vista/sdk/pch.h"
-
 #include "dnv/vista/sdk/LocalIdBuilder.h"
 
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"

@@ -14,7 +14,6 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/ISO19848Constants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/LocalIdConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/LocationsConstants.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/UniversalIdConstants.h
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/datatypes/DateTimeISO8601.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/datatypes/DateTimeISO8601.inl
@@ -33,6 +32,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.h
 
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.h
@@ -105,6 +106,7 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.cpp
 
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.cpp

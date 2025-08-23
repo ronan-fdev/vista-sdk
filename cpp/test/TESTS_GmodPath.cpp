@@ -3,8 +3,6 @@
  * @brief Unit tests for the GmodPath class.
  */
 
-#include "pch.h"
-
 #include "TestDataLoader.h"
 
 #include "dnv/vista/sdk/Gmod.h"

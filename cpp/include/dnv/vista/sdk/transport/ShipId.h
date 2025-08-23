@@ -2,7 +2,6 @@
  * @file ShipId.h
  * @brief Ship identifier implementation using discriminated union pattern
  * @details Represents either an IMO number or other string identifier for vessels
- *          following the pattern established in the C# Vista SDK
  */
 
 #pragma once

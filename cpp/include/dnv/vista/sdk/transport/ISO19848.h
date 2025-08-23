@@ -27,6 +27,307 @@ namespace dnv::vista::sdk::transport
 	};
 
 	//=====================================================================
+	// Value class
+	//=====================================================================
+
+	/**
+	 * @brief Typed value wrapper for format data type validation results
+	 * @details Supports all ISO 19848 format data types with efficient variant storage
+	 */
+	class Value
+	{
+	public:
+		//----------------------------------------------
+		// Type enumeration
+		//----------------------------------------------
+
+		/** @brief Enumeration representing the variant types */
+		enum class Type : std::uint8_t
+		{
+			String = 0,
+			Char,
+			Boolean,
+			Integer,
+			UnsignedInteger,
+			Long,
+			Double,
+			Decimal,
+			DateTime,
+		};
+
+		//----------------------------------------------
+		// Value::String class
+		//----------------------------------------------
+
+		/**
+		 * @brief String value wrapper for format data type validation
+		 */
+		class String final
+		{
+		public:
+			inline explicit String( std::string_view value ) noexcept;
+			inline explicit String( std::string value ) noexcept;
+
+			/** @brief Default constructor */
+			String() = default;
+
+			/** @brief Copy constructor */
+			String( const String& ) = default;
+
+			/** @brief Move constructor */
+			String( String&& ) noexcept = default;
+
+			/** @brief Destructor */
+			~String() = default;
+
+			/** @brief Copy assignment */
+			String& operator=( const String& ) = default;
+
+			/** @brief Move assignment */
+			String& operator=( String&& ) noexcept = default;
+
+			[[nodiscard]] inline const std::string& value() const noexcept;
+
+		private:
+			/** @brief Internal string storage */
+			std::string m_value;
+		};
+
+		//----------------------------------------------
+		// Value::Char class
+		//----------------------------------------------
+
+		/**
+		 * @brief Character value wrapper for format data type validation
+		 */
+		class Char final
+		{
+		public:
+			inline explicit Char( char value ) noexcept;
+			[[nodiscard]] inline char value() const noexcept;
+
+		private:
+			/** @brief Internal character storage */
+			char m_value;
+		};
+
+		//----------------------------------------------
+		// Value::Boolean class
+		//----------------------------------------------
+
+		/**
+		 * @brief Boolean value wrapper for format data type validation
+		 */
+		class Boolean final
+		{
+		public:
+			inline explicit Boolean( bool value ) noexcept;
+			[[nodiscard]] inline bool value() const noexcept;
+
+		private:
+			/** @brief Internal boolean storage */
+			bool m_value;
+		};
+
+		//----------------------------------------------
+		// Value::Integer class
+		//----------------------------------------------
+
+		/**
+		 * @brief Integer value wrapper for format data type validation
+		 */
+		class Integer final
+		{
+		public:
+			inline explicit Integer( int value ) noexcept;
+			[[nodiscard]] inline int value() const noexcept;
+
+		private:
+			/** @brief Internal integer storage */
+			int m_value;
+		};
+
+		//----------------------------------------------
+		// Value::UnsignedInteger class
+		//----------------------------------------------
+
+		/**
+		 * @brief Unsigned integer value wrapper for format data type validation
+		 */
+		class UnsignedInteger final
+		{
+		public:
+			inline explicit UnsignedInteger( std::uint32_t value ) noexcept;
+			[[nodiscard]] inline std::uint32_t value() const noexcept;
+
+		private:
+			/** @brief Internal unsigned integer storage */
+			std::uint32_t m_value;
+		};
+
+		//----------------------------------------------
+		// Value::Long class
+		//---------------------------------------------
+
+		/**
+		 * @brief Long integer value wrapper for format data type validation
+		 */
+		class Long final
+		{
+		public:
+			inline explicit Long( std::int64_t value ) noexcept;
+			[[nodiscard]] inline std::int64_t value() const noexcept;
+
+		private:
+			/** @brief Internal long integer storage */
+			std::int64_t m_value;
+		};
+
+		//----------------------------------------------
+		// Value::Double class
+		//---------------------------------------------
+
+		/**
+		 * @brief Double precision floating-point value wrapper for format data type validation
+		 */
+		class Double final
+		{
+		public:
+			inline explicit Double( double value ) noexcept;
+			[[nodiscard]] inline double value() const noexcept;
+
+		private:
+			/** @brief Internal double precision storage */
+			double m_value;
+		};
+
+		//----------------------------------------------
+		// Value::Decimal class
+		//----------------------------------------------
+
+		/**
+		 * @brief 128-bit high-precision decimal value wrapper for format data type validation
+		 */
+		class Decimal final
+		{
+		public:
+			inline explicit Decimal( const datatypes::Decimal128& value ) noexcept;
+			inline explicit Decimal( double value ) noexcept;
+			[[nodiscard]] inline const datatypes::Decimal128& value() const noexcept;
+
+		private:
+			/** @brief Internal high-precision decimal storage */
+			datatypes::Decimal128 m_value;
+		};
+
+		//----------------------------------------------
+		// Value::DateTime class
+		//----------------------------------------------
+
+		/**
+		 * @brief Date and time value wrapper for format data type validation
+		 */
+		class DateTime final
+		{
+		public:
+			inline explicit DateTime( const datatypes::DateTimeOffset& value ) noexcept;
+			[[nodiscard]] inline const datatypes::DateTimeOffset& value() const noexcept;
+
+		private:
+			/** @brief Internal date and time storage */
+			datatypes::DateTimeOffset m_value;
+		};
+
+		//----------------------------------------------
+		// Construction from value types
+		//----------------------------------------------
+
+		Value() = default;
+
+		//-----------------------------
+		// Converting constructors
+		//-----------------------------
+
+		/**
+		 * @brief Converting constructors with optimal move semantics
+		 * @details These constructors use the "pass-by-value then move" idiom for optimal performance:
+		 * - When called with lvalue: parameter is copy-constructed, then moved into variant
+		 * - When called with rvalue: parameter is move-constructed, then moved into variant
+		 * - Avoids constructor ambiguity that would arise with separate copy/move overloads
+		 * - Provides single, efficient path for both copy and move scenarios
+		 * - Implementation uses std::move() to forward into std::variant storage
+		 *
+		 * Performance benefits over traditional copy/move constructor pairs:
+		 * - No ambiguous overload resolution
+		 * - Optimal performance for both lvalue and rvalue arguments
+		 * - Simpler API surface with single constructor per type
+		 * - Perfect forwarding semantics without template complexity
+		 */
+
+		inline Value( String string ) noexcept;
+		inline Value( Char charValue ) noexcept;
+		inline Value( Boolean boolean ) noexcept;
+		inline Value( Integer integer ) noexcept;
+		inline Value( UnsignedInteger unsignedInteger ) noexcept;
+		inline Value( Long longValue ) noexcept;
+		inline Value( Double doubleValue ) noexcept;
+		inline Value( Decimal decimal ) noexcept;
+		inline Value( DateTime dateTime ) noexcept;
+
+		//----------------------------------------------
+		// Type checking
+		//----------------------------------------------
+
+		[[nodiscard]] inline bool isString() const noexcept;
+		[[nodiscard]] inline bool isChar() const noexcept;
+		[[nodiscard]] inline bool isBoolean() const noexcept;
+		[[nodiscard]] inline bool isInteger() const noexcept;
+		[[nodiscard]] inline bool isUnsignedInteger() const noexcept;
+		[[nodiscard]] inline bool isLong() const noexcept;
+		[[nodiscard]] inline bool isDouble() const noexcept;
+		[[nodiscard]] inline bool isDecimal() const noexcept;
+		[[nodiscard]] inline bool isDateTime() const noexcept;
+
+		//----------------------------------------------
+		// Value access
+		//----------------------------------------------
+
+		[[nodiscard]] inline const String& string() const;
+		[[nodiscard]] inline const Char& charValue() const;
+		[[nodiscard]] inline const Boolean& boolean() const;
+		[[nodiscard]] inline const Integer& integer() const;
+		[[nodiscard]] inline const UnsignedInteger& unsignedInteger() const;
+		[[nodiscard]] inline const Long& longValue() const;
+		[[nodiscard]] inline const Double& doubleValue() const;
+		[[nodiscard]] inline const Decimal& decimal() const;
+		[[nodiscard]] inline const DateTime& dateTime() const;
+
+		//----------------------------------------------
+		// Variant index access
+		//----------------------------------------------
+
+		/**
+		 * @brief Get the variant index for switch statements
+		 * @return Index of the currently held type in the variant
+		 */
+		[[nodiscard]] inline std::size_t index() const noexcept;
+
+		/**
+		 * @brief Get the type as an enum for readable switch statements
+		 * @return Type enum representing the currently held type
+		 */
+		[[nodiscard]] inline Type type() const noexcept;
+
+	private:
+		//----------------------------------------------
+		// Private member variables
+		//----------------------------------------------
+
+		/** @brief Variant storing the typed value */
+		std::variant<String, Char, Boolean, Integer, UnsignedInteger, Long, Double, Decimal, DateTime> m_value{ String{ std::string_view{ "" } } };
+	};
+
+	//=====================================================================
 	// DataChannelTypeName class
 	//=====================================================================
 
@@ -275,307 +576,6 @@ namespace dnv::vista::sdk::transport
 
 		/** @brief Move assignment */
 		FormatDataType& operator=( FormatDataType&& ) noexcept = default;
-
-		//----------------------------------------------
-		// FormatDataType::Value class
-		//----------------------------------------------
-
-		/**
-		 * @brief Typed value wrapper for format data type validation results
-		 * @details Supports all ISO 19848 format data types with efficient variant storage
-		 */
-		class Value
-		{
-		public:
-			//----------------------------------------------
-			// Type enumeration
-			//----------------------------------------------
-
-			/** @brief Enumeration representing the variant types */
-			enum class Type : std::uint8_t
-			{
-				String = 0,
-				Char,
-				Boolean,
-				Integer,
-				UnsignedInteger,
-				Long,
-				Double,
-				Decimal,
-				DateTime,
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::String class
-			//----------------------------------------------
-
-			/**
-			 * @brief String value wrapper for format data type validation
-			 */
-			class String final
-			{
-			public:
-				inline explicit String( std::string_view value ) noexcept;
-				inline explicit String( std::string value ) noexcept;
-
-				/** @brief Default constructor */
-				String() = default;
-
-				/** @brief Copy constructor */
-				String( const String& ) = default;
-
-				/** @brief Move constructor */
-				String( String&& ) noexcept = default;
-
-				/** @brief Destructor */
-				~String() = default;
-
-				/** @brief Copy assignment */
-				String& operator=( const String& ) = default;
-
-				/** @brief Move assignment */
-				String& operator=( String&& ) noexcept = default;
-
-				[[nodiscard]] inline const std::string& value() const noexcept;
-
-			private:
-				/** @brief Internal string storage */
-				std::string m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::Char class
-			//----------------------------------------------
-
-			/**
-			 * @brief Character value wrapper for format data type validation
-			 */
-			class Char final
-			{
-			public:
-				inline explicit Char( char value ) noexcept;
-				[[nodiscard]] inline char value() const noexcept;
-
-			private:
-				/** @brief Internal character storage */
-				char m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::Boolean class
-			//----------------------------------------------
-
-			/**
-			 * @brief Boolean value wrapper for format data type validation
-			 */
-			class Boolean final
-			{
-			public:
-				inline explicit Boolean( bool value ) noexcept;
-				[[nodiscard]] inline bool value() const noexcept;
-
-			private:
-				/** @brief Internal boolean storage */
-				bool m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::Integer class
-			//----------------------------------------------
-
-			/**
-			 * @brief Integer value wrapper for format data type validation
-			 */
-			class Integer final
-			{
-			public:
-				inline explicit Integer( int value ) noexcept;
-				[[nodiscard]] inline int value() const noexcept;
-
-			private:
-				/** @brief Internal integer storage */
-				int m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::UnsignedInteger class
-			//----------------------------------------------
-
-			/**
-			 * @brief Unsigned integer value wrapper for format data type validation
-			 */
-			class UnsignedInteger final
-			{
-			public:
-				inline explicit UnsignedInteger( std::uint32_t value ) noexcept;
-				[[nodiscard]] inline std::uint32_t value() const noexcept;
-
-			private:
-				/** @brief Internal unsigned integer storage */
-				std::uint32_t m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::Long class
-			//---------------------------------------------
-
-			/**
-			 * @brief Long integer value wrapper for format data type validation
-			 */
-			class Long final
-			{
-			public:
-				inline explicit Long( std::int64_t value ) noexcept;
-				[[nodiscard]] inline std::int64_t value() const noexcept;
-
-			private:
-				/** @brief Internal long integer storage */
-				std::int64_t m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::Double class
-			//---------------------------------------------
-
-			/**
-			 * @brief Double precision floating-point value wrapper for format data type validation
-			 */
-			class Double final
-			{
-			public:
-				inline explicit Double( double value ) noexcept;
-				[[nodiscard]] inline double value() const noexcept;
-
-			private:
-				/** @brief Internal double precision storage */
-				double m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::Decimal class
-			//----------------------------------------------
-
-			/**
-			 * @brief 128-bit high-precision decimal value wrapper for format data type validation
-			 */
-			class Decimal final
-			{
-			public:
-				inline explicit Decimal( const datatypes::Decimal128& value ) noexcept;
-				inline explicit Decimal( double value ) noexcept;
-				[[nodiscard]] inline const datatypes::Decimal128& value() const noexcept;
-
-			private:
-				/** @brief Internal high-precision decimal storage */
-				datatypes::Decimal128 m_value;
-			};
-
-			//----------------------------------------------
-			// FormatDataType::Value::DateTime class
-			//----------------------------------------------
-
-			/**
-			 * @brief Date and time value wrapper for format data type validation
-			 */
-			class DateTime final
-			{
-			public:
-				inline explicit DateTime( const datatypes::DateTimeOffset& value ) noexcept;
-				[[nodiscard]] inline const datatypes::DateTimeOffset& value() const noexcept;
-
-			private:
-				/** @brief Internal date and time storage */
-				datatypes::DateTimeOffset m_value;
-			};
-
-			//----------------------------------------------
-			// Construction from value types
-			//----------------------------------------------
-
-			Value() = default;
-
-			//-----------------------------
-			// Converting constructors
-			//-----------------------------
-
-			/**
-			 * @brief Converting constructors with optimal move semantics
-			 * @details These constructors use the "pass-by-value then move" idiom for optimal performance:
-			 * - When called with lvalue: parameter is copy-constructed, then moved into variant
-			 * - When called with rvalue: parameter is move-constructed, then moved into variant
-			 * - Avoids constructor ambiguity that would arise with separate copy/move overloads
-			 * - Provides single, efficient path for both copy and move scenarios
-			 * - Implementation uses std::move() to forward into std::variant storage
-			 *
-			 * Performance benefits over traditional copy/move constructor pairs:
-			 * - No ambiguous overload resolution
-			 * - Optimal performance for both lvalue and rvalue arguments
-			 * - Simpler API surface with single constructor per type
-			 * - Perfect forwarding semantics without template complexity
-			 */
-
-			inline Value( String string ) noexcept;
-			inline Value( Char charValue ) noexcept;
-			inline Value( Boolean boolean ) noexcept;
-			inline Value( Integer integer ) noexcept;
-			inline Value( UnsignedInteger unsignedInteger ) noexcept;
-			inline Value( Long longValue ) noexcept;
-			inline Value( Double doubleValue ) noexcept;
-			inline Value( Decimal decimal ) noexcept;
-			inline Value( DateTime dateTime ) noexcept;
-
-			//----------------------------------------------
-			// Type checking
-			//----------------------------------------------
-
-			[[nodiscard]] inline bool isString() const noexcept;
-			[[nodiscard]] inline bool isChar() const noexcept;
-			[[nodiscard]] inline bool isBoolean() const noexcept;
-			[[nodiscard]] inline bool isInteger() const noexcept;
-			[[nodiscard]] inline bool isUnsignedInteger() const noexcept;
-			[[nodiscard]] inline bool isLong() const noexcept;
-			[[nodiscard]] inline bool isDouble() const noexcept;
-			[[nodiscard]] inline bool isDecimal() const noexcept;
-			[[nodiscard]] inline bool isDateTime() const noexcept;
-
-			//----------------------------------------------
-			// Value access
-			//----------------------------------------------
-
-			[[nodiscard]] inline const String& string() const;
-			[[nodiscard]] inline const Char& charValue() const;
-			[[nodiscard]] inline const Boolean& boolean() const;
-			[[nodiscard]] inline const Integer& integer() const;
-			[[nodiscard]] inline const UnsignedInteger& unsignedInteger() const;
-			[[nodiscard]] inline const Long& longValue() const;
-			[[nodiscard]] inline const Double& doubleValue() const;
-			[[nodiscard]] inline const Decimal& decimal() const;
-			[[nodiscard]] inline const DateTime& dateTime() const;
-
-			//----------------------------------------------
-			// Variant index access
-			//----------------------------------------------
-
-			/**
-			 * @brief Get the variant index for switch statements
-			 * @return Index of the currently held type in the variant
-			 */
-			[[nodiscard]] inline std::size_t index() const noexcept;
-
-			/**
-			 * @brief Get the type as an enum for readable switch statements
-			 * @return Type enum representing the currently held type
-			 */
-			[[nodiscard]] inline Type type() const noexcept;
-
-		private:
-			//----------------------------------------------
-			// Private member variables
-			//----------------------------------------------
-
-			/** @brief Variant storing the typed value */
-			std::variant<String, Char, Boolean, Integer, UnsignedInteger, Long, Double, Decimal, DateTime> m_value{ String{ std::string_view{ "" } } };
-		};
 
 		//----------------------------------------------
 		// Accessors

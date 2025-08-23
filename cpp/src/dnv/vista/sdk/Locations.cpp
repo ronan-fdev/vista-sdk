@@ -3,8 +3,6 @@
  * @brief Implements the Locations, Location, RelativeLocation, and related helper classes.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/Locations.h"
 
 #include "dnv/vista/sdk/constants/LocationsConstants.h"

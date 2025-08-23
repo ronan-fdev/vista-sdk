@@ -3,8 +3,6 @@
  * @brief Implementation of Generic Product Model (GMOD) data transfer objects
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/GmodDto.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"

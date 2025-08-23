@@ -3,8 +3,6 @@
  * @brief Implementation of resource loading and caching utilities for Vista SDK
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/EmbeddedResource.h"
 
 #include "dnv/vista/sdk/CodebooksDto.h"

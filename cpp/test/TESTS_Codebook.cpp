@@ -3,8 +3,6 @@
  * @brief Unit tests for the Codebook and related functionalities.
  */
 
-#include "pch.h"
-
 #include "TestDataLoader.h"
 
 #include "dnv/vista/sdk/Codebooks.h"

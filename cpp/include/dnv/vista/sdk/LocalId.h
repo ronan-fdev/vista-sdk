@@ -241,4 +241,20 @@ namespace dnv::vista::sdk
 	};
 }
 
+//=====================================================================
+// std::hash specialization for LocalId
+//=====================================================================
+
+namespace std
+{
+	template <>
+	struct hash<dnv::vista::sdk::LocalId>
+	{
+		std::size_t operator()( const dnv::vista::sdk::LocalId& localId ) const noexcept
+		{
+			return std::hash<std::string>{}( localId.toString() );
+		}
+	};
+}
+
 #include "LocalId.inl"

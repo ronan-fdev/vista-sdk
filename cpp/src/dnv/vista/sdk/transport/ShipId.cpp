@@ -3,8 +3,6 @@
  * @brief Implementation of ShipId class
  */
 
-#include "dnv/vista/sdk/pch.h"
-
 #include "dnv/vista/sdk/utils/StringUtils.h"
 
 #include "dnv/vista/sdk/transport/ShipId.h"

@@ -3,8 +3,6 @@
  * @brief Implementation of ISO 19848 codebook data transfer objects
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/CodebooksDto.h"
 
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"

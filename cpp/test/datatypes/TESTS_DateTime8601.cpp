@@ -125,6 +125,63 @@ namespace dnv::vista::sdk::test
 		EXPECT_EQ( 1500 * constants::datetime::TICKS_PER_MILLISECOND, fromMs.ticks() );
 	}
 
+	TEST_F( TimeSpanTest, TryParseMethod )
+	{
+		datatypes::TimeSpan result;
+
+		/* Valid ISO 8601 duration formats */
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "PT1H", result ) );
+		EXPECT_EQ( constants::datetime::TICKS_PER_HOUR, result.ticks() );
+
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "PT30M", result ) );
+		EXPECT_EQ( 30 * constants::datetime::TICKS_PER_MINUTE, result.ticks() );
+
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "PT45S", result ) );
+		EXPECT_EQ( 45 * constants::datetime::TICKS_PER_SECOND, result.ticks() );
+
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "PT1H30M45S", result ) );
+		EXPECT_EQ( constants::datetime::TICKS_PER_HOUR + 30 * constants::datetime::TICKS_PER_MINUTE + 45 * constants::datetime::TICKS_PER_SECOND, result.ticks() );
+
+		/* Valid H:M:S format */
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "01:30:45", result ) );
+		EXPECT_EQ( constants::datetime::TICKS_PER_HOUR + 30 * constants::datetime::TICKS_PER_MINUTE + 45 * constants::datetime::TICKS_PER_SECOND, result.ticks() );
+
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "00:05:30.5", result ) );
+		EXPECT_EQ( 5 * constants::datetime::TICKS_PER_MINUTE + 30.5 * constants::datetime::TICKS_PER_SECOND, result.ticks() );
+
+		/* Valid numeric seconds format */
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "123.45", result ) );
+		EXPECT_EQ( static_cast<std::int64_t>( 123.45 * constants::datetime::TICKS_PER_SECOND ), result.ticks() );
+
+		EXPECT_TRUE( datatypes::TimeSpan::tryParse( "60", result ) );
+		EXPECT_EQ( 60 * constants::datetime::TICKS_PER_SECOND, result.ticks() );
+
+		/* Invalid formats */
+		EXPECT_FALSE( datatypes::TimeSpan::tryParse( "", result ) );
+		EXPECT_FALSE( datatypes::TimeSpan::tryParse( "invalid", result ) );
+		EXPECT_FALSE( datatypes::TimeSpan::tryParse( "25:00:00", result ) ); // Invalid hour
+		EXPECT_FALSE( datatypes::TimeSpan::tryParse( "01:60:00", result ) ); // Invalid minute
+		EXPECT_FALSE( datatypes::TimeSpan::tryParse( "01:30:60", result ) ); // Invalid second
+	}
+
+	TEST_F( TimeSpanTest, ParseMethod )
+	{
+		/* Valid parsing */
+		auto result1 = datatypes::TimeSpan::parse( "PT1H30M" );
+		EXPECT_EQ( constants::datetime::TICKS_PER_HOUR + 30 * constants::datetime::TICKS_PER_MINUTE, result1.ticks() );
+
+		auto result2 = datatypes::TimeSpan::parse( "02:15:30" );
+		EXPECT_EQ( 2 * constants::datetime::TICKS_PER_HOUR + 15 * constants::datetime::TICKS_PER_MINUTE + 30 * constants::datetime::TICKS_PER_SECOND, result2.ticks() );
+
+		auto result3 = datatypes::TimeSpan::parse( "90.5" );
+		EXPECT_EQ( static_cast<std::int64_t>( 90.5 * constants::datetime::TICKS_PER_SECOND ), result3.ticks() );
+
+		/* Invalid parsing should throw */
+		EXPECT_THROW( datatypes::TimeSpan::parse( "" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::TimeSpan::parse( "invalid" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::TimeSpan::parse( "25:00:00" ), std::invalid_argument );
+	}
+
 	//=====================================================================
 	// DateTime Tests
 	//=====================================================================
@@ -413,6 +470,42 @@ namespace dnv::vista::sdk::test
 		EXPECT_FALSE( datatypes::DateTime::tryParse( "2024-13-01T00:00:00Z", result ) );
 		EXPECT_FALSE( datatypes::DateTime::tryParse( "2024-01-32T00:00:00Z", result ) );
 		EXPECT_FALSE( datatypes::DateTime::tryParse( "2024-01-01T25:00:00Z", result ) );
+	}
+
+	TEST_F( DateTimeTest, ParseMethod )
+	{
+		/* Valid parsing */
+		auto result1 = datatypes::DateTime::parse( "2024-06-15T14:30:45Z" );
+		EXPECT_EQ( 2024, result1.year() );
+		EXPECT_EQ( 6, result1.month() );
+		EXPECT_EQ( 15, result1.day() );
+		EXPECT_EQ( 14, result1.hour() );
+		EXPECT_EQ( 30, result1.minute() );
+		EXPECT_EQ( 45, result1.second() );
+
+		auto result2 = datatypes::DateTime::parse( "2024-01-01" );
+		EXPECT_EQ( 2024, result2.year() );
+		EXPECT_EQ( 1, result2.month() );
+		EXPECT_EQ( 1, result2.day() );
+		EXPECT_EQ( 0, result2.hour() );
+		EXPECT_EQ( 0, result2.minute() );
+		EXPECT_EQ( 0, result2.second() );
+
+		auto result3 = datatypes::DateTime::parse( "2024-12-31T23:59:59.999Z" );
+		EXPECT_EQ( 2024, result3.year() );
+		EXPECT_EQ( 12, result3.month() );
+		EXPECT_EQ( 31, result3.day() );
+		EXPECT_EQ( 23, result3.hour() );
+		EXPECT_EQ( 59, result3.minute() );
+		EXPECT_EQ( 59, result3.second() );
+		EXPECT_EQ( 999, result3.millisecond() );
+
+		/* Invalid parsing should throw */
+		EXPECT_THROW( datatypes::DateTime::parse( "" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::DateTime::parse( "invalid" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::DateTime::parse( "2024-13-01" ), std::invalid_argument );			 // Invalid month
+		EXPECT_THROW( datatypes::DateTime::parse( "2024-01-32" ), std::invalid_argument );			 // Invalid day
+		EXPECT_THROW( datatypes::DateTime::parse( "2024-01-01T25:00:00Z" ), std::invalid_argument ); // Invalid hour
 	}
 
 	TEST_F( DateTimeTest, StreamOperators )
@@ -1022,6 +1115,58 @@ namespace dnv::vista::sdk::test
 		EXPECT_FALSE( datatypes::DateTimeOffset::tryParse( "2024-13-01T00:00:00Z", result ) );
 		EXPECT_FALSE( datatypes::DateTimeOffset::tryParse( "2024-01-01T25:00:00Z", result ) );
 		EXPECT_FALSE( datatypes::DateTimeOffset::tryParse( "2024-01-01T12:00:00+15:00", result ) );
+	}
+
+	TEST_F( DateTimeOffsetTest, ParseMethod )
+	{
+		/* Valid parsing with UTC timezone */
+		auto result1 = datatypes::DateTimeOffset::parse( "2024-06-15T14:30:45Z" );
+		EXPECT_EQ( 2024, result1.year() );
+		EXPECT_EQ( 6, result1.month() );
+		EXPECT_EQ( 15, result1.day() );
+		EXPECT_EQ( 14, result1.hour() );
+		EXPECT_EQ( 30, result1.minute() );
+		EXPECT_EQ( 45, result1.second() );
+		EXPECT_EQ( 0, result1.totalOffsetMinutes() );
+
+		/* Valid parsing with positive offset */
+		auto result2 = datatypes::DateTimeOffset::parse( "2024-06-15T14:30:45+02:00" );
+		EXPECT_EQ( 2024, result2.year() );
+		EXPECT_EQ( 6, result2.month() );
+		EXPECT_EQ( 15, result2.day() );
+		EXPECT_EQ( 14, result2.hour() );
+		EXPECT_EQ( 30, result2.minute() );
+		EXPECT_EQ( 45, result2.second() );
+		EXPECT_EQ( 120, result2.totalOffsetMinutes() ); // +02:00 = 120 minutes
+
+		/* Valid parsing with negative offset */
+		auto result3 = datatypes::DateTimeOffset::parse( "2024-06-15T14:30:45-05:00" );
+		EXPECT_EQ( 2024, result3.year() );
+		EXPECT_EQ( 6, result3.month() );
+		EXPECT_EQ( 15, result3.day() );
+		EXPECT_EQ( 14, result3.hour() );
+		EXPECT_EQ( 30, result3.minute() );
+		EXPECT_EQ( 45, result3.second() );
+		EXPECT_EQ( -300, result3.totalOffsetMinutes() ); // -05:00 = -300 minutes
+
+		/* Valid parsing with fractional seconds */
+		auto result4 = datatypes::DateTimeOffset::parse( "2024-12-31T23:59:59.999Z" );
+		EXPECT_EQ( 2024, result4.year() );
+		EXPECT_EQ( 12, result4.month() );
+		EXPECT_EQ( 31, result4.day() );
+		EXPECT_EQ( 23, result4.hour() );
+		EXPECT_EQ( 59, result4.minute() );
+		EXPECT_EQ( 59, result4.second() );
+		EXPECT_EQ( 999, result4.millisecond() );
+		EXPECT_EQ( 0, result4.totalOffsetMinutes() );
+
+		/* Invalid parsing should throw */
+		EXPECT_THROW( datatypes::DateTimeOffset::parse( "" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::DateTimeOffset::parse( "invalid" ), std::invalid_argument );
+		EXPECT_THROW( datatypes::DateTimeOffset::parse( "2024-13-01T12:00:00Z" ), std::invalid_argument );		// Invalid month
+		EXPECT_THROW( datatypes::DateTimeOffset::parse( "2024-01-32T12:00:00Z" ), std::invalid_argument );		// Invalid day
+		EXPECT_THROW( datatypes::DateTimeOffset::parse( "2024-01-01T25:00:00Z" ), std::invalid_argument );		// Invalid hour
+		EXPECT_THROW( datatypes::DateTimeOffset::parse( "2024-01-01T12:00:00+15:00" ), std::invalid_argument ); // Invalid offset (>14:00)
 	}
 
 	TEST_F( DateTimeOffsetTest, StreamOperators )

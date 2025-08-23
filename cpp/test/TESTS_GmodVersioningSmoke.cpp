@@ -3,8 +3,6 @@
  * @brief Unit tests for the GmodVersioningSmokeTests class.
  */
 
-#include "pch.h"
-
 #include "dnv/vista/sdk/GmodVersioning.h"
 #include "dnv/vista/sdk/VIS.h"
 #include "dnv/vista/sdk/VISVersion.h"
