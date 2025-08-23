@@ -29,8 +29,6 @@ namespace dnv::vista::sdk::datatypes
 	 */
 	class Int128 final
 	{
-		friend class Decimal128;
-
 	public:
 		//----------------------------------------------
 		// Construction
@@ -265,6 +263,17 @@ namespace dnv::vista::sdk::datatypes
 		 * @return Upper 64 bits as unsigned integer
 		 */
 		[[nodiscard]] std::uint64_t toHigh() const noexcept;
+
+#if VISTA_SDK_CPP_HAS_INT128
+		/**
+		 * @brief Get native 128-bit integer value (GCC/Clang only)
+		 * @return Native __int128 value for direct use with compiler intrinsics
+		 * @details This method provides access to the underlying native 128-bit integer
+		 *          when compiled with GCC or Clang. Useful for interfacing with APIs
+		 *          that expect native __int128 types or for maximum performance operations.
+		 */
+		constexpr VISTA_SDK_CPP_INT128 toNative() const noexcept;
+#endif
 
 	private:
 		//----------------------------------------------

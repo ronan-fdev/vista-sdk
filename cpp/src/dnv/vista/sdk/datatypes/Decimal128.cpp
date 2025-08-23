@@ -517,8 +517,8 @@ namespace dnv::vista::sdk::datatypes
 		result = static_cast<double>( mantissa.m_value );
 #else
 		/* Convert 128-bit to double (approximate) */
-		result = static_cast<double>( mantissa.m_upper64bits ) * ( 1ULL << 32 ) * ( 1ULL << 32 ) +
-				 static_cast<double>( mantissa.m_lower64bits );
+		result = static_cast<double>( mantissa.toHigh() ) * ( 1ULL << 32 ) * ( 1ULL << 32 ) +
+				 static_cast<double>( mantissa.toLow() );
 #endif /* Apply scale */
 		std::uint8_t currentScale = scale();
 		for ( std::uint8_t i = 0; i < currentScale; ++i )
@@ -573,10 +573,10 @@ namespace dnv::vista::sdk::datatypes
 			}
 		}
 #else
-		if ( mantissa.m_upper64bits == 0 )
+		if ( mantissa.toHigh() == 0 )
 		{
 			/* Fast 64-bit path */
-			std::uint64_t value = mantissa.m_lower64bits;
+			std::uint64_t value = mantissa.toLow();
 			while ( value > 0 && digitCount < digits.size() )
 			{
 				digits[digitCount++] = static_cast<char>( constants::decimal128::DIGIT_OFFSET + ( value % 10 ) );
@@ -588,10 +588,10 @@ namespace dnv::vista::sdk::datatypes
 			/* Manual 128-bit extraction */
 			while ( !mantissa.isZero() && digitCount < digits.size() )
 			{
-				if ( mantissa.m_upper64bits == 0 )
+				if ( mantissa.toHigh() == 0 )
 				{
 					/* Switched to 64-bit range */
-					std::uint64_t value = mantissa.m_lower64bits;
+					std::uint64_t value = mantissa.toLow();
 					while ( value > 0 && digitCount < digits.size() )
 					{
 						digits[digitCount++] = static_cast<char>( constants::decimal128::DIGIT_OFFSET + ( value % 10 ) );
@@ -600,7 +600,7 @@ namespace dnv::vista::sdk::datatypes
 					break;
 				}
 				digits[digitCount++] = static_cast<char>( constants::decimal128::DIGIT_OFFSET +
-														  ( mantissa.m_lower64bits % constants::decimal128::BASE ) );
+														  ( mantissa.toLow() % constants::decimal128::BASE ) );
 
 				mantissa = mantissa / Int128{ constants::decimal128::BASE };
 			}

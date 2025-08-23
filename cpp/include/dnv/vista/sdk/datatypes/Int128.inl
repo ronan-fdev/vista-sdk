@@ -148,7 +148,9 @@ namespace dnv::vista::sdk::datatypes
 
 	inline Int128 Int128::abs() const noexcept
 	{
-		return Int128{ m_value < 0 ? -m_value : m_value };
+		return Int128{ m_value < 0
+						   ? -m_value
+						   : m_value };
 	}
 
 	//----------------------------------------------
@@ -165,6 +167,10 @@ namespace dnv::vista::sdk::datatypes
 		return static_cast<std::uint64_t>( m_value >> 64 );
 	}
 
+	constexpr VISTA_SDK_CPP_INT128 Int128::toNative() const noexcept
+	{
+		return m_value;
+	}
 #else
 
 	//----------------------------------------------
@@ -191,7 +197,8 @@ namespace dnv::vista::sdk::datatypes
 
 	inline constexpr Int128::Int128( std::int64_t val ) noexcept
 		: m_lower64bits{ static_cast<std::uint64_t>( val ) },
-		  m_upper64bits{ ( val < 0 ) ? static_cast<std::uint64_t>( -1 ) : 0 }
+		  m_upper64bits{ ( val < 0 ) ? static_cast<std::uint64_t>( -1 )
+									 : 0 }
 	{
 	}
 
@@ -202,7 +209,9 @@ namespace dnv::vista::sdk::datatypes
 	}
 
 	inline constexpr Int128::Int128( int val ) noexcept
-		: m_lower64bits{ static_cast<std::uint64_t>( val ) }, m_upper64bits{ ( val < 0 ) ? static_cast<std::uint64_t>( -1 ) : 0 }
+		: m_lower64bits{ static_cast<std::uint64_t>( val ) },
+		  m_upper64bits{ ( val < 0 ) ? static_cast<std::uint64_t>( -1 )
+									 : 0 }
 	{
 	}
 
@@ -214,7 +223,8 @@ namespace dnv::vista::sdk::datatypes
 	{
 		/* 128-bit addition with carry propagation */
 		std::uint64_t result_low = m_lower64bits + other.m_lower64bits;
-		std::uint64_t carry = ( result_low < m_lower64bits ) ? 1 : 0;
+		std::uint64_t carry = ( result_low < m_lower64bits ) ? 1
+															 : 0;
 		std::uint64_t result_high = m_upper64bits + other.m_upper64bits + carry;
 
 		return Int128( result_low, result_high );
@@ -224,7 +234,9 @@ namespace dnv::vista::sdk::datatypes
 	{
 		/* 128-bit subtraction with borrow propagation */
 		std::uint64_t result_low = m_lower64bits - other.m_lower64bits;
-		std::uint64_t borrow = ( m_lower64bits < other.m_lower64bits ) ? 1 : 0;
+		std::uint64_t borrow = ( m_lower64bits < other.m_lower64bits )
+								   ? 1
+								   : 0;
 		std::uint64_t result_high = m_upper64bits - other.m_upper64bits - borrow;
 
 		return Int128( result_low, result_high );
@@ -297,7 +309,9 @@ namespace dnv::vista::sdk::datatypes
 			std::uint64_t res = static_cast<std::uint64_t>( -result );
 			/* Two's complement negation for negative results */
 			std::uint64_t neg_low = ~res + 1;
-			std::uint64_t neg_high = ( res == 0 ) ? 0 : ~static_cast<std::uint64_t>( 0 );
+			std::uint64_t neg_high = ( res == 0 )
+										 ? 0
+										 : ~static_cast<std::uint64_t>( 0 );
 			return Int128( neg_low, neg_high );
 		}
 	}

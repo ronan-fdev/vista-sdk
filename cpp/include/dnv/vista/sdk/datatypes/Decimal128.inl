@@ -104,13 +104,14 @@ namespace dnv::vista::sdk::datatypes
 	inline void Decimal128::setMantissa( const Int128& value ) noexcept
 	{
 #if VISTA_SDK_CPP_HAS_INT128
-		m_mantissa[0] = static_cast<std::uint32_t>( value.m_value );
-		m_mantissa[1] = static_cast<std::uint32_t>( value.m_value >> 32 );
-		m_mantissa[2] = static_cast<std::uint32_t>( value.m_value >> 64 );
+		auto nativeValue = value.toNative();
+		m_mantissa[0] = static_cast<std::uint32_t>( nativeValue );
+		m_mantissa[1] = static_cast<std::uint32_t>( nativeValue >> 32 );
+		m_mantissa[2] = static_cast<std::uint32_t>( nativeValue >> 64 );
 #else
-		m_mantissa[0] = static_cast<std::uint32_t>( value.m_lower64bits );
-		m_mantissa[1] = static_cast<std::uint32_t>( value.m_lower64bits >> 32 );
-		m_mantissa[2] = static_cast<std::uint32_t>( value.m_upper64bits );
+		m_mantissa[0] = static_cast<std::uint32_t>( value.toLow() );
+		m_mantissa[1] = static_cast<std::uint32_t>( value.toLow() >> 32 );
+		m_mantissa[2] = static_cast<std::uint32_t>( value.toHigh() );
 #endif
 	}
 }
