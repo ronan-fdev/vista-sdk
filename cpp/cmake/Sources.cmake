@@ -25,10 +25,6 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/HashMap.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.inl
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.inl
@@ -103,7 +99,10 @@ set(PUBLIC_HEADERS
 
 set(PRIVATE_HEADERS
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/impl/DynamicStringBuffer_impl.h
+
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBufferPool.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.h
 )
 
 set(PRIVATE_SOURCES

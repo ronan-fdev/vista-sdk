@@ -244,6 +244,28 @@ namespace dnv::vista::sdk::internal
 		m_errors.reserve( 8 );
 	}
 
+	//=====================================================================
+	// LocalIdParsingErrorBuilder class
+	//=====================================================================
+
+	//----------------------------------------------
+	// State inspection methods
+	//----------------------------------------------
+
+	bool LocalIdParsingErrorBuilder::hasError() const noexcept
+	{
+		return !m_errors.empty();
+	}
+
+	//----------------------------------------------
+	// Static factory method
+	//----------------------------------------------
+
+	LocalIdParsingErrorBuilder LocalIdParsingErrorBuilder::create()
+	{
+		return LocalIdParsingErrorBuilder{};
+	}
+
 	//----------------------------------------------
 	// ParsingErrors construction
 	//----------------------------------------------

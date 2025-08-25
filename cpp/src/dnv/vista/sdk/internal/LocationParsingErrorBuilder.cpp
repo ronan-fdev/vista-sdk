@@ -86,6 +86,24 @@ namespace dnv::vista::sdk::internal
 	}
 
 	//----------------------------------------------
+	// State inspection methods
+	//----------------------------------------------
+
+	bool LocationParsingErrorBuilder::hasError() const noexcept
+	{
+		return !m_errors.empty();
+	}
+
+	//----------------------------------------------
+	// Static factory method
+	//----------------------------------------------
+
+	LocationParsingErrorBuilder LocationParsingErrorBuilder::create()
+	{
+		return LocationParsingErrorBuilder();
+	}
+
+	//----------------------------------------------
 	// ParsingErrors construction
 	//----------------------------------------------
 

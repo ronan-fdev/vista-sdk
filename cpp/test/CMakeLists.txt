@@ -155,6 +155,7 @@ foreach(test_source ${TEST_SOURCES})
 
 		target_include_directories(${test_target_name} PRIVATE
 			${VISTA_SDK_CPP_INCLUDE_DIR}
+			${VISTA_SDK_CPP_SOURCE_DIR}
 		)
 
 		if(TARGET CopyTestData)

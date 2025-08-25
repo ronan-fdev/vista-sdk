@@ -106,7 +106,7 @@ namespace dnv::vista::sdk
 			 * @brief Checks if any errors have been added to the builder.
 			 * @return `true` if at least one error has been added, `false` otherwise.
 			 */
-			[[nodiscard]] inline bool hasError() const noexcept;
+			[[nodiscard]] bool hasError() const noexcept;
 
 			//----------------------------------------------
 			// Static factory method
@@ -117,7 +117,7 @@ namespace dnv::vista::sdk
 			 * @details Provides a clear entry point for creating a builder.
 			 * @return A new instance of `LocalIdParsingErrorBuilder`.
 			 */
-			[[nodiscard]] inline static LocalIdParsingErrorBuilder create();
+			[[nodiscard]] static LocalIdParsingErrorBuilder create();
 
 			//----------------------------------------------
 			// ParsingErrors construction
@@ -166,5 +166,3 @@ namespace dnv::vista::sdk
 		};
 	}
 }
-
-#include "LocalIdParsingErrorBuilder.inl"
