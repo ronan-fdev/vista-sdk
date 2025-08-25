@@ -559,7 +559,7 @@ namespace dnv::vista::sdk::transport
 			case Value::Type::Double:
 			default:
 			{
-				throw std::runtime_error( "Unexpected value type in switch operation" );
+				throw std::logic_error( "Should never happen" );
 			}
 		}
 	}
@@ -605,7 +605,7 @@ namespace dnv::vista::sdk::transport
 			case Value::Type::Double:
 			default:
 			{
-				throw std::runtime_error( "Unexpected value type in match operation" );
+				throw std::logic_error( "Should never happen" );
 			}
 		}
 	}

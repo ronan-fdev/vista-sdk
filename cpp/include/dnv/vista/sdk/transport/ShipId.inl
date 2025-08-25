@@ -16,7 +16,7 @@ namespace dnv::vista::sdk::transport
 	//----------------------------------------------
 
 	inline ShipId::ShipId( ImoNumber imoNumber ) noexcept
-		: m_tag{ 1 },
+		: m_tag{ Tag::IMO },
 		  m_imoNumber{ std::move( imoNumber ) }
 	{
 	}
@@ -34,11 +34,11 @@ namespace dnv::vista::sdk::transport
 
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::IMO:
 			{
 				return m_imoNumber == other.m_imoNumber;
 			}
-			case 2:
+			case Tag::Other:
 			{
 				return m_otherId == other.m_otherId;
 			}
@@ -60,12 +60,12 @@ namespace dnv::vista::sdk::transport
 
 	inline bool ShipId::isImoNumber() const noexcept
 	{
-		return m_tag == 1;
+		return m_tag == Tag::IMO;
 	}
 
 	inline bool ShipId::isOtherId() const noexcept
 	{
-		return m_tag == 2;
+		return m_tag == Tag::Other;
 	}
 
 	//----------------------------------------------
@@ -74,7 +74,7 @@ namespace dnv::vista::sdk::transport
 
 	inline std::optional<ImoNumber> ShipId::imoNumber() const noexcept
 	{
-		if ( m_tag == 1 )
+		if ( m_tag == Tag::IMO )
 		{
 			return m_imoNumber;
 		}
@@ -84,7 +84,7 @@ namespace dnv::vista::sdk::transport
 
 	inline std::optional<std::string_view> ShipId::otherId() const noexcept
 	{
-		if ( m_tag == 2 )
+		if ( m_tag == Tag::Other )
 		{
 			return std::string_view{ *m_otherId };
 		}
@@ -103,17 +103,17 @@ namespace dnv::vista::sdk::transport
 	{
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::IMO:
 			{
 				return onImoNumber( *m_imoNumber );
 			}
-			case 2:
+			case Tag::Other:
 			{
 				return onOtherId( std::string_view{ *m_otherId } );
 			}
 			default:
 			{
-				throw std::runtime_error( "Invalid ShipId state: corrupted tag" );
+				throw std::logic_error( "Should never happen" );
 			}
 		}
 	}
@@ -124,19 +124,19 @@ namespace dnv::vista::sdk::transport
 	{
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::IMO:
 			{
 				onImoNumber( *m_imoNumber );
 				break;
 			}
-			case 2:
+			case Tag::Other:
 			{
 				onOtherId( std::string_view{ *m_otherId } );
 				break;
 			}
 			default:
 			{
-				throw std::runtime_error( "Invalid ShipId state: corrupted tag" );
+				throw std::logic_error( "Should never happen" );
 			}
 		}
 	}

@@ -18,7 +18,7 @@ namespace dnv::vista::sdk::transport
 	//----------------------------------------------
 
 	ShipId::ShipId( std::string_view otherId )
-		: m_tag{ 2 },
+		: m_tag{ Tag::Other },
 		  m_otherId{ otherId }
 	{
 		if ( m_otherId->empty() )
@@ -35,12 +35,12 @@ namespace dnv::vista::sdk::transport
 	{
 		switch ( m_tag )
 		{
-			case 1:
+			case Tag::IMO:
 			{
 				/* In ISO-19848, IMO number as ShipID should include "IMO" prefix */
 				return m_imoNumber->toString();
 			}
-			case 2:
+			case Tag::Other:
 			{
 				return *m_otherId;
 			}

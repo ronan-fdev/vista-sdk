@@ -169,13 +169,20 @@ namespace dnv::vista::sdk::transport
 		// Private members
 		//----------------------------------------------
 
-		/** @brief Tag to identify which union member is active (1=IMO, 2=other) */
-		int m_tag;
+		/** @brief Tag enumeration for discriminated union */
+		enum class Tag : bool
+		{
+			IMO = 0,
+			Other
+		};
 
-		/** @brief IMO number storage (active when m_tag == 1) */
+		/** @brief Tag to identify which union member is active */
+		Tag m_tag;
+
+		/** @brief IMO number storage (active when m_tag == Tag::IMO) */
 		std::optional<ImoNumber> m_imoNumber;
 
-		/** @brief Other identifier storage (active when m_tag == 2) */
+		/** @brief Other identifier storage (active when m_tag == Tag::Other) */
 		std::optional<std::string> m_otherId;
 	};
 }

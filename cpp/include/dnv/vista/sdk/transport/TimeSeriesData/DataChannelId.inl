@@ -127,12 +127,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				auto lease = internal::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "Invalid DataChannelId state: corrupted tag " );
-				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
-
-				throw std::runtime_error( lease.toString() );
+				throw std::logic_error( "Should never happen" );
 			}
 		}
 	}
@@ -152,14 +147,10 @@ namespace dnv::vista::sdk::transport
 				std::forward<ShortIdFunc>( onShortId )( std::string_view{ *m_shortId } );
 				break;
 			}
+
 			default:
 			{
-				auto lease = internal::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "Invalid DataChannelId state: corrupted tag " );
-				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
-
-				throw std::runtime_error( lease.toString() );
+				throw std::logic_error( "Should never happen" );
 			}
 		}
 	}
