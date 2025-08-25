@@ -25,7 +25,7 @@ namespace dnv::vista::sdk
 
 		[[noreturn]] void throwInvalidVersionError( VisVersion version )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Invalid VIS version provided: " );
 			builder.append( VisVersionExtensions::toVersionString( version ) );

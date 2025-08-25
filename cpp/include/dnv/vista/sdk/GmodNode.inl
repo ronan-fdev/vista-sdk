@@ -486,7 +486,7 @@ namespace dnv::vista::sdk
 
 	inline std::string GmodNode::toString() const noexcept
 	{
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		lease.builder().append( m_code );
 		if ( m_location.has_value() )
 		{
@@ -497,7 +497,7 @@ namespace dnv::vista::sdk
 		return lease.toString();
 	}
 
-	inline void GmodNode::toString( internal::StringBuilderWrapper& builder ) const noexcept
+	inline void GmodNode::toString( internal::StringBuilder& builder ) const noexcept
 	{
 		builder.append( m_code );
 		if ( m_location.has_value() )

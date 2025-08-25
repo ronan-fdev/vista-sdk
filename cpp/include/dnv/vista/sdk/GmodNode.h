@@ -499,7 +499,7 @@ namespace dnv::vista::sdk
 		 * @brief Appends the node's string representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toString( internal::StringBuilderWrapper& builder ) const noexcept;
+		inline void toString( internal::StringBuilder& builder ) const noexcept;
 
 	private:
 		//----------------------------------------------

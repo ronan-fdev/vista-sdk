@@ -84,7 +84,7 @@ namespace dnv::vista::sdk
 	{
 		if ( static_cast<int>( key ) <= 0 )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Unsupported code: " );
 			builder.append( std::to_string( static_cast<int>( key ) ) );
@@ -95,7 +95,7 @@ namespace dnv::vista::sdk
 		auto index{ static_cast<size_t>( key ) - 1 };
 		if ( index >= m_table.size() )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Unsupported code: " );
 			builder.append( std::to_string( static_cast<int>( key ) ) );
@@ -182,10 +182,11 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Unsupported code: " );
 				builder.append( std::string_view{ &code, 1 } );
+
 				throw std::invalid_argument( lease.toString() );
 			}
 
@@ -237,7 +238,7 @@ namespace dnv::vista::sdk
 		Location location;
 		if ( !tryParse( locationStr, location ) )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Invalid location: " );
 			builder.append( locationStr );
@@ -354,7 +355,7 @@ namespace dnv::vista::sdk
 			{
 				if ( prevDigitIndex != -1 && prevDigitIndex != static_cast<int>( i ) - 1 )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Invalid location: cannot have multiple separated digits in location: '" );
 					builder.append( displayString() );
@@ -367,7 +368,7 @@ namespace dnv::vista::sdk
 
 				if ( charsStartIndex != -1 )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Invalid location: numeric location should start before location code(s) in location: '" );
 					builder.append( displayString() );
@@ -399,7 +400,7 @@ namespace dnv::vista::sdk
 
 			if ( !valid )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				const std::string& source = displayString();
 				bool first = true;
@@ -420,7 +421,7 @@ namespace dnv::vista::sdk
 					}
 				}
 
-				auto errorLease = internal::StringBuilderPool::instance();
+				auto errorLease = internal::StringBuilderPool::lease();
 				auto errorMsgBuilder = errorLease.builder();
 				errorMsgBuilder.append( "Invalid location code: '" );
 				errorMsgBuilder.append( displayString() );
@@ -440,7 +441,7 @@ namespace dnv::vista::sdk
 				if ( !charDict.tryAdd( group, ch, existingValue ) )
 				{
 					const std::string_view groupName = groupNameToString( group );
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Invalid location: Multiple '" );
 					builder.append( groupName );
@@ -463,7 +464,7 @@ namespace dnv::vista::sdk
 				char prevCh = span[i - 1];
 				if ( !std::isdigit( prevCh ) && ch < prevCh )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Invalid location: '" );
 					builder.append( displayString() );

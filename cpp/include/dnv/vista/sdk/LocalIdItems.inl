@@ -76,7 +76,7 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	inline void LocalIdItems::append(
-		internal::StringBuilderWrapper& builder,
+		internal::StringBuilder& builder,
 		bool verboseMode ) const
 	{
 		if ( !m_primaryItem && !m_secondaryItem )
@@ -151,7 +151,7 @@ namespace dnv::vista::sdk
 	}
 
 	inline void LocalIdItems::appendCommonName(
-		internal::StringBuilderWrapper& builder,
+		internal::StringBuilder& builder,
 		std::string_view commonName,
 		const std::optional<std::string>& location )
 	{

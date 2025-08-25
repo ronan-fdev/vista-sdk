@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <future>
+#include <mutex>
 #include <queue>
 #include <shared_mutex>
 #include <stdexcept>

@@ -542,7 +542,7 @@ namespace dnv::vista::sdk::datatypes
 			return "0";
 		}
 
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		auto builder = lease.builder();
 		Int128 mantissa = getMantissa().abs();
 		std::uint8_t currentScale = scale();

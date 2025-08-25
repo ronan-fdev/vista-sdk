@@ -16,13 +16,12 @@ set(TEST_SOURCES
 	datatypes/TESTS_DateTimeISO8601.cpp
 	datatypes/TESTS_Decimal128.cpp
 	datatypes/TESTS_Int128.cpp
+	internal/TESTS_StringBuilderPool.cpp
 	transport/TESTS_DataChannelId.cpp
 	transport/TESTS_DataChannelISOmessages.cpp
 	transport/TESTS_ISO19848.cpp
 	transport/TESTS_ShipId.cpp
 	transport/TESTS_TimeSeriesISOmessages.cpp
-	utils/TESTS_StringBuilderPoolTests.cpp
-
 	TESTS_Codebook.cpp
 	TESTS_Codebooks.cpp
 	TESTS_Gmod.cpp

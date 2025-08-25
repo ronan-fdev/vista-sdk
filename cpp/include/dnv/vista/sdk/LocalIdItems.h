@@ -130,7 +130,7 @@ namespace dnv::vista::sdk
 		// Public methods
 		//----------------------------------------------
 
-		inline void append( internal::StringBuilderWrapper& builder, bool verboseMode ) const;
+		inline void append( internal::StringBuilder& builder, bool verboseMode ) const;
 
 	private:
 		//----------------------------------------------
@@ -138,7 +138,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		inline static void appendCommonName(
-			internal::StringBuilderWrapper& builder,
+			internal::StringBuilder& builder,
 			std::string_view commonName,
 			const std::optional<std::string>& location );
 

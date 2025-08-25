@@ -267,7 +267,7 @@ namespace dnv::vista::sdk
 	inline std::string LocalIdBuilder::toString() const
 	{
 		/* LocalId format: /dnv-v2/vis-{version}/{primary-item}[/sec/{secondary-item}][~{description}]/meta/{metadata-tags} */
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		auto builder = lease.builder();
 
 		toString( builder );
@@ -320,9 +320,9 @@ namespace dnv::vista::sdk
 		appendMetadata( m_detail );
 
 		/* Cleanup trailing slash */
-		if ( builder.size() > 0 && builder[builder.size() - 1] == '/' )
+		if ( builder.length() > 0 && builder[builder.length() - 1] == '/' )
 		{
-			builder.resize( builder.size() - 1 );
+			builder.resize( builder.length() - 1 );
 		}
 	}
 }

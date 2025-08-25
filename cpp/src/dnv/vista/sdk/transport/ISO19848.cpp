@@ -226,7 +226,7 @@ namespace dnv::vista::sdk::transport
 			datatypes::Decimal128 d;
 			if ( !datatypes::Decimal128::tryParse( value, d ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid decimal value - Value='" );
 				builder.append( value );
@@ -243,7 +243,7 @@ namespace dnv::vista::sdk::transport
 			double d;
 			if ( !utils::tryParseDouble( value, d ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid double value - Value='" );
 				builder.append( value );
@@ -260,7 +260,7 @@ namespace dnv::vista::sdk::transport
 			int i;
 			if ( !utils::tryParseInt( value, i ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid integer value - Value='" );
 				builder.append( value );
@@ -277,7 +277,7 @@ namespace dnv::vista::sdk::transport
 			bool b;
 			if ( !utils::tryParseBool( value, b ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid boolean value - Value='" );
 				builder.append( value );
@@ -293,7 +293,7 @@ namespace dnv::vista::sdk::transport
 		{
 			if ( !utils::hasExactLength( value, 1 ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid char value - Value='" );
 				builder.append( value );
@@ -310,7 +310,7 @@ namespace dnv::vista::sdk::transport
 			std::uint32_t ui;
 			if ( !utils::tryParseUInt( value, ui ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid unsigned integer value - Value='" );
 				builder.append( value );
@@ -327,7 +327,7 @@ namespace dnv::vista::sdk::transport
 			std::int64_t l;
 			if ( !utils::tryParseLong( value, l ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid long value - Value='" );
 				builder.append( value );
@@ -348,7 +348,7 @@ namespace dnv::vista::sdk::transport
 			datatypes::DateTimeOffset dt;
 			if ( !datatypes::DateTimeOffset::tryParse( value, dt ) )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid datetime value - Value='" );
 				builder.append( value );
@@ -362,7 +362,7 @@ namespace dnv::vista::sdk::transport
 		}
 		else
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 
 			builder.append( "Invalid format type " );

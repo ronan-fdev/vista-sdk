@@ -31,7 +31,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Invalid DataChannelId state: corrupted tag " );
 				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
@@ -49,7 +49,7 @@ namespace dnv::vista::sdk::transport
 	{
 		if ( value.empty() )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "DataChannelId::parse: value cannot be empty" );
 

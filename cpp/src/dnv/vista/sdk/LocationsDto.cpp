@@ -73,7 +73,7 @@ namespace dnv::vista::sdk
 		{
 			if ( !json.is_object() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: JSON value for RelativeLocationsDto is not an object\n" );
 
@@ -89,7 +89,7 @@ namespace dnv::vista::sdk
 
 			if ( codeIt == json.end() || !codeIt->is_string() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: RelativeLocationsDto JSON missing required '" );
 				builder.append( constants::dto::LOCATIONS_DTO_KEY_CODE );
@@ -100,7 +100,7 @@ namespace dnv::vista::sdk
 			}
 			if ( nameIt == json.end() || !nameIt->is_string() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: RelativeLocationsDto JSON missing required '" );
 				builder.append( constants::dto::LOCATIONS_DTO_KEY_NAME );
@@ -113,7 +113,7 @@ namespace dnv::vista::sdk
 			std::string codeStr = codeIt->get<std::string>();
 			if ( codeStr.empty() || codeStr.length() != 1 )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: RelativeLocationsDto (hint: code='" );
 				builder.append( codeHint );
@@ -127,7 +127,7 @@ namespace dnv::vista::sdk
 			std::string tempName = nameIt->get<std::string>();
 			if ( tempName.empty() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty name field found in RelativeLocationsDto code='" );
 				builder.append( codeStr );
@@ -147,7 +147,7 @@ namespace dnv::vista::sdk
 				}
 				else if ( !defIt->is_null() )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "WARN: RelativeLocationsDto code='" );
 					builder.append( codeStr );
@@ -163,7 +163,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "ERROR: JSON exception during RelativeLocationsDto parsing (hint: code='" );
 			builder.append( codeHint );
@@ -177,7 +177,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Standard exception during RelativeLocationsDto parsing (hint: code='" );
 			builder.append( codeHint );
@@ -248,7 +248,7 @@ namespace dnv::vista::sdk
 		dto.m_name = nameIt->get<std::string>();
 		if ( dto.m_name.empty() )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "WARN: Empty name field found in RelativeLocationsDto code='" );
 			builder.append( std::string{ 1, dto.m_code } );
@@ -263,7 +263,7 @@ namespace dnv::vista::sdk
 
 			if ( dto.m_definition.has_value() && dto.m_definition->empty() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty definition field found in RelativeLocationsDto code='" );
 				builder.append( std::string{ 1, dto.m_code } );
@@ -294,7 +294,7 @@ namespace dnv::vista::sdk
 		{
 			if ( !json.is_object() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: JSON value for LocationsDto is not an object\n" );
 
@@ -309,7 +309,7 @@ namespace dnv::vista::sdk
 
 			if ( visIt == json.end() || !visIt->is_string() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: LocationsDto JSON missing required '" );
 				builder.append( constants::dto::LOCATIONS_DTO_KEY_VIS_RELEASE );
@@ -321,7 +321,7 @@ namespace dnv::vista::sdk
 			}
 			if ( itemsIt == json.end() || !itemsIt->is_array() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ERROR: LocationsDto JSON missing required '" );
 				builder.append( constants::dto::LOCATIONS_DTO_KEY_ITEMS );
@@ -338,7 +338,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "ERROR: JSON exception during LocationsDto parsing (hint: visRelease='" );
 			builder.append( visHint );
@@ -352,7 +352,7 @@ namespace dnv::vista::sdk
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "ERROR: Standard exception during LocationsDto parsing (hint: visRelease='" );
 			builder.append( visHint );
@@ -423,7 +423,7 @@ namespace dnv::vista::sdk
 
 		if ( dto.m_visVersion.empty() )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "WARN: Empty visVersion field found in LocationsDto\n" );
 
@@ -450,7 +450,7 @@ namespace dnv::vista::sdk
 			}
 			else
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "WARN: Skipping invalid RelativeLocationsDto item during parsing\n" );
 

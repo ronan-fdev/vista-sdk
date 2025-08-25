@@ -19,6 +19,7 @@ set(BENCHMARK_SOURCES
 	gmod/BM_GmodTraversal.cpp
 	gmod/BM_GmodVersioningConvertPath.cpp
 	internal/BM_ShortStringHash.cpp
+	internal/BM_StringBuilderPool.cpp
 )
 
 # --- Configure benchmark executables ---

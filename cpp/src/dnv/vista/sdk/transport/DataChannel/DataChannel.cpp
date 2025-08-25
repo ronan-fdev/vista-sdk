@@ -99,7 +99,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( m_length && value.length() != *m_length )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value length must be exactly " );
 			builder.append( std::to_string( *m_length ) );
@@ -110,7 +110,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( m_minLength && value.length() < *m_minLength )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value length must be at least " );
 			builder.append( std::to_string( *m_minLength ) );
@@ -121,7 +121,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( m_maxLength && value.length() > *m_maxLength )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value length must be at most " );
 			builder.append( std::to_string( *m_maxLength ) );
@@ -149,7 +149,7 @@ namespace dnv::vista::sdk::transport::datachannel
 				auto decimalPlaces = countDecimalPlaces( decimalValueResult );
 				if ( decimalPlaces > *m_fractionDigits )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Value has too many decimal places (max: " );
 					builder.append( std::to_string( *m_fractionDigits ) );
@@ -167,7 +167,7 @@ namespace dnv::vista::sdk::transport::datachannel
 				numStr.erase( std::remove_if( numStr.begin(), numStr.end(), []( char c ) { return c == '.' || c == '-'; } ), numStr.end() );
 				if ( numStr.length() > *m_totalDigits )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Value has too many total digits (max: " );
 					builder.append( std::to_string( *m_totalDigits ) );
@@ -189,7 +189,7 @@ namespace dnv::vista::sdk::transport::datachannel
 	{
 		if ( m_minExclusive && number <= *m_minExclusive )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value must be greater than " );
 			builder.append( std::to_string( *m_minExclusive ) );
@@ -199,7 +199,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( m_maxExclusive && number >= *m_maxExclusive )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value must be less than " );
 			builder.append( std::to_string( *m_maxExclusive ) );
@@ -209,7 +209,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( m_minInclusive && number < *m_minInclusive )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value must be greater than or equal to " );
 			builder.append( std::to_string( *m_minInclusive ) );
@@ -219,7 +219,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( m_maxInclusive && number > *m_maxInclusive )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Value must be less than or equal to " );
 			builder.append( std::to_string( *m_maxInclusive ) );
@@ -328,7 +328,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 		if ( !result.isOk() )
 		{
-			auto lease = internal::StringBuilderPool::instance();
+			auto lease = internal::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "Invalid data channel type: " );
 			builder.append( type );
@@ -520,7 +520,7 @@ namespace dnv::vista::sdk::transport::datachannel
 			const auto& shortId = *dataChannel.dataChannelId().shortId();
 			if ( m_shortIdMap.find( shortId ) != m_shortIdMap.end() )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "ShortId already exists in collection: " );
 				builder.append( shortId );

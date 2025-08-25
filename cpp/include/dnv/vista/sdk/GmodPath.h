@@ -164,7 +164,7 @@ namespace dnv::vista::sdk
 		 * @param builder The StringBuilder to write to.
 		 * @param separator Character to use between path segments (default: '/').
 		 */
-		inline void toString( internal::StringBuilderWrapper& builder, char separator = '/' ) const;
+		inline void toString( internal::StringBuilder& builder, char separator = '/' ) const;
 
 		/**
 		 * @brief Converts the path to full hierarchical string representation
@@ -176,7 +176,7 @@ namespace dnv::vista::sdk
 		 * @brief Writes the path's full hierarchical string representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toFullPathString( internal::StringBuilderWrapper& builder ) const;
+		inline void toFullPathString( internal::StringBuilder& builder ) const;
 
 		/**
 		 * @brief Creates detailed debug representation of the path
@@ -188,7 +188,7 @@ namespace dnv::vista::sdk
 		 * @brief Writes the path's detailed debug representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toStringDump( internal::StringBuilderWrapper& builder ) const;
+		inline void toStringDump( internal::StringBuilder& builder ) const;
 
 		//----------------------------------------------
 		// Path manipulation methods

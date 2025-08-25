@@ -256,7 +256,7 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Appends the string representation of the Local ID to a StringBuilder.
-		 * @tparam StringBuilder The type of the string builder (e.g., StringBuilderWrapper).
+		 * @tparam StringBuilder The type of the string builder (e.g., StringBuilder).
 		 * @param builder The StringBuilder to append to.
 		 */
 		template <typename StringBuilder>

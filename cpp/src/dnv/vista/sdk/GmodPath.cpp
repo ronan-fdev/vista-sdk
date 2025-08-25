@@ -1051,7 +1051,7 @@ namespace dnv::vista::sdk
 
 	std::string GmodIndividualizableSet::toString() const
 	{
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		bool firstNodeAppended = false;
 
 		for ( size_t j = 0; j < m_nodeIndices.size(); ++j )

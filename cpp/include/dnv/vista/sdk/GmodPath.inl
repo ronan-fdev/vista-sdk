@@ -229,7 +229,7 @@ namespace dnv::vista::sdk
 
 	inline std::string GmodPath::toString() const
 	{
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		bool first = true;
 		for ( const auto& parent : m_parents )
 		{
@@ -259,7 +259,7 @@ namespace dnv::vista::sdk
 
 	inline std::string GmodPath::toFullPathString() const
 	{
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		auto enumerator = this->fullPath();
 		while ( enumerator.next() )
 		{
@@ -276,7 +276,7 @@ namespace dnv::vista::sdk
 
 	inline std::string GmodPath::toStringDump() const
 	{
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		auto enumerator = this->fullPath();
 		while ( enumerator.next() )
 		{
@@ -319,7 +319,7 @@ namespace dnv::vista::sdk
 		return lease.toString();
 	}
 
-	inline void GmodPath::toString( internal::StringBuilderWrapper& builder, char separator ) const
+	inline void GmodPath::toString( internal::StringBuilder& builder, char separator ) const
 	{
 		bool first = true;
 		for ( const auto& parent : m_parents )
@@ -346,7 +346,7 @@ namespace dnv::vista::sdk
 		}
 	}
 
-	inline void GmodPath::toFullPathString( internal::StringBuilderWrapper& builder ) const
+	inline void GmodPath::toFullPathString( internal::StringBuilder& builder ) const
 	{
 		auto enumerator = this->fullPath();
 		while ( enumerator.next() )
@@ -360,7 +360,7 @@ namespace dnv::vista::sdk
 		}
 	}
 
-	inline void GmodPath::toStringDump( internal::StringBuilderWrapper& builder ) const
+	inline void GmodPath::toStringDump( internal::StringBuilder& builder ) const
 	{
 		auto enumerator = this->fullPath();
 		while ( enumerator.next() )

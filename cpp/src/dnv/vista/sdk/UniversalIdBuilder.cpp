@@ -46,7 +46,7 @@ namespace dnv::vista::sdk
 			throw std::invalid_argument( "Invalid Universal Id state: Missing LocalId" );
 		}
 
-		auto lease = internal::StringBuilderPool::instance();
+		auto lease = internal::StringBuilderPool::lease();
 		auto builder = lease.builder();
 
 		builder.append( constants::iso19848::ANNEX_C_NAMING_ENTITY );

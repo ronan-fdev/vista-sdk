@@ -74,7 +74,7 @@ namespace dnv::vista::sdk::transport::timeseries
 			const auto& dataSet = table.m_dataSets[i];
 			if ( dataSet.value().size() != expectedChannelCount )
 			{
-				auto lease = internal::StringBuilderPool::instance();
+				auto lease = internal::StringBuilderPool::lease();
 				auto builder = lease.builder();
 				builder.append( "Tabular data set " );
 				builder.append( std::to_string( i ) );
@@ -169,7 +169,7 @@ namespace dnv::vista::sdk::transport::timeseries
 
 						if ( !dataChannel )
 						{
-							auto lease = internal::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::lease();
 							auto builder = lease.builder();
 							builder.append( "Data channel not found: " );
 							builder.append( dataChannelId.toString() );
@@ -182,7 +182,7 @@ namespace dnv::vista::sdk::transport::timeseries
 						auto formatResult = dataChannel->property().format().validateValue( dataSet.value()[j], parsedValue );
 						if ( formatResult.isInvalid() )
 						{
-							auto lease = internal::StringBuilderPool::instance();
+							auto lease = internal::StringBuilderPool::lease();
 							auto builder = lease.builder();
 							builder.append( "Invalid value format: " );
 							builder.append( dataSet.value()[j] );
@@ -238,7 +238,7 @@ namespace dnv::vista::sdk::transport::timeseries
 
 				if ( !dataChannel )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Data channel not found: " );
 					builder.append( eventDataSet.dataChannelId().toString() );
@@ -251,7 +251,7 @@ namespace dnv::vista::sdk::transport::timeseries
 				auto formatResult = dataChannel->property().format().validateValue( eventDataSet.value(), parsedValue );
 				if ( formatResult.isInvalid() )
 				{
-					auto lease = internal::StringBuilderPool::instance();
+					auto lease = internal::StringBuilderPool::lease();
 					auto builder = lease.builder();
 					builder.append( "Invalid value format: " );
 					builder.append( eventDataSet.value() );
