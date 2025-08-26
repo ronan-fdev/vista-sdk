@@ -153,11 +153,11 @@ namespace dnv::vista::sdk
 		{
 			std::queue<PathNode> parts;
 			PathNode toFind;
-			std::optional<utils::StringMap<Location>> locations;
+			std::optional<internal::StringMap<Location>> locations;
 			std::optional<GmodPath> path;
 			const Gmod* gmod;
 
-			ParseContext( std::queue<PathNode>&& p, PathNode&& t, std::optional<utils::StringMap<Location>>&& l,
+			ParseContext( std::queue<PathNode>&& p, PathNode&& t, std::optional<internal::StringMap<Location>>&& l,
 				std::optional<GmodPath>&& path, const Gmod& g )
 				: parts{ std::move( p ) },
 				  toFind{ std::move( t ) },
@@ -188,7 +188,7 @@ namespace dnv::vista::sdk
 			{
 				if ( !context.locations.has_value() )
 				{
-					context.locations = utils::StringMap<Location>{};
+					context.locations = internal::StringMap<Location>{};
 				}
 				context.locations->emplace( toFind.code, toFind.location.value() );
 			}

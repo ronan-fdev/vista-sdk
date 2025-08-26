@@ -345,7 +345,7 @@ namespace dnv::vista::sdk::transport::timeseries
 		std::optional<datatypes::DateTimeOffset> dateModified,
 		std::optional<std::string> author,
 		std::optional<std::vector<ConfigurationReference>> systemConfiguration,
-		std::optional<utils::StringMap<Value>> customHeaders )
+		std::optional<internal::StringMap<Value>> customHeaders )
 		: m_shipId{ std::move( shipId ) },
 		  m_timeRange{ std::move( timeRange ) },
 		  m_dateCreated{ std::move( dateCreated ) },
@@ -390,7 +390,7 @@ namespace dnv::vista::sdk::transport::timeseries
 		return m_systemConfiguration;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& Header::customHeaders() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& Header::customHeaders() const noexcept
 	{
 		return m_customHeaders;
 	}
@@ -436,7 +436,7 @@ namespace dnv::vista::sdk::transport::timeseries
 		m_systemConfiguration = std::move( systemConfiguration );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Header::setCustomHeaders( std::optional<utils::StringMap<Value>> customHeaders )
+	VISTA_SDK_CPP_FORCE_INLINE void Header::setCustomHeaders( std::optional<internal::StringMap<Value>> customHeaders )
 	{
 		m_customHeaders = std::move( customHeaders );
 	}
@@ -453,7 +453,7 @@ namespace dnv::vista::sdk::transport::timeseries
 		std::optional<ConfigurationReference> dataConfiguration,
 		std::optional<std::vector<TabularData>> tabularData,
 		std::optional<EventData> eventData,
-		std::optional<utils::StringMap<Value>> customDataKinds )
+		std::optional<internal::StringMap<Value>> customDataKinds )
 		: m_dataConfiguration{ std::move( dataConfiguration ) },
 		  m_tabularData{ std::move( tabularData ) },
 		  m_eventData{ std::move( eventData ) },
@@ -480,7 +480,7 @@ namespace dnv::vista::sdk::transport::timeseries
 		return m_eventData;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& TimeSeriesData::customDataKinds() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& TimeSeriesData::customDataKinds() const noexcept
 	{
 		return m_customDataKinds;
 	}
@@ -504,7 +504,7 @@ namespace dnv::vista::sdk::transport::timeseries
 		m_eventData = std::move( eventData );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void TimeSeriesData::setCustomDataKinds( std::optional<utils::StringMap<Value>> customDataKinds )
+	VISTA_SDK_CPP_FORCE_INLINE void TimeSeriesData::setCustomDataKinds( std::optional<internal::StringMap<Value>> customDataKinds )
 	{
 		m_customDataKinds = std::move( customDataKinds );
 	}

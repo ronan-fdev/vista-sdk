@@ -10,7 +10,7 @@
 #include "dnv/vista/sdk/config/Platform.h"
 #include "dnv/vista/sdk/transport/ISO19848.h"
 #include "dnv/vista/sdk/transport/ShipId.h"
-#include "dnv/vista/sdk/utils/StringMap.h"
+#include "dnv/vista/sdk/internal/StringMap.h"
 #include "dnv/vista/sdk/LocalId.h"
 
 namespace dnv::vista::sdk
@@ -629,7 +629,7 @@ namespace dnv::vista::sdk
 			 * @brief Get optional custom elements
 			 * @return Optional custom elements dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customElements() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customElements() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -651,7 +651,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom elements
 			 * @param customElements New optional custom elements
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomElements( std::optional<utils::StringMap<Value>> customElements );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomElements( std::optional<internal::StringMap<Value>> customElements );
 
 		private:
 			//----------------------------------------------
@@ -660,7 +660,7 @@ namespace dnv::vista::sdk
 
 			std::string m_unitSymbol;
 			std::optional<std::string> m_quantityName;
-			std::optional<utils::StringMap<Value>> m_customElements;
+			std::optional<internal::StringMap<Value>> m_customElements;
 		};
 
 		//=====================================================================
@@ -706,7 +706,7 @@ namespace dnv::vista::sdk
 				std::optional<VersionInformation> versionInformation,
 				std::optional<std::string> author,
 				std::optional<datatypes::DateTimeOffset> dateCreated,
-				std::optional<utils::StringMap<Value>> customHeaders );
+				std::optional<internal::StringMap<Value>> customHeaders );
 
 			/** @brief Copy constructor */
 			Header( const Header& ) = default;
@@ -765,7 +765,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom headers
 			 * @return Optional custom headers dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customHeaders() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customHeaders() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -805,7 +805,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom headers
 			 * @param customHeaders New optional custom headers dictionary
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<utils::StringMap<Value>> customHeaders );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<internal::StringMap<Value>> customHeaders );
 
 		private:
 			//----------------------------------------------
@@ -817,7 +817,7 @@ namespace dnv::vista::sdk
 			std::optional<VersionInformation> m_versionInformation;
 			std::optional<std::string> m_author;
 			std::optional<datatypes::DateTimeOffset> m_dateCreated;
-			std::optional<utils::StringMap<Value>> m_customHeaders;
+			std::optional<internal::StringMap<Value>> m_customHeaders;
 		};
 
 		//=====================================================================
@@ -870,7 +870,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom name objects
 			 * @return Optional custom name objects dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customNameObjects() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customNameObjects() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -886,7 +886,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom name objects
 			 * @param customNameObjects New optional custom name objects
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomNameObjects( std::optional<utils::StringMap<Value>> customNameObjects );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomNameObjects( std::optional<internal::StringMap<Value>> customNameObjects );
 
 		private:
 			//----------------------------------------------
@@ -894,7 +894,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			std::string m_namingRule;
-			std::optional<utils::StringMap<Value>> m_customNameObjects;
+			std::optional<internal::StringMap<Value>> m_customNameObjects;
 		};
 
 		//=====================================================================
@@ -1214,7 +1214,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom properties
 			 * @return Optional custom properties dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customProperties() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customProperties() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -1272,7 +1272,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom properties
 			 * @param customProperties New optional custom properties
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomProperties( std::optional<utils::StringMap<Value>> customProperties );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomProperties( std::optional<internal::StringMap<Value>> customProperties );
 
 			//----------------------------------------------
 			// Validation
@@ -1297,7 +1297,7 @@ namespace dnv::vista::sdk
 			std::optional<std::string> m_alertPriority;
 			std::optional<std::string> m_name;
 			std::optional<std::string> m_remarks;
-			std::optional<utils::StringMap<Value>> m_customProperties;
+			std::optional<internal::StringMap<Value>> m_customProperties;
 		};
 
 		//=====================================================================
@@ -1671,7 +1671,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			std::vector<DataChannel> m_dataChannels;
-			utils::StringMap<std::reference_wrapper<const DataChannel>> m_shortIdMap;
+			internal::StringMap<std::reference_wrapper<const DataChannel>> m_shortIdMap;
 			std::unordered_map<LocalId, std::reference_wrapper<const DataChannel>> m_localIdMap;
 		};
 

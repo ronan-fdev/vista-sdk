@@ -18,6 +18,7 @@ set(BENCHMARK_SOURCES
 	gmod/BM_GmodPathParse.cpp
 	gmod/BM_GmodTraversal.cpp
 	gmod/BM_GmodVersioningConvertPath.cpp
+	internal/BM_HashMap.cpp
 	internal/BM_ShortStringHash.cpp
 	internal/BM_StringBuilderPool.cpp
 )

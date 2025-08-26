@@ -8,6 +8,7 @@
 #include "config/Platform.h"
 #include "constants/GmodConstants.h"
 #include "internal/StringBuilderPool.h"
+#include "utils/StringUtils.h"
 
 namespace dnv::vista::sdk
 {
@@ -69,7 +70,7 @@ namespace dnv::vista::sdk
 		const std::optional<std::string>& definition,
 		const std::optional<std::string>& commonDefinition,
 		const std::optional<bool>& installSubstructure,
-		const utils::StringMap<std::string>& normalAssignmentNames ) noexcept
+		const internal::StringMap<std::string>& normalAssignmentNames ) noexcept
 		: m_category{ category },
 		  m_type{ type },
 		  m_name{ name },
@@ -184,7 +185,7 @@ namespace dnv::vista::sdk
 		return m_installSubstructure;
 	}
 
-	inline const utils::StringMap<std::string>& GmodNodeMetadata::normalAssignmentNames() const noexcept
+	inline const internal::StringMap<std::string>& GmodNodeMetadata::normalAssignmentNames() const noexcept
 	{
 		return m_normalAssignmentNames;
 	}
@@ -209,7 +210,7 @@ namespace dnv::vista::sdk
 			  dto.commonDefinition(),
 			  dto.installSubstructure(),
 			  dto.normalAssignmentNames().has_value() ? *dto.normalAssignmentNames()
-													  : utils::StringMap<std::string>() },
+													  : internal::StringMap<std::string>() },
 		  m_children{},
 		  m_parents{},
 		  m_childrenSet{}

@@ -6,7 +6,7 @@
 #pragma once
 
 #include "dnv/vista/sdk/config/Platform.h"
-#include "dnv/vista/sdk/utils/StringUtils.h"
+#include "dnv/vista/sdk/internal/StringMap.h"
 
 namespace dnv::vista::sdk::internal
 {
@@ -46,7 +46,7 @@ namespace dnv::vista::sdk::internal
 		size_t m_mask = INITIAL_CAPACITY - 1;
 
 		VISTA_SDK_CPP_NO_UNIQUE_ADDRESS std::conditional_t<std::is_same_v<TKey, std::string> || std::is_same_v<TKey, std::string_view>,
-			utils::StringViewHash, std::hash<TKey>>
+			StringViewHash, std::hash<TKey>>
 			m_hasher;
 
 	public:
@@ -319,11 +319,11 @@ namespace dnv::vista::sdk::internal
 		{
 			if constexpr ( std::is_same_v<KeyType1, std::string> && std::is_same_v<KeyType2, std::string_view> )
 			{
-				return utils::StringViewEqual{}( k1, k2 );
+				return StringViewEqual{}( k1, k2 );
 			}
 			else if constexpr ( std::is_same_v<KeyType1, std::string_view> && std::is_same_v<KeyType2, std::string> )
 			{
-				return utils::StringViewEqual{}( k1, k2 );
+				return StringViewEqual{}( k1, k2 );
 			}
 			else
 			{

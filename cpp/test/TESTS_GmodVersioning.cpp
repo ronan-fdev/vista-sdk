@@ -38,7 +38,7 @@ namespace dnv::vista::sdk::tests
 				}
 				catch ( [[maybe_unused]] const std::exception& ex )
 				{
-					utils::StringMap<GmodVersioningDto> emptyDto;
+					internal::StringMap<GmodVersioningDto> emptyDto;
 					m_gmodVersioning = std::make_unique<GmodVersioning>( emptyDto );
 				}
 

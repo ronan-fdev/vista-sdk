@@ -109,10 +109,10 @@ namespace dnv::vista::sdk
 		return visVersions;
 	}
 
-	const std::optional<utils::StringMap<GmodVersioningDto>>& EmbeddedResource::gmodVersioning()
+	const std::optional<internal::StringMap<GmodVersioningDto>>& EmbeddedResource::gmodVersioning()
 	{
 		static std::mutex gmodVersioningCacheMutex;
-		static std::optional<utils::StringMap<GmodVersioningDto>> gmodVersioningCache;
+		static std::optional<internal::StringMap<GmodVersioningDto>> gmodVersioningCache;
 		static bool cacheInitialized = false;
 
 		{
@@ -136,7 +136,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		utils::StringMap<GmodVersioningDto> resultMap;
+		internal::StringMap<GmodVersioningDto> resultMap;
 		std::mutex resultMutex;
 		bool foundAnyResource = false;
 
@@ -211,7 +211,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex gmodCacheMutex;
 
-		static utils::StringMap<std::optional<GmodDto>> gmodCache;
+		static internal::StringMap<std::optional<GmodDto>> gmodCache;
 
 		{
 			std::lock_guard<std::mutex> lock( gmodCacheMutex );
@@ -234,7 +234,7 @@ namespace dnv::vista::sdk
 		{
 			fmt::print( stderr, "ERROR: GMOD resource not found for version: {}\n", visVersion );
 			std::lock_guard<std::mutex> lock( gmodCacheMutex );
-			gmodCache.emplace( std::string{ visVersion }, std::nullopt );
+			gmodCache.emplace( visVersion, std::nullopt );
 
 			return std::nullopt;
 		}
@@ -275,7 +275,7 @@ namespace dnv::vista::sdk
 		}
 
 		std::lock_guard<std::mutex> lock( gmodCacheMutex );
-		auto [emplaceIt, inserted] = gmodCache.emplace( std::string{ visVersion }, std::move( resultForCache ) );
+		auto [emplaceIt, inserted] = gmodCache.emplace( visVersion, std::move( resultForCache ) );
 
 		return emplaceIt->second;
 	}
@@ -284,7 +284,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex codebooksCacheMutex;
 
-		static utils::StringMap<std::optional<CodebooksDto>> codebooksCache;
+		static internal::StringMap<std::optional<CodebooksDto>> codebooksCache;
 
 		{
 			std::lock_guard<std::mutex> lock( codebooksCacheMutex );
@@ -307,7 +307,7 @@ namespace dnv::vista::sdk
 		{
 			fmt::print( stderr, "ERROR: Codebooks resource not found for version: {}\n", visVersion );
 			std::lock_guard<std::mutex> lock( codebooksCacheMutex );
-			codebooksCache.emplace( std::string{ visVersion }, std::nullopt );
+			codebooksCache.emplace( visVersion, std::nullopt );
 
 			return std::nullopt;
 		}
@@ -348,7 +348,7 @@ namespace dnv::vista::sdk
 		}
 
 		std::lock_guard<std::mutex> lock( codebooksCacheMutex );
-		auto [emplaceIt, inserted] = codebooksCache.emplace( std::string{ visVersion }, std::move( resultForCache ) );
+		auto [emplaceIt, inserted] = codebooksCache.emplace( visVersion, std::move( resultForCache ) );
 
 		return emplaceIt->second;
 	}
@@ -357,7 +357,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex locationsCacheMutex;
 
-		static utils::StringMap<std::optional<LocationsDto>> locationsCache;
+		static internal::StringMap<std::optional<LocationsDto>> locationsCache;
 
 		{
 			std::lock_guard<std::mutex> lock( locationsCacheMutex );
@@ -378,7 +378,7 @@ namespace dnv::vista::sdk
 		{
 			fmt::print( stderr, "ERROR: Locations resource not found for version: {}\n", visVersion );
 			std::lock_guard<std::mutex> lock( locationsCacheMutex );
-			locationsCache.emplace( std::string{ visVersion }, std::nullopt );
+			locationsCache.emplace( visVersion, std::nullopt );
 
 			return std::nullopt;
 		}
@@ -419,7 +419,7 @@ namespace dnv::vista::sdk
 		}
 
 		std::lock_guard<std::mutex> lock( locationsCacheMutex );
-		auto [emplaceIt, inserted] = locationsCache.emplace( std::string{ visVersion }, std::move( resultForCache ) );
+		auto [emplaceIt, inserted] = locationsCache.emplace( visVersion, std::move( resultForCache ) );
 
 		return emplaceIt->second;
 	}
@@ -428,7 +428,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex dataChannelTypeNamesCacheMutex;
 
-		static utils::StringMap<std::optional<transport::DataChannelTypeNamesDto>> dataChannelTypeNamesCache;
+		static internal::StringMap<std::optional<transport::DataChannelTypeNamesDto>> dataChannelTypeNamesCache;
 
 		{
 			std::lock_guard<std::mutex> lock( dataChannelTypeNamesCacheMutex );
@@ -450,7 +450,7 @@ namespace dnv::vista::sdk
 			fmt::print( stderr, "ERROR: DataChannelTypeNames resource not found for version: {}\n", version );
 
 			std::lock_guard<std::mutex> lock( dataChannelTypeNamesCacheMutex );
-			dataChannelTypeNamesCache.emplace( std::string{ version }, std::nullopt );
+			dataChannelTypeNamesCache.emplace( version, std::nullopt );
 
 			return std::nullopt;
 		}
@@ -491,7 +491,7 @@ namespace dnv::vista::sdk
 		}
 
 		std::lock_guard<std::mutex> lock( dataChannelTypeNamesCacheMutex );
-		auto [emplaceIt, inserted] = dataChannelTypeNamesCache.emplace( std::string{ version }, std::move( resultForCache ) );
+		auto [emplaceIt, inserted] = dataChannelTypeNamesCache.emplace( version, std::move( resultForCache ) );
 
 		return emplaceIt->second;
 	}
@@ -500,7 +500,7 @@ namespace dnv::vista::sdk
 	{
 		static std::mutex fdTypesCacheMutex;
 
-		static utils::StringMap<std::optional<transport::FormatDataTypesDto>> fdTypesCache;
+		static internal::StringMap<std::optional<transport::FormatDataTypesDto>> fdTypesCache;
 
 		{
 			std::lock_guard<std::mutex> lock( fdTypesCacheMutex );
@@ -521,7 +521,7 @@ namespace dnv::vista::sdk
 		{
 			fmt::print( stderr, "ERROR: FormatDataTypes resource not found for version: {}\n", version );
 			std::lock_guard<std::mutex> lock( fdTypesCacheMutex );
-			fdTypesCache.emplace( std::string{ version }, std::nullopt );
+			fdTypesCache.emplace( version, std::nullopt );
 
 			return std::nullopt;
 		}
@@ -562,7 +562,7 @@ namespace dnv::vista::sdk
 		}
 
 		std::lock_guard<std::mutex> lock( fdTypesCacheMutex );
-		auto [emplaceIt, inserted] = fdTypesCache.emplace( std::string{ version }, std::move( resultForCache ) );
+		auto [emplaceIt, inserted] = fdTypesCache.emplace( version, std::move( resultForCache ) );
 
 		return emplaceIt->second;
 	}
@@ -763,7 +763,7 @@ namespace dnv::vista::sdk
 				{
 					{
 						std::lock_guard<std::mutex> lock( pathCacheMutex );
-						resourcePathCache.emplace( std::string{ resourceName }, resourcePath );
+						resourcePathCache.emplace( resourceName, resourcePath );
 					}
 
 					return fileStream;

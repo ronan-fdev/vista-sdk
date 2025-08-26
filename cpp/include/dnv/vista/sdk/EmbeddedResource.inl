@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "utils/StringUtils.h"
+
 namespace dnv::vista::sdk
 {
 	/**

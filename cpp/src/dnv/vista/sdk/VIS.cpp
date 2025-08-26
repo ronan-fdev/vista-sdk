@@ -170,9 +170,9 @@ namespace dnv::vista::sdk
 	// DTO Loading
 	//----------------------------------------------
 
-	const utils::StringMap<GmodVersioningDto>& VIS::gmodVersioningDto()
+	const internal::StringMap<GmodVersioningDto>& VIS::gmodVersioningDto()
 	{
-		static auto versioningDto = []() -> utils::StringMap<GmodVersioningDto> {
+		static auto versioningDto = []() -> internal::StringMap<GmodVersioningDto> {
 			auto dto = EmbeddedResource::gmodVersioning();
 			if ( !dto )
 			{

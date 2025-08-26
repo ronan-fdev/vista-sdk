@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "utils/StringMap.h"
+#include "internal/StringMap.h"
 
 namespace dnv::vista::sdk
 {
@@ -28,9 +28,9 @@ namespace dnv::vista::sdk
 			return versions;
 		}
 
-		inline const utils::StringMap<VisVersion>& versionMapImpl()
+		inline const internal::StringMap<VisVersion>& versionMapImpl()
 		{
-			static const utils::StringMap<VisVersion> versionMap{
+			static const internal::StringMap<VisVersion> versionMap{
 				{ "3.4a", VisVersion::v3_4a },
 				{ "3.5a", VisVersion::v3_5a },
 				{ "3.6a", VisVersion::v3_6a },

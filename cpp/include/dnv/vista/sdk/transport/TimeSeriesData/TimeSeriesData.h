@@ -12,7 +12,7 @@
 #include "dnv/vista/sdk/transport/DataChannel/DataChannel.h"
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"
 #include "dnv/vista/sdk/transport/ShipId.h"
-#include "dnv/vista/sdk/utils/StringMap.h"
+#include "dnv/vista/sdk/internal/StringMap.h"
 #include "dnv/vista/sdk/LocalId.h"
 
 namespace dnv::vista::sdk
@@ -668,7 +668,7 @@ namespace dnv::vista::sdk
 				std::optional<datatypes::DateTimeOffset> dateModified,
 				std::optional<std::string> author,
 				std::optional<std::vector<ConfigurationReference>> systemConfiguration,
-				std::optional<utils::StringMap<Value>> customHeaders );
+				std::optional<internal::StringMap<Value>> customHeaders );
 
 			/** @brief Copy constructor */
 			Header( const Header& ) = default;
@@ -733,7 +733,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom headers
 			 * @return Optional custom headers dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customHeaders() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customHeaders() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -779,7 +779,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom headers
 			 * @param customHeaders New optional custom headers
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<utils::StringMap<Value>> customHeaders );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<internal::StringMap<Value>> customHeaders );
 
 		private:
 			//----------------------------------------------
@@ -792,7 +792,7 @@ namespace dnv::vista::sdk
 			std::optional<datatypes::DateTimeOffset> m_dateModified;
 			std::optional<std::string> m_author;
 			std::optional<std::vector<ConfigurationReference>> m_systemConfiguration;
-			std::optional<utils::StringMap<Value>> m_customHeaders;
+			std::optional<internal::StringMap<Value>> m_customHeaders;
 		};
 
 		//=====================================================================
@@ -836,7 +836,7 @@ namespace dnv::vista::sdk
 				std::optional<ConfigurationReference> dataConfiguration,
 				std::optional<std::vector<TabularData>> tabularData,
 				std::optional<EventData> eventData,
-				std::optional<utils::StringMap<Value>> customDataKinds );
+				std::optional<internal::StringMap<Value>> customDataKinds );
 
 			/** @brief Copy constructor */
 			TimeSeriesData( const TimeSeriesData& ) = default;
@@ -883,7 +883,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom data kinds
 			 * @return Optional custom data kinds dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<utils::StringMap<Value>>& customDataKinds() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customDataKinds() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -911,7 +911,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom data kinds
 			 * @param customDataKinds New optional custom data kinds
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomDataKinds( std::optional<utils::StringMap<Value>> customDataKinds );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomDataKinds( std::optional<internal::StringMap<Value>> customDataKinds );
 
 			//----------------------------------------------
 			// Validation
@@ -937,7 +937,7 @@ namespace dnv::vista::sdk
 			std::optional<ConfigurationReference> m_dataConfiguration;
 			std::optional<std::vector<TabularData>> m_tabularData;
 			std::optional<EventData> m_eventData;
-			std::optional<utils::StringMap<Value>> m_customDataKinds;
+			std::optional<internal::StringMap<Value>> m_customDataKinds;
 		};
 
 		//=====================================================================

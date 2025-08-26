@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "utils/StringMap.h"
+#include "internal/StringMap.h"
 
 namespace dnv::vista::sdk
 {
@@ -347,7 +347,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Type representing a mapping of node codes to conversion information with heterogeneous lookup */
-		using ItemsMap = utils::StringMap<GmodNodeConversionDto>;
+		using ItemsMap = internal::StringMap<GmodNodeConversionDto>;
 
 		//----------------------------------------------
 		// Construction

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "utils/StringMap.h"
+#include "internal/StringMap.h"
 
 namespace dnv::vista::sdk
 {
@@ -31,7 +31,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Shorthand for the normal assignment names map type with heterogeneous lookup */
-		using NormalAssignmentNamesMap = utils::StringMap<std::string>;
+		using NormalAssignmentNamesMap = internal::StringMap<std::string>;
 
 		//----------------------------------------------
 		// Construction

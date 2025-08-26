@@ -43,7 +43,7 @@ namespace dnv::vista::sdk::tests
 		header.setDateCreated( datatypes::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
 
 		/* Add custom headers */
-		utils::StringMap<transport::Value> customHeaders;
+		internal::StringMap<transport::Value> customHeaders;
 		customHeaders["nr:CustomHeaderElement"] = transport::Value::String{ "Vendor specific headers" };
 		header.setCustomHeaders( customHeaders );
 
@@ -65,7 +65,7 @@ namespace dnv::vista::sdk::tests
 			nameObject.setNamingRule( "Naming_Rule" );
 
 			/* Add custom name objects */
-			utils::StringMap<transport::Value> customNameObjects;
+			internal::StringMap<transport::Value> customNameObjects;
 			customNameObjects["nr:CustomNameObject"] = transport::Value::String{ "Vendor specific NameObject" };
 			nameObject.setCustomNameObjects( customNameObjects );
 
@@ -87,7 +87,7 @@ namespace dnv::vista::sdk::tests
 			unit.setQuantityName( "Temperature" );
 
 			/* Add custom elements to unit */
-			utils::StringMap<transport::Value> customElements;
+			internal::StringMap<transport::Value> customElements;
 			customElements["nr:CustomUnitElement"] = transport::Value::String{ "Vendor specific unit element" };
 			unit.setCustomElements( customElements );
 
@@ -97,7 +97,7 @@ namespace dnv::vista::sdk::tests
 			property.setRemarks( " Location: ECR, Manufacturer: AAA Company, Type: TYPE-AAA " );
 
 			/* Add custom properties */
-			utils::StringMap<transport::Value> customProperties;
+			internal::StringMap<transport::Value> customProperties;
 			customProperties["nr:CustomPropertyElement"] = transport::Value::String{ "Vendor specific property element" };
 			property.setCustomProperties( customProperties );
 

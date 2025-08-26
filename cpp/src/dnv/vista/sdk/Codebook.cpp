@@ -275,8 +275,8 @@ namespace dnv::vista::sdk
 		m_groupMap.reserve( capacity );
 		m_rawData.reserve( groupCount + ( groupCount >> 2 ) ); /* 1.25x */
 
-		utils::StringSet valueSet;
-		utils::StringSet groupSet;
+		internal::StringSet valueSet;
+		internal::StringSet groupSet;
 		valueSet.reserve( capacity );
 		groupSet.reserve( groupCount + ( groupCount >> 2 ) );
 
@@ -359,7 +359,9 @@ namespace dnv::vista::sdk
 		if ( !tagOpt )
 		{
 			throw std::invalid_argument(
-				"Invalid value for metadata tag: codebook=" + std::to_string( static_cast<int>( m_name ) ) + ", value=" + std::string{ value } );
+				"Invalid value for metadata tag: codebook=" +
+				std::to_string( static_cast<int>( m_name ) ) +
+				", value=" + std::string{ value } );
 		}
 
 		return tagOpt.value();
@@ -499,7 +501,7 @@ namespace dnv::vista::sdk
 
 		if ( worstResult == PositionValidationResult::Valid )
 		{
-			utils::StringSet uniqueGroups;
+			internal::StringSet uniqueGroups;
 			uniqueGroups.reserve( MAX_GROUPS );
 			bool hasDefaultGroup = false;
 

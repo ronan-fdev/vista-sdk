@@ -11,8 +11,8 @@
 
 namespace dnv::vista::sdk::benchmarks
 {
-	static utils::StringMap<const GmodNode*> g_dict;
-	static utils::StringMap<const GmodNode*> g_frozenDict;
+	static internal::StringMap<const GmodNode*> g_dict;
+	static internal::StringMap<const GmodNode*> g_frozenDict;
 	static internal::HashMap<std::string, const GmodNode*> g_dictionary;
 	static const Gmod* g_gmod = nullptr;
 	static bool g_initialized = false;

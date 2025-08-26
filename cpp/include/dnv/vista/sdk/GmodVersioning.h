@@ -46,7 +46,7 @@ namespace dnv::vista::sdk
 		 *
 		 * @param dto Dictionary of GmodVersioningDto objects indexed by version string with heterogeneous lookup
 		 */
-		explicit GmodVersioning( const utils::StringMap<GmodVersioningDto>& dto );
+		explicit GmodVersioning( const internal::StringMap<GmodVersioningDto>& dto );
 
 		/** @brief Default constructor. */
 		GmodVersioning() = delete;
@@ -158,7 +158,7 @@ namespace dnv::vista::sdk
 			/**
 			 * @brief Constructor for GmodVersioningNode
 			 */
-			GmodVersioningNode( VisVersion visVersion, const utils::StringMap<GmodNodeConversionDto>& dto );
+			GmodVersioningNode( VisVersion visVersion, const internal::StringMap<GmodNodeConversionDto>& dto );
 
 			/** @brief Default constructor. */
 			GmodVersioningNode() = default;
@@ -206,7 +206,7 @@ namespace dnv::vista::sdk
 			//----------------------------
 
 			VisVersion m_visVersion;
-			utils::StringMap<GmodNodeConversion> m_versioningNodeChanges;
+			internal::StringMap<GmodNodeConversion> m_versioningNodeChanges;
 		};
 
 		//----------------------------------------------

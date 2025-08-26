@@ -28,6 +28,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/StringMap.h
+
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.inl
@@ -42,7 +44,6 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ShipId.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ShipId.inl
 
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringMap.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/utils/StringUtils.h
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Codebook.h
@@ -98,8 +99,7 @@ set(PUBLIC_HEADERS
 )
 
 set(PRIVATE_HEADERS
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/impl/DynamicStringBuffer_impl.h
-
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBuffer_impl.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBufferPool.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.h
@@ -110,11 +110,11 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/Decimal128.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/Int128.cpp
 
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/impl/DynamicStringBuffer_impl.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBuffer_impl.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBufferPool.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBufferPool.cpp
 
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.cpp

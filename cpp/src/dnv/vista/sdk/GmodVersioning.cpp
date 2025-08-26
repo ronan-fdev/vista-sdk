@@ -109,7 +109,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//----------------------------------------------
 
-	GmodVersioning::GmodVersioning( const utils::StringMap<GmodVersioningDto>& dto )
+	GmodVersioning::GmodVersioning( const internal::StringMap<GmodVersioningDto>& dto )
 	{
 		m_versioningsMap.reserve( dto.size() );
 
@@ -457,7 +457,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//----------------------------
 
-	GmodVersioning::GmodVersioningNode::GmodVersioningNode( VisVersion visVersion, const utils::StringMap<GmodNodeConversionDto>& dto )
+	GmodVersioning::GmodVersioningNode::GmodVersioningNode( VisVersion visVersion, const internal::StringMap<GmodNodeConversionDto>& dto )
 		: m_visVersion{ visVersion }
 	{
 		for ( const auto& [code, dtoNode] : dto )

@@ -12,176 +12,6 @@
 namespace dnv::vista::sdk::utils
 {
 	//=====================================================================
-	// Heterogeneous lookup functors for zero-copy string operations
-	//=====================================================================
-
-	/**
-	 * @brief Hash functor supporting both std::string and std::string_view
-	 * @details Enables heterogeneous lookup in unordered containers,
-	 *          allowing direct string_view lookups without string construction.
-	 */
-	struct StringViewHash
-	{
-		/**
-		 * @brief Enables heterogeneous lookup in unordered containers
-		 * @details This type alias allows the hash functor to work with different
-		 *          but compatible key types (std::string, std::string_view, const char*)
-		 *          without requiring conversion to the container's key type.
-		 */
-		using is_transparent = void;
-
-		static constexpr std::hash<std::string_view> s_hasher{};
-
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE size_t operator()( std::string_view sv ) const noexcept
-		{
-			return s_hasher( sv );
-		}
-
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE size_t operator()( const std::string& s ) const noexcept
-		{
-			return s_hasher( std::string_view{ s.data(), s.size() } );
-		}
-
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE size_t operator()( const char* s ) const noexcept
-		{
-			return s_hasher( std::string_view{ s } );
-		}
-	};
-
-	/**
-	 * @brief Equality functor supporting both std::string and std::string_view
-	 * @details Enables heterogeneous lookup in unordered containers,
-	 *          providing all comparison overloads for string types.
-	 */
-	struct StringViewEqual
-	{
-		/**
-		 * @brief Enables heterogeneous lookup in unordered containers
-		 * @details This type alias allows the equality functor to work with different
-		 *          but compatible key types (std::string, std::string_view, const char*)
-		 *          without requiring conversion to the container's key type.
-		 */
-		using is_transparent = void;
-
-		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const std::string& lhs, const std::string& rhs ) const noexcept
-		{
-			return lhs.size() == rhs.size() && lhs == rhs;
-		}
-
-		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const std::string& lhs, std::string_view rhs ) const noexcept
-		{
-			return lhs.size() == rhs.size() && lhs == rhs;
-		}
-
-		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( std::string_view lhs, const std::string& rhs ) const noexcept
-		{
-			return lhs.size() == rhs.size() && lhs == rhs;
-		}
-
-		[[nodiscard]] constexpr inline bool operator()( std::string_view lhs, std::string_view rhs ) const noexcept
-		{
-			return lhs.size() == rhs.size() && lhs == rhs;
-		}
-
-		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const char* lhs, const std::string& rhs ) const noexcept
-		{
-			std::string_view lhs_view{ lhs };
-			return lhs_view.size() == rhs.size() && lhs_view == rhs;
-		}
-
-		[[nodiscard]] inline VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR bool operator()( const std::string& lhs, const char* rhs ) const noexcept
-		{
-			std::string_view rhs_view{ rhs };
-			return lhs.size() == rhs_view.size() && lhs == rhs_view;
-		}
-
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool operator()( const char* lhs, std::string_view rhs ) const noexcept
-		{
-			std::string_view lhs_view{ lhs };
-			return lhs_view.size() == rhs.size() && lhs_view == rhs;
-		}
-
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool operator()( std::string_view lhs, const char* rhs ) const noexcept
-		{
-			std::string_view rhs_view{ rhs };
-			return lhs.size() == rhs_view.size() && lhs == rhs_view;
-		}
-
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool operator()( const char* lhs, const char* rhs ) const noexcept
-		{
-			std::string_view lhs_view{ lhs };
-			std::string_view rhs_view{ rhs };
-			return lhs_view.size() == rhs_view.size() && lhs_view == rhs_view;
-		}
-	};
-
-	//=====================================================================
-	// Performance-critical string utilities
-	//=====================================================================
-
-	/**
-	 * @brief Fast check if string ends with suffix
-	 * @param str String to check
-	 * @param suffix Suffix to find
-	 * @return True if str ends with suffix
-	 */
-	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool endsWith( std::string_view str, std::string_view suffix ) noexcept
-	{
-		return str.size() >= suffix.size() && str.compare( str.size() - suffix.size(), suffix.size(), suffix ) == 0;
-	}
-
-	/**
-	 * @brief Fast check if string starts with prefix
-	 * @param str String to check
-	 * @param prefix Prefix to find
-	 * @return True if str starts with prefix
-	 */
-	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool startsWith( std::string_view str, std::string_view prefix ) noexcept
-	{
-		return str.size() >= prefix.size() && str.compare( 0, prefix.size(), prefix ) == 0;
-	}
-
-	/**
-	 * @brief Fast check if string contains substring
-	 * @param str String to check
-	 * @param substr Substring to find
-	 * @return True if str contains substr
-	 */
-	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool contains( std::string_view str, std::string_view substr ) noexcept
-	{
-		return str.find( substr ) != std::string_view::npos;
-	}
-
-	/**
-	 * @brief Fast case-sensitive string comparison
-	 * @param lhs First string
-	 * @param rhs Second string
-	 * @return True if strings are exactly equal
-	 */
-	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool equals( std::string_view lhs, std::string_view rhs ) noexcept
-	{
-		return lhs == rhs;
-	}
-
-	/**
-	 * @brief Fast case-insensitive string comparison
-	 * @param lhs First string
-	 * @param rhs Second string
-	 * @return True if strings are equal (case-insensitive)
-	 */
-	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool iequals( std::string_view lhs, std::string_view rhs ) noexcept
-	{
-		if ( lhs.size() != rhs.size() )
-		{
-			return false;
-		}
-
-		return std::equal( lhs.begin(), lhs.end(), rhs.begin(),
-			[]( char a, char b ) noexcept { return std::tolower( static_cast<unsigned char>( a ) ) ==
-												   std::tolower( static_cast<unsigned char>( b ) ); } );
-	}
-
-	//=====================================================================
 	// StringViewSplitter class
 	//=====================================================================
 
@@ -205,12 +35,6 @@ namespace dnv::vista::sdk::utils
 		 */
 		class Iterator
 		{
-		private:
-			const StringViewSplitter* m_splitter;
-			size_t m_currentPos;
-			std::string_view m_currentSegment;
-			bool m_isAtEnd;
-
 		public:
 			/**
 			 * @brief Constructs iterator at beginning or end position
@@ -274,6 +98,12 @@ namespace dnv::vista::sdk::utils
 					m_currentPos = delimiterPos + 1;
 				}
 			}
+
+		private:
+			const StringViewSplitter* m_splitter;
+			size_t m_currentPos;
+			std::string_view m_currentSegment;
+			bool m_isAtEnd;
 		};
 
 		/**
@@ -293,8 +123,17 @@ namespace dnv::vista::sdk::utils
 		}
 	};
 
+	//=====================================================================
+	// String splitting factory functions
+	//=====================================================================
+
 	/**
 	 * @brief Factory function for zero-copy string splitting
+	 * @details Creates a StringViewSplitter for efficient iteration over string segments
+	 *          without heap allocations.
+	 * @param str String to split
+	 * @param delimiter Character to split on
+	 * @return StringViewSplitter object for range-based iteration
 	 */
 	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE StringViewSplitter splitView( std::string_view str, char delimiter ) noexcept
 	{
@@ -417,5 +256,71 @@ namespace dnv::vista::sdk::utils
 
 		const auto parseResult = std::from_chars( str.data(), str.data() + str.size(), result );
 		return parseResult.ec == std::errc{} && parseResult.ptr == str.data() + str.size();
+	}
+
+	//=====================================================================
+	// Performance-critical string utilities
+	//=====================================================================
+
+	/**
+	 * @brief Fast check if string ends with suffix
+	 * @param str String to check
+	 * @param suffix Suffix to find
+	 * @return True if str ends with suffix
+	 */
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool endsWith( std::string_view str, std::string_view suffix ) noexcept
+	{
+		return str.size() >= suffix.size() && str.compare( str.size() - suffix.size(), suffix.size(), suffix ) == 0;
+	}
+
+	/**
+	 * @brief Fast check if string starts with prefix
+	 * @param str String to check
+	 * @param prefix Prefix to find
+	 * @return True if str starts with prefix
+	 */
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool startsWith( std::string_view str, std::string_view prefix ) noexcept
+	{
+		return str.size() >= prefix.size() && str.compare( 0, prefix.size(), prefix ) == 0;
+	}
+
+	/**
+	 * @brief Fast check if string contains substring
+	 * @param str String to check
+	 * @param substr Substring to find
+	 * @return True if str contains substr
+	 */
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool contains( std::string_view str, std::string_view substr ) noexcept
+	{
+		return str.find( substr ) != std::string_view::npos;
+	}
+
+	/**
+	 * @brief Fast case-sensitive string comparison
+	 * @param lhs First string
+	 * @param rhs Second string
+	 * @return True if strings are exactly equal
+	 */
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE constexpr bool equals( std::string_view lhs, std::string_view rhs ) noexcept
+	{
+		return lhs == rhs;
+	}
+
+	/**
+	 * @brief Fast case-insensitive string comparison
+	 * @param lhs First string
+	 * @param rhs Second string
+	 * @return True if strings are equal (case-insensitive)
+	 */
+	[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool iequals( std::string_view lhs, std::string_view rhs ) noexcept
+	{
+		if ( lhs.size() != rhs.size() )
+		{
+			return false;
+		}
+
+		return std::equal( lhs.begin(), lhs.end(), rhs.begin(),
+			[]( char a, char b ) noexcept { return std::tolower( static_cast<unsigned char>( a ) ) ==
+												   std::tolower( static_cast<unsigned char>( b ) ); } );
 	}
 }

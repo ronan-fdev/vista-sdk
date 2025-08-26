@@ -221,7 +221,7 @@ namespace dnv::vista::sdk
 		 *         and values are GmodVersioningDto objects.
 		 * @throws std::runtime_error If the versioning DTOs cannot be loaded.
 		 */
-		[[nodiscard]] static const utils::StringMap<GmodVersioningDto>& gmodVersioningDto();
+		[[nodiscard]] static const internal::StringMap<GmodVersioningDto>& gmodVersioningDto();
 
 		//----------------------------------------------
 		// Conversion

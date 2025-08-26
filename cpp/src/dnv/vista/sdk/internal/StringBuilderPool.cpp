@@ -6,7 +6,7 @@
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
 #include "dnv/vista/sdk/internal/DynamicStringBufferPool.h"
 
-#include "impl/DynamicStringBuffer_impl.h"
+#include "DynamicStringBuffer_impl.h"
 
 namespace dnv::vista::sdk::internal
 {
