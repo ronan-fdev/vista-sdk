@@ -32,6 +32,7 @@ set(TEST_SOURCES
 	TESTS_ImoNumber.cpp
 	TESTS_ISOString.cpp
 	TESTS_LocalId.cpp
+	TESTS_LocalIdQuery.cpp
 	TESTS_Locations.cpp
 	TESTS_UniversalId.cpp
 )

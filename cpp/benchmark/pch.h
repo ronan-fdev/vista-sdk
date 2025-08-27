@@ -17,6 +17,7 @@
 #include <barrier>
 #include <charconv>
 #include <chrono>
+#include <functional>
 #include <mutex>
 #include <numeric>
 #include <random>

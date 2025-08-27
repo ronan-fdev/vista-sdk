@@ -79,6 +79,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdBuilder.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdItems.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdItems.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdQuery.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdQuery.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationBuilder.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationBuilder.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Locations.h
@@ -87,6 +89,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationsDto.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTag.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTag.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTagsQuery.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTagsQuery.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/ParsingErrors.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/ParsingErrors.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Results.h
@@ -139,10 +143,12 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/ImoNumber.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalIdBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalIdQuery.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Locations.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationsDto.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/MetadataTag.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/MetadataTagsQuery.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/ParsingErrors.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/UniversalId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/UniversalIdBuilder.cpp

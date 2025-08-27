@@ -23,7 +23,7 @@ namespace dnv::vista::sdk
 	 * Each value represents a different category of data that can be stored
 	 * in the vessel information structure according to ISO 19848.
 	 */
-	enum class CodebookName
+	enum class CodebookName : std::uint8_t
 	{
 		/** @brief Represents physical quantities and units (prefix: qty) */
 		Quantity = 1,

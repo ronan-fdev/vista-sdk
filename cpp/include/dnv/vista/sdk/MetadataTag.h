@@ -13,7 +13,7 @@ namespace dnv::vista::sdk
 	// Forward declarations
 	//=====================================================================
 
-	enum class CodebookName;
+	enum class CodebookName : std::uint8_t;
 
 	//=====================================================================
 	// MetadataTag class

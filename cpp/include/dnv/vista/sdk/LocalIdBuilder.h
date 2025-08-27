@@ -22,7 +22,7 @@ namespace dnv::vista::sdk
 	class LocalId;
 	class ParsingErrors;
 
-	enum class CodebookName;
+	enum class CodebookName : std::uint8_t;
 	enum class VisVersion;
 
 	namespace internal
