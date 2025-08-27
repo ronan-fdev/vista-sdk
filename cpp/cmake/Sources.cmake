@@ -65,6 +65,8 @@ set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodNode.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPath.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPath.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPathQuery.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPathQuery.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioning.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioning.inl
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioningDto.h
@@ -131,6 +133,7 @@ set(PRIVATE_SOURCES
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodDto.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodNode.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodPath.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodPathQuery.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodVersioning.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodVersioningDto.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/ImoNumber.cpp

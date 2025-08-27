@@ -26,6 +26,7 @@ set(TEST_SOURCES
 	TESTS_Codebooks.cpp
 	TESTS_Gmod.cpp
 	TESTS_GmodPath.cpp
+	TESTS_GmodPathQuery.cpp
 	TESTS_GmodVersioning.cpp
 	TESTS_HashCompatibility.cpp
 	TESTS_ImoNumber.cpp
