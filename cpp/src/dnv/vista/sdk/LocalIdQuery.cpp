@@ -172,13 +172,13 @@ namespace dnv::vista::sdk
 			{
 				if ( !m_primaryItem.has_value() )
 				{
-					throw std::invalid_argument( "Primary item is null - cannot configure without existing primary item" );
+					throw std::invalid_argument{ "Primary item is null - cannot configure without existing primary item" };
 				}
 				auto query = configure( m_primaryItem.value() );
 				return withPrimaryItem( query );
 			}
 			default:
-				throw std::invalid_argument( "Invalid From enum value" );
+				throw std::invalid_argument{ "Invalid From enum value" };
 		}
 	}
 
@@ -193,9 +193,9 @@ namespace dnv::vista::sdk
 				return withPrimaryItem( query );
 			}
 			case ConfigureFrom::Nodes:
-				throw std::invalid_argument( "From::Nodes does not support GmodPath parameter - use the single parameter overload" );
+				throw std::invalid_argument{ "From::Nodes does not support GmodPath parameter - use the single parameter overload" };
 			default:
-				throw std::invalid_argument( "Invalid From enum value" );
+				throw std::invalid_argument{ "Invalid From enum value" };
 		}
 	}
 
@@ -228,7 +228,7 @@ namespace dnv::vista::sdk
 			{
 				if ( !m_secondaryItem.has_value() )
 				{
-					throw std::invalid_argument( "Secondary item is null - cannot configure without existing secondary item" );
+					throw std::invalid_argument{ "Secondary item is null - cannot configure without existing secondary item" };
 				}
 				auto query = configure( m_secondaryItem.value() );
 				return withSecondaryItem( query );
@@ -249,9 +249,9 @@ namespace dnv::vista::sdk
 				return withSecondaryItem( query );
 			}
 			case ConfigureFrom::Nodes:
-				throw std::invalid_argument( "From::Nodes does not support GmodPath parameter - use the single parameter overload" );
+				throw std::invalid_argument{ "From::Nodes does not support GmodPath parameter - use the single parameter overload" };
 			default:
-				throw std::invalid_argument( "Invalid From enum value" );
+				throw std::invalid_argument{ "Invalid From enum value" };
 		}
 	}
 

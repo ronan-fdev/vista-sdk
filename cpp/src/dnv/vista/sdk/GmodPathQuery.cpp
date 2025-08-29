@@ -78,7 +78,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_sourcePath.has_value() )
 		{
-			throw std::runtime_error( "withNode with selector can only be used on path-based queries" );
+			throw std::runtime_error{ "withNode with selector can only be used on path-based queries" };
 		}
 
 		GmodPathQuery result = *this;
@@ -86,7 +86,7 @@ namespace dnv::vista::sdk
 		auto it = result.m_filter.find( node.code() );
 		if ( it == result.m_filter.end() )
 		{
-			throw std::runtime_error( "Expected to find a filter on the node in the path" );
+			throw std::runtime_error{ "Expected to find a filter on the node in the path" };
 		}
 
 		std::vector<Location> locationSet{ locations.begin(), locations.end() };

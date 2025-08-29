@@ -113,74 +113,6 @@ namespace dnv::vista::sdk
 				}
 			}
 		}
-
-		static std::string codebookNametoString( CodebookName name )
-		{
-			/*
-				TODO: This function returns the codebook names used for internal operations (plural, lowercase).
-
-				In the C# implementation, error messages use the enum name directly via string interpolation:
-				Example: $"Invalid {codebookName} metadata tag: '{value}'. Use prefix '~' for custom values"
-
-				When C# interpolates CodebookName.Content, it automatically calls ToString() on the enum,
-				which returns "Content" (singular, capitalized form) - matching the test expectations.
-
-				For C++ error messages, we need a separate function that mimics this C# behavior
-				to return "Content", "Quantity", "FunctionalServices", "MaintenanceCategory",etc. (singular, capitalized) instead of
-				"contents", "quantities", "functional_services", "maintenance_category", etc. (plural, lowercase from constants).
-			*/
-			switch ( name )
-			{
-				case CodebookName::Position:
-				{
-					return "Position";
-				}
-				case CodebookName::Quantity:
-				{
-					return "Quantity";
-				}
-				case CodebookName::Calculation:
-				{
-					return "Calculation";
-				}
-				case CodebookName::State:
-				{
-					return "State";
-				}
-				case CodebookName::Content:
-				{
-					return "Content";
-				}
-				case CodebookName::Command:
-				{
-					return "Command";
-				}
-				case CodebookName::Type:
-				{
-					return "Type";
-				}
-				case CodebookName::FunctionalServices:
-				{
-					return "FunctionalServices";
-				}
-				case CodebookName::MaintenanceCategory:
-				{
-					return "MaintenanceCategory";
-				}
-				case CodebookName::ActivityType:
-				{
-					return "ActivityType";
-				}
-				case CodebookName::Detail:
-				{
-					return "Detail";
-				}
-				default:
-				{
-					throw std::invalid_argument( "Unknown codebook: " + std::to_string( static_cast<int>( name ) ) );
-				}
-			}
-		}
 	}
 
 	//=====================================================================
@@ -784,6 +716,78 @@ namespace dnv::vista::sdk
 		errors = errorBuilder.build();
 
 		return success;
+	}
+
+	//----------------------------------------------
+	// Enum stringification utility
+	//----------------------------------------------
+
+	std::string LocalIdBuilder::codebookNametoString( CodebookName name )
+	{
+		/*
+			TODO: This function returns the codebook names used for internal operations (plural, lowercase).
+
+			In the C# implementation, error messages use the enum name directly via string interpolation:
+			Example: $"Invalid {codebookName} metadata tag: '{value}'. Use prefix '~' for custom values"
+
+			When C# interpolates CodebookName.Content, it automatically calls ToString() on the enum,
+			which returns "Content" (singular, capitalized form) - matching the test expectations.
+
+			For C++ error messages, we need a separate function that mimics this C# behavior
+			to return "Content", "Quantity", "FunctionalServices", "MaintenanceCategory",etc. (singular, capitalized) instead of
+			"contents", "quantities", "functional_services", "maintenance_category", etc. (plural, lowercase from constants).
+		*/
+		switch ( name )
+		{
+			case CodebookName::Position:
+			{
+				return "Position";
+			}
+			case CodebookName::Quantity:
+			{
+				return "Quantity";
+			}
+			case CodebookName::Calculation:
+			{
+				return "Calculation";
+			}
+			case CodebookName::State:
+			{
+				return "State";
+			}
+			case CodebookName::Content:
+			{
+				return "Content";
+			}
+			case CodebookName::Command:
+			{
+				return "Command";
+			}
+			case CodebookName::Type:
+			{
+				return "Type";
+			}
+			case CodebookName::FunctionalServices:
+			{
+				return "FunctionalServices";
+			}
+			case CodebookName::MaintenanceCategory:
+			{
+				return "MaintenanceCategory";
+			}
+			case CodebookName::ActivityType:
+			{
+				return "ActivityType";
+			}
+			case CodebookName::Detail:
+			{
+				return "Detail";
+			}
+			default:
+			{
+				throw std::invalid_argument( "Unknown codebook: " + std::to_string( static_cast<int>( name ) ) );
+			}
+		}
 	}
 
 	//----------------------------------------------
@@ -1633,4 +1637,5 @@ namespace dnv::vista::sdk
 
 		return true;
 	}
+
 }

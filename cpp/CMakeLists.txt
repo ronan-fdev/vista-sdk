@@ -32,7 +32,7 @@ option(VISTA_SDK_CPP_RUN_TESTS             "Run tests after build"              
 option(VISTA_SDK_CPP_BUILD_BENCHMARKS      "Build benchmarks"                           ON   )
 option(VISTA_SDK_CPP_RUN_BENCHMARKS        "Run benchmarks after build"                 OFF  )
 option(VISTA_SDK_CPP_COPY_RESOURCES        "Copy resources to build directory"          ON   ) # TODO: Remove later
-option(VISTA_SDK_CPP_BUILD_SAMPLES         "Build vista-sdk-cpp samples"                OFF  )
+option(VISTA_SDK_CPP_BUILD_SAMPLES         "Build vista-sdk-cpp samples"                ON   )
 option(VISTA_SDK_CPP_BUILD_DOCUMENTATION   "Build vista-sdk-cpp doxygen documentation"  OFF  )
 
 set(VISTA_SDK_CPP_INSTALL_DIR "" CACHE PATH "Install directory option (empty = use platform defaults)")

@@ -96,7 +96,7 @@ foreach(target_name ${TARGETS_TO_CONFIGURE})
 			/wd4820                                                 # padding
 #			/wd4834                                                 # discarding return value of function with 'nodiscard' attribute
 			/wd4866                                                 # compiler may not enforce left-to-right evaluation order for call to operator_name
-#			/wd4868                                                 # compiler may not enforce left-to-right evaluation order in braced initializer list
+			/wd4868                                                 # compiler may not enforce left-to-right evaluation order in braced initializer list
 #			/wd5026                                                 # move constructor was implicitly defined as deleted
 #			/wd5027                                                 # move assignment operator was implicitly defined as deleted
 #			/wd5038                                                 # will be initialized after
