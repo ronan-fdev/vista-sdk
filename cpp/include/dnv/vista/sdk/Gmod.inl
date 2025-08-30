@@ -343,7 +343,7 @@ namespace dnv::vista::sdk
 	{
 		if ( node.metadata().installSubstructure().has_value() && !node.metadata().installSubstructure().value() )
 		{
-			return TraversalHandlerResult::Continue;
+			return TraversalHandlerResult::SkipSubtree;
 		}
 
 		TraversalHandlerResult result = context.handler( context.state, context.parents.asList(), node );
