@@ -9,7 +9,10 @@
 
 #pragma once
 
-#include "internal/StringMap.h"
+#include <optional>
+
+#include <nfx/containers/StringMap.h>
+#include <nlohmann/json.hpp>
 
 namespace dnv::vista::sdk
 {
@@ -31,7 +34,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Shorthand for the normal assignment names map type with heterogeneous lookup */
-		using NormalAssignmentNamesMap = internal::StringMap<std::string>;
+		using NormalAssignmentNamesMap = nfx::containers::StringMap<std::string>;
 
 		//----------------------------------------------
 		// Construction

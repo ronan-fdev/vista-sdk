@@ -1,0 +1,132 @@
+# ==============================================================================
+# VISTA-SDK-CPP - C++ Library CMake Sources
+# ==============================================================================
+
+set(PUBLIC_HEADERS
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/config/Platform.h
+
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/AlgorithmConstants.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/CodebookConstants.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/DtoKeysConstants.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/GmodConstants.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/ISO19848Constants.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/LocalIdConstants.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/LocationsConstants.h
+
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/HashMap.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
+
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ShipId.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/ShipId.inl
+
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Codebook.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Codebook.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Codebooks.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Codebooks.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/CodebookName.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/CodebookName.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/CodebooksDto.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/CodebooksDto.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/EmbeddedResource.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/EmbeddedResource.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Exceptions.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Gmod.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Gmod.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodDto.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodDto.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodNode.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodNode.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPath.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPath.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPathQuery.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodPathQuery.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioning.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioning.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioningDto.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/GmodVersioningDto.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/ImoNumber.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/ImoNumber.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalId.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalId.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdBuilder.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdBuilder.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdItems.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdItems.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdQuery.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocalIdQuery.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationBuilder.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationBuilder.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Locations.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Locations.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationsDto.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/LocationsDto.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTag.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTag.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTagsQuery.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/MetadataTagsQuery.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/ParsingErrors.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/ParsingErrors.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Results.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/Results.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/UniversalIdBuilder.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/UniversalIdBuilder.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/UniversalId.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/UniversalId.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/VIS.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/VIS.inl
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/VISVersion.h
+)
+
+set(PRIVATE_HEADERS
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocalIdParsingErrorBuilder.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationParsingErrorBuilder.h
+)
+
+set(PRIVATE_SOURCES
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocalIdParsingErrorBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationParsingErrorBuilder.cpp
+
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/DataChannel/DataChannel.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/TimeSeriesData/DataChannelId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/TimeSeriesData/TimeSeriesData.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/ISO19848.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/ISO19848Dtos.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/ShipId.cpp
+
+	${VISTA_SDK_CPP_SOURCE_DIR}/Codebook.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Codebooks.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/CodebooksDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/EmbeddedResource.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Gmod.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodNode.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodPath.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodPathQuery.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodVersioning.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodVersioningDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/ImoNumber.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocalId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocalIdBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocalIdQuery.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocationBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Locations.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocationsDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/MetadataTag.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/MetadataTagsQuery.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/ParsingErrors.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/UniversalId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/UniversalIdBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/VIS.cpp
+)

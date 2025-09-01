@@ -12,6 +12,11 @@
 
 #pragma once
 
+#include <stdexcept>
+#include <string>
+#include <string_view>
+#include <vector>
+
 #include "dnv/vista/sdk/config/Platform.h"
 
 namespace dnv::vista::sdk::internal
@@ -79,7 +84,7 @@ namespace dnv::vista::sdk::internal
 			/**
 			 * @brief Throws a key not found exception with the specified key.
 			 * @param[in] key The key that was not found.
-			 * @throws key_not_found_exception Always.
+			 * @throws KeyNotFoundException Always.
 			 */
 			[[noreturn]] inline static void throwKeyNotFoundException( std::string_view key );
 
@@ -88,7 +93,7 @@ namespace dnv::vista::sdk::internal
 			 * @details This exception is thrown when an operation is not valid due to
 			 *          the current state of the object, such as accessing Current on
 			 *          an enumerator that hasn't been positioned properly.
-			 * @throws invalid_operation_exception Always.
+			 * @throws InvalidOperationException Always.
 			 */
 			[[noreturn]] inline static void throwInvalidOperationException();
 		};
@@ -185,14 +190,14 @@ namespace dnv::vista::sdk::internal
 	 * @details This exception is thrown by operator[] and at() methods when
 	 *          the specified key does not exist in the dictionary.
 	 */
-	class key_not_found_exception : public std::runtime_error
+	class KeyNotFoundException : public std::runtime_error
 	{
 	public:
 		/**
 		 * @brief Constructs a key not found exception.
 		 * @param[in] key The key that was not found.
 		 */
-		inline explicit key_not_found_exception( std::string_view key );
+		inline explicit KeyNotFoundException( std::string_view key );
 	};
 
 	/**
@@ -200,19 +205,19 @@ namespace dnv::vista::sdk::internal
 	 * @details This exception is thrown by enumerator operations when the enumerator
 	 *          is not positioned on a valid element.
 	 */
-	class invalid_operation_exception : public std::runtime_error
+	class InvalidOperationException : public std::runtime_error
 	{
 	public:
 		/**
 		 * @brief Constructs an invalid operation exception with default message.
 		 */
-		inline invalid_operation_exception();
+		inline InvalidOperationException();
 
 		/**
 		 * @brief Constructs an invalid operation exception with custom message.
 		 * @param[in] message The exception message.
 		 */
-		inline explicit invalid_operation_exception( std::string_view message );
+		inline explicit InvalidOperationException( std::string_view message );
 	};
 
 	//=====================================================================
@@ -307,7 +312,7 @@ namespace dnv::vista::sdk::internal
 		 *          Allows modification of the retrieved value if TValue is mutable.
 		 * @param[in] key The key whose associated value is to be retrieved.
 		 * @return A reference to the value associated with `key`.
-		 * @throws key_not_found_exception if the `key` is not found in the dictionary or if the dictionary is empty.
+		 * @throws KeyNotFoundException if the `key` is not found in the dictionary or if the dictionary is empty.
 		 */
 		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE TValue& operator[]( std::string_view key );
 
@@ -320,7 +325,7 @@ namespace dnv::vista::sdk::internal
 		 * @details Provides read-only access to the value. Performs a lookup using the perfect hash function.
 		 * @param[in] key The key whose associated value is to be retrieved.
 		 * @return A constant reference to the value associated with `key`.
-		 * @throws key_not_found_exception if the `key` is not found in the dictionary or if the dictionary is empty.
+		 * @throws KeyNotFoundException if the `key` is not found in the dictionary or if the dictionary is empty.
 		 */
 		[[nodiscard]] inline const TValue& at( std::string_view key ) const;
 
@@ -645,7 +650,7 @@ namespace dnv::vista::sdk::internal
 			 *          The enumerator must be positioned on a valid element by calling `next()`
 			 *          and ensuring it returned `true`.
 			 * @return A constant reference to the current `std::pair<std::string, TValue>`.
-			 * @throws invalid_operation_exception if the enumerator is not positioned on a valid element.
+			 * @throws InvalidOperationException if the enumerator is not positioned on a valid element.
 			 */
 			[[nodiscard]] inline const std::pair<std::string, TValue>& current() const;
 

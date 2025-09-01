@@ -10,6 +10,10 @@
 
 #pragma once
 
+#include <optional>
+#include <string>
+#include <string_view>
+
 #include "internal/ChdDictionary.h"
 #include "internal/HashMap.h"
 
@@ -470,7 +474,10 @@ namespace dnv::vista::sdk
 			size_t maxTraversalOccurrence;
 
 			TraversalContext( Parents& p, TraverseHandlerWithState<TState> h, TState& s, size_t maxOcc )
-				: parents( p ), handler( h ), state( s ), maxTraversalOccurrence( maxOcc )
+				: parents{ p },
+				  handler{ h },
+				  state{ s },
+				  maxTraversalOccurrence{ maxOcc }
 			{
 			}
 

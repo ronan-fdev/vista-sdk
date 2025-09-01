@@ -8,8 +8,10 @@
 
 #pragma once
 
-#include "config/Platform.h"
+#include <unordered_set>
+#include <string>
 
+#include "config/Platform.h"
 #include "LocationsDto.h"
 
 namespace dnv::vista::sdk

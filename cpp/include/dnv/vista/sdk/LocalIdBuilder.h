@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include <optional>
+#include <string>
+#include <string_view>
+
 #include "LocalIdItems.h"
 #include "MetadataTag.h"
 

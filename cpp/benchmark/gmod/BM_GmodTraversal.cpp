@@ -3,6 +3,8 @@
  * @brief GMOD tree traversal performance benchmark testing full tree iteration
  */
 
+#include <benchmark/benchmark.h>
+
 #include "dnv/vista/sdk/VIS.h"
 
 namespace dnv::vista::sdk::benchmarks

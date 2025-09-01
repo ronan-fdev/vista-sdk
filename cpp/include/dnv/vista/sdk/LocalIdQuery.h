@@ -7,9 +7,11 @@
 
 #pragma once
 
+#include <string>
+
 #include "GmodPathQuery.h"
-#include "MetadataTagsQuery.h"
 #include "LocalId.h"
+#include "MetadataTagsQuery.h"
 
 namespace dnv::vista::sdk
 {

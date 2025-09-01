@@ -10,8 +10,13 @@
 
 #pragma once
 
-#include "internal/StringBuilderPool.h"
-#include "internal/StringMap.h"
+#include <optional>
+#include <string>
+#include <string_view>
+
+#include <nfx/containers/StringMap.h>
+#include <nfx/containers/StringSet.h>
+#include <nfx/string/StringBuilderPool.h>
 
 #include "GmodDto.h"
 #include "Locations.h"
@@ -61,7 +66,7 @@ namespace dnv::vista::sdk
 			const std::optional<std::string>& definition = std::nullopt,
 			const std::optional<std::string>& commonDefinition = std::nullopt,
 			const std::optional<bool>& installSubstructure = std::nullopt,
-			const internal::StringMap<std::string>& normalAssignmentNames = {} ) noexcept;
+			const nfx::containers::StringMap<std::string>& normalAssignmentNames = {} ) noexcept;
 
 		/** @brief Default constructor. */
 		GmodNodeMetadata() = default;
@@ -163,7 +168,7 @@ namespace dnv::vista::sdk
 		 * @brief Get the normal assignment names mapping
 		 * @return Reference to the map of normal assignment names
 		 */
-		[[nodiscard]] inline const internal::StringMap<std::string>& normalAssignmentNames() const noexcept;
+		[[nodiscard]] inline const nfx::containers::StringMap<std::string>& normalAssignmentNames() const noexcept;
 
 	private:
 		//----------------------------------------------
@@ -192,7 +197,7 @@ namespace dnv::vista::sdk
 		std::optional<bool> m_installSubstructure;
 
 		/** @brief Optional mapping of normal assignment names. */
-		internal::StringMap<std::string> m_normalAssignmentNames;
+		nfx::containers::StringMap<std::string> m_normalAssignmentNames;
 
 		/** @brief Combined category and type string, e.g., "PRODUCT TYPE", generated at construction. */
 		std::string m_fullType;
@@ -499,7 +504,7 @@ namespace dnv::vista::sdk
 		 * @brief Appends the node's string representation to a StringBuilder.
 		 * @param builder The StringBuilder to write to.
 		 */
-		inline void toString( internal::StringBuilder& builder ) const noexcept;
+		inline void toString( nfx::string::StringBuilder& builder ) const noexcept;
 
 	private:
 		//----------------------------------------------
@@ -551,7 +556,7 @@ namespace dnv::vista::sdk
 		std::vector<GmodNode*> m_parents;
 
 		/** @brief Set of child codes for efficient `isChild(std::string_view)` lookups. Maintained by addChild/trim. */
-		internal::StringSet m_childrenSet;
+		nfx::containers::StringSet m_childrenSet;
 	};
 }
 

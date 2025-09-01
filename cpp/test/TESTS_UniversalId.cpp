@@ -3,14 +3,15 @@
  * @brief Unit tests for LocalId and LocalIdBuilder classes.
  */
 
+#include <gtest/gtest.h>
+
 #include "TestDataLoader.h"
 
-#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "internal/LocalIdParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/ImoNumber.h"
-
 #include "dnv/vista/sdk/LocalIdBuilder.h"
 #include "dnv/vista/sdk/Locations.h"
 #include "dnv/vista/sdk/ParsingErrors.h"

@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "internal/StringMap.h"
+#include <nfx/containers/StringMap.h>
+#include <nlohmann/json.hpp>
 
 namespace dnv::vista::sdk
 {
@@ -33,7 +34,7 @@ namespace dnv::vista::sdk
 		using ValueGroup = std::vector<std::string>;
 
 		/** @brief Type representing a mapping of group names to their values with heterogeneous lookup */
-		using ValuesMap = internal::StringMap<ValueGroup>;
+		using ValuesMap = nfx::containers::StringMap<ValueGroup>;
 
 		//----------------------------------------------
 		// Construction

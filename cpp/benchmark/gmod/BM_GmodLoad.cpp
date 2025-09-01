@@ -3,6 +3,8 @@
  * @brief GMOD loading and construction performance analysis
  */
 
+#include <benchmark/benchmark.h>
+
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodDto.h"
 #include "dnv/vista/sdk/VIS.h"

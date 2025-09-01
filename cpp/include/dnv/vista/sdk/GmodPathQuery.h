@@ -8,7 +8,8 @@
 
 #pragma once
 
-#include "internal/StringMap.h"
+#include <nfx/containers/StringMap.h>
+
 #include "GmodPath.h"
 #include "Locations.h"
 
@@ -178,7 +179,7 @@ namespace dnv::vista::sdk
 		 * @return New query instance with the constraint added
 		 */
 		[[nodiscard]] GmodPathQuery withNode(
-			std::function<const GmodNode&( const internal::StringMap<GmodNode>& )> selector,
+			std::function<const GmodNode&( const nfx::containers::StringMap<GmodNode>& )> selector,
 			bool matchAllLocations = false ) const;
 
 		/**
@@ -188,7 +189,7 @@ namespace dnv::vista::sdk
 		 * @return New query instance with the constraint added
 		 */
 		[[nodiscard]] GmodPathQuery withNode(
-			std::function<const GmodNode&( const internal::StringMap<GmodNode>& )> selector,
+			std::function<const GmodNode&( const nfx::containers::StringMap<GmodNode>& )> selector,
 			const std::vector<Location>& locations ) const;
 
 		//----------------------------
@@ -237,9 +238,9 @@ namespace dnv::vista::sdk
 		// Private member variables
 		//----------------------------------------------
 
-		internal::StringMap<NodeItem> m_filter;
+		nfx::containers::StringMap<NodeItem> m_filter;
 		std::optional<GmodPath> m_sourcePath;
-		internal::StringMap<GmodNode> m_setNodes;
+		nfx::containers::StringMap<GmodNode> m_setNodes;
 
 		//----------------------------------------------
 		// Helper methods

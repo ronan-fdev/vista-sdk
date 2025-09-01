@@ -3,8 +3,6 @@
  * @brief Inline implementation of Codebooks class methods
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -38,7 +36,7 @@ namespace dnv::vista::sdk
 			return m_codebooks[rawValue - 1];
 		}
 
-		throw std::invalid_argument( "Invalid codebook name: " + std::to_string( rawValue ) );
+		throw std::invalid_argument{ "Invalid codebook name: " + std::to_string( rawValue ) };
 	}
 
 	//----------------------------------------------

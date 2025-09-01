@@ -11,6 +11,11 @@
  * For more examples, see the other files in this directory.
  */
 
+#include <iostream>
+#include <optional>
+#include <string>
+#include <vector>
+
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/Codebook.h"
 #include "dnv/vista/sdk/CodebookName.h"
@@ -22,11 +27,6 @@
 #include "dnv/vista/sdk/MetadataTag.h"
 #include "dnv/vista/sdk/VIS.h"
 #include "dnv/vista/sdk/VISVersion.h"
-
-#include <iostream>
-#include <vector>
-#include <string>
-#include <optional>
 
 using namespace dnv::vista::sdk;
 

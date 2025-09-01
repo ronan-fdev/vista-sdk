@@ -13,7 +13,10 @@
 
 #pragma once
 
-#include "internal/StringMap.h"
+#include <unordered_set>
+
+#include <nfx/containers/StringMap.h>
+#include <nlohmann/json.hpp>
 
 namespace dnv::vista::sdk
 {
@@ -347,7 +350,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief Type representing a mapping of node codes to conversion information with heterogeneous lookup */
-		using ItemsMap = internal::StringMap<GmodNodeConversionDto>;
+		using ItemsMap = nfx::containers::StringMap<GmodNodeConversionDto>;
 
 		//----------------------------------------------
 		// Construction

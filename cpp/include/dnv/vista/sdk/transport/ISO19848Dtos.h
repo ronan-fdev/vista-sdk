@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 namespace dnv::vista::sdk::transport
 {
 	//=====================================================================

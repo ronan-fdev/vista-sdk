@@ -3,6 +3,11 @@
  * @brief Unit tests for the ImoNumber class.
  */
 
+#include <fstream>
+
+#include <gtest/gtest.h>
+#include <nlohmann/json.hpp>
+
 #include "dnv/vista/sdk/ImoNumber.h"
 
 namespace dnv::vista::sdk::test

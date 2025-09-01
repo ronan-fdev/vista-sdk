@@ -3,6 +3,8 @@
  * @brief Unit tests for the Locations and Location classes.
  */
 
+#include <gtest/gtest.h>
+
 #include "TestDataLoader.h"
 
 #include "dnv/vista/sdk/Gmod.h"

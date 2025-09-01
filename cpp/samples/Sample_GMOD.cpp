@@ -11,6 +11,8 @@ This example demonstrates working with GMOD (Generic Product Model):
  * For more examples, see the other files in this directory.
  */
 
+#include <iostream>
+
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/GmodNode.h"

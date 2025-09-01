@@ -3,11 +3,12 @@
  * @brief Inline implementations for performance-critical Gmod operations
  */
 
-#pragma once
+#include <stdexcept>
+
+#include <nfx/string/Utils.h>
+#include <fmt/format.h>
 
 #include "constants/CodebookConstants.h"
-#include "utils/StringUtils.h"
-
 #include "GmodNode.h"
 
 namespace dnv::vista::sdk
@@ -29,7 +30,7 @@ namespace dnv::vista::sdk
 			return *nodePtr;
 		}
 
-		throw std::out_of_range( fmt::format( "Key not found in Gmod node map: {}", key ) );
+		throw std::out_of_range{ fmt::format( "Key not found in Gmod node map: {}", key ) };
 	}
 
 	//----------------------------------------------
@@ -45,7 +46,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_rootNode )
 		{
-			throw std::runtime_error( "Root node is not initialized or 'VE' was not found." );
+			throw std::runtime_error{ "Root node is not initialized or 'VE' was not found." };
 		}
 
 		return *m_rootNode;
@@ -80,17 +81,17 @@ namespace dnv::vista::sdk
 		 *   - Can contain multiple selectable options
 		 */
 
-		if ( utils::hasExactLength( type, 4 ) )
+		if ( nfx::string::hasExactLength( type, 4 ) )
 		{
-			return utils::equals( type, constants::gmod::GMODNODE_TYPE_LEAF );
+			return nfx::string::equals( type, constants::gmod::GMODNODE_TYPE_LEAF );
 		}
-		else if ( utils::hasExactLength( type, 5 ) )
+		else if ( nfx::string::hasExactLength( type, 5 ) )
 		{
-			return utils::equals( type, constants::gmod::GMODNODE_TYPE_GROUP );
+			return nfx::string::equals( type, constants::gmod::GMODNODE_TYPE_GROUP );
 		}
-		else if ( utils::hasExactLength( type, 9 ) )
+		else if ( nfx::string::hasExactLength( type, 9 ) )
 		{
-			return utils::equals( type, constants::gmod::GMODNODE_TYPE_SELECTION );
+			return nfx::string::equals( type, constants::gmod::GMODNODE_TYPE_SELECTION );
 		}
 
 		return false;
@@ -99,38 +100,38 @@ namespace dnv::vista::sdk
 	inline bool Gmod::isLeafNode( const GmodNodeMetadata& metadata ) noexcept
 	{
 		const auto& fullType = metadata.fullType();
-		return utils::equals( fullType, constants::gmod::GMODNODE_FULLTYPE_ASSET_FUNCTION_LEAF ) ||
-			   utils::equals( fullType, constants::gmod::GMODNODE_FULLTYPE_PRODUCT_FUNCTION_LEAF );
+		return nfx::string::equals( fullType, constants::gmod::GMODNODE_FULLTYPE_ASSET_FUNCTION_LEAF ) ||
+			   nfx::string::equals( fullType, constants::gmod::GMODNODE_FULLTYPE_PRODUCT_FUNCTION_LEAF );
 	}
 
 	inline bool Gmod::isFunctionNode( const GmodNodeMetadata& metadata ) noexcept
 	{
 		const auto& category = metadata.category();
 
-		return !utils::equals( category, constants::gmod::GMODNODE_CATEGORY_PRODUCT ) &&
-			   !utils::equals( category, constants::gmod::GMODNODE_CATEGORY_ASSET );
+		return !nfx::string::equals( category, constants::gmod::GMODNODE_CATEGORY_PRODUCT ) &&
+			   !nfx::string::equals( category, constants::gmod::GMODNODE_CATEGORY_ASSET );
 	}
 
 	inline bool Gmod::isProductSelection( const GmodNodeMetadata& metadata ) noexcept
 	{
-		return utils::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_PRODUCT ) &&
-			   utils::equals( metadata.type(), constants::gmod::GMODNODE_TYPE_SELECTION );
+		return nfx::string::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_PRODUCT ) &&
+			   nfx::string::equals( metadata.type(), constants::gmod::GMODNODE_TYPE_SELECTION );
 	}
 
 	inline bool Gmod::isProductType( const GmodNodeMetadata& metadata ) noexcept
 	{
-		return utils::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_PRODUCT ) &&
-			   utils::equals( metadata.type(), constants::gmod::GMODNODE_TYPE_TYPE );
+		return nfx::string::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_PRODUCT ) &&
+			   nfx::string::equals( metadata.type(), constants::gmod::GMODNODE_TYPE_TYPE );
 	}
 
 	inline bool Gmod::isAsset( const GmodNodeMetadata& metadata ) noexcept
 	{
-		return utils::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_ASSET );
+		return nfx::string::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_ASSET );
 	}
 
 	inline bool Gmod::isAssetFunctionNode( const GmodNodeMetadata& metadata ) noexcept
 	{
-		return utils::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_ASSET_FUNCTION );
+		return nfx::string::equals( metadata.category(), constants::gmod::GMODNODE_CATEGORY_ASSET_FUNCTION );
 	}
 
 	inline bool Gmod::isProductTypeAssignment( const GmodNode* parent, const GmodNode* child ) noexcept
@@ -144,12 +145,12 @@ namespace dnv::vista::sdk
 		const auto& childCategory = child->metadata().category();
 		const auto& childType = child->metadata().type();
 
-		if ( !utils::contains( parentCategory, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
+		if ( !nfx::string::contains( parentCategory, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
 		{
 			return false;
 		}
-		if ( !utils::equals( childCategory, constants::gmod::GMODNODE_CATEGORY_PRODUCT ) ||
-			 !utils::equals( childType, constants::gmod::GMODNODE_TYPE_TYPE ) )
+		if ( !nfx::string::equals( childCategory, constants::gmod::GMODNODE_CATEGORY_PRODUCT ) ||
+			 !nfx::string::equals( childType, constants::gmod::GMODNODE_TYPE_TYPE ) )
 		{
 			return false;
 		}
@@ -168,12 +169,12 @@ namespace dnv::vista::sdk
 		const auto& childCategory = child->metadata().category();
 		const auto& childType = child->metadata().type();
 
-		if ( !utils::contains( parentCategory, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
+		if ( !nfx::string::contains( parentCategory, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
 		{
 			return false;
 		}
-		if ( !utils::equals( childCategory, constants::gmod::GMODNODE_CATEGORY_PRODUCT ) ||
-			 !utils::equals( childType, constants::gmod::GMODNODE_TYPE_SELECTION ) )
+		if ( !nfx::string::equals( childCategory, constants::gmod::GMODNODE_CATEGORY_PRODUCT ) ||
+			 !nfx::string::equals( childType, constants::gmod::GMODNODE_TYPE_SELECTION ) )
 		{
 			return false;
 		}
@@ -215,7 +216,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_sourceMapPtr || m_isInitialState || m_currentMapIterator == m_sourceMapPtr->end() )
 		{
-			throw std::out_of_range( "Gmod::Enumerator::getCurrent() called in an invalid state or past the end." );
+			throw std::out_of_range{ "Gmod::Enumerator::getCurrent() called in an invalid state or past the end." };
 		}
 
 		return m_currentMapIterator->second;
@@ -362,7 +363,7 @@ namespace dnv::vista::sdk
 			}
 			if ( occ > context.maxTraversalOccurrence )
 			{
-				throw std::runtime_error( "Invalid state - node occurred more than expected" );
+				throw std::runtime_error{ "Invalid state - node occurred more than expected" };
 			}
 		}
 

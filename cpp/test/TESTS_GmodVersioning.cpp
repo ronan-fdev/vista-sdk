@@ -3,7 +3,8 @@
  * @brief Unit tests for the GmodVersioning class.
  */
 
-#include "dnv/vista/sdk/utils/StringUtils.h"
+#include <nfx/string/Utils.h>
+#include <gtest/gtest.h>
 
 #include "TestDataLoader.h"
 
@@ -38,7 +39,7 @@ namespace dnv::vista::sdk::tests
 				}
 				catch ( [[maybe_unused]] const std::exception& ex )
 				{
-					internal::StringMap<GmodVersioningDto> emptyDto;
+					nfx::containers::StringMap<GmodVersioningDto> emptyDto;
 					m_gmodVersioning = std::make_unique<GmodVersioning>( emptyDto );
 				}
 

@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "dnv/vista/sdk/internal/MemoryCache.h"
+#include <nfx/datatypes/Decimal.h>
+#include <nfx/time/DateTime.h>
 
-#include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
-#include "dnv/vista/sdk/datatypes/Decimal128.h"
+#include "dnv/vista/sdk/internal/MemoryCache.h"
 #include "dnv/vista/sdk/transport/ISO19848Dtos.h"
 #include "dnv/vista/sdk/Exceptions.h"
 #include "dnv/vista/sdk/Results.h"
@@ -210,13 +210,13 @@ namespace dnv::vista::sdk::transport
 		class Decimal final
 		{
 		public:
-			inline explicit Decimal( const datatypes::Decimal128& value ) noexcept;
+			inline explicit Decimal( const nfx::datatypes::Decimal& value ) noexcept;
 			inline explicit Decimal( double value ) noexcept;
-			[[nodiscard]] inline const datatypes::Decimal128& value() const noexcept;
+			[[nodiscard]] inline const nfx::datatypes::Decimal& value() const noexcept;
 
 		private:
 			/** @brief Internal high-precision decimal storage */
-			datatypes::Decimal128 m_value;
+			nfx::datatypes::Decimal m_value;
 		};
 
 		//----------------------------------------------
@@ -229,12 +229,12 @@ namespace dnv::vista::sdk::transport
 		class DateTime final
 		{
 		public:
-			inline explicit DateTime( const datatypes::DateTimeOffset& value ) noexcept;
-			[[nodiscard]] inline const datatypes::DateTimeOffset& value() const noexcept;
+			inline explicit DateTime( const nfx::time::DateTimeOffset& value ) noexcept;
+			[[nodiscard]] inline const nfx::time::DateTimeOffset& value() const noexcept;
 
 		private:
 			/** @brief Internal date and time storage */
-			datatypes::DateTimeOffset m_value;
+			nfx::time::DateTimeOffset m_value;
 		};
 
 		//----------------------------------------------

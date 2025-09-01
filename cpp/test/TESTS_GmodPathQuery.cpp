@@ -5,6 +5,8 @@
  *          location filtering, and path matching capabilities.
  */
 
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/GmodPathQuery.h"
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/Gmod.h"

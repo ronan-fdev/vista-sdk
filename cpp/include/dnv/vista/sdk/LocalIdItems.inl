@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical LocalIdItems operations
  */
 
-#pragma once
-
 #include "constants/LocalIdConstants.h"
 
 namespace dnv::vista::sdk
@@ -76,7 +74,7 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	inline void LocalIdItems::append(
-		internal::StringBuilder& builder,
+		nfx::string::StringBuilder& builder,
 		bool verboseMode ) const
 	{
 		if ( !m_primaryItem && !m_secondaryItem )
@@ -151,7 +149,7 @@ namespace dnv::vista::sdk
 	}
 
 	inline void LocalIdItems::appendCommonName(
-		internal::StringBuilder& builder,
+		nfx::string::StringBuilder& builder,
 		std::string_view commonName,
 		const std::optional<std::string>& location )
 	{

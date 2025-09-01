@@ -7,7 +7,10 @@
 
 #pragma once
 
-#include "internal/StringMap.h"
+#include <unordered_map>
+
+#include <nfx/containers/StringMap.h>
+
 #include "LocalId.h"
 #include "MetadataTag.h"
 

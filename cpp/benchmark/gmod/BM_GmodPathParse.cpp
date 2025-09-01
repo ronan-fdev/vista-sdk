@@ -3,6 +3,8 @@
  * @brief GMOD path parsing performance benchmarks comparing different parsing strategies
  */
 
+#include <benchmark/benchmark.h>
+
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/VIS.h"
 

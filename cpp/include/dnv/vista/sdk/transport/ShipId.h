@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <functional>
+#include <string_view>
+
 #include "dnv/vista/sdk/ImoNumber.h"
 
 namespace dnv::vista::sdk::transport

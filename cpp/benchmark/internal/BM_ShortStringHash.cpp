@@ -3,9 +3,10 @@
  * @brief Short string hash function performance comparison between different algorithms
  */
 
+#include <benchmark/benchmark.h>
+
 #include "dnv/vista/sdk/constants/AlgorithmConstants.h"
 #include "dnv/vista/sdk/internal/ChdDictionary.h"
-
 #include "dnv/vista/sdk/VIS.h"
 
 namespace dnv::vista::sdk::benchmarks

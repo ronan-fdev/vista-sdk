@@ -12,7 +12,8 @@
  * For more examples, see the other files in this directory.
  */
 
-#include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
+#include <iostream>
+
 #include "dnv/vista/sdk/transport/ShipId.h"
 #include "dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.h"
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"
@@ -31,8 +32,8 @@ struct BallastEvent
 {
 	std::string mode;				 ///< Ballast operation mode
 	std::string location;			 ///< Location identifier
-	datatypes::DateTimeOffset start; ///< Event start time
-	datatypes::DateTimeOffset stop;	 ///< Event stop time
+	nfx::time::DateTimeOffset start; ///< Event start time
+	nfx::time::DateTimeOffset stop;	 ///< Event stop time
 	int volume;						 ///< Water volume (m³)
 	int uvTreatment;				 ///< UV treatment level
 	int salinity;					 ///< Salinity measurement (PSU)
@@ -55,7 +56,7 @@ transport::timeseries::TimeSeriesDataPackage createPackage( const std::vector<Ba
 	}
 
 	// Current timestamp for package creation
-	const auto now = datatypes::DateTimeOffset::now();
+	const auto now = nfx::time::DateTimeOffset::now();
 
 	// Define data channel identifiers
 	const std::vector<std::string> dataChannelIds{
@@ -136,8 +137,8 @@ transport::timeseries::TimeSeriesDataPackage createPackage( const std::vector<Ba
 	auto header = transport::timeseries::Header{
 		shipId,														  // shipId
 		std::optional<transport::timeseries::TimeRange>{ timeRange }, // timeRange
-		std::optional<datatypes::DateTimeOffset>{ now },			  // dateCreated
-		std::optional<datatypes::DateTimeOffset>{ now },			  // dateModified
+		std::optional<nfx::time::DateTimeOffset>{ now },			  // dateCreated
+		std::optional<nfx::time::DateTimeOffset>{ now },			  // dateModified
 		std::optional<std::string>{ "DNV" },						  // author
 		std::nullopt,												  // systemConfiguration
 		std::nullopt												  // customHeaders
@@ -171,8 +172,8 @@ int main()
 			{
 				"Intake",													// mode
 				"Port Tank #1",												// location
-				datatypes::DateTimeOffset::parse( "2025-08-28T08:00:00Z" ), // start
-				datatypes::DateTimeOffset::parse( "2025-08-28T10:30:00Z" ), // stop
+				nfx::time::DateTimeOffset::parse( "2025-08-28T08:00:00Z" ), // start
+				nfx::time::DateTimeOffset::parse( "2025-08-28T10:30:00Z" ), // stop
 				1500,														// volume (m³)
 				95,															// uvTreatment (%)
 				35,															// salinity (PSU)
@@ -181,8 +182,8 @@ int main()
 			{
 				"Discharge",												// mode
 				"Starboard Tank #2",										// location
-				datatypes::DateTimeOffset::parse( "2025-08-28T12:15:00Z" ), // start
-				datatypes::DateTimeOffset::parse( "2025-08-28T14:45:00Z" ), // stop
+				nfx::time::DateTimeOffset::parse( "2025-08-28T12:15:00Z" ), // start
+				nfx::time::DateTimeOffset::parse( "2025-08-28T14:45:00Z" ), // stop
 				1200,														// volume (m³)
 				98,															// uvTreatment (%)
 				32,															// salinity (PSU)
@@ -191,8 +192,8 @@ int main()
 			{
 				"Exchange",													// mode
 				"Port Tank #3",												// location
-				datatypes::DateTimeOffset::parse( "2025-08-28T16:00:00Z" ), // start
-				datatypes::DateTimeOffset::parse( "2025-08-28T18:20:00Z" ), // stop
+				nfx::time::DateTimeOffset::parse( "2025-08-28T16:00:00Z" ), // start
+				nfx::time::DateTimeOffset::parse( "2025-08-28T18:20:00Z" ), // stop
 				2000,														// volume (m³)
 				97,															// uvTreatment (%)
 				38,															// salinity (PSU)

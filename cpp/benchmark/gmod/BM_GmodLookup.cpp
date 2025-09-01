@@ -3,16 +3,17 @@
  * @brief GMOD node lookup comparison between CHD Dictionary and std::unordered_map
  */
 
-#include "dnv/vista/sdk/internal/HashMap.h"
-#include "dnv/vista/sdk/utils/StringUtils.h"
+#include <nfx/string/Utils.h>
+#include <benchmark/benchmark.h>
 
+#include "dnv/vista/sdk/internal/HashMap.h"
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/VIS.h"
 
 namespace dnv::vista::sdk::benchmarks
 {
-	static internal::StringMap<const GmodNode*> g_dict;
-	static internal::StringMap<const GmodNode*> g_frozenDict;
+	static nfx::containers::StringMap<const GmodNode*> g_dict;
+	static nfx::containers::StringMap<const GmodNode*> g_frozenDict;
 	static internal::HashMap<std::string, const GmodNode*> g_dictionary;
 	static const Gmod* g_gmod = nullptr;
 	static bool g_initialized = false;

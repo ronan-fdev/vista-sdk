@@ -7,6 +7,10 @@
 
 #pragma once
 
+#include <string>
+#include <variant>
+#include <vector>
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================

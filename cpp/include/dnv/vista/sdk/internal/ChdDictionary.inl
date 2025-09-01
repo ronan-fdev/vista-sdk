@@ -3,10 +3,16 @@
  * @brief Template implementation of CHD Dictionary class
  */
 
-#pragma once
+#include <array>
+#include <unordered_map>
+
+#include <nfx/string/Utils.h>
+#include <fmt/format.h>
+#if defined( __GNUC__ )
+#	include <cpuid.h>
+#endif
 
 #include "dnv/vista/sdk/constants/AlgorithmConstants.h"
-#include "dnv/vista/sdk/utils/StringUtils.h"
 
 namespace dnv::vista::sdk::internal
 {
@@ -51,12 +57,12 @@ namespace dnv::vista::sdk::internal
 
 		inline void ThrowHelper::throwKeyNotFoundException( std::string_view key )
 		{
-			throw key_not_found_exception( key );
+			throw KeyNotFoundException{ key };
 		}
 
 		inline void ThrowHelper::throwInvalidOperationException()
 		{
-			throw invalid_operation_exception();
+			throw InvalidOperationException{};
 		}
 
 		//----------------------------------------------
@@ -98,17 +104,17 @@ namespace dnv::vista::sdk::internal
 	// Exception class
 	//=====================================================================
 
-	inline key_not_found_exception::key_not_found_exception( std::string_view key )
+	inline KeyNotFoundException::KeyNotFoundException( std::string_view key )
 		: std::runtime_error{ fmt::format( "No value associated to key: {}", key ) }
 	{
 	}
 
-	inline invalid_operation_exception::invalid_operation_exception()
+	inline InvalidOperationException::InvalidOperationException()
 		: std::runtime_error{ "Operation is not valid due to the current state of the object." }
 	{
 	}
 
-	inline invalid_operation_exception::invalid_operation_exception( std::string_view message )
+	inline InvalidOperationException::InvalidOperationException( std::string_view message )
 		: std::runtime_error{ std::string{ message } }
 	{
 	}
@@ -201,10 +207,10 @@ namespace dnv::vista::sdk::internal
 
 				if ( currentSeedValue > size * constants::algorithm::MAX_SEED_SEARCH_MULTIPLIER )
 				{
-					throw std::runtime_error(
+					throw std::runtime_error{
 						fmt::format(
 							"Bucket {}: Seed search exceeded threshold ({}), aborting construction!",
-							currentBucketIdx, currentSeedValue ) );
+							currentBucketIdx, currentSeedValue ) };
 				}
 			}
 
@@ -285,7 +291,7 @@ namespace dnv::vista::sdk::internal
 
 		const auto& kvp = m_table[finalIndex];
 
-		if ( utils::equals( key, kvp.first ) )
+		if ( nfx::string::equals( key, kvp.first ) )
 		{
 			return const_cast<TValue&>( kvp.second );
 		}
@@ -360,7 +366,7 @@ namespace dnv::vista::sdk::internal
 		const size_t keyLen = key.size();
 		const size_t storedLen = kvp.first.size();
 
-		if ( keyLen == storedLen && ( utils::isEmpty( key ) || utils::equals( key, kvp.first ) ) )
+		if ( keyLen == storedLen && ( nfx::string::isEmpty( key ) || nfx::string::equals( key, kvp.first ) ) )
 		{
 			outValue = &kvp.second;
 
@@ -472,7 +478,11 @@ namespace dnv::vista::sdk::internal
 	{
 		if ( m_index >= m_table->size() )
 		{
-			throw std::runtime_error( fmt::format( "Iterator: Dereference out of bounds (index: {}, table size: {})", m_index, m_table->size() ) );
+			throw std::runtime_error{
+				fmt::format(
+					"Iterator: Dereference out of bounds (index: {}, table size: {})",
+					m_index,
+					m_table->size() ) };
 		}
 
 		return ( *m_table )[m_index];
@@ -483,7 +493,10 @@ namespace dnv::vista::sdk::internal
 	{
 		if ( m_index >= m_table->size() )
 		{
-			throw std::runtime_error( fmt::format( "Iterator: Arrow operator out of bounds (index: {}, table size: {})", m_index, m_table->size() ) );
+			throw std::runtime_error{
+				fmt::format(
+					"Iterator: Arrow operator out of bounds (index: {}, table size: {})",
+					m_index, m_table->size() ) };
 		}
 
 		return &( ( *m_table )[m_index] );

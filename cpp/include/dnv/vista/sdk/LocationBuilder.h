@@ -10,6 +10,9 @@
 
 #pragma once
 
+#include <map>
+#include <optional>
+
 #include "internal/HashMap.h"
 
 namespace dnv::vista::sdk

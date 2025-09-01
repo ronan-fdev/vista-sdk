@@ -3,9 +3,13 @@
  * @brief Unit tests for LocalId and LocalIdBuilder classes.
  */
 
+#include <fstream>
+
+#include <gtest/gtest.h>
+
 #include "TestDataLoader.h"
 
-#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "internal/LocalIdParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/Gmod.h"

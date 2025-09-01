@@ -3,14 +3,15 @@
  * @brief Inline implementations for performance-critical LocalIdBuilder operations
  */
 
-#pragma once
+#include <optional>
+#include <vector>
+
+#include <nfx/string/StringBuilderPool.h>
 
 #include "config/Platform.h"
 #include "constants/AlgorithmConstants.h"
 #include "constants/ISO19848Constants.h"
 #include "constants/LocalIdConstants.h"
-#include "internal/StringBuilderPool.h"
-
 #include "CodebookName.h"
 
 namespace dnv::vista::sdk
@@ -60,7 +61,7 @@ namespace dnv::vista::sdk
 	{
 		if ( m_visVersion != other.m_visVersion )
 		{
-			throw std::invalid_argument( "Cant compare local IDs from different VIS versions" );
+			throw std::invalid_argument{ "Cant compare local IDs from different VIS versions" };
 		}
 
 		return m_items.primaryItem() == other.m_items.primaryItem() &&
@@ -267,7 +268,7 @@ namespace dnv::vista::sdk
 	inline std::string LocalIdBuilder::toString() const
 	{
 		/* LocalId format: /dnv-v2/vis-{version}/{primary-item}[/sec/{secondary-item}][~{description}]/meta/{metadata-tags} */
-		auto lease = internal::StringBuilderPool::lease();
+		auto lease = nfx::string::StringBuilderPool::lease();
 		auto builder = lease.builder();
 
 		toString( builder );
@@ -280,7 +281,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_visVersion.has_value() )
 		{
-			throw std::invalid_argument( "No VisVersion configured on LocalId" );
+			throw std::invalid_argument{ "No VisVersion configured on LocalId" };
 		}
 
 		/* Naming rule prefix: "/dnv-v2" */

@@ -11,6 +11,8 @@
  * For more examples, see the other files in this directory.
  */
 
+#include <iostream>
+
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/Codebook.h"
 #include "dnv/vista/sdk/CodebookName.h"

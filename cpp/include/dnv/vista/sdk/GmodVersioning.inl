@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical GmodVersioning operations
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -19,17 +17,17 @@ namespace dnv::vista::sdk
 	{
 		if ( sourceVersion == VisVersion::Unknown )
 		{
-			throw std::invalid_argument( "Invalid source VIS Version: Unknown" );
+			throw std::invalid_argument{ "Invalid source VIS Version: Unknown" };
 		}
 
 		if ( targetVersion == VisVersion::Unknown )
 		{
-			throw std::invalid_argument( "Invalid target VIS Version: Unknown" );
+			throw std::invalid_argument{ "Invalid target VIS Version: Unknown" };
 		}
 
 		if ( sourceVersion >= targetVersion )
 		{
-			throw std::invalid_argument( "Source version must be earlier than target version" );
+			throw std::invalid_argument{ "Source version must be earlier than target version" };
 		}
 	}
 
@@ -37,12 +35,12 @@ namespace dnv::vista::sdk
 	{
 		if ( sourceVersion >= targetVersion )
 		{
-			throw std::invalid_argument( "Source version must be less than target version" );
+			throw std::invalid_argument{ "Source version must be less than target version" };
 		}
 
 		if ( static_cast<int>( targetVersion ) - static_cast<int>( sourceVersion ) != 100 )
 		{
-			throw std::invalid_argument( "Target version must be exactly one version higher than source version" );
+			throw std::invalid_argument{ "Target version must be exactly one version higher than source version" };
 		}
 	}
 
@@ -84,7 +82,7 @@ namespace dnv::vista::sdk
 			return ConversionType::AssignmentDelete;
 		}
 
-		throw std::invalid_argument( "Invalid conversion type: " + std::string{ type } );
+		throw std::invalid_argument{ "Invalid conversion type: " + std::string{ type } };
 	}
 
 	//----------------------------------------------

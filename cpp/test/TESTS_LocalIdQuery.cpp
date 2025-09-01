@@ -5,6 +5,8 @@
  *          primary item, secondary item, and metadata tag constraints.
  */
 
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodPath.h"

@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical GmodPathQuery operations
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================

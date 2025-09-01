@@ -4,8 +4,6 @@
  * @details Inline method implementations for data channel classes
  */
 
-#pragma once
-
 #include "dnv/vista/sdk/constants/ISO19848Constants.h"
 
 namespace dnv::vista::sdk::transport::datachannel
@@ -78,7 +76,7 @@ namespace dnv::vista::sdk::transport::datachannel
 	// Construction
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference::ConfigurationReference( std::string_view id, datatypes::DateTimeOffset timeStamp, std::optional<std::string_view> version )
+	VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference::ConfigurationReference( std::string_view id, nfx::time::DateTimeOffset timeStamp, std::optional<std::string_view> version )
 		: m_id{ id },
 		  m_timeStamp{ timeStamp },
 		  m_version{ version
@@ -122,7 +120,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		}
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void ConfigurationReference::setTimeStamp( datatypes::DateTimeOffset timeStamp )
+	VISTA_SDK_CPP_FORCE_INLINE void ConfigurationReference::setTimeStamp( nfx::time::DateTimeOffset timeStamp )
 	{
 		m_timeStamp = timeStamp;
 	}
@@ -329,7 +327,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_quantityName;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<transport::Value>>& Unit::customElements() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<transport::Value>>& Unit::customElements() const noexcept
 	{
 		return m_customElements;
 	}
@@ -348,7 +346,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_quantityName = std::move( quantityName );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Unit::setCustomElements( std::optional<internal::StringMap<transport::Value>> customElements )
+	VISTA_SDK_CPP_FORCE_INLINE void Unit::setCustomElements( std::optional<nfx::containers::StringMap<transport::Value>> customElements )
 	{
 		m_customElements = std::move( customElements );
 	}
@@ -369,7 +367,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		  m_dataChannelListId{ std::move( dataChannelListId ) },
 		  m_versionInformation{ VersionInformation{} },
 		  m_author{ std::move( author ) },
-		  m_dateCreated{ datatypes::DateTimeOffset::utcNow() },
+		  m_dateCreated{ nfx::time::DateTimeOffset::utcNow() },
 		  m_customHeaders{ std::nullopt }
 	{
 	}
@@ -379,8 +377,8 @@ namespace dnv::vista::sdk::transport::datachannel
 		ConfigurationReference dataChannelListId,
 		std::optional<VersionInformation> versionInformation,
 		std::optional<std::string> author,
-		std::optional<datatypes::DateTimeOffset> dateCreated,
-		std::optional<internal::StringMap<Value>> customHeaders )
+		std::optional<nfx::time::DateTimeOffset> dateCreated,
+		std::optional<nfx::containers::StringMap<Value>> customHeaders )
 		: m_shipId{ std::move( shipId ) },
 		  m_dataChannelListId{ std::move( dataChannelListId ) },
 		  m_versionInformation{ std::move( versionInformation ) },
@@ -414,12 +412,12 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_author;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<datatypes::DateTimeOffset>& Header::dateCreated() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::time::DateTimeOffset>& Header::dateCreated() const noexcept
 	{
 		return m_dateCreated;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<transport::Value>>& Header::customHeaders() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<transport::Value>>& Header::customHeaders() const noexcept
 	{
 		return m_customHeaders;
 	}
@@ -448,12 +446,12 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_author = std::move( author );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Header::setDateCreated( std::optional<datatypes::DateTimeOffset> dateCreated )
+	VISTA_SDK_CPP_FORCE_INLINE void Header::setDateCreated( std::optional<nfx::time::DateTimeOffset> dateCreated )
 	{
 		m_dateCreated = std::move( dateCreated );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Header::setCustomHeaders( std::optional<internal::StringMap<transport::Value>> customHeaders )
+	VISTA_SDK_CPP_FORCE_INLINE void Header::setCustomHeaders( std::optional<nfx::containers::StringMap<transport::Value>> customHeaders )
 	{
 		m_customHeaders = std::move( customHeaders );
 	}
@@ -480,7 +478,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_namingRule;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<transport::Value>>& NameObject::customNameObjects() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<transport::Value>>& NameObject::customNameObjects() const noexcept
 	{
 		return m_customNameObjects;
 	}
@@ -494,7 +492,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_namingRule = std::move( namingRule );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void NameObject::setCustomNameObjects( std::optional<internal::StringMap<transport::Value>> customNameObjects )
+	VISTA_SDK_CPP_FORCE_INLINE void NameObject::setCustomNameObjects( std::optional<nfx::containers::StringMap<transport::Value>> customNameObjects )
 	{
 		m_customNameObjects = std::move( customNameObjects );
 	}
@@ -640,7 +638,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		return m_remarks;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<transport::Value>>& Property::customProperties() const noexcept
+	VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<transport::Value>>& Property::customProperties() const noexcept
 	{
 		return m_customProperties;
 	}
@@ -689,7 +687,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		m_remarks = std::move( remarks );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Property::setCustomProperties( std::optional<internal::StringMap<transport::Value>> customProperties )
+	VISTA_SDK_CPP_FORCE_INLINE void Property::setCustomProperties( std::optional<nfx::containers::StringMap<transport::Value>> customProperties )
 	{
 		m_customProperties = std::move( customProperties );
 	}

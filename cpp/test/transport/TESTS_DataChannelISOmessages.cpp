@@ -3,7 +3,8 @@
  * @brief Comprehensive tests for DataChannel infrastructure
  */
 
-#include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/transport/DataChannel/DataChannel.h"
 #include "dnv/vista/sdk/transport/ShipId.h"
 #include "dnv/vista/sdk/LocalId.h"
@@ -22,7 +23,7 @@ namespace dnv::vista::sdk::tests
 	transport::datachannel::DataChannelListPackage createValidFullyCustomDataChannelList()
 	{
 		/* Create ConfigurationReference for DataChannelListId */
-		auto timeStamp = datatypes::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
+		auto timeStamp = nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
 		transport::datachannel::ConfigurationReference dataChannelListId{
 			"DataChannelList.xml",
 			timeStamp,
@@ -40,10 +41,10 @@ namespace dnv::vista::sdk::tests
 		versionInfo.setReferenceUrl( "http://somewhere.net" );
 		header.setVersionInformation( versionInfo );
 
-		header.setDateCreated( datatypes::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
+		header.setDateCreated( nfx::time::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
 
 		/* Add custom headers */
-		internal::StringMap<transport::Value> customHeaders;
+		nfx::containers::StringMap<transport::Value> customHeaders;
 		customHeaders["nr:CustomHeaderElement"] = transport::Value::String{ "Vendor specific headers" };
 		header.setCustomHeaders( customHeaders );
 
@@ -65,7 +66,7 @@ namespace dnv::vista::sdk::tests
 			nameObject.setNamingRule( "Naming_Rule" );
 
 			/* Add custom name objects */
-			internal::StringMap<transport::Value> customNameObjects;
+			nfx::containers::StringMap<transport::Value> customNameObjects;
 			customNameObjects["nr:CustomNameObject"] = transport::Value::String{ "Vendor specific NameObject" };
 			nameObject.setCustomNameObjects( customNameObjects );
 
@@ -87,7 +88,7 @@ namespace dnv::vista::sdk::tests
 			unit.setQuantityName( "Temperature" );
 
 			/* Add custom elements to unit */
-			internal::StringMap<transport::Value> customElements;
+			nfx::containers::StringMap<transport::Value> customElements;
 			customElements["nr:CustomUnitElement"] = transport::Value::String{ "Vendor specific unit element" };
 			unit.setCustomElements( customElements );
 
@@ -97,7 +98,7 @@ namespace dnv::vista::sdk::tests
 			property.setRemarks( " Location: ECR, Manufacturer: AAA Company, Type: TYPE-AAA " );
 
 			/* Add custom properties */
-			internal::StringMap<transport::Value> customProperties;
+			nfx::containers::StringMap<transport::Value> customProperties;
 			customProperties["nr:CustomPropertyElement"] = transport::Value::String{ "Vendor specific property element" };
 			property.setCustomProperties( customProperties );
 
@@ -142,7 +143,7 @@ namespace dnv::vista::sdk::tests
 		/* Create ConfigurationReference for DataChannelListId */
 		transport::datachannel::ConfigurationReference dataChannelListId{
 			"some-id",
-			datatypes::DateTimeOffset( "2016-01-01T00:00:00Z" ) };
+			nfx::time::DateTimeOffset( "2016-01-01T00:00:00Z" ) };
 
 		/* Create Header */
 		transport::datachannel::Header header{

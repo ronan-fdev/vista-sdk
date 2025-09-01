@@ -7,12 +7,13 @@
 
 #pragma once
 
+#include <nfx/containers/StringMap.h>
+#include <nfx/time/DateTime.h>
+
 #include "dnv/vista/sdk/config/Platform.h"
-#include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
 #include "dnv/vista/sdk/transport/DataChannel/DataChannel.h"
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"
 #include "dnv/vista/sdk/transport/ShipId.h"
-#include "dnv/vista/sdk/internal/StringMap.h"
 #include "dnv/vista/sdk/LocalId.h"
 
 namespace dnv::vista::sdk
@@ -22,11 +23,6 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	class ValidateResult;
-
-	namespace datatypes
-	{
-		class DateTimeOffset;
-	}
 
 	namespace transport
 	{
@@ -61,7 +57,7 @@ namespace dnv::vista::sdk
 			 * @param end End timestamp
 			 * @throws std::invalid_argument If start > end
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE TimeRange( datatypes::DateTimeOffset start, datatypes::DateTimeOffset end );
+			VISTA_SDK_CPP_FORCE_INLINE TimeRange( nfx::time::DateTimeOffset start, nfx::time::DateTimeOffset end );
 
 			/** @brief Copy constructor */
 			TimeRange( const TimeRange& ) = default;
@@ -90,13 +86,13 @@ namespace dnv::vista::sdk
 			 * @brief Get start timestamp
 			 * @return Start time
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const datatypes::DateTimeOffset& start() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const nfx::time::DateTimeOffset& start() const noexcept;
 
 			/**
 			 * @brief Get end timestamp
 			 * @return End time
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const datatypes::DateTimeOffset& end() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const nfx::time::DateTimeOffset& end() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -107,22 +103,22 @@ namespace dnv::vista::sdk
 			 * @param start New start time
 			 * @throws std::invalid_argument If start > current end
 			 */
-			void setStart( datatypes::DateTimeOffset start );
+			void setStart( nfx::time::DateTimeOffset start );
 
 			/**
 			 * @brief Set end timestamp with validation
 			 * @param end New end time
 			 * @throws std::invalid_argument If end < current start
 			 */
-			void setEnd( datatypes::DateTimeOffset end );
+			void setEnd( nfx::time::DateTimeOffset end );
 
 		private:
 			//----------------------------------------------
 			// Private members
 			//----------------------------------------------
 
-			datatypes::DateTimeOffset m_start;
-			datatypes::DateTimeOffset m_end;
+			nfx::time::DateTimeOffset m_start;
+			nfx::time::DateTimeOffset m_end;
 		};
 
 		//=====================================================================
@@ -147,7 +143,7 @@ namespace dnv::vista::sdk
 			 * @param id Configuration identifier
 			 * @param timeStamp Configuration timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference( std::string_view id, datatypes::DateTimeOffset timeStamp );
+			VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference( std::string_view id, nfx::time::DateTimeOffset timeStamp );
 
 			/** @brief Copy constructor */
 			ConfigurationReference( const ConfigurationReference& ) = default;
@@ -182,7 +178,7 @@ namespace dnv::vista::sdk
 			 * @brief Get timestamp
 			 * @return Configuration timestamp
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const datatypes::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -198,7 +194,7 @@ namespace dnv::vista::sdk
 			 * @brief Set timestamp
 			 * @param timeStamp New configuration timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( datatypes::DateTimeOffset timeStamp );
+			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( nfx::time::DateTimeOffset timeStamp );
 
 		private:
 			//----------------------------------------------
@@ -206,7 +202,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			std::string m_id;
-			datatypes::DateTimeOffset m_timeStamp;
+			nfx::time::DateTimeOffset m_timeStamp;
 		};
 
 		//=====================================================================
@@ -232,7 +228,7 @@ namespace dnv::vista::sdk
 			 * @param capacity Initial capacity for value vector
 			 */
 			VISTA_SDK_CPP_FORCE_INLINE TabularDataSet(
-				datatypes::DateTimeOffset timeStamp,
+				nfx::time::DateTimeOffset timeStamp,
 				size_t capacity = 0 );
 
 			/**
@@ -242,7 +238,7 @@ namespace dnv::vista::sdk
 			 * @param quality Optional quality values
 			 */
 			VISTA_SDK_CPP_FORCE_INLINE TabularDataSet(
-				datatypes::DateTimeOffset timeStamp,
+				nfx::time::DateTimeOffset timeStamp,
 				std::vector<std::string> value,
 				std::optional<std::vector<std::string>> quality = std::nullopt );
 
@@ -273,7 +269,7 @@ namespace dnv::vista::sdk
 			 * @brief Get timestamp
 			 * @return Data timestamp
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const datatypes::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			/**
 			 * @brief Get values
@@ -295,7 +291,7 @@ namespace dnv::vista::sdk
 			 * @brief Set timestamp
 			 * @param timeStamp New timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( datatypes::DateTimeOffset timeStamp );
+			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( nfx::time::DateTimeOffset timeStamp );
 
 			/**
 			 * @brief Set values
@@ -314,7 +310,7 @@ namespace dnv::vista::sdk
 			// Private members
 			//----------------------------------------------
 
-			datatypes::DateTimeOffset m_timeStamp;
+			nfx::time::DateTimeOffset m_timeStamp;
 			std::vector<std::string> m_value;
 			std::optional<std::vector<std::string>> m_quality;
 		};
@@ -344,7 +340,7 @@ namespace dnv::vista::sdk
 			 * @param quality Optional quality value
 			 */
 			VISTA_SDK_CPP_FORCE_INLINE EventDataSet(
-				datatypes::DateTimeOffset timeStamp,
+				nfx::time::DateTimeOffset timeStamp,
 				DataChannelId dataChannelId,
 				std::string value,
 				std::optional<std::string> quality = std::nullopt );
@@ -376,7 +372,7 @@ namespace dnv::vista::sdk
 			 * @brief Get timestamp
 			 * @return Event timestamp
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const datatypes::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			/**
 			 * @brief Get data channel ID
@@ -404,7 +400,7 @@ namespace dnv::vista::sdk
 			 * @brief Set timestamp
 			 * @param timeStamp New timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( datatypes::DateTimeOffset timeStamp );
+			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( nfx::time::DateTimeOffset timeStamp );
 
 			/**
 			 * @brief Set data channel ID
@@ -429,7 +425,7 @@ namespace dnv::vista::sdk
 			// Private members
 			//----------------------------------------------
 
-			datatypes::DateTimeOffset m_timeStamp;
+			nfx::time::DateTimeOffset m_timeStamp;
 			DataChannelId m_dataChannelId;
 			std::string m_value;
 			std::optional<std::string> m_quality;
@@ -664,11 +660,11 @@ namespace dnv::vista::sdk
 			VISTA_SDK_CPP_FORCE_INLINE Header(
 				ShipId shipId,
 				std::optional<TimeRange> timeRange,
-				std::optional<datatypes::DateTimeOffset> dateCreated,
-				std::optional<datatypes::DateTimeOffset> dateModified,
+				std::optional<nfx::time::DateTimeOffset> dateCreated,
+				std::optional<nfx::time::DateTimeOffset> dateModified,
 				std::optional<std::string> author,
 				std::optional<std::vector<ConfigurationReference>> systemConfiguration,
-				std::optional<internal::StringMap<Value>> customHeaders );
+				std::optional<nfx::containers::StringMap<Value>> customHeaders );
 
 			/** @brief Copy constructor */
 			Header( const Header& ) = default;
@@ -709,13 +705,13 @@ namespace dnv::vista::sdk
 			 * @brief Get date created
 			 * @return Optional creation timestamp
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<datatypes::DateTimeOffset>& dateCreated() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::time::DateTimeOffset>& dateCreated() const noexcept;
 
 			/**
 			 * @brief Get date modified
 			 * @return Optional modification timestamp
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<datatypes::DateTimeOffset>& dateModified() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::time::DateTimeOffset>& dateModified() const noexcept;
 
 			/**
 			 * @brief Get author
@@ -733,7 +729,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom headers
 			 * @return Optional custom headers dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customHeaders() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<Value>>& customHeaders() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -755,13 +751,13 @@ namespace dnv::vista::sdk
 			 * @brief Set date created
 			 * @param dateCreated New optional creation timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setDateCreated( std::optional<datatypes::DateTimeOffset> dateCreated );
+			VISTA_SDK_CPP_FORCE_INLINE void setDateCreated( std::optional<nfx::time::DateTimeOffset> dateCreated );
 
 			/**
 			 * @brief Set date modified
 			 * @param dateModified New optional modification timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setDateModified( std::optional<datatypes::DateTimeOffset> dateModified );
+			VISTA_SDK_CPP_FORCE_INLINE void setDateModified( std::optional<nfx::time::DateTimeOffset> dateModified );
 
 			/**
 			 * @brief Set author
@@ -779,7 +775,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom headers
 			 * @param customHeaders New optional custom headers
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<internal::StringMap<Value>> customHeaders );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<nfx::containers::StringMap<Value>> customHeaders );
 
 		private:
 			//----------------------------------------------
@@ -788,11 +784,11 @@ namespace dnv::vista::sdk
 
 			ShipId m_shipId;
 			std::optional<TimeRange> m_timeRange;
-			std::optional<datatypes::DateTimeOffset> m_dateCreated;
-			std::optional<datatypes::DateTimeOffset> m_dateModified;
+			std::optional<nfx::time::DateTimeOffset> m_dateCreated;
+			std::optional<nfx::time::DateTimeOffset> m_dateModified;
 			std::optional<std::string> m_author;
 			std::optional<std::vector<ConfigurationReference>> m_systemConfiguration;
-			std::optional<internal::StringMap<Value>> m_customHeaders;
+			std::optional<nfx::containers::StringMap<Value>> m_customHeaders;
 		};
 
 		//=====================================================================
@@ -803,7 +799,7 @@ namespace dnv::vista::sdk
 		 * @brief Validation function type for data validation
 		 */
 		using ValidateData = std::function<ValidateResult(
-			const datatypes::DateTimeOffset& timeStamp,
+			const nfx::time::DateTimeOffset& timeStamp,
 			const datachannel::DataChannel& dataChannel,
 			const Value& value,
 			const std::optional<std::string>& quality )>;
@@ -836,7 +832,7 @@ namespace dnv::vista::sdk
 				std::optional<ConfigurationReference> dataConfiguration,
 				std::optional<std::vector<TabularData>> tabularData,
 				std::optional<EventData> eventData,
-				std::optional<internal::StringMap<Value>> customDataKinds );
+				std::optional<nfx::containers::StringMap<Value>> customDataKinds );
 
 			/** @brief Copy constructor */
 			TimeSeriesData( const TimeSeriesData& ) = default;
@@ -883,7 +879,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom data kinds
 			 * @return Optional custom data kinds dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customDataKinds() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<Value>>& customDataKinds() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -911,7 +907,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom data kinds
 			 * @param customDataKinds New optional custom data kinds
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomDataKinds( std::optional<internal::StringMap<Value>> customDataKinds );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomDataKinds( std::optional<nfx::containers::StringMap<Value>> customDataKinds );
 
 			//----------------------------------------------
 			// Validation
@@ -937,7 +933,7 @@ namespace dnv::vista::sdk
 			std::optional<ConfigurationReference> m_dataConfiguration;
 			std::optional<std::vector<TabularData>> m_tabularData;
 			std::optional<EventData> m_eventData;
-			std::optional<internal::StringMap<Value>> m_customDataKinds;
+			std::optional<nfx::containers::StringMap<Value>> m_customDataKinds;
 		};
 
 		//=====================================================================

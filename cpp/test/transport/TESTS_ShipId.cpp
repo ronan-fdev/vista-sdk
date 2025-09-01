@@ -3,6 +3,8 @@
  * @brief Comprehensive tests for ShipId class
  */
 
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/transport/ShipId.h"
 #include "dnv/vista/sdk/ImoNumber.h"
 

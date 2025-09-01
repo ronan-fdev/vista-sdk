@@ -8,9 +8,11 @@
 
 #pragma once
 
-#include "internal/MemoryCache.h"
-#include "utils/StringUtils.h"
+#include <vector>
 
+#include <nfx/string/Utils.h>
+
+#include "internal/MemoryCache.h"
 #include "Codebooks.h"
 #include "Gmod.h"
 #include "Locations.h"
@@ -221,7 +223,7 @@ namespace dnv::vista::sdk
 		 *         and values are GmodVersioningDto objects.
 		 * @throws std::runtime_error If the versioning DTOs cannot be loaded.
 		 */
-		[[nodiscard]] static const internal::StringMap<GmodVersioningDto>& gmodVersioningDto();
+		[[nodiscard]] static const nfx::containers::StringMap<GmodVersioningDto>& gmodVersioningDto();
 
 		//----------------------------------------------
 		// Conversion

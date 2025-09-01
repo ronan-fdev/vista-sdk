@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical codebook operations
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -15,7 +13,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//----------------------------------------------
 
-	inline CodebookStandardValues::CodebookStandardValues( CodebookName name, internal::StringSet&& standardValues ) noexcept
+	inline CodebookStandardValues::CodebookStandardValues( CodebookName name, nfx::containers::StringSet&& standardValues ) noexcept
 		: m_name{ name },
 		  m_standardValues{ std::move( standardValues ) }
 	{
@@ -69,7 +67,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//----------------------------------------------
 
-	inline CodebookGroups::CodebookGroups( internal::StringSet&& groups ) noexcept
+	inline CodebookGroups::CodebookGroups( nfx::containers::StringSet&& groups ) noexcept
 		: m_groups{ std::move( groups ) }
 	{
 	}
@@ -125,7 +123,7 @@ namespace dnv::vista::sdk
 		return m_standardValues;
 	}
 
-	inline const internal::StringMap<std::vector<std::string>>& Codebook::rawData() const noexcept
+	inline const nfx::containers::StringMap<std::vector<std::string>>& Codebook::rawData() const noexcept
 	{
 		return m_rawData;
 	}

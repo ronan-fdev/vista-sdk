@@ -3,6 +3,10 @@
  * @brief Unit tests for ISO string validation utilities.
  */
 
+#include <fstream>
+
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/VIS.h"
 
 namespace dnv::vista::sdk::test

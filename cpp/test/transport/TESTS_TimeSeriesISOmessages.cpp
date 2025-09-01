@@ -3,7 +3,8 @@
  * @brief Comprehensive tests for TimeSeries infrastructure
  */
 
-#include "dnv/vista/sdk/datatypes/DateTimeISO8601.h"
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.h"
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"
 #include "dnv/vista/sdk/transport/DataChannel/DataChannel.h"
@@ -24,7 +25,7 @@ namespace dnv::vista::sdk::tests
 	transport::datachannel::DataChannelListPackage createValidFullyCustomDataChannelList()
 	{
 		/* Create ConfigurationReference for DataChannelListId */
-		auto timeStamp = datatypes::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
+		auto timeStamp = nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
 		transport::datachannel::ConfigurationReference dataChannelListId{
 			"DataChannelList.xml",
 			timeStamp,
@@ -42,7 +43,7 @@ namespace dnv::vista::sdk::tests
 		versionInfo.setReferenceUrl( "http://somewhere.net" );
 		header.setVersionInformation( versionInfo );
 
-		header.setDateCreated( datatypes::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
+		header.setDateCreated( nfx::time::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
 
 		/* Create DataChannelList */
 		transport::datachannel::DataChannelList dataChannelList;
@@ -134,14 +135,14 @@ namespace dnv::vista::sdk::tests
 		firstDataChannelId.push_back( allDataChannelIds[0] );
 
 		/* Create timestamps */
-		auto start = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
-		auto end = datatypes::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
-		auto timestamp1 = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
-		auto timestamp2 = datatypes::DateTimeOffset::parse( "2016-01-02T12:00:00Z" );
-		auto timestamp3 = datatypes::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
-		auto eventTimestamp = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:01Z" );
-		auto createdModified = datatypes::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
-		auto configTimestamp = datatypes::DateTimeOffset::parse( "2016-01-03T00:00:00Z" );
+		auto start = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto end = nfx::time::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
+		auto timestamp1 = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto timestamp2 = nfx::time::DateTimeOffset::parse( "2016-01-02T12:00:00Z" );
+		auto timestamp3 = nfx::time::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
+		auto eventTimestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:01Z" );
+		auto createdModified = nfx::time::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
+		auto configTimestamp = nfx::time::DateTimeOffset::parse( "2016-01-03T00:00:00Z" );
 
 		/* Create first tabular data */
 		std::vector<transport::timeseries::TabularDataSet> dataSets1 = {
@@ -196,7 +197,7 @@ namespace dnv::vista::sdk::tests
 		/* Create configuration reference */
 		transport::timeseries::ConfigurationReference dataConfig(
 			"DataChannelList.xml",
-			datatypes::DateTimeOffset::parse( "2016-01-01T00:00:00Z" ) );
+			nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" ) );
 
 		/* Create system configuration references */
 		std::vector<transport::timeseries::ConfigurationReference> systemConfigs = {
@@ -303,8 +304,8 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( TimeSeriesTests, Test_TimeRange_Validation )
 	{
-		auto start = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
-		auto end = datatypes::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
+		auto start = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto end = nfx::time::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
 
 		/* Test valid range construction */
 		transport::timeseries::TimeRange timeRange( start, end );
@@ -312,19 +313,19 @@ namespace dnv::vista::sdk::tests
 		EXPECT_EQ( timeRange.end().toString(), end.toString() );
 
 		/* Test setting range values */
-		auto newStart = datatypes::DateTimeOffset::parse( "2016-01-02T12:00:00Z" );
+		auto newStart = nfx::time::DateTimeOffset::parse( "2016-01-02T12:00:00Z" );
 		timeRange.setStart( newStart );
 		EXPECT_EQ( timeRange.start().toString(), newStart.toString() );
 
-		auto newEnd = datatypes::DateTimeOffset::parse( "2016-01-04T12:00:00Z" );
+		auto newEnd = nfx::time::DateTimeOffset::parse( "2016-01-04T12:00:00Z" );
 		timeRange.setEnd( newEnd );
 		EXPECT_EQ( timeRange.end().toString(), newEnd.toString() );
 
 		/* Test invalid range: start > end should throw */
-		auto invalidEnd = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto invalidEnd = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
 		EXPECT_THROW( timeRange.setEnd( invalidEnd ), std::invalid_argument );
 
-		auto invalidStart = datatypes::DateTimeOffset::parse( "2016-01-05T12:00:00Z" );
+		auto invalidStart = nfx::time::DateTimeOffset::parse( "2016-01-05T12:00:00Z" );
 		EXPECT_THROW( timeRange.setStart( invalidStart ), std::invalid_argument );
 	}
 
@@ -340,7 +341,7 @@ namespace dnv::vista::sdk::tests
 		dataChannelIds.push_back( transport::DataChannelId::parse( "0020" ) );
 
 		/* Create valid TabularDataSets */
-		auto timestamp = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto timestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
 		std::vector<transport::timeseries::TabularDataSet> dataSets = {
 			transport::timeseries::TabularDataSet(
 				timestamp,
@@ -369,7 +370,7 @@ namespace dnv::vista::sdk::tests
 		EXPECT_TRUE( eventData.dataSet().empty() );
 
 		/* Add event data sets */
-		auto timestamp = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:01Z" );
+		auto timestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:01Z" );
 		auto dataChannelId = transport::DataChannelId::parse( "0010" );
 
 		transport::timeseries::EventDataSet eventDataSet1(
@@ -407,7 +408,7 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( ValidationTests, Test_ConfigurationReference_Validation )
 	{
-		auto timestamp = datatypes::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
+		auto timestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
 
 		transport::timeseries::ConfigurationReference configRef( "TestConfig.xml", timestamp );
 
@@ -418,7 +419,7 @@ namespace dnv::vista::sdk::tests
 		configRef.setId( "NewConfig.xml" );
 		EXPECT_EQ( configRef.id(), "NewConfig.xml" );
 
-		auto newTimestamp = datatypes::DateTimeOffset::parse( "2016-01-02T00:00:00Z" );
+		auto newTimestamp = nfx::time::DateTimeOffset::parse( "2016-01-02T00:00:00Z" );
 		configRef.setTimeStamp( newTimestamp );
 		EXPECT_EQ( configRef.timeStamp().toString(), newTimestamp.toString() );
 	}
@@ -429,7 +430,7 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( ValidationTests, Test_TabularDataSet_Validation )
 	{
-		auto timestamp = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto timestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
 		std::vector<std::string> values = { "100.0", "200.0" };
 		std::vector<std::string> quality = { "0", "0" };
 
@@ -455,7 +456,7 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( ValidationTests, Test_EventDataSet_Validation )
 	{
-		auto timestamp = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:01Z" );
+		auto timestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:01Z" );
 		auto dataChannelId = transport::DataChannelId::parse( "0010" );
 
 		transport::timeseries::EventDataSet eventDataSet(
@@ -488,22 +489,22 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( ErrorHandlingTests, Test_TimeRange_Error_Handling )
 	{
-		auto start = datatypes::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
-		auto end = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto start = nfx::time::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
+		auto end = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
 
 		/* Test invalid range construction: start > end should throw */
 		EXPECT_THROW( transport::timeseries::TimeRange( start, end ), std::invalid_argument );
 
 		/* Test valid construction first */
-		auto validStart = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
-		auto validEnd = datatypes::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
+		auto validStart = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto validEnd = nfx::time::DateTimeOffset::parse( "2016-01-03T12:00:00Z" );
 		transport::timeseries::TimeRange timeRange( validStart, validEnd );
 
 		/* Test invalid setters */
-		auto invalidStart = datatypes::DateTimeOffset::parse( "2016-01-04T12:00:00Z" );
+		auto invalidStart = nfx::time::DateTimeOffset::parse( "2016-01-04T12:00:00Z" );
 		EXPECT_THROW( timeRange.setStart( invalidStart ), std::invalid_argument );
 
-		auto invalidEnd = datatypes::DateTimeOffset::parse( "2015-12-31T12:00:00Z" );
+		auto invalidEnd = nfx::time::DateTimeOffset::parse( "2015-12-31T12:00:00Z" );
 		EXPECT_THROW( timeRange.setEnd( invalidEnd ), std::invalid_argument );
 	}
 
@@ -519,7 +520,7 @@ namespace dnv::vista::sdk::tests
 		dataChannelIds.push_back( transport::DataChannelId::parse( "0020" ) );
 
 		/* 3 values but only 2 channels */
-		auto timestamp = datatypes::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
+		auto timestamp = nfx::time::DateTimeOffset::parse( "2016-01-01T12:00:00Z" );
 		std::vector<transport::timeseries::TabularDataSet> dataSets = {
 			transport::timeseries::TabularDataSet(
 				timestamp,

@@ -3,7 +3,10 @@
  * @brief Inline implementations for performance-critical CodebookName operations
  */
 
-#pragma once
+#include <array>
+#include <stdexcept>
+
+#include <fmt/format.h>
 
 #include "config/Platform.h"
 #include "constants/CodebookConstants.h"
@@ -48,7 +51,7 @@ namespace dnv::vista::sdk
 	{
 		if ( prefix.empty() )
 		{
-			throw std::invalid_argument( "Prefix cannot be empty." );
+			throw std::invalid_argument{ "Prefix cannot be empty." };
 		}
 
 		for ( const auto& mapping : internal::s_prefixMappings )
@@ -59,7 +62,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		throw std::invalid_argument( fmt::format( "Unknown prefix: {}", prefix ) );
+		throw std::invalid_argument{ fmt::format( "Unknown prefix: {}", prefix ) };
 	}
 
 	inline std::string_view CodebookNames::toPrefix( CodebookName name )
@@ -112,7 +115,7 @@ namespace dnv::vista::sdk
 			}
 			default:
 			{
-				throw std::invalid_argument( fmt::format( "Unknown codebook: {}", static_cast<int>( name ) ) );
+				throw std::invalid_argument{ fmt::format( "Unknown codebook: {}", static_cast<int>( name ) ) };
 			}
 		}
 	}

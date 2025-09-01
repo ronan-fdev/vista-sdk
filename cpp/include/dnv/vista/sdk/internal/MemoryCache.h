@@ -5,6 +5,12 @@
 
 #pragma once
 
+#include <chrono>
+#include <functional>
+#include <mutex>
+#include <optional>
+#include <unordered_map>
+
 #include "dnv/vista/sdk/config/Platform.h"
 
 namespace dnv::vista::sdk::internal

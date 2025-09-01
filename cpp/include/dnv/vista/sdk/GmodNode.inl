@@ -3,12 +3,11 @@
  * @brief Inline implementations for performance-critical GmodNode operations
  */
 
-#pragma once
+#include <nfx/string/StringBuilderPool.h>
+#include <nfx/string/Utils.h>
 
 #include "config/Platform.h"
 #include "constants/GmodConstants.h"
-#include "internal/StringBuilderPool.h"
-#include "utils/StringUtils.h"
 
 namespace dnv::vista::sdk
 {
@@ -24,7 +23,7 @@ namespace dnv::vista::sdk
 			{
 				return 0;
 			}
-			if ( utils::contains( category, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
+			if ( nfx::string::contains( category, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
 			{
 				return 16;
 			}
@@ -41,7 +40,7 @@ namespace dnv::vista::sdk
 			{
 				return 1;
 			}
-			if ( utils::contains( category, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
+			if ( nfx::string::contains( category, constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
 			{
 				return 2;
 			}
@@ -70,7 +69,7 @@ namespace dnv::vista::sdk
 		const std::optional<std::string>& definition,
 		const std::optional<std::string>& commonDefinition,
 		const std::optional<bool>& installSubstructure,
-		const internal::StringMap<std::string>& normalAssignmentNames ) noexcept
+		const nfx::containers::StringMap<std::string>& normalAssignmentNames ) noexcept
 		: m_category{ category },
 		  m_type{ type },
 		  m_name{ name },
@@ -185,7 +184,7 @@ namespace dnv::vista::sdk
 		return m_installSubstructure;
 	}
 
-	inline const internal::StringMap<std::string>& GmodNodeMetadata::normalAssignmentNames() const noexcept
+	inline const nfx::containers::StringMap<std::string>& GmodNodeMetadata::normalAssignmentNames() const noexcept
 	{
 		return m_normalAssignmentNames;
 	}
@@ -210,7 +209,7 @@ namespace dnv::vista::sdk
 			  dto.commonDefinition(),
 			  dto.installSubstructure(),
 			  dto.normalAssignmentNames().has_value() ? *dto.normalAssignmentNames()
-													  : internal::StringMap<std::string>() },
+													  : nfx::containers::StringMap<std::string>() },
 		  m_children{},
 		  m_parents{},
 		  m_childrenSet{}
@@ -330,7 +329,7 @@ namespace dnv::vista::sdk
 			return std::nullopt;
 		}
 
-		if ( !utils::contains( m_metadata.category(), constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
+		if ( !nfx::string::contains( m_metadata.category(), constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
 		{
 			return std::nullopt;
 		}
@@ -361,7 +360,7 @@ namespace dnv::vista::sdk
 			return std::nullopt;
 		}
 
-		if ( !utils::contains( m_metadata.category(), constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
+		if ( !nfx::string::contains( m_metadata.category(), constants::gmod::GMODNODE_CATEGORY_FUNCTION ) )
 		{
 			return std::nullopt;
 		}
@@ -372,7 +371,7 @@ namespace dnv::vista::sdk
 			return std::nullopt;
 		}
 
-		if ( !utils::contains( child->m_metadata.category(), constants::gmod::GMODNODE_CATEGORY_PRODUCT ) )
+		if ( !nfx::string::contains( child->m_metadata.category(), constants::gmod::GMODNODE_CATEGORY_PRODUCT ) )
 		{
 			return std::nullopt;
 		}
@@ -487,7 +486,7 @@ namespace dnv::vista::sdk
 
 	inline std::string GmodNode::toString() const noexcept
 	{
-		auto lease = internal::StringBuilderPool::lease();
+		auto lease = nfx::string::StringBuilderPool::lease();
 		lease.builder().append( m_code );
 		if ( m_location.has_value() )
 		{
@@ -498,7 +497,7 @@ namespace dnv::vista::sdk
 		return lease.toString();
 	}
 
-	inline void GmodNode::toString( internal::StringBuilder& builder ) const noexcept
+	inline void GmodNode::toString( nfx::string::StringBuilder& builder ) const noexcept
 	{
 		builder.append( m_code );
 		if ( m_location.has_value() )

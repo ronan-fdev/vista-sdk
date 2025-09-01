@@ -198,7 +198,7 @@ if(Doxygen_FOUND)
 	# --- Documentation Target Definition --
 	doxygen_add_docs( documentation
 				${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/
-				${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/
+				${VISTA_SDK_CPP_SOURCE_DIR}/
 				ALL
 				COMMENT "Generate documentation."
 	)

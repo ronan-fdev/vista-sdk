@@ -11,6 +11,9 @@
 
 #pragma once
 
+#include <cstdint>
+#include <string_view>
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================

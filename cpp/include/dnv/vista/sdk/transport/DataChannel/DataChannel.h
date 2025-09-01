@@ -7,11 +7,18 @@
 
 #pragma once
 
+#include <nfx/containers/StringMap.h>
+
 #include "dnv/vista/sdk/config/Platform.h"
 #include "dnv/vista/sdk/transport/ISO19848.h"
 #include "dnv/vista/sdk/transport/ShipId.h"
-#include "dnv/vista/sdk/internal/StringMap.h"
 #include "dnv/vista/sdk/LocalId.h"
+
+namespace nfx::datatypes
+{
+	class DateTimeOffset;
+	class Decimal;
+}
 
 namespace dnv::vista::sdk
 {
@@ -20,12 +27,6 @@ namespace dnv::vista::sdk
 	//=====================================================================
 
 	class ValidateResult;
-
-	namespace datatypes
-	{
-		class DateTimeOffset;
-		class Decimal128;
-	}
 
 	namespace transport::datachannel
 	{
@@ -161,7 +162,7 @@ namespace dnv::vista::sdk
 			 * @param timeStamp Configuration timestamp
 			 * @param version Optional version string
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference( std::string_view id, datatypes::DateTimeOffset timeStamp, std::optional<std::string_view> version = std::nullopt );
+			VISTA_SDK_CPP_FORCE_INLINE ConfigurationReference( std::string_view id, nfx::time::DateTimeOffset timeStamp, std::optional<std::string_view> version = std::nullopt );
 
 			/** @brief Copy constructor */
 			ConfigurationReference( const ConfigurationReference& ) = default;
@@ -206,7 +207,7 @@ namespace dnv::vista::sdk
 			 * @brief Get timestamp
 			 * @return Configuration timestamp
 			 */
-			[[nodiscard]] inline const datatypes::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] inline const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -228,7 +229,7 @@ namespace dnv::vista::sdk
 			 * @brief Set timestamp
 			 * @param timeStamp New configuration timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( datatypes::DateTimeOffset timeStamp );
+			VISTA_SDK_CPP_FORCE_INLINE void setTimeStamp( nfx::time::DateTimeOffset timeStamp );
 
 		private:
 			//----------------------------------------------
@@ -236,7 +237,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			std::string m_id;
-			datatypes::DateTimeOffset m_timeStamp;
+			nfx::time::DateTimeOffset m_timeStamp;
 			std::optional<std::string> m_version;
 		};
 
@@ -476,7 +477,7 @@ namespace dnv::vista::sdk
 			 * @param decimal Decimal value to analyze
 			 * @return Number of decimal places
 			 */
-			[[nodiscard]] static uint32_t countDecimalPlaces( datatypes::Decimal128 decimal );
+			[[nodiscard]] static uint32_t countDecimalPlaces( nfx::datatypes::Decimal decimal );
 		};
 
 		//=====================================================================
@@ -629,7 +630,7 @@ namespace dnv::vista::sdk
 			 * @brief Get optional custom elements
 			 * @return Optional custom elements dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customElements() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<Value>>& customElements() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -651,7 +652,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom elements
 			 * @param customElements New optional custom elements
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomElements( std::optional<internal::StringMap<Value>> customElements );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomElements( std::optional<nfx::containers::StringMap<Value>> customElements );
 
 		private:
 			//----------------------------------------------
@@ -660,7 +661,7 @@ namespace dnv::vista::sdk
 
 			std::string m_unitSymbol;
 			std::optional<std::string> m_quantityName;
-			std::optional<internal::StringMap<Value>> m_customElements;
+			std::optional<nfx::containers::StringMap<Value>> m_customElements;
 		};
 
 		//=====================================================================
@@ -705,8 +706,8 @@ namespace dnv::vista::sdk
 				ConfigurationReference dataChannelListId,
 				std::optional<VersionInformation> versionInformation,
 				std::optional<std::string> author,
-				std::optional<datatypes::DateTimeOffset> dateCreated,
-				std::optional<internal::StringMap<Value>> customHeaders );
+				std::optional<nfx::time::DateTimeOffset> dateCreated,
+				std::optional<nfx::containers::StringMap<Value>> customHeaders );
 
 			/** @brief Copy constructor */
 			Header( const Header& ) = default;
@@ -759,13 +760,13 @@ namespace dnv::vista::sdk
 			 * @brief Get date created
 			 * @return Optional creation timestamp (UtcNow default)
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<datatypes::DateTimeOffset>& dateCreated() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::time::DateTimeOffset>& dateCreated() const noexcept;
 
 			/**
 			 * @brief Get custom headers
 			 * @return Optional custom headers dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customHeaders() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<Value>>& customHeaders() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -799,13 +800,13 @@ namespace dnv::vista::sdk
 			 * @brief Set date created
 			 * @param dateCreated New optional creation timestamp
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setDateCreated( std::optional<datatypes::DateTimeOffset> dateCreated );
+			VISTA_SDK_CPP_FORCE_INLINE void setDateCreated( std::optional<nfx::time::DateTimeOffset> dateCreated );
 
 			/**
 			 * @brief Set custom headers
 			 * @param customHeaders New optional custom headers dictionary
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<internal::StringMap<Value>> customHeaders );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomHeaders( std::optional<nfx::containers::StringMap<Value>> customHeaders );
 
 		private:
 			//----------------------------------------------
@@ -816,8 +817,8 @@ namespace dnv::vista::sdk
 			ConfigurationReference m_dataChannelListId;
 			std::optional<VersionInformation> m_versionInformation;
 			std::optional<std::string> m_author;
-			std::optional<datatypes::DateTimeOffset> m_dateCreated;
-			std::optional<internal::StringMap<Value>> m_customHeaders;
+			std::optional<nfx::time::DateTimeOffset> m_dateCreated;
+			std::optional<nfx::containers::StringMap<Value>> m_customHeaders;
 		};
 
 		//=====================================================================
@@ -870,7 +871,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom name objects
 			 * @return Optional custom name objects dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customNameObjects() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<Value>>& customNameObjects() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -886,7 +887,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom name objects
 			 * @param customNameObjects New optional custom name objects
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomNameObjects( std::optional<internal::StringMap<Value>> customNameObjects );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomNameObjects( std::optional<nfx::containers::StringMap<Value>> customNameObjects );
 
 		private:
 			//----------------------------------------------
@@ -894,7 +895,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			std::string m_namingRule;
-			std::optional<internal::StringMap<Value>> m_customNameObjects;
+			std::optional<nfx::containers::StringMap<Value>> m_customNameObjects;
 		};
 
 		//=====================================================================
@@ -1214,7 +1215,7 @@ namespace dnv::vista::sdk
 			 * @brief Get custom properties
 			 * @return Optional custom properties dictionary
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<internal::StringMap<Value>>& customProperties() const noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE const std::optional<nfx::containers::StringMap<Value>>& customProperties() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -1272,7 +1273,7 @@ namespace dnv::vista::sdk
 			 * @brief Set custom properties
 			 * @param customProperties New optional custom properties
 			 */
-			VISTA_SDK_CPP_FORCE_INLINE void setCustomProperties( std::optional<internal::StringMap<Value>> customProperties );
+			VISTA_SDK_CPP_FORCE_INLINE void setCustomProperties( std::optional<nfx::containers::StringMap<Value>> customProperties );
 
 			//----------------------------------------------
 			// Validation
@@ -1297,7 +1298,7 @@ namespace dnv::vista::sdk
 			std::optional<std::string> m_alertPriority;
 			std::optional<std::string> m_name;
 			std::optional<std::string> m_remarks;
-			std::optional<internal::StringMap<Value>> m_customProperties;
+			std::optional<nfx::containers::StringMap<Value>> m_customProperties;
 		};
 
 		//=====================================================================
@@ -1671,7 +1672,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			std::vector<DataChannel> m_dataChannels;
-			internal::StringMap<std::reference_wrapper<const DataChannel>> m_shortIdMap;
+			nfx::containers::StringMap<std::reference_wrapper<const DataChannel>> m_shortIdMap;
 			std::unordered_map<LocalId, std::reference_wrapper<const DataChannel>> m_localIdMap;
 		};
 

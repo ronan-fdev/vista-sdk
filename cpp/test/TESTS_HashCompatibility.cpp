@@ -7,8 +7,12 @@
  *          cross-platform dictionary compatibility.
  */
 
+#include <fstream>
+
+#include <nfx/string/Utils.h>
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/internal/ChdDictionary.h"
-#include "dnv/vista/sdk/utils/StringUtils.h"
 
 namespace dnv::vista::sdk::test
 {

@@ -3,7 +3,14 @@
  * @brief Comprehensive benchmarks comparing StringMap, StringSet, HashMap vs STL containers
  */
 
-#include "dnv/vista/sdk/internal/StringMap.h"
+#include <random>
+#include <unordered_set>
+
+#include <nfx/containers/StringMap.h>
+#include <nfx/containers/StringSet.h>
+
+#include <benchmark/benchmark.h>
+
 #include "dnv/vista/sdk/internal/HashMap.h"
 
 namespace dnv::vista::sdk::benchmarks
@@ -153,7 +160,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		for ( auto _ : state )
 		{
-			internal::StringMap<int> map;
+			nfx::containers::StringMap<int> map;
 			map.reserve( keys.size() );
 
 			for ( size_t i = 0; i < keys.size(); ++i )
@@ -173,7 +180,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		for ( auto _ : state )
 		{
-			internal::StringMap<int> map;
+			nfx::containers::StringMap<int> map;
 			map.reserve( views.size() );
 
 			for ( size_t i = 0; i < views.size(); ++i )
@@ -279,7 +286,7 @@ namespace dnv::vista::sdk::benchmarks
 
 	static void BM_StringMap_Lookup_String( benchmark::State& state )
 	{
-		auto map = createPopulatedMap<internal::StringMap<int>>();
+		auto map = createPopulatedMap<nfx::containers::StringMap<int>>();
 		const auto& keys = BenchmarkData::getTestKeys();
 
 		for ( auto _ : state )
@@ -301,7 +308,7 @@ namespace dnv::vista::sdk::benchmarks
 
 	static void BM_StringMap_Lookup_StringView( benchmark::State& state )
 	{
-		auto map = createPopulatedMap<internal::StringMap<int>>();
+		auto map = createPopulatedMap<nfx::containers::StringMap<int>>();
 		const auto& views = BenchmarkData::getTestKeysViews();
 
 		for ( auto _ : state )
@@ -413,7 +420,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		for ( auto _ : state )
 		{
-			internal::StringSet set;
+			nfx::containers::StringSet set;
 			set.reserve( keys.size() );
 
 			for ( const auto& key : keys )
@@ -433,7 +440,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		for ( auto _ : state )
 		{
-			internal::StringSet set;
+			nfx::containers::StringSet set;
 			set.reserve( views.size() );
 
 			for ( const auto& view : views )
@@ -510,7 +517,7 @@ namespace dnv::vista::sdk::benchmarks
 
 	static void BM_StringSet_Lookup_String( benchmark::State& state )
 	{
-		auto set = createPopulatedSet<internal::StringSet>();
+		auto set = createPopulatedSet<nfx::containers::StringSet>();
 		const auto& keys = BenchmarkData::getTestKeys();
 
 		for ( auto _ : state )
@@ -531,7 +538,7 @@ namespace dnv::vista::sdk::benchmarks
 
 	static void BM_StringSet_Lookup_StringView( benchmark::State& state )
 	{
-		auto set = createPopulatedSet<internal::StringSet>();
+		auto set = createPopulatedSet<nfx::containers::StringSet>();
 		const auto& views = BenchmarkData::getTestKeysViews();
 
 		for ( auto _ : state )
@@ -579,7 +586,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		state.SetItemsProcessed( static_cast<int64_t>( state.iterations() * keys.size() ) );
 		state.SetBytesProcessed( static_cast<int64_t>( state.iterations() * keys.size() *
-								 ( sizeof( std::string ) + sizeof( int ) + 32 ) ) );
+													   ( sizeof( std::string ) + sizeof( int ) + 32 ) ) );
 	}
 
 	static void BM_Memory_StringMap( benchmark::State& state )
@@ -590,7 +597,7 @@ namespace dnv::vista::sdk::benchmarks
 		{
 			state.PauseTiming();
 
-			internal::StringMap<int> map;
+			nfx::containers::StringMap<int> map;
 			map.reserve( keys.size() );
 
 			state.ResumeTiming();
@@ -607,7 +614,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		state.SetItemsProcessed( static_cast<int64_t>( state.iterations() * keys.size() ) );
 		state.SetBytesProcessed( static_cast<int64_t>( state.iterations() * keys.size() *
-								 ( sizeof( std::string ) + sizeof( int ) + 32 ) ) );
+													   ( sizeof( std::string ) + sizeof( int ) + 32 ) ) );
 	}
 
 	static void BM_Memory_HashMap( benchmark::State& state )
@@ -635,7 +642,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		state.SetItemsProcessed( static_cast<int64_t>( state.iterations() * keys.size() ) );
 		state.SetBytesProcessed( static_cast<int64_t>( state.iterations() * keys.size() *
-								 ( sizeof( std::string ) + sizeof( int ) + 16 ) ) );
+													   ( sizeof( std::string ) + sizeof( int ) + 16 ) ) );
 	}
 
 	//=====================================================================

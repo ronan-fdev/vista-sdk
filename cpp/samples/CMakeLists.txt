@@ -102,10 +102,9 @@ foreach(sample_source ${SAMPLE_SOURCES})
 			)
 		endif()
 
-		target_precompile_headers(${sample_source_name} PRIVATE pch.h)
-
 		target_link_libraries(${sample_source_name} PRIVATE
 			vista-sdk-cpp
+			nfx-cpp-essentials::static
 			nlohmann_json::nlohmann_json
 			zlib
 			fmt::fmt-header-only

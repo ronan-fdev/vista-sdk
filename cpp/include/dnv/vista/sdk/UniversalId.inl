@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical UniversalId operations
  */
 
-#pragma once
-
 #include "config/Platform.h"
 #include "constants/AlgorithmConstants.h"
 

@@ -3,8 +3,6 @@
  * @brief Inline implementations for ISO 19848 classes
  */
 
-#pragma once
-
 namespace dnv::vista::sdk::transport
 {
 	//=====================================================================
@@ -103,7 +101,7 @@ namespace dnv::vista::sdk::transport
 	{
 	}
 
-	inline Value::Decimal::Decimal( const datatypes::Decimal128& value ) noexcept
+	inline Value::Decimal::Decimal( const nfx::datatypes::Decimal& value ) noexcept
 		: m_value{ value }
 	{
 	}
@@ -113,7 +111,7 @@ namespace dnv::vista::sdk::transport
 	{
 	}
 
-	inline Value::DateTime::DateTime( const datatypes::DateTimeOffset& value ) noexcept
+	inline Value::DateTime::DateTime( const nfx::time::DateTimeOffset& value ) noexcept
 		: m_value{ value }
 	{
 	}
@@ -206,12 +204,12 @@ namespace dnv::vista::sdk::transport
 		return m_value;
 	}
 
-	inline const datatypes::Decimal128& Value::Decimal::value() const noexcept
+	inline const nfx::datatypes::Decimal& Value::Decimal::value() const noexcept
 	{
 		return m_value;
 	}
 
-	inline const datatypes::DateTimeOffset& Value::DateTime::value() const noexcept
+	inline const nfx::time::DateTimeOffset& Value::DateTime::value() const noexcept
 	{
 		return m_value;
 	}
@@ -523,7 +521,7 @@ namespace dnv::vista::sdk::transport
 
 		if ( result.isInvalid() )
 		{
-			throw ValidationException( "Invalid value" );
+			throw ValidationException{ "Invalid value" };
 		}
 
 		switch ( typedValue.type() )
@@ -559,7 +557,7 @@ namespace dnv::vista::sdk::transport
 			case Value::Type::Double:
 			default:
 			{
-				throw std::logic_error( "Should never happen" );
+				throw std::logic_error{ "Should never happen" };
 			}
 		}
 	}
@@ -574,7 +572,7 @@ namespace dnv::vista::sdk::transport
 
 		if ( result.isInvalid() )
 		{
-			throw ValidationException( "Invalid value" );
+			throw ValidationException{ "Invalid value" };
 		}
 
 		switch ( typedValue.type() )
@@ -605,7 +603,7 @@ namespace dnv::vista::sdk::transport
 			case Value::Type::Double:
 			default:
 			{
-				throw std::logic_error( "Should never happen" );
+				throw std::logic_error{ "Should never happen" };
 			}
 		}
 	}

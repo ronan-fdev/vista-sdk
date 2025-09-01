@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical LocationsDto operations
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================

@@ -3,9 +3,7 @@
  * @brief Inline implementations for DataChannelId class
  */
 
-#pragma once
-
-#include "dnv/vista/sdk/internal/StringBuilderPool.h"
+#include <nfx/string/StringBuilderPool.h>
 
 namespace dnv::vista::sdk::transport
 {
@@ -29,7 +27,7 @@ namespace dnv::vista::sdk::transport
 	{
 		if ( m_shortId->empty() )
 		{
-			auto lease = internal::StringBuilderPool::lease();
+			auto lease = nfx::string::StringBuilderPool::lease();
 			auto builder = lease.builder();
 			builder.append( "DataChannelId shortId cannot be empty" );
 
@@ -127,7 +125,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				throw std::logic_error( "Should never happen" );
+				throw std::logic_error{ "Should never happen" };
 			}
 		}
 	}
@@ -150,7 +148,7 @@ namespace dnv::vista::sdk::transport
 
 			default:
 			{
-				throw std::logic_error( "Should never happen" );
+				throw std::logic_error{ "Should never happen" };
 			}
 		}
 	}

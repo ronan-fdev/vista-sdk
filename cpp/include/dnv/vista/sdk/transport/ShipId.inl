@@ -3,7 +3,7 @@
  * @brief Inline implementations for ShipId class
  */
 
-#pragma once
+#include <stdexcept>
 
 namespace dnv::vista::sdk::transport
 {
@@ -113,7 +113,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				throw std::logic_error( "Should never happen" );
+				throw std::logic_error{ "Should never happen" };
 			}
 		}
 	}
@@ -136,7 +136,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				throw std::logic_error( "Should never happen" );
+				throw std::logic_error{ "Should never happen" };
 			}
 		}
 	}

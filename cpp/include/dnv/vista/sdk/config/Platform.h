@@ -40,13 +40,6 @@
 // Compiler-specific C++20 feature support
 //----------------------------------------------
 
-/** @brief Conditional constexpr support for GCC 11.x which has incomplete constexpr std::string support */
-#if defined( __GNUC__ ) && __GNUC__ >= 11 && __GNUC__ < 12
-#	define VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR
-#else
-#	define VISTA_SDK_CPP_CONDITIONAL_CONSTEXPR constexpr
-#endif
-
 /** @brief No unique address attribute for zero-cost empty member optimization */
 #if defined( __clang__ )
 /* Clang or Clang-CL: Use feature detection regardless of _MSC_VER */
@@ -66,53 +59,4 @@
 #	endif
 #else
 #	define VISTA_SDK_CPP_NO_UNIQUE_ADDRESS
-#endif
-
-//----------------------------------------------
-// Cross-platform 128-bit integer support
-//----------------------------------------------
-
-/**
- * @brief Cross-platform 128-bit integer support detection
- * @details Detects native __int128 support for high-performance decimal arithmetic.
- *          - GCC/Clang: Native __int128 support since GCC 4.6+ and Clang 3.1+
- *          - MSVC: No native 128-bit support, requires manual implementation
- */
-#if defined( __SIZEOF_INT128__ ) && !defined( _MSC_VER )
-/* GCC and Clang have native __int128 support */
-#	define VISTA_SDK_CPP_HAS_INT128 1
-#	define VISTA_SDK_CPP_INT128 __int128
-#	define VISTA_SDK_CPP_UINT128 unsigned __int128
-#else
-/* MSVC and other compilers without native 128-bit support */
-#	define VISTA_SDK_CPP_HAS_INT128 0
-/* For manual 128-bit implementation, we'll use our custom Int128 struct */
-#endif
-
-/** @brief Conditional compilation helper for 128-bit specific code paths */
-#if VISTA_SDK_CPP_HAS_INT128
-#	define VISTA_SDK_CPP_IF_INT128( code ) code
-#	define VISTA_SDK_CPP_IF_NO_INT128( code )
-#else
-#	define VISTA_SDK_CPP_IF_INT128( code )
-#	define VISTA_SDK_CPP_IF_NO_INT128( code ) code
-#endif
-
-//----------------------------------------------
-// Cross-platform time functions
-//----------------------------------------------
-
-/** @brief Cross-platform thread-safe time conversion functions */
-#if defined( _WIN32 )
-/* Windows uses gmtime_s and localtime_s (different parameter order than POSIX) */
-#	define VISTA_SDK_CPP_GMTIME_R( timer, result ) ( gmtime_s( ( result ), ( timer ) ) == 0 )
-#	define VISTA_SDK_CPP_LOCALTIME_R( timer, result ) ( localtime_s( ( result ), ( timer ) ) == 0 )
-#elif defined( __GNUC__ ) || defined( __clang__ )
-/* POSIX systems use gmtime_r and localtime_r */
-#	define VISTA_SDK_CPP_GMTIME_R( timer, result ) ( gmtime_r( ( timer ), ( result ) ) != nullptr )
-#	define VISTA_SDK_CPP_LOCALTIME_R( timer, result ) ( localtime_r( ( timer ), ( result ) ) != nullptr )
-#else
-/* Fallback to non-thread-safe versions */
-#	define VISTA_SDK_CPP_GMTIME_R( timer, result ) ( ( *( result ) = *gmtime( timer ) ), true )
-#	define VISTA_SDK_CPP_LOCALTIME_R( timer, result ) ( ( *( result ) = *localtime( timer ) ), true )
 #endif

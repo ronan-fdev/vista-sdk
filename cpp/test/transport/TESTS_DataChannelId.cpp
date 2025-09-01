@@ -3,6 +3,8 @@
  * @brief Comprehensive tests for DataChannelId class
  */
 
+#include <gtest/gtest.h>
+
 #include "dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.h"
 #include "dnv/vista/sdk/GmodPath.h"
 #include "dnv/vista/sdk/LocalId.h"

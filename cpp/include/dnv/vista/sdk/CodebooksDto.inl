@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical CodebooksDto operations
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================

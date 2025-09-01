@@ -2,6 +2,7 @@
  * @file TestDataLoader.cpp
  * @brief Helper utilities for loading test data from JSON files.
  */
+#include <fstream>
 
 #include "dnv/vista/sdk/internal/HashMap.h"
 

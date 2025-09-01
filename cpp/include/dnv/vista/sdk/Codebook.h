@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include "internal/StringMap.h"
+#include <nfx/containers/StringMap.h>
+#include <nfx/containers/StringSet.h>
 
 #include "CodebooksDto.h"
 #include "CodebookName.h"
@@ -117,7 +118,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Iterator type for traversing standard values
 		 */
-		using Iterator = internal::StringSet::const_iterator;
+		using Iterator = nfx::containers::StringSet::const_iterator;
 
 		//----------------------------------------------
 		// Construction
@@ -128,7 +129,7 @@ namespace dnv::vista::sdk
 		 * @param name The codebook name
 		 * @param standardValues The set of standard values with zero-copy string_view access
 		 */
-		inline explicit CodebookStandardValues( CodebookName name, internal::StringSet&& standardValues ) noexcept;
+		inline explicit CodebookStandardValues( CodebookName name, nfx::containers::StringSet&& standardValues ) noexcept;
 
 		/** @brief Default constructor. */
 		CodebookStandardValues() = default;
@@ -198,7 +199,7 @@ namespace dnv::vista::sdk
 		CodebookName m_name;
 
 		/** @brief The set of standard values */
-		internal::StringSet m_standardValues;
+		nfx::containers::StringSet m_standardValues;
 	};
 
 	//=====================================================================
@@ -220,7 +221,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Iterator type for traversing groups
 		 */
-		using Iterator = internal::StringSet::const_iterator;
+		using Iterator = nfx::containers::StringSet::const_iterator;
 
 		//----------------------------------------------
 		// Construction
@@ -230,7 +231,7 @@ namespace dnv::vista::sdk
 		 * @brief Construct with groups
 		 * @param groups The set of groups with zero-copy string_view access
 		 */
-		inline explicit CodebookGroups( internal::StringSet&& groups ) noexcept;
+		inline explicit CodebookGroups( nfx::containers::StringSet&& groups ) noexcept;
 
 		/** @brief Default constructor. */
 		CodebookGroups() = default;
@@ -297,7 +298,7 @@ namespace dnv::vista::sdk
 		//----------------------------------------------
 
 		/** @brief The set of groups */
-		internal::StringSet m_groups;
+		nfx::containers::StringSet m_groups;
 	};
 
 	//=====================================================================
@@ -377,7 +378,7 @@ namespace dnv::vista::sdk
 		 * @brief Get the raw data
 		 * @return Map of groups to their values with zero-copy string_view access
 		 */
-		[[nodiscard]] inline const internal::StringMap<std::vector<std::string>>& rawData() const noexcept;
+		[[nodiscard]] inline const nfx::containers::StringMap<std::vector<std::string>>& rawData() const noexcept;
 
 		//----------------------------------------------
 		// State inspection methods
@@ -441,7 +442,7 @@ namespace dnv::vista::sdk
 		CodebookName m_name;
 
 		/** @brief Mapping from values to their group names */
-		internal::StringMap<std::string> m_groupMap;
+		nfx::containers::StringMap<std::string> m_groupMap;
 
 		/** @brief Container for standard values */
 		CodebookStandardValues m_standardValues;
@@ -450,7 +451,7 @@ namespace dnv::vista::sdk
 		CodebookGroups m_groups;
 
 		/** @brief Raw mapping of groups to their values */
-		internal::StringMap<std::vector<std::string>> m_rawData;
+		nfx::containers::StringMap<std::vector<std::string>> m_rawData;
 	};
 }
 

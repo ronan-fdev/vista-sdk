@@ -4,8 +4,6 @@
  * @details Provides inline method implementations for ValidateResult classes
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================

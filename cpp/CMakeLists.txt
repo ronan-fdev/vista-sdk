@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(vista-sdk-cpp
-	VERSION 0.1.0
+	VERSION 0.0.23
 	DESCRIPTION "DNV VISTA SDK C++ implementation"
 	LANGUAGES CXX
 )
@@ -38,7 +38,7 @@ option(VISTA_SDK_CPP_BUILD_DOCUMENTATION   "Build vista-sdk-cpp doxygen document
 set(VISTA_SDK_CPP_INSTALL_DIR "" CACHE PATH "Install directory option (empty = use platform defaults)")
 
 #----------------------------------------------
-# Directory and module configuration
+# Directory and CMake modules configuration
 #----------------------------------------------
 
 cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH VISTA_SDK_ROOT_DIR)
@@ -49,4 +49,4 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Main configuration
 #----------------------------------------------
 
-include(Config)
+include(dnvVistaCppConfig)

@@ -11,8 +11,6 @@ endif()
 # --- Benchmarks source files ---
 set(BENCHMARK_SOURCES
 	codebooks/BM_CodebooksLookup.cpp
-	datatypes/BM_Decimal128.cpp
-	datatypes/BM_Int128.cpp
 	gmod/BM_GmodLoad.cpp
 	gmod/BM_GmodLookup.cpp
 	gmod/BM_GmodPathParse.cpp
@@ -20,7 +18,6 @@ set(BENCHMARK_SOURCES
 	gmod/BM_GmodVersioningConvertPath.cpp
 	internal/BM_HashMap.cpp
 	internal/BM_ShortStringHash.cpp
-	internal/BM_StringBuilderPool.cpp
 )
 
 # --- Configure benchmark executables ---
@@ -107,10 +104,9 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 			)
 		endif()
 
-		target_precompile_headers(${benchmark_target_name} PRIVATE pch.h)
-
 		target_link_libraries(${benchmark_target_name} PRIVATE
 			vista-sdk-cpp
+			nfx-cpp-essentials::static
 			benchmark::benchmark
 			nlohmann_json::nlohmann_json
 			zlib

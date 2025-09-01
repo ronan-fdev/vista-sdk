@@ -16,8 +16,9 @@
  * PURPOSE: Determine optimal data structure for codebook lookups with 3 elements
  */
 
-#include "dnv/vista/sdk/internal/ChdDictionary.h"
+#include <benchmark/benchmark.h>
 
+#include "dnv/vista/sdk/internal/ChdDictionary.h"
 #include "dnv/vista/sdk/Codebook.h"
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/CodebookName.h"

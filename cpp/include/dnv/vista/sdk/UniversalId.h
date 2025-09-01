@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <string>
+#include <string_view>
+
 #include "ImoNumber.h"
 #include "LocalId.h"
 

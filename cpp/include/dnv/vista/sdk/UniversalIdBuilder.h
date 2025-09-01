@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <string_view>
+
 #include "ImoNumber.h"
 #include "LocalIdBuilder.h"
 
@@ -134,7 +136,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if builder state is valid for building UniversalId.
 		 * @details Requires both IMO number and valid LocalIdBuilder.
 		 * @return True if build() will succeed.
-		 * @note This method is guaranteed not to throw (noexcept).
+		 * @note This method is guaranteed not to throw.
 		 */
 		[[nodiscard]] inline bool isValid() const noexcept;
 

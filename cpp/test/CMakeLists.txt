@@ -13,10 +13,6 @@ include(GoogleTest)
 
 # --- Tests source files ---
 set(TEST_SOURCES
-	datatypes/TESTS_DateTimeISO8601.cpp
-	datatypes/TESTS_Decimal128.cpp
-	datatypes/TESTS_Int128.cpp
-	internal/TESTS_StringBuilderPool.cpp
 	transport/TESTS_DataChannelId.cpp
 	transport/TESTS_DataChannelISOmessages.cpp
 	transport/TESTS_ISO19848.cpp
@@ -145,10 +141,9 @@ foreach(test_source ${TEST_SOURCES})
 			)
 		endif()
 
-		target_precompile_headers(${test_target_name} PRIVATE pch.h)
-
 		target_link_libraries(${test_target_name} PRIVATE
 			vista-sdk-cpp
+			nfx-cpp-essentials::static
 			GTest::gtest_main
 			nlohmann_json::nlohmann_json
 			zlib

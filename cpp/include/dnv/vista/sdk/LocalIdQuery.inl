@@ -3,8 +3,6 @@
  * @brief Inline implementations for performance-critical LocalIdQuery operations
  */
 
-#pragma once
-
 namespace dnv::vista::sdk
 {
 	//=====================================================================

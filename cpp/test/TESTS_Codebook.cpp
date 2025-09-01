@@ -3,6 +3,8 @@
  * @brief Unit tests for the Codebook and related functionalities.
  */
 
+#include <gtest/gtest.h>
+
 #include "TestDataLoader.h"
 
 #include "dnv/vista/sdk/Codebooks.h"

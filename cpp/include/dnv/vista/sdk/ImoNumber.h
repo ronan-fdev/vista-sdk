@@ -5,6 +5,10 @@
 
 #pragma once
 
+#include <optional>
+#include <string>
+#include <string_view>
+
 #include "config/Platform.h"
 
 namespace dnv::vista::sdk
