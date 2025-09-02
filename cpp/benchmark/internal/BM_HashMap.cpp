@@ -6,12 +6,11 @@
 #include <random>
 #include <unordered_set>
 
+#include <nfx/containers/HashMap.h>
 #include <nfx/containers/StringMap.h>
 #include <nfx/containers/StringSet.h>
 
 #include <benchmark/benchmark.h>
-
-#include "dnv/vista/sdk/internal/HashMap.h"
 
 namespace dnv::vista::sdk::benchmarks
 {
@@ -200,7 +199,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		for ( auto _ : state )
 		{
-			internal::HashMap<std::string, int> map;
+			nfx::containers::HashMap<std::string, int> map;
 			map.reserve( keys.size() );
 
 			for ( size_t i = 0; i < keys.size(); ++i )
@@ -227,7 +226,7 @@ namespace dnv::vista::sdk::benchmarks
 
 		for ( size_t i = 0; i < keys.size(); ++i )
 		{
-			if constexpr ( std::is_same_v<MapType, internal::HashMap<std::string, int>> )
+			if constexpr ( std::is_same_v<MapType, nfx::containers::HashMap<std::string, int>> )
 			{
 				map.insertOrAssign( keys[i], static_cast<int>( i ) );
 			}
@@ -330,7 +329,7 @@ namespace dnv::vista::sdk::benchmarks
 
 	static void BM_HashMap_Lookup_String( benchmark::State& state )
 	{
-		auto map = createPopulatedMap<internal::HashMap<std::string, int>>();
+		auto map = createPopulatedMap<nfx::containers::HashMap<std::string, int>>();
 		const auto& keys = BenchmarkData::getTestKeys();
 
 		for ( auto _ : state )
@@ -351,7 +350,7 @@ namespace dnv::vista::sdk::benchmarks
 
 	static void BM_HashMap_Lookup_StringView( benchmark::State& state )
 	{
-		auto map = createPopulatedMap<internal::HashMap<std::string, int>>();
+		auto map = createPopulatedMap<nfx::containers::HashMap<std::string, int>>();
 		const auto& views = BenchmarkData::getTestKeysViews();
 
 		for ( auto _ : state )
@@ -625,7 +624,7 @@ namespace dnv::vista::sdk::benchmarks
 		{
 			state.PauseTiming();
 
-			internal::HashMap<std::string, int> map;
+			nfx::containers::HashMap<std::string, int> map;
 			map.reserve( keys.size() );
 
 			state.ResumeTiming();

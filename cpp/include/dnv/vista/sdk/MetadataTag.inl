@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-#include "config/Platform.h"
+#include "config/config.h"
 
 namespace dnv::vista::sdk
 {

@@ -11,7 +11,7 @@
 #include <optional>
 #include <unordered_map>
 
-#include "dnv/vista/sdk/config/Platform.h"
+#include "dnv/vista/sdk/config/config.h"
 
 namespace dnv::vista::sdk::internal
 {
@@ -45,19 +45,19 @@ namespace dnv::vista::sdk::internal
 
 		const void* keyPtr = nullptr;
 
-		VISTA_SDK_CPP_FORCE_INLINE CacheEntry( std::chrono::milliseconds expiration = std::chrono::hours( 1 ) )
+		VISTA_SDK_CPP_INLINE CacheEntry( std::chrono::milliseconds expiration = std::chrono::hours( 1 ) )
 			: lastAccessed{ std::chrono::steady_clock::now() },
 			  slidingExpiration{ expiration }
 		{
 		}
 
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool isExpired() const noexcept
+		[[nodiscard]] VISTA_SDK_CPP_INLINE bool isExpired() const noexcept
 		{
 			auto now = std::chrono::steady_clock::now();
 			return ( now - lastAccessed ) > slidingExpiration;
 		}
 
-		void VISTA_SDK_CPP_FORCE_INLINE updateAccess() noexcept
+		void VISTA_SDK_CPP_INLINE updateAccess() noexcept
 		{
 			lastAccessed = std::chrono::steady_clock::now();
 		}
@@ -85,7 +85,7 @@ namespace dnv::vista::sdk::internal
 		 * @brief Construct memory cache with specified options
 		 * @param options Configuration options for cache behavior
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE explicit MemoryCache( const MemoryCacheOptions& options = {} )
+		VISTA_SDK_CPP_INLINE explicit MemoryCache( const MemoryCacheOptions& options = {} )
 			: m_options{ options },
 			  m_lruHead{ nullptr },
 			  m_lruTail{ nullptr }
@@ -106,7 +106,7 @@ namespace dnv::vista::sdk::internal
 		 * @param configure Optional function to configure cache entry
 		 * @return Reference to the cached value
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE TValue& getOrCreate( const TKey& key, FactoryFunction factory, ConfigFunction configure = nullptr )
+		VISTA_SDK_CPP_INLINE TValue& getOrCreate( const TKey& key, FactoryFunction factory, ConfigFunction configure = nullptr )
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -153,7 +153,7 @@ namespace dnv::vista::sdk::internal
 		 * @param key The cache key
 		 * @return Optional containing the value if found and not expired
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE std::optional<std::reference_wrapper<TValue>> tryGet( const TKey& key )
+		VISTA_SDK_CPP_INLINE std::optional<std::reference_wrapper<TValue>> tryGet( const TKey& key )
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -181,7 +181,7 @@ namespace dnv::vista::sdk::internal
 		 * @param key The cache key to remove
 		 * @return True if entry was removed, false if not found
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE bool remove( const TKey& key )
+		VISTA_SDK_CPP_INLINE bool remove( const TKey& key )
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -199,7 +199,7 @@ namespace dnv::vista::sdk::internal
 		/**
 		 * @brief Clear all cache entries
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE void clear()
+		VISTA_SDK_CPP_INLINE void clear()
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 			m_cache.clear();
@@ -211,7 +211,7 @@ namespace dnv::vista::sdk::internal
 		 * @brief Get current cache size
 		 * @return Number of entries in cache
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE std::size_t size() const
+		VISTA_SDK_CPP_INLINE std::size_t size() const
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -222,7 +222,7 @@ namespace dnv::vista::sdk::internal
 		 * @brief Check if cache is empty
 		 * @return True if cache contains no entries
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE bool isEmpty() const
+		VISTA_SDK_CPP_INLINE bool isEmpty() const
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -232,7 +232,7 @@ namespace dnv::vista::sdk::internal
 		/**
 		 * @brief Manually trigger cleanup of expired entries
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE void cleanupExpired()
+		VISTA_SDK_CPP_INLINE void cleanupExpired()
 		{
 			std::lock_guard<std::mutex> lock( m_mutex );
 
@@ -275,7 +275,7 @@ namespace dnv::vista::sdk::internal
 		 * @brief Add entry to head of LRU list (most recently used)
 		 * @param entry Entry to add to LRU list head
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE void addToLruHead( CacheEntry* entry ) noexcept
+		VISTA_SDK_CPP_INLINE void addToLruHead( CacheEntry* entry ) noexcept
 		{
 			entry->lruNext = m_lruHead;
 			entry->lruPrev = nullptr;
@@ -296,7 +296,7 @@ namespace dnv::vista::sdk::internal
 		 * @brief Remove entry from LRU list
 		 * @param entry Entry to remove from LRU list
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE void removeFromLru( CacheEntry* entry ) noexcept
+		VISTA_SDK_CPP_INLINE void removeFromLru( CacheEntry* entry ) noexcept
 		{
 			if ( entry->lruPrev != nullptr )
 			{
@@ -324,7 +324,7 @@ namespace dnv::vista::sdk::internal
 		 * @brief Move entry to head of LRU list (mark as most recently used)
 		 * @param entry Entry to move to LRU list head
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE void moveToLruHead( CacheEntry* entry ) noexcept
+		VISTA_SDK_CPP_INLINE void moveToLruHead( CacheEntry* entry ) noexcept
 		{
 			if ( entry == m_lruHead )
 			{
@@ -338,7 +338,7 @@ namespace dnv::vista::sdk::internal
 		/**
 		 * @brief Evict least recently used entry in O(1) time
 		 */
-		VISTA_SDK_CPP_FORCE_INLINE void evictLeastRecentlyUsed()
+		VISTA_SDK_CPP_INLINE void evictLeastRecentlyUsed()
 		{
 			if ( m_lruTail == nullptr )
 			{

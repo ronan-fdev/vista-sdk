@@ -8,7 +8,7 @@
 
 #include <fmt/format.h>
 
-#include "config/Platform.h"
+#include "config/config.h"
 #include "constants/CodebookConstants.h"
 
 namespace dnv::vista::sdk

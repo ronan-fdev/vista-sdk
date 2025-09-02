@@ -13,7 +13,7 @@
 #include <map>
 #include <optional>
 
-#include "internal/HashMap.h"
+#include <nfx/containers/HashMap.h>
 
 namespace dnv::vista::sdk
 {

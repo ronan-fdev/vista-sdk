@@ -3,12 +3,12 @@
  * @brief Implementation of ISO 19848 standard data access
  */
 
+#include <nfx/containers/HashMap.h>
 #include <nfx/string/StringBuilderPool.h>
 #include <nfx/string/Utils.h>
 
 #include "dnv/vista/sdk/transport/ISO19848.h"
 #include "dnv/vista/sdk/constants/ISO19848Constants.h"
-#include "dnv/vista/sdk/internal/HashMap.h"
 #include "dnv/vista/sdk/EmbeddedResource.h"
 
 namespace dnv::vista::sdk::transport
@@ -187,7 +187,7 @@ namespace dnv::vista::sdk::transport
 
 	DataChannelTypeNames::ParseResult DataChannelTypeNames::parse( std::string_view type ) const
 	{
-		static thread_local internal::HashMap<std::string, DataChannelTypeName> s_lookupCache;
+		static thread_local nfx::containers::HashMap<std::string, DataChannelTypeName> s_lookupCache;
 		static thread_local bool s_cacheInitialized = false;
 
 		if ( !s_cacheInitialized )
@@ -385,7 +385,7 @@ namespace dnv::vista::sdk::transport
 
 	FormatDataTypes::ParseResult FormatDataTypes::parse( std::string_view type ) const
 	{
-		static thread_local internal::HashMap<std::string, FormatDataType> s_lookupCache;
+		static thread_local nfx::containers::HashMap<std::string, FormatDataType> s_lookupCache;
 		static thread_local bool s_cacheInitialized = false;
 
 		if ( !s_cacheInitialized )

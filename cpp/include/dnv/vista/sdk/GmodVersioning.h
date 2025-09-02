@@ -10,9 +10,9 @@
 
 #pragma once
 
+#include <nfx/containers/HashMap.h>
 #include <nfx/string/Utils.h>
 
-#include "internal/HashMap.h"
 #include "GmodPath.h"
 #include "GmodVersioningDto.h"
 #include "LocalId.h"
@@ -213,7 +213,7 @@ namespace dnv::vista::sdk
 		// Private member variables
 		//----------------------------------------------
 
-		internal::HashMap<VisVersion, GmodVersioningNode> m_versioningsMap;
+		nfx::containers::HashMap<VisVersion, GmodVersioningNode> m_versioningsMap;
 
 		//----------------------------------------------
 		// Private helper methods

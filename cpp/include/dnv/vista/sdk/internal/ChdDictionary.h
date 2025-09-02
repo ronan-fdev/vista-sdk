@@ -17,7 +17,7 @@
 #include <string_view>
 #include <vector>
 
-#include "dnv/vista/sdk/config/Platform.h"
+#include "dnv/vista/sdk/config/config.h"
 
 namespace dnv::vista::sdk::internal
 {
@@ -148,7 +148,7 @@ namespace dnv::vista::sdk::internal
 			 * @details Simple hash by Paul Larson, provided for benchmarking.
 			 * @note Not used by CHD algorithm.
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static constexpr uint32_t Larson( uint32_t hash, uint8_t ch ) noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_INLINE static constexpr uint32_t Larson( uint32_t hash, uint8_t ch ) noexcept;
 
 			/**
 			 * @brief Computes one step of the FNV-1a hash function.
@@ -157,7 +157,7 @@ namespace dnv::vista::sdk::internal
 			 * @return The updated hash value.
 			 * @see https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static constexpr uint32_t fnv1a( uint32_t hash, uint8_t ch ) noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_INLINE static constexpr uint32_t fnv1a( uint32_t hash, uint8_t ch ) noexcept;
 
 			/**
 			 * @brief Computes one step of the CRC32 hash function using SSE4.2 instructions.
@@ -167,7 +167,7 @@ namespace dnv::vista::sdk::internal
 			 * @note Requires SSE4.2 support. Use hasSSE42Support() to check availability.
 			 * @see https://en.wikipedia.org/wiki/Cyclic_redundancy_check
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static uint32_t crc32( uint32_t hash, uint8_t ch ) noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_INLINE static uint32_t crc32( uint32_t hash, uint8_t ch ) noexcept;
 
 			/**
 			 * @brief Computes the final table index using the seed mixing function for the CHD algorithm.
@@ -177,7 +177,7 @@ namespace dnv::vista::sdk::internal
 			 * @return The final table index for the key (as size_t).
 			 * @see https://en.wikipedia.org/wiki/Perfect_hash_function#CHD_algorithm
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static constexpr uint32_t seed( uint32_t seed, uint32_t hash, size_t size ) noexcept;
+			[[nodiscard]] VISTA_SDK_CPP_INLINE static constexpr uint32_t seed( uint32_t seed, uint32_t hash, size_t size ) noexcept;
 		};
 	}
 
@@ -314,7 +314,7 @@ namespace dnv::vista::sdk::internal
 		 * @return A reference to the value associated with `key`.
 		 * @throws KeyNotFoundException if the `key` is not found in the dictionary or if the dictionary is empty.
 		 */
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE TValue& operator[]( std::string_view key );
+		[[nodiscard]] VISTA_SDK_CPP_INLINE TValue& operator[]( std::string_view key );
 
 		//----------------------------------------------
 		// Lookup methods
@@ -363,7 +363,7 @@ namespace dnv::vista::sdk::internal
 		 *                      set to the address of the found value. On failure, it will be set to `nullptr`.
 		 * @return `true` if the `key` was found and `outValue` was updated, `false` otherwise.
 		 */
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE bool tryGetValue( std::string_view key, const TValue*& outValue ) const noexcept;
+		[[nodiscard]] VISTA_SDK_CPP_INLINE bool tryGetValue( std::string_view key, const TValue*& outValue ) const noexcept;
 
 		//----------------------------------------------
 		// Iteration
@@ -417,7 +417,7 @@ namespace dnv::vista::sdk::internal
 		 * @param[in] key ASCII string key to hash
 		 * @return 32-bit hash value compatible with C# implementation
 		 */
-		[[nodiscard]] static VISTA_SDK_CPP_FORCE_INLINE uint32_t hash( std::string_view key ) noexcept;
+		[[nodiscard]] static VISTA_SDK_CPP_INLINE uint32_t hash( std::string_view key ) noexcept;
 
 	private:
 		//----------------------------------------------

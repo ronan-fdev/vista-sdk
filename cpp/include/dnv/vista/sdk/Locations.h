@@ -11,7 +11,7 @@
 #include <unordered_set>
 #include <string>
 
-#include "config/Platform.h"
+#include "config/config.h"
 #include "LocationsDto.h"
 
 namespace dnv::vista::sdk
@@ -518,7 +518,7 @@ namespace dnv::vista::sdk
 		 * @param number Output parameter: if parsing succeeds, this is set to the parsed integer.
 		 * @return True if parsing succeeded, false otherwise.
 		 */
-		[[nodiscard]] static VISTA_SDK_CPP_FORCE_INLINE bool tryParseInt( std::string_view span, int start, int length, int& number );
+		[[nodiscard]] static VISTA_SDK_CPP_INLINE bool tryParseInt( std::string_view span, int start, int length, int& number );
 
 	private:
 		//----------------------------------------------

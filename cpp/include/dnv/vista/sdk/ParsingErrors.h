@@ -9,7 +9,7 @@
 #include <string_view>
 #include <vector>
 
-#include "config/Platform.h"
+#include "config/config.h"
 
 namespace dnv::vista::sdk
 {

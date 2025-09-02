@@ -56,7 +56,7 @@ namespace dnv::vista::sdk
 	// Node query methods
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE bool Gmod::tryGetNode( std::string_view code, const GmodNode*& node ) const noexcept
+	VISTA_SDK_CPP_INLINE bool Gmod::tryGetNode( std::string_view code, const GmodNode*& node ) const noexcept
 	{
 		return m_nodeMap.tryGetValue( code, node );
 	}
@@ -199,7 +199,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//-----------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE Gmod::Enumerator::Enumerator( const internal::ChdDictionary<GmodNode>* map ) noexcept
+	VISTA_SDK_CPP_INLINE Gmod::Enumerator::Enumerator( const internal::ChdDictionary<GmodNode>* map ) noexcept
 		: m_sourceMapPtr{ map }, m_isInitialState{ true }
 	{
 		if ( m_sourceMapPtr )
@@ -212,7 +212,7 @@ namespace dnv::vista::sdk
 	// Iteration interface
 	//-----------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE const GmodNode& Gmod::Enumerator::current() const
+	VISTA_SDK_CPP_INLINE const GmodNode& Gmod::Enumerator::current() const
 	{
 		if ( !m_sourceMapPtr || m_isInitialState || m_currentMapIterator == m_sourceMapPtr->end() )
 		{
@@ -222,7 +222,7 @@ namespace dnv::vista::sdk
 		return m_currentMapIterator->second;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE bool Gmod::Enumerator::next() noexcept
+	VISTA_SDK_CPP_INLINE bool Gmod::Enumerator::next() noexcept
 	{
 		if ( !m_sourceMapPtr || m_sourceMapPtr->isEmpty() )
 		{
@@ -248,7 +248,7 @@ namespace dnv::vista::sdk
 		return false;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Gmod::Enumerator::reset() noexcept
+	VISTA_SDK_CPP_INLINE void Gmod::Enumerator::reset() noexcept
 	{
 		m_isInitialState = true;
 
@@ -266,13 +266,13 @@ namespace dnv::vista::sdk
 	// Parents class implementation
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE Gmod::Parents::Parents()
+	VISTA_SDK_CPP_INLINE Gmod::Parents::Parents()
 	{
 		m_parents.reserve( 64 );
 		m_occurrences.reserve( 4 );
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Gmod::Parents::push( const GmodNode* parent )
+	VISTA_SDK_CPP_INLINE void Gmod::Parents::push( const GmodNode* parent )
 	{
 		m_parents.push_back( parent );
 		const auto* countPtr = m_occurrences.tryGetValue( parent->code() );
@@ -286,7 +286,7 @@ namespace dnv::vista::sdk
 		}
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE void Gmod::Parents::pop()
+	VISTA_SDK_CPP_INLINE void Gmod::Parents::pop()
 	{
 		if ( m_parents.empty() )
 		{
@@ -393,7 +393,7 @@ namespace dnv::vista::sdk
 	// Public traverse method implementations
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE bool Gmod::traverse( TraverseHandler handler, const TraversalOptions& options ) const
+	VISTA_SDK_CPP_INLINE bool Gmod::traverse( TraverseHandler handler, const TraversalOptions& options ) const
 	{
 		TraverseHandler capturedHandler = handler;
 		TraverseHandlerWithState<TraverseHandler> wrapperHandler =
@@ -404,7 +404,7 @@ namespace dnv::vista::sdk
 	}
 
 	template <typename TState>
-	VISTA_SDK_CPP_FORCE_INLINE bool Gmod::traverse(
+	VISTA_SDK_CPP_INLINE bool Gmod::traverse(
 		TState& state,
 		TraverseHandlerWithState<TState> handler,
 		const TraversalOptions& options ) const
@@ -415,7 +415,7 @@ namespace dnv::vista::sdk
 		return traverseNode( context, *m_rootNode ) == TraversalHandlerResult::Continue;
 	}
 
-	VISTA_SDK_CPP_FORCE_INLINE bool Gmod::traverse( const GmodNode& rootNode, TraverseHandler handler, const TraversalOptions& options ) const
+	VISTA_SDK_CPP_INLINE bool Gmod::traverse( const GmodNode& rootNode, TraverseHandler handler, const TraversalOptions& options ) const
 	{
 		TraverseHandler capturedHandler = handler;
 		TraverseHandlerWithState<TraverseHandler> wrapperHandler =
@@ -429,7 +429,7 @@ namespace dnv::vista::sdk
 	}
 
 	template <typename TState>
-	VISTA_SDK_CPP_FORCE_INLINE bool Gmod::traverse(
+	VISTA_SDK_CPP_INLINE bool Gmod::traverse(
 		TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, const TraversalOptions& options ) const
 	{
 		Parents parentsStack;

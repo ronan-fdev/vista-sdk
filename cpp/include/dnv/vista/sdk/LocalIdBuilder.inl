@@ -8,7 +8,7 @@
 
 #include <nfx/string/StringBuilderPool.h>
 
-#include "config/Platform.h"
+#include "config/config.h"
 #include "constants/AlgorithmConstants.h"
 #include "constants/ISO19848Constants.h"
 #include "constants/LocalIdConstants.h"

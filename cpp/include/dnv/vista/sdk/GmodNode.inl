@@ -6,7 +6,7 @@
 #include <nfx/string/StringBuilderPool.h>
 #include <nfx/string/Utils.h>
 
-#include "config/Platform.h"
+#include "config/config.h"
 #include "constants/GmodConstants.h"
 
 namespace dnv::vista::sdk

@@ -11,7 +11,7 @@
 
 #include <nfx/string/StringBuilderPool.h>
 
-#include "config/Platform.h"
+#include "config/config.h"
 #include "GmodNode.h"
 
 namespace dnv::vista::sdk
@@ -230,9 +230,9 @@ namespace dnv::vista::sdk
 		 * @return Parsed GmodPath instance
 		 * @throws std::invalid_argument if parsing fails
 		 */
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static GmodPath parse( std::string_view item, VisVersion visVersion );
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static GmodPath parse( std::string_view item, const Gmod& gmod, const Locations& locations );
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static GmodPath parseFullPath( std::string_view item, VisVersion visVersion );
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static GmodPath parse( std::string_view item, VisVersion visVersion );
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static GmodPath parse( std::string_view item, const Gmod& gmod, const Locations& locations );
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static GmodPath parseFullPath( std::string_view item, VisVersion visVersion );
 
 		/**
 		 * @brief Attempts to parse a path string, returning success/failure
@@ -241,12 +241,12 @@ namespace dnv::vista::sdk
 		 * @param outPath [out] The parsed path if successful
 		 * @return True if parsing succeeded, false otherwise
 		 */
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static bool tryParse( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath );
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static bool tryParse(
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static bool tryParse( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath );
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static bool tryParse(
 			std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath );
 
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static bool tryParseFullPath( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath );
-		[[nodiscard]] VISTA_SDK_CPP_FORCE_INLINE static bool tryParseFullPath(
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static bool tryParseFullPath( std::string_view item, VisVersion visVersion, std::optional<GmodPath>& outPath );
+		[[nodiscard]] VISTA_SDK_CPP_INLINE static bool tryParseFullPath(
 			std::string_view item, const Gmod& gmod, const Locations& locations, std::optional<GmodPath>& outPath );
 
 		//----------------------------------------------

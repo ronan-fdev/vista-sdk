@@ -3,7 +3,7 @@
 # ==============================================================================
 
 set(PUBLIC_HEADERS
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/config/Platform.h
+	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/config/config.h
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/AlgorithmConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/CodebookConstants.h
@@ -15,7 +15,6 @@ set(PUBLIC_HEADERS
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.inl
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/HashMap.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.h

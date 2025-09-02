@@ -26,7 +26,7 @@ namespace dnv::vista::sdk::internal
 		// CPU feature detection
 		//----------------------------------------------
 
-		VISTA_SDK_CPP_FORCE_INLINE bool hasSSE42Support() noexcept
+		VISTA_SDK_CPP_INLINE bool hasSSE42Support() noexcept
 		{
 			static thread_local const bool s_hasSSE42 = []() {
 				bool hasSupport = false;
@@ -73,22 +73,22 @@ namespace dnv::vista::sdk::internal
 		// Public static methods
 		//----------------------------
 
-		VISTA_SDK_CPP_FORCE_INLINE constexpr uint32_t Hashing::Larson( uint32_t hash, uint8_t ch ) noexcept
+		VISTA_SDK_CPP_INLINE constexpr uint32_t Hashing::Larson( uint32_t hash, uint8_t ch ) noexcept
 		{
 			return 37 * hash + ch;
 		}
 
-		VISTA_SDK_CPP_FORCE_INLINE constexpr uint32_t Hashing::fnv1a( uint32_t hash, uint8_t ch ) noexcept
+		VISTA_SDK_CPP_INLINE constexpr uint32_t Hashing::fnv1a( uint32_t hash, uint8_t ch ) noexcept
 		{
 			return ( ch ^ hash ) * constants::algorithm::FNV_PRIME;
 		}
 
-		VISTA_SDK_CPP_FORCE_INLINE uint32_t Hashing::crc32( uint32_t hash, uint8_t ch ) noexcept
+		VISTA_SDK_CPP_INLINE uint32_t Hashing::crc32( uint32_t hash, uint8_t ch ) noexcept
 		{
 			return _mm_crc32_u8( hash, ch );
 		}
 
-		VISTA_SDK_CPP_FORCE_INLINE constexpr uint32_t Hashing::seed( uint32_t seed, uint32_t hash, size_t size ) noexcept
+		VISTA_SDK_CPP_INLINE constexpr uint32_t Hashing::seed( uint32_t seed, uint32_t hash, size_t size ) noexcept
 		{
 			/* Mixes the primary hash with the seed to find the final table slot */
 			uint32_t x{ seed + hash };
@@ -267,7 +267,7 @@ namespace dnv::vista::sdk::internal
 	//----------------------------------------------
 
 	template <typename TValue>
-	VISTA_SDK_CPP_FORCE_INLINE TValue& ChdDictionary<TValue>::operator[]( std::string_view key )
+	VISTA_SDK_CPP_INLINE TValue& ChdDictionary<TValue>::operator[]( std::string_view key )
 	{
 		if ( isEmpty() )
 		{
@@ -345,7 +345,7 @@ namespace dnv::vista::sdk::internal
 	//----------------------------------------------
 
 	template <typename TValue>
-	VISTA_SDK_CPP_FORCE_INLINE bool ChdDictionary<TValue>::tryGetValue( std::string_view key, const TValue*& outValue ) const noexcept
+	VISTA_SDK_CPP_INLINE bool ChdDictionary<TValue>::tryGetValue( std::string_view key, const TValue*& outValue ) const noexcept
 	{
 		if ( key.empty() )
 		{
@@ -421,7 +421,7 @@ namespace dnv::vista::sdk::internal
 	//---------------------------
 
 	template <typename TValue>
-	VISTA_SDK_CPP_FORCE_INLINE uint32_t ChdDictionary<TValue>::hash( std::string_view key ) noexcept
+	VISTA_SDK_CPP_INLINE uint32_t ChdDictionary<TValue>::hash( std::string_view key ) noexcept
 	{
 		if ( key.empty() )
 		{

@@ -3,7 +3,7 @@
  * @brief Inline implementations for performance-critical ParsingErrors operations
  */
 
-#include "config/Platform.h"
+#include "config/config.h"
 #include "constants/AlgorithmConstants.h"
 
 namespace dnv::vista::sdk

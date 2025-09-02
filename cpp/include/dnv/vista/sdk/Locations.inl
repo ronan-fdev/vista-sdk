@@ -3,7 +3,7 @@
  * @brief Inline implementations for performance-critical Locations operations
  */
 
-#include "config/Platform.h"
+#include "config/config.h"
 
 namespace dnv::vista::sdk
 {
@@ -52,7 +52,7 @@ namespace dnv::vista::sdk
 	// Public static helper methods
 	//----------------------------------------------
 
-	VISTA_SDK_CPP_FORCE_INLINE bool Locations::tryParseInt( std::string_view span, int start, int length, int& number )
+	VISTA_SDK_CPP_INLINE bool Locations::tryParseInt( std::string_view span, int start, int length, int& number )
 	{
 		if ( start < 0 || length <= 0 || static_cast<size_t>( start + length ) > span.length() )
 		{
