@@ -32,31 +32,30 @@ public abstract record GmodPathQueryBuilder
         internal Path(GmodPath path)
         {
             _setNodes = new();
-            var p = EnsurePathVersion(path);
 
-            foreach (var set in p.IndividualizableSets)
+            foreach (var set in path.IndividualizableSets)
             {
-                var setNode = set.Nodes.Last();
+                var setNode = set.Nodes[set.Nodes.Count - 1];
                 _setNodes.Add(setNode.Code, setNode);
-                HashSet<Location> locations = new();
+                HashSet<Location> locations = [];
                 if (set.Location is not null)
                     locations.Add(set.Location.Value);
-                _filter.Add(setNode.Code, new(setNode.Code, locations));
+                _filter.Add(setNode.Code, new(setNode, locations));
             }
 
-            GmodPath = p;
+            GmodPath = path;
         }
 
         public Path WithNode(
             Func<IReadOnlyDictionary<string, GmodNode>, GmodNode> select,
-            bool MatchAllLocations = false
+            bool matchAllLocations = false
         )
         {
             var node = select(_setNodes);
             if (!_filter.TryGetValue(node.Code, out var item))
                 throw new Exception("Expected to find a filter on the node in the path");
             item.Locations = new();
-            item.MatchAllLocations = MatchAllLocations;
+            item.MatchAllLocations = matchAllLocations;
             return this with { };
         }
 
@@ -86,56 +85,52 @@ public abstract record GmodPathQueryBuilder
 
         public Nodes WithNode(GmodNode node, bool MatchAllLocations = false)
         {
-            var n = EnsureNodeVersion(node);
-            if (_filter.TryGetValue(n.Code, out var item))
+            if (_filter.TryGetValue(node.Code, out var item))
             {
                 item.Locations = new();
                 item.MatchAllLocations = MatchAllLocations;
             }
             else
             {
-                _filter.Add(n.Code, new(n.Code, new()) { MatchAllLocations = MatchAllLocations });
+                _filter.Add(node.Code, new(node, new()) { MatchAllLocations = MatchAllLocations });
             }
             return this with { };
         }
 
         public Nodes WithNode(GmodNode node, params Location[]? locations)
         {
-            var n = EnsureNodeVersion(node);
             var newLocations = locations is null ? new HashSet<Location>() : new(locations);
-            if (_filter.TryGetValue(n.Code, out var item))
+            if (_filter.TryGetValue(node.Code, out var item))
             {
                 item.Locations = newLocations;
             }
             else
             {
-                _filter.Add(n.Code, new(n.Code, newLocations));
+                _filter.Add(node.Code, new(node, newLocations));
             }
             return this with { };
         }
     }
 
-    private GmodPath EnsurePathVersion(GmodPath path)
+    private static GmodPath EnsurePathVersion(GmodPath path)
     {
         GmodPath p = path;
         if (p.VisVersion < VIS.LatestVisVersion)
         {
-            var convertedPath = VIS.Instance.ConvertPath(p, VIS.LatestVisVersion);
-            if (convertedPath is null)
-                throw new Exception("Failed to convert path");
+            var convertedPath =
+                VIS.Instance.ConvertPath(p, VIS.LatestVisVersion) ?? throw new Exception("Failed to convert path");
             p = convertedPath;
         }
         return p;
     }
 
-    private GmodNode EnsureNodeVersion(GmodNode node)
+    private static GmodNode EnsureNodeVersion(GmodNode node)
     {
         GmodNode n = node;
         if (n.VisVersion < VIS.LatestVisVersion)
         {
-            var convertedNode = VIS.Instance.ConvertNode(n, VIS.LatestVisVersion);
-            if (convertedNode is null)
-                throw new Exception("Failed to convert node");
+            var convertedNode =
+                VIS.Instance.ConvertNode(n, VIS.LatestVisVersion) ?? throw new Exception("Failed to convert node");
             n = convertedNode;
         }
         return n;
@@ -159,10 +154,10 @@ public abstract record GmodPathQueryBuilder
 
         foreach (var kvp in _filter)
         {
-            var code = kvp.Key;
             var item = kvp.Value;
+            var node = EnsureNodeVersion(item.Node);
 
-            if (!targetNodes.TryGetValue(code, out var potentialLocations))
+            if (!targetNodes.TryGetValue(node.Code, out var potentialLocations))
                 return false;
             if (item.MatchAllLocations)
                 continue;
@@ -186,13 +181,13 @@ public abstract record GmodPathQueryBuilder
 
 internal sealed record NodeItem
 {
-    public NodeItem(string node, HashSet<Location> locations)
+    public NodeItem(GmodNode node, HashSet<Location> locations)
     {
         Node = node;
         Locations = locations;
     }
 
-    public string Node { get; set; }
+    public GmodNode Node { get; set; }
     public HashSet<Location> Locations { get; set; }
 
     public bool MatchAllLocations { get; set; }

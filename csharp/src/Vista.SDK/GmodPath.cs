@@ -461,7 +461,7 @@ public sealed record GmodPath
         };
     }
 
-    private record struct LocationSetsVisitor
+    internal record struct LocationSetsVisitor
     {
         public int currentParentStart;
 
