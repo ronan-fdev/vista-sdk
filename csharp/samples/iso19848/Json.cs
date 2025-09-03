@@ -20,4 +20,14 @@ static class JsonToDomain
         Debug.Assert(json != null);
         return json.ToDomainModel();
     }
+
+    public static string Serialize(Vista.SDK.Transport.DataChannel.DataChannelListPackage dataChannelListPackage)
+    {
+        // SDK provides a configured JSON serializer
+        return Serializer.Serialize(dataChannelListPackage.ToJsonDto());
+    }
+
+    // SDK provides a configured JSON serializer
+    public static string Serialize(Vista.SDK.Transport.TimeSeries.TimeSeriesDataPackage timeSeriesDataPackage) =>
+        Serializer.Serialize(timeSeriesDataPackage.ToJsonDto());
 }

@@ -71,3 +71,5 @@ var nonStandardId = "TC-Speed";
 
 string nonStandard = Transformer.Transform(standardId);
 LocalId standard = Transformer.Transform(nonStandardId);
+Console.WriteLine($"Transformed {standardId} to non-standardized name {nonStandard}");
+Console.WriteLine($"Transformed {nonStandardId} to standardized name {standard}");

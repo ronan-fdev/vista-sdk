@@ -24,11 +24,9 @@ static class Transformer
             ?? throw new InvalidOperationException($"No ShortId found for LocalId {standardTagName}");
     }
 
-    public static LocalId TransformToStandardizedName(string nonStandardTagName)
-    {
-        var dataChannel = DataChannelListPackage.DataChannelList[nonStandardTagName];
-        return dataChannel.DataChannelId.LocalId;
-    }
+    // Or as a one liner
+    public static LocalId TransformToStandardizedName(string nonStandardTagName) =>
+        DataChannelListPackage.DataChannelList[nonStandardTagName].DataChannelId.LocalId;
 
     // Of course, unecessary tranformation -  just to show that it is allowed
     public static string TransformToNonStandardizedName(string nonStandardTagName)
