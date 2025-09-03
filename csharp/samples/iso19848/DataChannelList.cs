@@ -2,7 +2,7 @@ using Vista.SDK;
 using Vista.SDK.Transport;
 using Vista.SDK.Transport.DataChannel;
 
-static class DataChannelList
+static class UseDataChannelList
 {
     // You should define the properties for each DataChannel, not default like this
     private static readonly Property DefaultProperty =
@@ -57,7 +57,7 @@ static class DataChannelList
                             },
                             Property = DefaultProperty with {
                                 // Customize properties here
-                                Name = $"TC-{kvp.Key}",
+                                Name = kvp.Key,
                             }
                         }
                 )

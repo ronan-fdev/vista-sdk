@@ -5,7 +5,7 @@
             "DataChannelListID": {
                 "ID": "ExampleDataChannelList",
                 "Version": "1.0.0",
-                "TimeStamp": "2025-09-03T07:50:40.7645986\u002B00:00"
+                "TimeStamp": "2025-09-03T14:22:44.6401818\u002B00:00"
             },
             "VersionInformation": {
                 "NamingRule": "dnv",
@@ -13,14 +13,14 @@
                 "ReferenceURL": "https://docs.vista.dnv.com"
             },
             "Author": "DNV",
-            "DateCreated": "2025-09-03T07:50:40.7645986\u002B00:00"
+            "DateCreated": "2025-09-03T14:22:44.6401818\u002B00:00"
         },
         "DataChannelList": {
             "DataChannel": [
                 {
                     "DataChannelID": {
                         "LocalID": "/dnv-v2/vis-3-9a/411.1/C101.663i/C663/meta/qty-rotational.frequency",
-                        "ShortID": "Speed",
+                        "ShortID": "TC-Speed",
                         "NameObject": { "NamingRule": "/dnv-v2" }
                     },
                     "Property": {
@@ -32,7 +32,7 @@
                 {
                     "DataChannelID": {
                         "LocalID": "/dnv-v2/vis-3-9a/411.1/C101.663i/C663/meta/qty-pressure/cnt-lubricating.oil/pos-inlet",
-                        "ShortID": "LubeOilPressureInlet",
+                        "ShortID": "TC-LubeOilPressureInlet",
                         "NameObject": { "NamingRule": "/dnv-v2" }
                     },
                     "Property": {
@@ -44,7 +44,7 @@
                 {
                     "DataChannelID": {
                         "LocalID": "/dnv-v2/vis-3-9a/411.1/C101.663i/C663/meta/qty-temperature/cnt-exhaust.gas/pos-inlet",
-                        "ShortID": "LubeOilTemperatureInlet",
+                        "ShortID": "TC-LubeOilTemperatureInlet",
                         "NameObject": { "NamingRule": "/dnv-v2" }
                     },
                     "Property": {
@@ -56,7 +56,7 @@
                 {
                     "DataChannelID": {
                         "LocalID": "/dnv-v2/vis-3-9a/411.1/C101.663i/C663/meta/qty-temperature/cnt-lubricating.oil/pos-outlet",
-                        "ShortID": "LubeOilTemperatureOutlet",
+                        "ShortID": "TC-LubeOilTemperatureOutlet",
                         "NameObject": { "NamingRule": "/dnv-v2" }
                     },
                     "Property": {
@@ -74,13 +74,13 @@
                     "Property": {
                         "DataChannelType": { "Type": "Inst" },
                         "Format": { "Type": "String", "Restriction": {} },
-                        "Name": "TC-ExhaustGasTemperatureOutlet"
+                        "Name": "ExhaustGasTemperatureOutlet"
                     }
                 },
                 {
                     "DataChannelID": {
                         "LocalID": "/dnv-v2/vis-3-9a/710.1/F211.11/meta/qty-latitude",
-                        "ShortID": "Latitude",
+                        "ShortID": "TC-Latitude",
                         "NameObject": { "NamingRule": "/dnv-v2" }
                     },
                     "Property": {
@@ -92,7 +92,7 @@
                 {
                     "DataChannelID": {
                         "LocalID": "/dnv-v2/vis-3-9a/710.1/F211.11/meta/qty-longitude",
-                        "ShortID": "Longitude",
+                        "ShortID": "TC-Longitude",
                         "NameObject": { "NamingRule": "/dnv-v2" }
                     },
                     "Property": {
