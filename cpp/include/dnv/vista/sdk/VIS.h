@@ -10,9 +10,9 @@
 
 #include <vector>
 
+#include <nfx/memory/MemoryCache.h>
 #include <nfx/string/Utils.h>
 
-#include "internal/MemoryCache.h"
 #include "Codebooks.h"
 #include "Gmod.h"
 #include "Locations.h"
@@ -365,37 +365,37 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Access static thread-safe cache for GMOD DTOs by VisVersion
 		 */
-		static internal::MemoryCache<VisVersion, GmodDto>& gmodDtoCache();
+		static nfx::memory::MemoryCache<VisVersion, GmodDto>& gmodDtoCache();
 
 		/**
 		 * @brief Access static thread-safe cache for Codebooks DTOs by VisVersion
 		 */
-		static internal::MemoryCache<VisVersion, CodebooksDto>& codebooksDtoCache();
+		static nfx::memory::MemoryCache<VisVersion, CodebooksDto>& codebooksDtoCache();
 
 		/**
 		 * @brief Access static thread-safe cache for Locations DTOs by VisVersion
 		 */
-		static internal::MemoryCache<VisVersion, LocationsDto>& locationsDtoCache();
+		static nfx::memory::MemoryCache<VisVersion, LocationsDto>& locationsDtoCache();
 
 		/**
 		 * @brief Access static thread-safe cache for processed Codebooks objects by VisVersion
 		 */
-		static internal::MemoryCache<VisVersion, Codebooks>& codebooksCache();
+		static nfx::memory::MemoryCache<VisVersion, Codebooks>& codebooksCache();
 
 		/**
 		 * @brief Access static thread-safe cache for processed GMOD objects by VisVersion
 		 */
-		static internal::MemoryCache<VisVersion, Gmod>& gmodsCache();
+		static nfx::memory::MemoryCache<VisVersion, Gmod>& gmodsCache();
 
 		/**
 		 * @brief Access static thread-safe cache for processed Locations objects by VisVersion
 		 */
-		static internal::MemoryCache<VisVersion, Locations>& locationsCache();
+		static nfx::memory::MemoryCache<VisVersion, Locations>& locationsCache();
 
 		/**
 		 * @brief Access static thread-safe cache for GMOD versioning object
 		 */
-		static internal::MemoryCache<int, GmodVersioning>& gmodVersioningCache();
+		static nfx::memory::MemoryCache<VisVersion, GmodVersioning>& gmodVersioningCache();
 	};
 }
 

@@ -15,7 +15,6 @@ set(PUBLIC_HEADERS
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.inl
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/MemoryCache.h
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.inl

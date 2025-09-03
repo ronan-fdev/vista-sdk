@@ -6,9 +6,9 @@
 #pragma once
 
 #include <nfx/datatypes/Decimal.h>
+#include <nfx/memory/MemoryCache.h>
 #include <nfx/time/DateTime.h>
 
-#include "dnv/vista/sdk/internal/MemoryCache.h"
 #include "dnv/vista/sdk/transport/ISO19848Dtos.h"
 #include "dnv/vista/sdk/Exceptions.h"
 #include "dnv/vista/sdk/Results.h"
@@ -850,10 +850,10 @@ namespace dnv::vista::sdk::transport
 		// Cache instances
 		//----------------------------------------------
 
-		internal::MemoryCache<ISO19848Version, DataChannelTypeNamesDto> m_dataChannelTypeNamesDtoCache;
-		internal::MemoryCache<ISO19848Version, DataChannelTypeNames> m_dataChannelTypeNamesCache;
-		internal::MemoryCache<ISO19848Version, FormatDataTypesDto> m_formatDataTypesDtoCache;
-		internal::MemoryCache<ISO19848Version, FormatDataTypes> m_formatDataTypesCache;
+		nfx::memory::MemoryCache<ISO19848Version, DataChannelTypeNamesDto> m_dataChannelTypeNamesDtoCache;
+		nfx::memory::MemoryCache<ISO19848Version, DataChannelTypeNames> m_dataChannelTypeNamesCache;
+		nfx::memory::MemoryCache<ISO19848Version, FormatDataTypesDto> m_formatDataTypesDtoCache;
+		nfx::memory::MemoryCache<ISO19848Version, FormatDataTypes> m_formatDataTypesCache;
 
 		//----------------------------------------------
 		// DTO access

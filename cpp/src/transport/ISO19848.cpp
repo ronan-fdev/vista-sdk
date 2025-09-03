@@ -32,10 +32,10 @@ namespace dnv::vista::sdk::transport
 	//----------------------------------------------
 
 	ISO19848::ISO19848() noexcept
-		: m_dataChannelTypeNamesDtoCache{ internal::MemoryCacheOptions{ 10, std::chrono::hours( 1 ), std::chrono::hours( 1 ) } },
-		  m_dataChannelTypeNamesCache{ internal::MemoryCacheOptions{ 10, std::chrono::hours( 1 ), std::chrono::hours( 1 ) } },
-		  m_formatDataTypesDtoCache{ internal::MemoryCacheOptions{ 10, std::chrono::hours( 1 ), std::chrono::hours( 1 ) } },
-		  m_formatDataTypesCache{ internal::MemoryCacheOptions{ 10, std::chrono::hours( 1 ), std::chrono::hours( 1 ) } }
+		: m_dataChannelTypeNamesDtoCache{ nfx::memory::MemoryCacheOptions{ 10, std::chrono::hours( 1 ) } },
+		  m_dataChannelTypeNamesCache{ nfx::memory::MemoryCacheOptions{ 10, std::chrono::hours( 1 ) } },
+		  m_formatDataTypesDtoCache{ nfx::memory::MemoryCacheOptions{ 10, std::chrono::hours( 1 ) } },
+		  m_formatDataTypesCache{ nfx::memory::MemoryCacheOptions{ 10, std::chrono::hours( 1 ) } }
 	{
 	}
 
@@ -60,7 +60,7 @@ namespace dnv::vista::sdk::transport
 
 				return DataChannelTypeNames{ std::move( values ) };
 			},
-			[]( internal::CacheEntry& entry ) {
+			[]( nfx::memory::CacheEntry& entry ) {
 				entry.size = 1;
 				entry.slidingExpiration = std::chrono::hours( 1 );
 			} );
@@ -83,7 +83,7 @@ namespace dnv::vista::sdk::transport
 
 				return FormatDataTypes{ std::move( values ) };
 			},
-			[]( internal::CacheEntry& entry ) {
+			[]( nfx::memory::CacheEntry& entry ) {
 				entry.size = 1;
 				entry.slidingExpiration = std::chrono::hours( 1 );
 			} );
@@ -106,7 +106,7 @@ namespace dnv::vista::sdk::transport
 
 				return dto.value();
 			},
-			[]( internal::CacheEntry& entry ) {
+			[]( nfx::memory::CacheEntry& entry ) {
 				entry.size = 1;
 				entry.slidingExpiration = std::chrono::hours( 1 );
 			} );
@@ -125,7 +125,7 @@ namespace dnv::vista::sdk::transport
 
 				return dto.value();
 			},
-			[]( internal::CacheEntry& entry ) {
+			[]( nfx::memory::CacheEntry& entry ) {
 				entry.size = 1;
 				entry.slidingExpiration = std::chrono::hours( 1 );
 			} );
