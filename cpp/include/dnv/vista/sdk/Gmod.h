@@ -14,9 +14,10 @@
 #include <string>
 #include <string_view>
 
+#include <nfx/containers/ChdHashMap.h>
 #include <nfx/containers/HashMap.h>
 
-#include "internal/ChdDictionary.h"
+#include "config/config.h"
 
 namespace dnv::vista::sdk
 {
@@ -367,7 +368,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief An enumerator for iterating over all nodes within a Gmod instance.
 		 * @details Provides a way to access each GmodNode in the GMOD's internal collection.
-		 *          The order of iteration depends on the underlying ChdDictionary.
+		 *          The order of iteration depends on the underlying ChdHashMap.
 		 */
 		class Enumerator final
 		{
@@ -380,9 +381,9 @@ namespace dnv::vista::sdk
 		private:
 			/**
 			 * @brief Private constructor, typically called by Gmod::enumerator().
-			 * @param map Pointer to the ChdDictionary of GmodNodes to iterate over.
+			 * @param map Pointer to the ChdHashMap of GmodNodes to iterate over.
 			 */
-			VISTA_SDK_CPP_INLINE Enumerator( const internal::ChdDictionary<GmodNode>* map ) noexcept;
+			VISTA_SDK_CPP_INLINE Enumerator( const nfx::containers::ChdHashMap<GmodNode>* map ) noexcept;
 
 		public:
 			/** @brief Default constructor. */
@@ -433,8 +434,8 @@ namespace dnv::vista::sdk
 			// Private member variables
 			//-----------------------------
 
-			const internal::ChdDictionary<GmodNode>* m_sourceMapPtr;
-			internal::ChdDictionary<GmodNode>::Iterator m_currentMapIterator;
+			const nfx::containers::ChdHashMap<GmodNode>* m_sourceMapPtr;
+			nfx::containers::ChdHashMap<GmodNode>::Iterator m_currentMapIterator;
 			bool m_isInitialState;
 		};
 
@@ -513,7 +514,7 @@ namespace dnv::vista::sdk
 		 * @details This dictionary maps node codes (strings) to GmodNode objects.
 		 *          It owns the GmodNode instances.
 		 */
-		internal::ChdDictionary<GmodNode> m_nodeMap;
+		nfx::containers::ChdHashMap<GmodNode> m_nodeMap;
 	};
 }
 

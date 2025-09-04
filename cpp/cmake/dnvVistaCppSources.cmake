@@ -5,16 +5,12 @@
 set(PUBLIC_HEADERS
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/config/config.h
 
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/AlgorithmConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/CodebookConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/DtoKeysConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/GmodConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/ISO19848Constants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/LocalIdConstants.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/constants/LocationsConstants.h
-
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.h
-	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/internal/ChdDictionary.inl
 
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.h
 	${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.inl

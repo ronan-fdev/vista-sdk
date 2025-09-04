@@ -11,6 +11,7 @@
 
 namespace dnv::vista::sdk
 {
+
 	//=====================================================================
 	// Magic numbers
 	//=====================================================================
@@ -25,6 +26,9 @@ namespace dnv::vista::sdk
 
 		/** @brief Stack allocation limit for non-numeric position tracking to avoid heap allocation during order validation. */
 		static constexpr size_t MAX_NON_NUMERIC = 8;
+
+		/** @brief Character set for null or whitespace detection in string parsing operations. */
+		inline constexpr std::string_view NULL_OR_WHITESPACE = " \t\n\r\f\v";
 	}
 
 	//=====================================================================
@@ -139,7 +143,7 @@ namespace dnv::vista::sdk
 		 */
 		alignas( 64 ) constexpr std::array<bool, 256> s_whitespaceLookup = []() constexpr {
 			std::array<bool, 256> lookup{};
-			for ( char c : constants::algorithm::NULL_OR_WHITESPACE )
+			for ( char c : NULL_OR_WHITESPACE )
 			{
 				lookup[static_cast<unsigned char>( c )] = true;
 			}

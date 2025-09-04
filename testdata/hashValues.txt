@@ -1,4 +1,4 @@
-# C# Generated Hash Values for ChdDictionary Compatibility Testing
+# C# Generated Hash Values for ChdDictionary <-> C++ nfx::containers::ChdHashMap Compatibility Testing
 # Format: Key|HashValue
 
 |2166136261

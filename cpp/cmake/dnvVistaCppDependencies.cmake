@@ -40,7 +40,7 @@ set(NFX_CPP_ESSENTIALS_WITH_TIME        ON   CACHE BOOL  ""  FORCE)
 FetchContent_Declare(
 	nfx-cpp-essentials
 	GIT_REPOSITORY https://github.com/ronan-fdev/nfx-cpp-essentials.git
-	GIT_TAG        0.8.2
+	GIT_TAG        0.9.3
 	GIT_SHALLOW    TRUE
 )
 

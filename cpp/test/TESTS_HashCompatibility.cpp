@@ -1,18 +1,18 @@
 /**
  * @file TESTS_HashCompatibility.cpp
- * @brief Hash compatibility tests between C++ and C# ChdDictionary implementations
+ * @brief Hash compatibility tests between C++ and C# nfx::containers::ChdHashMap implementations
  *
- * @details This file tests that the C++ ChdDictionary::hash() function produces
- *          identical hash values to the C# ChdDictionary.Hash() method to ensure
+ * @details This file tests that the C++ nfx::containers::ChdHashMap::hash() function produces
+ *          identical hash values to the C# ChdHashMap.Hash() method to ensure
  *          cross-platform dictionary compatibility.
  */
 
 #include <fstream>
 
+#include <nfx/containers/ChdHashMap.h>
+
 #include <nfx/string/Utils.h>
 #include <gtest/gtest.h>
-
-#include "dnv/vista/sdk/internal/ChdDictionary.h"
 
 namespace dnv::vista::sdk::test
 {
@@ -78,7 +78,7 @@ namespace dnv::vista::sdk::test
 	}
 
 	/**
-	 * @brief Test that C++ ChdDictionary::hash() produces identical results to C# implementation
+	 * @brief Test that C++ nfx::containers::ChdHashMap::hash() produces identical results to C# implementation
 	 */
 	TEST( HashCompatibility, CppCSharpHashIdentical )
 	{
@@ -87,7 +87,7 @@ namespace dnv::vista::sdk::test
 
 		for ( const auto& testCase : testCases )
 		{
-			uint32_t actualHash = internal::ChdDictionary<int>::hash( testCase.key );
+			uint32_t actualHash = nfx::containers::ChdHashMap<int>::hash( testCase.key );
 			EXPECT_EQ( actualHash, testCase.expectedHash );
 		}
 	}

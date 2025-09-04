@@ -245,8 +245,6 @@ function(configure_vista_target target_name)
 		nlohmann_json::nlohmann_json
 		zlib
 		fmt::fmt-header-only
-		benchmark::benchmark
-		GTest::gtest_main
 	)
 
 	# --- Properties ---

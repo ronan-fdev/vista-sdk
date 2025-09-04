@@ -199,7 +199,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//-----------------------------
 
-	VISTA_SDK_CPP_INLINE Gmod::Enumerator::Enumerator( const internal::ChdDictionary<GmodNode>* map ) noexcept
+	VISTA_SDK_CPP_INLINE Gmod::Enumerator::Enumerator( const nfx::containers::ChdHashMap<GmodNode>* map ) noexcept
 		: m_sourceMapPtr{ map }, m_isInitialState{ true }
 	{
 		if ( m_sourceMapPtr )

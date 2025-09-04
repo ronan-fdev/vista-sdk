@@ -29,7 +29,7 @@ namespace dnv::vista::sdk
 			nodePairs.emplace_back( std::string{ nodeDto.code() }, GmodNode{ version, nodeDto } );
 		}
 
-		m_nodeMap = internal::ChdDictionary<GmodNode>( std::move( nodePairs ) );
+		m_nodeMap = nfx::containers::ChdHashMap<GmodNode>( std::move( nodePairs ) );
 
 		for ( const auto& relation : dto.relations() )
 		{
@@ -60,7 +60,7 @@ namespace dnv::vista::sdk
 		{
 			pairs.emplace_back( code, node );
 		}
-		m_nodeMap = internal::ChdDictionary<GmodNode>( std::move( pairs ) );
+		m_nodeMap = nfx::containers::ChdHashMap<GmodNode>( std::move( pairs ) );
 
 		for ( auto& [key, node] : m_nodeMap )
 		{

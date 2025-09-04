@@ -15,6 +15,11 @@
 
 namespace dnv::vista::sdk
 {
+	namespace
+	{
+		/** @brief Character set for null or whitespace detection in string parsing operations. */
+		inline constexpr std::string_view NULL_OR_WHITESPACE = " \t\n\r\f\v";
+	}
 	namespace internal
 	{
 		struct LocationSetsVisitor
@@ -819,13 +824,13 @@ namespace dnv::vista::sdk
 			return GmodParsePathResult::Error{ "Item is empty" };
 		}
 
-		const size_t start = item.find_first_not_of( constants::algorithm::NULL_OR_WHITESPACE );
+		const size_t start = item.find_first_not_of( NULL_OR_WHITESPACE );
 		if ( start == std::string_view::npos )
 		{
 			return GmodParsePathResult::Error{ "Item is empty" };
 		}
 
-		const size_t end = item.find_last_not_of( constants::algorithm::NULL_OR_WHITESPACE ) + 1;
+		const size_t end = item.find_last_not_of( NULL_OR_WHITESPACE ) + 1;
 		item = item.substr( start, end - start );
 
 		if ( !item.empty() && item[0] == '/' )

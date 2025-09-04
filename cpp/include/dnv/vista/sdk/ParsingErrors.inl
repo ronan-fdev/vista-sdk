@@ -4,7 +4,6 @@
  */
 
 #include "config/config.h"
-#include "constants/AlgorithmConstants.h"
 
 namespace dnv::vista::sdk
 {

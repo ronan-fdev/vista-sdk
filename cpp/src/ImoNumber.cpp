@@ -9,10 +9,14 @@
 
 #include "dnv/vista/sdk/ImoNumber.h"
 
-#include "dnv/vista/sdk/constants/AlgorithmConstants.h"
-
 namespace dnv::vista::sdk
 {
+	namespace
+	{
+		/** @brief Character set for null or whitespace detection in string parsing operations. */
+		inline constexpr std::string_view NULL_OR_WHITESPACE = " \t\n\r\f\v";
+	}
+
 	//=====================================================================
 	// ImoNumber class
 	//=====================================================================
@@ -121,7 +125,7 @@ namespace dnv::vista::sdk
 			return std::nullopt;
 		}
 
-		if ( value.find_first_of( constants::algorithm::NULL_OR_WHITESPACE ) != std::string::npos )
+		if ( value.find_first_of( NULL_OR_WHITESPACE ) != std::string::npos )
 		{
 			return std::nullopt;
 		}
