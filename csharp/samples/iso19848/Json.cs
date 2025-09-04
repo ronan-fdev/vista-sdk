@@ -5,17 +5,19 @@ using Vista.SDK.Transport.Json.TimeSeriesData;
 
 static class JsonToDomain
 {
-    public static Vista.SDK.Transport.DataChannel.DataChannelListPackage ReadDataChannelList()
+    public static Vista.SDK.Transport.DataChannel.DataChannelListPackage DeserializeDataChannelList()
     {
         var file = File.ReadAllText("resources/DataChannelList.json");
+        // SDK provides a configured JSON serializer
         var json = Serializer.DeserializeDataChannelList(file);
         Debug.Assert(json != null);
         return json.ToDomainModel();
     }
 
-    public static Vista.SDK.Transport.TimeSeries.TimeSeriesDataPackage ReadTimeSeriesDataPackage()
+    public static Vista.SDK.Transport.TimeSeries.TimeSeriesDataPackage DeserializeTimeSeriesDataPackage()
     {
         var file = File.ReadAllText("resources/TimeSeriesDataPackage.json");
+        // SDK provides a configured JSON serializer
         var json = Serializer.DeserializeTimeSeriesData(file);
         Debug.Assert(json != null);
         return json.ToDomainModel();

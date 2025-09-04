@@ -5,8 +5,8 @@ using Vista.SDK.Transport.Json.DataChannel;
 using Vista.SDK.Transport.Json.TimeSeriesData;
 
 Console.WriteLine($"=========== Read ISO 19848 JSON to domain example ===========");
-var dataChannelListPackage = JsonToDomain.ReadDataChannelList();
-var timeSeriesDataPackage = JsonToDomain.ReadTimeSeriesDataPackage();
+var dataChannelListPackage = JsonToDomain.DeserializeDataChannelList();
+var timeSeriesDataPackage = JsonToDomain.DeserializeTimeSeriesDataPackage();
 Console.WriteLine($"Read DataChannelList: \n{dataChannelListPackage.ToJsonDto().Serialize()}");
 Console.WriteLine($"Read TimeSeriesDataPackage: \n{timeSeriesDataPackage.ToJsonDto().Serialize()}");
 

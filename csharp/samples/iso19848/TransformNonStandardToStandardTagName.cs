@@ -2,16 +2,16 @@ using Vista.SDK;
 using Vista.SDK.Transport.DataChannel;
 
 /// <summary>
-/// The calling to access a specific DataChannl is allowed by the following properties:
+/// Accessing a specific DataChannel is available by the following properties:
 /// - ISO19848 LocalId
-/// - Non-standardized name (as long as the DataChannel is configured)
+/// - Non-standardized name (ShortId)
 /// - Index
-/// As you can see. All properties are used similarly on the <see cref="DataChannelList"/> to access the <see cref="DataChannel"/>
+/// As you can see. All properties are accessed similarly on the <see cref="DataChannelList"/> to access the <see cref="DataChannel"/>
 /// </summary>
 static class Transformer
 {
     // Either read as file, or produce from database. Keep it in memory to improve performance
-    public static readonly DataChannelListPackage DataChannelListPackage = JsonToDomain.ReadDataChannelList();
+    public static readonly DataChannelListPackage DataChannelListPackage = JsonToDomain.DeserializeDataChannelList();
 
     public static LocalId Transform(string nonStandardTagName) => TransformToStandardizedName(nonStandardTagName);
 

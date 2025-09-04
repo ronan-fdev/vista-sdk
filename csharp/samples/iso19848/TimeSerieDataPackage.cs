@@ -82,12 +82,14 @@ static class TimeSeries
         // Optional validation step - can be used to validate data
         var result = data.Validate(
             dataChannelListPackage,
+            // Tabular
             (timestamp, dataChannel, value, quality) =>
             {
                 // Custom validation logic
                 return new ValidateResult.Ok();
             },
-            (@event, dataChannel, value, quality) =>
+            // Event
+            (timestamp, dataChannel, value, quality) =>
             {
                 // Custom validation logic
                 return new ValidateResult.Ok();
