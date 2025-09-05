@@ -69,8 +69,7 @@ namespace dnv::vista::sdk::tests
 
 	TEST_F( GmodVersioningTest, ConvertLocalId )
 	{
-		ASSERT_TRUE( m_setupSuccess ) << "Test setup failed";
-
+		// Test case 1: Basic conversion
 		std::string sourceLocalIdStr = "/dnv-v2/vis-3-4a/411.1/C101/sec/411.1/C101.64i/S201/meta/cnt-condensate";
 		std::string targetLocalIdStr = "/dnv-v2/vis-3-5a/411.1/C101/sec/411.1/C101.64/S201/meta/cnt-condensate";
 
@@ -85,6 +84,21 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( convertedLocalId.has_value() );
 		EXPECT_EQ( *targetLocalId, *convertedLocalId );
 		EXPECT_EQ( targetLocalIdStr, convertedLocalId->toString() );
+
+		// Test case 2: Conversion with individualization preservation
+		std::string sourceLocalIdStr2 = "/dnv-v2/vis-3-4a/411.1/C101.64i-1/S201.1/C151.2/S110/meta/cnt-hydraulic.oil/state-running";
+		std::string targetLocalIdStr2 = "/dnv-v2/vis-3-9a/411.1/C101.64-1/S201.1/C151.2/S110/meta/cnt-hydraulic.oil/state-running";
+
+		std::optional<LocalIdBuilder> sourceLocalId2;
+		std::optional<LocalIdBuilder> targetLocalId2;
+
+		ASSERT_TRUE( LocalIdBuilder::tryParse( sourceLocalIdStr2, errors, sourceLocalId2 ) );
+		ASSERT_TRUE( LocalIdBuilder::tryParse( targetLocalIdStr2, errors, targetLocalId2 ) );
+
+		auto convertedLocalId2 = m_vis->convertLocalId( *sourceLocalId2, VisVersion::v3_9a );
+		ASSERT_TRUE( convertedLocalId2.has_value() );
+		EXPECT_EQ( *targetLocalId2, *convertedLocalId2 );
+		EXPECT_EQ( targetLocalIdStr2, convertedLocalId2->toString() );
 	}
 
 	//----------------------------------------------
@@ -266,9 +280,9 @@ namespace dnv::vista::sdk::tests
 					errorNodes += code + ", ";
 				}
 
-				std::cerr << "ERROR: Failed nodes for " 
-				         << dnv::vista::sdk::VisVersionExtensions::toVersionString( pair.first ) 
-				         << ": " << errorNodes << "\n";
+				std::cerr << "ERROR: Failed nodes for "
+						  << dnv::vista::sdk::VisVersionExtensions::toVersionString( pair.first )
+						  << ": " << errorNodes << "\n";
 			}
 		}
 	}
@@ -296,26 +310,26 @@ namespace dnv::vista::sdk::tests
 
 	std::vector<PathTestData> validPathTestData()
 	{
-		return { PathTestData( "411.1/C101.72/I101", "411.1/C101.72/I101" ), PathTestData( "323.51/H362.1", "323.61/H362.1" ),
+		return {
+			PathTestData( "411.1/C101.72/I101", "411.1/C101.72/I101" ), PathTestData( "323.51/H362.1", "323.61/H362.1" ),
 			PathTestData( "321.38/C906", "321.39/C906" ), PathTestData( "511.331/C221", "511.31/C121.31/C221" ),
 			PathTestData( "511.11/C101.663i/C663.5/CS6d", "511.11/C101.663i/C663.6/CS6d" ),
 			PathTestData( "511.11-1/C101.663i/C663.5/CS6d", "511.11-1/C101.663i/C663.6/CS6d" ),
 			PathTestData( "1012.21/C1147.221/C1051.7/C101.22", "1012.21/C1147.221/C1051.7/C101.93" ),
-			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.6", "1012.21/C1147.221/C1051.7/C101.311/C467.5" ), PathTestData( "001", "001" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.6", "1012.21/C1147.221/C1051.7/C101.311/C467.5" ),
+			PathTestData( "001", "001" ),
 			PathTestData( "038.7/F101.2/F71", "038.7/F101.2/F71" ),
-			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.6/S61", "1012.21/C1147.221/C1051.7/C101.311/C467.5/S61" ), PathTestData( "000a", "000a" ),
+			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.6/S61", "1012.21/C1147.221/C1051.7/C101.311/C467.5/S61" ),
+			PathTestData( "000a", "000a" ),
 			PathTestData( "1012.21/C1147.221/C1051.7/C101.61/S203.2/S101", "1012.21/C1147.221/C1051.7/C101.61/S203.3/S110.1/S101" ),
 			PathTestData( "1012.21/C1147.221/C1051.7/C101.661i/C624", "1012.21/C1147.221/C1051.7/C101.661i/C621" ),
 			PathTestData( "1012.22/S201.1/C151.2/S110.2/C101.64i", "1012.22/S201.1/C151.2/S110.2/C101.64" ),
 			PathTestData( "632.32i/S110.2/C111.42/G203.31/S90.5/C401", "632.32i/S110.2/C111.42/G203.31/S90.5/C401" ),
-			PathTestData( "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51",
-				"864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51" ),
-			PathTestData( "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401",
-				"864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401" ),
-			PathTestData( "221.31/C1141.41/C664.2/C471", "221.31/C1141.41/C664.2/C471" ), PathTestData( "514/E15", "514" ),
-			PathTestData( "244.1i/H101.111/H401", "244.1i/H101.11/H407.1/H401", VisVersion::v3_7a, VisVersion::v3_8a ),
-			PathTestData(
-				"1346/S201.1/C151.31/S110.2/C111.1/C109.16/C509", "1346/S201.1/C151.31/S110.2/C111.1/C109.126/C509", VisVersion::v3_7a, VisVersion::v3_8a ) };
+			PathTestData( "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51", "864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.42/G204.41/S90.2/S51" ),
+			PathTestData( "864.11/G71.21/C101.64i/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401", "864.11/G71.21/C101.64/S201.1/C151.31/S110.2/C111.41/G240.1/G242.2/S90.5/C401" ),
+			PathTestData( "221.31/C1141.41/C664.2/C471", "221.31/C1141.41/C664.2/C471" ),
+			PathTestData( "514/E15", "514" ),
+			PathTestData( "1346/S201.1/C151.31/S110.2/C111.1/C109.16/C509", "1346/S201.1/C151.31/S110.2/C111.1/C109.126/C509", VisVersion::v3_7a, VisVersion::v3_8a ) };
 	}
 
 	class PathConversionTest : public ::testing::TestWithParam<PathTestData>
@@ -441,6 +455,63 @@ namespace dnv::vista::sdk::tests
 	}
 
 	INSTANTIATE_TEST_SUITE_P( ValidFullPathTests, FullPathConversionTest, ::testing::ValuesIn( validFullPathTestData() ) );
+
+	//----------------------------------------------
+	// Test_Conversion_Exceptions
+	//----------------------------------------------
+
+	TEST_F( GmodVersioningTest, Test_Conversion_Exceptions )
+	{
+
+		// UNCOVERED MES CASE due to missing conversion codes, e.g. merge + normal assignment change
+		std::string sourcePath = "244.1i/H101.111/H401";
+		std::string targetExpected = "244.1i/H101.11/H407.1/H401";
+		VisVersion sourceVersion = VisVersion::v3_7a;
+		VisVersion targetVersion = VisVersion::v3_8a;
+
+		auto& vis = VIS::instance();
+		const auto& sourceGmod = vis.gmod( sourceVersion );
+
+		std::optional<GmodPath> sourcePathOpt;
+		ASSERT_TRUE( sourceGmod.tryParsePath( sourcePath, sourcePathOpt ) );
+		ASSERT_TRUE( sourcePathOpt.has_value() );
+
+		// This should throw an exception due to the uncovered conversion case
+		EXPECT_THROW(
+			{
+				auto result = vis.convertPath( sourceVersion, *sourcePathOpt, targetVersion );
+			},
+			std::exception );
+	}
+
+	//----------------------------------------------
+	// ConvertGmodPathWithLocation
+	//----------------------------------------------
+
+	TEST_F( GmodVersioningTest, ConvertGmodPathWithLocation )
+	{
+
+		std::string sourcePath = "691.811i-A/H101.11-1";
+		std::string expectedPath = "691.83111i-A/H101.11-1";
+		VisVersion sourceVersion = VisVersion::v3_7a;
+		VisVersion targetVersion = VisVersion::v3_9a;
+
+		auto& vis = VIS::instance();
+		const auto& sourceGmod = vis.gmod( sourceVersion );
+		const auto& targetGmod = vis.gmod( targetVersion );
+
+		std::optional<GmodPath> sourcePathOpt;
+		ASSERT_TRUE( sourceGmod.tryParsePath( sourcePath, sourcePathOpt ) );
+		ASSERT_TRUE( sourcePathOpt.has_value() );
+
+		std::optional<GmodPath> expectedPathOpt;
+		ASSERT_TRUE( targetGmod.tryParsePath( expectedPath, expectedPathOpt ) );
+		ASSERT_TRUE( expectedPathOpt.has_value() );
+
+		auto convertedPath = vis.convertPath( sourceVersion, *sourcePathOpt, targetVersion );
+		ASSERT_TRUE( convertedPath.has_value() );
+		EXPECT_EQ( *expectedPathOpt, *convertedPath );
+	}
 
 	//----------------------------------------------
 	// Test_GmodVersioning_ConvertNode

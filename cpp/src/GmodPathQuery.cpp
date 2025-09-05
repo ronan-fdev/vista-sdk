@@ -3,6 +3,7 @@
  * @brief Implementation of GmodPathQuery class
  */
 
+#include "dnv/vista/sdk/GmodNode.h"
 #include "dnv/vista/sdk/GmodPathQuery.h"
 #include "dnv/vista/sdk/VIS.h"
 
@@ -17,7 +18,7 @@ namespace dnv::vista::sdk
 	//----------------------------------------------
 
 	GmodPathQuery::GmodPathQuery( const GmodPath& path )
-		: m_sourcePath{ ensurePathVersion( path ) }
+		: m_sourcePath{ path }
 	{
 		for ( const auto& set : m_sourcePath->individualizableSets() )
 		{
@@ -35,7 +36,7 @@ namespace dnv::vista::sdk
 					locations.push_back( set.location().value() );
 				}
 
-				NodeItem item( nodeCode, std::move( locations ) );
+				NodeItem item( setNode, std::move( locations ) );
 				m_filter.emplace( nodeCode, std::move( item ) );
 			}
 		}
@@ -102,8 +103,7 @@ namespace dnv::vista::sdk
 	GmodPathQuery GmodPathQuery::withNode( const GmodNode& node, bool matchAllLocations ) const
 	{
 		GmodPathQuery result = *this;
-		const auto& n = result.ensureNodeVersion( node );
-		auto it = result.m_filter.find( n.code() );
+		auto it = result.m_filter.find( node.code() );
 		if ( it != result.m_filter.end() )
 		{
 			it->second.setLocations( {} );
@@ -111,9 +111,9 @@ namespace dnv::vista::sdk
 		}
 		else
 		{
-			NodeItem item( n.code(), {} );
+			NodeItem item( node, {} );
 			item.setMatchAllLocations( matchAllLocations );
-			result.m_filter.emplace( n.code(), std::move( item ) );
+			result.m_filter.emplace( node.code(), std::move( item ) );
 		}
 
 		return result;
@@ -122,18 +122,17 @@ namespace dnv::vista::sdk
 	GmodPathQuery GmodPathQuery::withNode( const GmodNode& node, const std::vector<Location>& locations ) const
 	{
 		GmodPathQuery result = *this;
-		const auto& n = result.ensureNodeVersion( node );
 		std::vector<Location> locationSet{ locations.begin(), locations.end() };
 
-		auto it = result.m_filter.find( n.code() );
+		auto it = result.m_filter.find( node.code() );
 		if ( it != result.m_filter.end() )
 		{
 			it->second.setLocations( std::move( locationSet ) );
 		}
 		else
 		{
-			NodeItem item( n.code(), std::move( locationSet ) );
-			result.m_filter.emplace( n.code(), std::move( item ) );
+			NodeItem item( node, std::move( locationSet ) );
+			result.m_filter.emplace( node.code(), std::move( item ) );
 		}
 
 		return result;
@@ -172,7 +171,9 @@ namespace dnv::vista::sdk
 		// Check each filter criterion
 		for ( const auto& [code, item] : m_filter )
 		{
-			auto targetIt = targetNodes.find( code );
+
+			const auto& node = ensureNodeVersion( item.node() );
+			auto targetIt = targetNodes.find( node.code() );
 			if ( targetIt == targetNodes.end() )
 			{
 				return false;
@@ -222,7 +223,7 @@ namespace dnv::vista::sdk
 	// Helper methods
 	//----------------------------------------------
 
-	GmodPath GmodPathQuery::ensurePathVersion( const GmodPath& path ) const
+	GmodPath GmodPathQuery::ensurePathVersion( const GmodPath& path )
 	{
 		const auto targetVersion = VIS::instance().latestVisVersion();
 
@@ -240,7 +241,7 @@ namespace dnv::vista::sdk
 		return path;
 	}
 
-	GmodNode GmodPathQuery::ensureNodeVersion( const GmodNode& node ) const
+	GmodNode GmodPathQuery::ensureNodeVersion( const GmodNode& node )
 	{
 		const auto targetVersion = VIS::instance().latestVisVersion();
 

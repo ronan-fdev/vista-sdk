@@ -5,6 +5,7 @@
 
 #include "dnv/vista/sdk/GmodVersioning.h"
 
+#include "internal/LocationSetsVisitor.h"
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodNode.h"
 #include "dnv/vista/sdk/GmodPath.h"
@@ -217,7 +218,7 @@ namespace dnv::vista::sdk
 			const GmodNode* rootNodeInGmodPtr = nullptr;
 			if ( !targetGmod.tryGetNode( targetEndNode->code(), rootNodeInGmodPtr ) || !rootNodeInGmodPtr )
 			{
-				throw std::runtime_error{ "Failed to get root node from targetGmod during root path conversion" };
+				throw std::runtime_error( "Failed to get root node from targetGmod during root path conversion" );
 			}
 
 			return GmodPath( targetGmod, *rootNodeInGmodPtr, {} );
@@ -239,7 +240,7 @@ namespace dnv::vista::sdk
 			std::optional<GmodNode> convertedNodeOpt = convertNode( sourceVersion, *nodePtr, targetVersion, targetGmod );
 			if ( !convertedNodeOpt.has_value() )
 			{
-				throw std::runtime_error{ "Could not convert node forward" };
+				throw std::runtime_error( "Could not convert node forward" );
 			}
 
 			qualifyingNodes.emplace_back( nodePtr, std::move( *convertedNodeOpt ) );
@@ -276,6 +277,50 @@ namespace dnv::vista::sdk
 
 			if ( i > 0 && qualifyingNode.second.code() == qualifyingNodes[i - 1].second.code() )
 			{
+				// Continue if next qualifying node is the same as the previous
+				// The same as the current qualifying node, assumes same normal assignment [IF NOT THROW EXCEPTION, uncovered case]
+				if ( qualifyingNode.second.code() == qualifyingNodes[i - 1].second.code() )
+				{
+					if ( qualifyingNode.first->productType().has_value() &&
+						 qualifyingNode.first->productType()->code() != qualifyingNodes[i - 1].second.productType().value_or( GmodNode{} ).code() )
+					{
+						throw std::runtime_error{
+							"Failed to convert path at node " + std::string( qualifyingNode.second.code() ) +
+							". Uncovered case of merge where target node also has a new assignment" };
+					}
+				}
+
+				// Check if skipped node is individualized
+				if ( qualifyingNode.second.location().has_value() )
+				{
+					// Find node in path
+					auto it = std::find_if( path.begin(), path.end(),
+						[&qualifyingNode]( const GmodNode& n ) { return n.code() == qualifyingNode.second.code(); } );
+
+					if ( it != path.end() )
+					{
+						size_t index = static_cast<size_t>( std::distance( path.begin(), it ) );
+
+						if ( path[index].location().has_value() &&
+							 path[index].location() != qualifyingNode.second.location() )
+						{
+							throw std::runtime_error( "Failed to convert path at node " + std::string( qualifyingNode.second.code() ) +
+													  ". Uncovered case of multiple colliding locations while converting nodes" );
+						}
+
+						if ( !path[index].isIndividualizable( false, false ) )
+						{
+							throw std::runtime_error( "Failed to convert path at node " + std::string( path[index].code() ) +
+													  ". Uncovered case of losing individualization information" );
+						}
+
+						// Don't overwrite existing location
+						if ( !path[index].location().has_value() )
+						{
+							path[index] = path[index].withLocation( qualifyingNode.second.location().value() );
+						}
+					}
+				}
 				continue;
 			}
 
@@ -294,10 +339,9 @@ namespace dnv::vista::sdk
 			{
 				addToPath( targetGmod, path, qualifyingNode.second );
 			}
-			else if ( normalAssignmentChanged )
-			{
-				/* SC || SN || SD */
 
+			else if ( normalAssignmentChanged ) // AC || AN || AD
+			{
 				bool wasDeleted = sourceNormalAssignment.has_value() && !targetNormalAssignment.has_value();
 
 				if ( !codeChanged )
@@ -314,7 +358,7 @@ namespace dnv::vista::sdk
 							const auto& next = qualifyingNodes[i + 1];
 							if ( next.second.code() != qualifyingNode.second.code() )
 							{
-								throw std::runtime_error{ "Normal assignment end node was deleted" };
+								throw std::runtime_error( "Normal assignment end node was deleted" );
 							}
 						}
 					}
@@ -332,14 +376,27 @@ namespace dnv::vista::sdk
 						}
 						addToPath( targetGmod, path, targetNormalAssignmentVal );
 
-						++i;
+						// AC The previous normal assignment
+						if ( sourceNormalAssignment.has_value() && targetNormalAssignment.has_value() &&
+							 sourceNormalAssignment->code() != targetNormalAssignment->code() )
+						{
+							// Sanity check that the next node is actually the old assignment
+							if ( i + 1 < qualifyingNodes.size() && qualifyingNodes[i + 1].first->code() != sourceNormalAssignment->code() )
+							{
+								throw std::runtime_error( "Failed to convert path at node " + std::string( qualifyingNode.second.code() ) +
+														  ". Expected next qualifying source node to match target normal assignment" );
+							}
+
+							// Skip next node, since that is the old assignment
+							++i;
+						}
 					}
 				}
 			}
 
 			if ( selectionChanged )
 			{
-				/* SC || SN || SD */
+				// SC || SN || SD
 			}
 
 			if ( !codeChanged && !normalAssignmentChanged )
@@ -355,7 +412,7 @@ namespace dnv::vista::sdk
 
 		if ( path.empty() || path.size() < 1 )
 		{
-			throw std::runtime_error{ "Path reconstruction resulted in an empty path" };
+			throw std::runtime_error( "Path reconstruction resulted in an empty path" );
 		}
 
 		if ( path.size() == 1 )
@@ -373,6 +430,47 @@ namespace dnv::vista::sdk
 
 		GmodNode targetEndNodeFromPath = std::move( path.back() );
 
+		internal::LocationSetsVisitor visitor;
+		for ( size_t i = 0; i < potentialParentsFromPath.size() + 1; ++i )
+		{
+			const GmodNode& n = ( i < potentialParentsFromPath.size() )
+									? potentialParentsFromPath[i]
+									: targetEndNodeFromPath;
+
+			std::vector<GmodNode*> tempParentsView;
+			tempParentsView.reserve( potentialParentsFromPath.size() );
+			for ( auto& parent : potentialParentsFromPath )
+			{
+				tempParentsView.push_back( &parent );
+			}
+
+			auto set = visitor.visit( n, i, tempParentsView, targetEndNodeFromPath );
+			if ( !set.has_value() )
+			{
+				if ( n.location().has_value() )
+				{
+					break;
+				}
+				continue;
+			}
+
+			const auto& [start, end, location] = set.value();
+			if ( start == end )
+				continue;
+
+			for ( size_t j = start; j <= end; ++j )
+			{
+				if ( j < potentialParentsFromPath.size() && location.has_value() )
+				{
+					potentialParentsFromPath[j] = potentialParentsFromPath[j].withLocation( location.value() );
+				}
+				else if ( j >= potentialParentsFromPath.size() && location.has_value() )
+				{
+					targetEndNodeFromPath = targetEndNodeFromPath.withLocation( location.value() );
+				}
+			}
+		}
+
 		std::vector<GmodNode*> potentialParentPtrsFromPath;
 		potentialParentPtrsFromPath.reserve( potentialParentsFromPath.size() );
 		for ( auto& parent : potentialParentsFromPath )
@@ -383,7 +481,7 @@ namespace dnv::vista::sdk
 		int missingLinkAt;
 		if ( !GmodPath::isValid( potentialParentPtrsFromPath, targetEndNodeFromPath, missingLinkAt ) )
 		{
-			throw std::runtime_error{ "Did not end up with a valid path" };
+			throw std::runtime_error( "Did not end up with a valid path" );
 		}
 
 		return GmodPath( targetGmod, std::move( targetEndNodeFromPath ), std::move( potentialParentsFromPath ) );
