@@ -86,6 +86,7 @@ set(PUBLIC_HEADERS
 set(PRIVATE_HEADERS
 	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocalIdParsingErrorBuilder.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationParsingErrorBuilder.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationSetsVisitor.h
 )
 
 set(PRIVATE_SOURCES
