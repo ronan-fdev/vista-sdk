@@ -104,6 +104,7 @@ set(PUBLIC_HEADERS
 )
 
 set(PRIVATE_HEADERS
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationSetsVisitor.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/internal/DynamicStringBuffer_impl.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/internal/DynamicStringBufferPool.h
 	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocalIdParsingErrorBuilder.h

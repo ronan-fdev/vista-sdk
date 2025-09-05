@@ -5,6 +5,7 @@
 
 #include "dnv/vista/sdk/GmodPath.h"
 
+#include "internal/LocationSetsVisitor.h"
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
 #include "dnv/vista/sdk/utils/StringUtils.h"
 
@@ -20,9 +21,13 @@ namespace dnv::vista::sdk
 			std::string_view code;
 			std::optional<Location> location;
 
-			PathNode( std::string_view c ) : code{ c }, location{ std::nullopt } {}
+			PathNode( std::string_view c ) : code{ c }, location{ std::nullopt }
+			{
+			}
 
-			PathNode( std::string_view c, const Location& loc ) : code{ c }, location{ loc } {}
+			PathNode( std::string_view c, const Location& loc ) : code{ c }, location{ loc }
+			{
+			}
 		};
 
 		struct ParseContext

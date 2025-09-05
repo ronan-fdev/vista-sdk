@@ -5,6 +5,7 @@
 
 #include "dnv/vista/sdk/GmodVersioning.h"
 
+#include "internal/LocationSetsVisitor.h"
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodNode.h"
 #include "dnv/vista/sdk/GmodPath.h"
@@ -298,7 +299,7 @@ namespace dnv::vista::sdk
 
 					if ( it != path.end() )
 					{
-						size_t index = std::distance( path.begin(), it );
+						size_t index = static_cast<size_t>( std::distance( path.begin(), it ) );
 
 						if ( path[index].location().has_value() &&
 							 path[index].location() != qualifyingNode.second.location() )
