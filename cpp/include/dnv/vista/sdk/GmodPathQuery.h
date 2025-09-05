@@ -9,6 +9,7 @@
 #pragma once
 
 #include "internal/StringMap.h"
+#include "GmodNode.h"
 #include "GmodPath.h"
 #include "Locations.h"
 
@@ -20,7 +21,7 @@ namespace dnv::vista::sdk
 
 	/**
 	 * @brief Internal node item for query filtering
-	 * @details Stores node code, associated locations, and matching behavior
+	 * @details Stores GmodNode, associated locations, and matching behavior
 	 */
 	class NodeItem final
 	{
@@ -32,7 +33,7 @@ namespace dnv::vista::sdk
 		/** @brief Default constructor */
 		NodeItem() = delete;
 
-		NodeItem( std::string node, std::vector<Location> locations ) noexcept;
+		NodeItem( GmodNode node, std::vector<Location> locations ) noexcept;
 
 		/** @brief Copy constructor */
 		NodeItem( const NodeItem& ) = default;
@@ -61,8 +62,8 @@ namespace dnv::vista::sdk
 		// Accessors
 		//----------------------------------------------
 
-		/** @brief Get the node code associated with this filter item */
-		[[nodiscard]] inline const std::string& node() const noexcept;
+		/** @brief Get the GmodNode associated with this filter item */
+		[[nodiscard]] inline const GmodNode& node() const noexcept;
 
 		/** @brief Get the vector of locations to match for this node */
 		[[nodiscard]] inline const std::vector<Location>& locations() const noexcept;
@@ -85,7 +86,7 @@ namespace dnv::vista::sdk
 		// Private member variables
 		//----------------------------------------------
 
-		std::string m_node;
+		GmodNode m_node;
 		std::vector<Location> m_locations;
 		bool m_matchAllLocations{ false };
 	};
@@ -245,8 +246,8 @@ namespace dnv::vista::sdk
 		// Helper methods
 		//----------------------------------------------
 
-		[[nodiscard]] GmodPath ensurePathVersion( const GmodPath& path ) const;
-		[[nodiscard]] GmodNode ensureNodeVersion( const GmodNode& node ) const;
+		[[nodiscard]] static GmodPath ensurePathVersion( const GmodPath& path );
+		[[nodiscard]] static GmodNode ensureNodeVersion( const GmodNode& node );
 	};
 }
 

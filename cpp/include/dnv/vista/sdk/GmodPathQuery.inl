@@ -15,7 +15,7 @@ namespace dnv::vista::sdk
 	// Construction
 	//----------------------------------------------
 
-	inline NodeItem::NodeItem( std::string node, std::vector<Location> locations ) noexcept
+	inline NodeItem::NodeItem( GmodNode node, std::vector<Location> locations ) noexcept
 		: m_node{ std::move( node ) },
 		  m_locations{ std::move( locations ) }
 	{
@@ -25,7 +25,7 @@ namespace dnv::vista::sdk
 	// Accessors
 	//----------------------------------------------
 
-	inline const std::string& NodeItem::node() const noexcept
+	inline const GmodNode& NodeItem::node() const noexcept
 	{
 		return m_node;
 	}
