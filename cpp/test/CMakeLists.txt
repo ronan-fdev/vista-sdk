@@ -147,7 +147,6 @@ foreach(test_source ${TEST_SOURCES})
 			GTest::gtest_main
 			nlohmann_json::nlohmann_json
 			zlib
-			fmt::fmt-header-only
 		)
 
 		target_include_directories(${test_target_name} PRIVATE

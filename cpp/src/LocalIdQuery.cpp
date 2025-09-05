@@ -41,7 +41,7 @@ namespace dnv::vista::sdk
 			convertedLocalId = VIS::instance().convertLocalId( localId, VIS::instance().latestVisVersion() );
 			if ( !convertedLocalId.has_value() )
 			{
-				throw std::runtime_error( "Failed to convert LocalId to latest VIS version" );
+				throw std::runtime_error{ "Failed to convert LocalId to latest VIS version" };
 			}
 			targetLocalId = &convertedLocalId.value();
 		}

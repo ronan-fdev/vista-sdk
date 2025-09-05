@@ -52,7 +52,7 @@ transport::timeseries::TimeSeriesDataPackage createPackage( const std::vector<Ba
 {
 	if ( sourceData.empty() )
 	{
-		throw std::invalid_argument( "Source data cannot be empty" );
+		throw std::invalid_argument{ "Source data cannot be empty" };
 	}
 
 	// Current timestamp for package creation

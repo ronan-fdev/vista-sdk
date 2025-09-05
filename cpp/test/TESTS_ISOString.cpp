@@ -111,10 +111,8 @@ namespace dnv::vista::sdk::test
 		{
 			for ( [[maybe_unused]] const auto& [localId, error] : context.errors )
 			{
-				fmt::print(
-					stderr,
-					"ERROR: Failed to parse {} with error {}\n",
-					localId, error.has_value() ? *error : "Not a match" );
+				std::cerr << "ERROR: Failed to parse " << localId 
+				         << " with error " << (error.has_value() ? *error : "Not a match") << "\n";
 			}
 		}
 

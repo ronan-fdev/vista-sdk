@@ -24,7 +24,7 @@ namespace dnv::vista::sdk::transport::timeseries
 	{
 		if ( start > m_end )
 		{
-			throw std::invalid_argument( "Start time must be before or equal to end time" );
+			throw std::invalid_argument{ "Start time must be before or equal to end time" };
 		}
 
 		m_start = std::move( start );
@@ -34,7 +34,7 @@ namespace dnv::vista::sdk::transport::timeseries
 	{
 		if ( end < m_start )
 		{
-			throw std::invalid_argument( "End time must be after or equal to start time" );
+			throw std::invalid_argument{ "End time must be after or equal to start time" };
 		}
 
 		m_end = std::move( end );

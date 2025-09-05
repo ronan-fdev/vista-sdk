@@ -31,7 +31,7 @@ namespace dnv::vista::sdk::transport
 			auto builder = lease.builder();
 			builder.append( "DataChannelId shortId cannot be empty" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 	}
 

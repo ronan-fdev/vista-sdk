@@ -61,7 +61,7 @@ namespace dnv::vista::sdk
 
 						if ( !hasOtherAssetFunction )
 						{
-							throw std::runtime_error( "Tried to remove last asset function node" );
+							throw std::runtime_error{ "Tried to remove last asset function node" };
 						}
 						path.erase( path.begin() + static_cast<std::ptrdiff_t>( j ) );
 					}
@@ -217,7 +217,7 @@ namespace dnv::vista::sdk
 			const GmodNode* rootNodeInGmodPtr = nullptr;
 			if ( !targetGmod.tryGetNode( targetEndNode->code(), rootNodeInGmodPtr ) || !rootNodeInGmodPtr )
 			{
-				throw std::runtime_error( "Failed to get root node from targetGmod during root path conversion" );
+				throw std::runtime_error{ "Failed to get root node from targetGmod during root path conversion" };
 			}
 
 			return GmodPath( targetGmod, *rootNodeInGmodPtr, {} );
@@ -239,7 +239,7 @@ namespace dnv::vista::sdk
 			std::optional<GmodNode> convertedNodeOpt = convertNode( sourceVersion, *nodePtr, targetVersion, targetGmod );
 			if ( !convertedNodeOpt.has_value() )
 			{
-				throw std::runtime_error( "Could not convert node forward" );
+				throw std::runtime_error{ "Could not convert node forward" };
 			}
 
 			qualifyingNodes.emplace_back( nodePtr, std::move( *convertedNodeOpt ) );
@@ -314,7 +314,7 @@ namespace dnv::vista::sdk
 							const auto& next = qualifyingNodes[i + 1];
 							if ( next.second.code() != qualifyingNode.second.code() )
 							{
-								throw std::runtime_error( "Normal assignment end node was deleted" );
+								throw std::runtime_error{ "Normal assignment end node was deleted" };
 							}
 						}
 					}
@@ -355,7 +355,7 @@ namespace dnv::vista::sdk
 
 		if ( path.empty() || path.size() < 1 )
 		{
-			throw std::runtime_error( "Path reconstruction resulted in an empty path" );
+			throw std::runtime_error{ "Path reconstruction resulted in an empty path" };
 		}
 
 		if ( path.size() == 1 )
@@ -383,7 +383,7 @@ namespace dnv::vista::sdk
 		int missingLinkAt;
 		if ( !GmodPath::isValid( potentialParentPtrsFromPath, targetEndNodeFromPath, missingLinkAt ) )
 		{
-			throw std::runtime_error( "Did not end up with a valid path" );
+			throw std::runtime_error{ "Did not end up with a valid path" };
 		}
 
 		return GmodPath( targetGmod, std::move( targetEndNodeFromPath ), std::move( potentialParentsFromPath ) );
@@ -398,7 +398,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !sourceLocalId.visVersion().has_value() )
 		{
-			throw std::invalid_argument( "Cannot convert local ID without a specific VIS version" );
+			throw std::invalid_argument{ "Cannot convert local ID without a specific VIS version" };
 		}
 
 		LocalIdBuilder targetLocalId = LocalIdBuilder::create( targetVersion );

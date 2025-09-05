@@ -101,7 +101,7 @@ namespace dnv::vista::sdk::transport
 				const auto dto = loadDataChannelTypeNamesDto( version );
 				if ( !dto.has_value() )
 				{
-					throw std::runtime_error( "Invalid state: Failed to load DataChannelTypeNamesDto" );
+					throw std::runtime_error{ "Invalid state: Failed to load DataChannelTypeNamesDto" };
 				}
 
 				return dto.value();
@@ -120,7 +120,7 @@ namespace dnv::vista::sdk::transport
 				const auto dto = loadFormatDataTypesDto( version );
 				if ( !dto.has_value() )
 				{
-					throw std::runtime_error( "Invalid state: Failed to load FormatDataTypesDto" );
+					throw std::runtime_error{ "Invalid state: Failed to load FormatDataTypesDto" };
 				}
 
 				return dto.value();
@@ -149,7 +149,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				throw std::invalid_argument( "Invalid ISO19848Version" );
+				throw std::invalid_argument{ "Invalid ISO19848Version" };
 			}
 		}
 	}
@@ -168,7 +168,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				throw std::invalid_argument( "Invalid ISO19848Version" );
+				throw std::invalid_argument{ "Invalid ISO19848Version" };
 			}
 		}
 	}
@@ -367,7 +367,7 @@ namespace dnv::vista::sdk::transport
 			builder.append( "Invalid format type " );
 			builder.append( m_type );
 
-			throw std::runtime_error( lease.toString() );
+			throw std::runtime_error{ lease.toString() };
 		}
 	}
 

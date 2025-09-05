@@ -3,9 +3,8 @@
  * @brief Inline implementations for performance-critical VISVersion operations
  */
 
-#include <fmt/format.h>
-
 #include <nfx/containers/StringMap.h>
+#include <nfx/string/StringBuilderPool.h>
 
 namespace dnv::vista::sdk
 {
@@ -179,7 +178,11 @@ namespace dnv::vista::sdk
 		VisVersion result;
 		if ( !tryParse( versionString, result ) )
 		{
-			throw std::invalid_argument{ fmt::format( "Invalid VIS version string: ", versionString ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version string: " );
+			builder.append( versionString );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return result;

@@ -25,7 +25,7 @@ namespace dnv::vista::sdk
 	{
 		if ( m_builder.isEmpty() || !m_builder.isValid() )
 		{
-			throw std::invalid_argument( "Invalid LocalIdBuilder" );
+			throw std::invalid_argument{ "Invalid LocalIdBuilder" };
 		}
 	}
 

@@ -37,7 +37,7 @@ namespace dnv::vista::sdk::transport
 				builder.append( "Invalid DataChannelId state: corrupted tag " );
 				builder.append( std::to_string( static_cast<int>( m_tag ) ) );
 
-				throw std::runtime_error( lease.toString() );
+				throw std::runtime_error{ lease.toString() };
 			}
 		}
 	}
@@ -54,7 +54,7 @@ namespace dnv::vista::sdk::transport
 			auto builder = lease.builder();
 			builder.append( "DataChannelId::parse: value cannot be empty" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		/* Try to parse as LocalId first */

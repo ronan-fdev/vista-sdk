@@ -3,7 +3,7 @@
  * @brief Implementation of ISO 19848 data transfer objects
  */
 
-#include <fmt/format.h>
+#include <cstdio>
 
 #include <nfx/string/StringBuilderPool.h>
 
@@ -55,11 +55,7 @@ namespace dnv::vista::sdk::transport
 		{
 			if ( !json.is_object() )
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "ERROR: JSON value for DataChannelTypeNameDto is not an object\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "ERROR: JSON value for DataChannelTypeNameDto is not an object\n" );
 
 				return std::nullopt;
 			}
@@ -70,29 +66,15 @@ namespace dnv::vista::sdk::transport
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: JSON exception during DataChannelTypeNameDto parsing (hint: type='" );
-			builder.append( typeHint );
-			builder.append( "'): " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: JSON exception during DataChannelTypeNameDto parsing (hint: type='%.*s'): %s\n",
+				static_cast<int>( typeHint.size() ), typeHint.data(), ex.what() );
 
 			return std::nullopt;
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: Standard exception during DataChannelTypeNameDto parsing (hint: type='" );
-			builder.append( typeHint );
-			builder.append( "'): " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: Standard exception during DataChannelTypeNameDto parsing (hint: type='%.*s'): %s\n",
+				static_cast<int>( typeHint.size() ), typeHint.data(), ex.what() );
 
 			return std::nullopt;
 		}
@@ -110,7 +92,7 @@ namespace dnv::vista::sdk::transport
 			builder.append( typeHint );
 			builder.append( "')" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return std::move( dtoOpt ).value();
@@ -159,19 +141,11 @@ namespace dnv::vista::sdk::transport
 
 		if ( dto.m_type.empty() )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "WARN: Empty 'type' field found in DataChannelTypeNameDto\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "WARN: Empty 'type' field found in DataChannelTypeNameDto\n" );
 		}
 		if ( dto.m_description.empty() )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "WARN: Empty 'description' field found in DataChannelTypeNameDto\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "WARN: Empty 'description' field found in DataChannelTypeNameDto\n" );
 		}
 	}
 
@@ -194,11 +168,7 @@ namespace dnv::vista::sdk::transport
 		{
 			if ( !json.is_object() )
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "ERROR: JSON value for DataChannelTypeNamesDto is not an object\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "ERROR: JSON value for DataChannelTypeNamesDto is not an object\n" );
 
 				return std::nullopt;
 			}
@@ -206,13 +176,8 @@ namespace dnv::vista::sdk::transport
 			const auto valuesIt = json.find( constants::dto::ISO19848_DTO_KEY_VALUES );
 			if ( valuesIt == json.end() || !valuesIt->is_array() )
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "ERROR: DataChannelTypeNamesDto JSON missing required '" );
-				builder.append( constants::dto::ISO19848_DTO_KEY_VALUES );
-				builder.append( "' array\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "ERROR: DataChannelTypeNamesDto JSON missing required '%s' array\n",
+					constants::dto::ISO19848_DTO_KEY_VALUES );
 
 				return std::nullopt;
 			}
@@ -237,11 +202,7 @@ namespace dnv::vista::sdk::transport
 				}
 				else
 				{
-					auto lease = nfx::string::StringBuilderPool::lease();
-					auto builder = lease.builder();
-					builder.append( "WARN: Skipping invalid DataChannelTypeNameDto item during parsing\n" );
-
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "WARN: Skipping invalid DataChannelTypeNameDto item during parsing\n" );
 				}
 			}
 
@@ -259,25 +220,13 @@ namespace dnv::vista::sdk::transport
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: JSON exception during DataChannelTypeNamesDto parsing: " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: JSON exception during DataChannelTypeNamesDto parsing: %s\n", ex.what() );
 
 			return std::nullopt;
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: Standard exception during DataChannelTypeNamesDto parsing: " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: Standard exception during DataChannelTypeNamesDto parsing: %s\n", ex.what() );
 
 			return std::nullopt;
 		}
@@ -288,7 +237,7 @@ namespace dnv::vista::sdk::transport
 		auto dtoOpt = DataChannelTypeNamesDto::tryFromJson( json );
 		if ( !dtoOpt.has_value() )
 		{
-			throw std::invalid_argument( "Failed to deserialize DataChannelTypeNamesDto from JSON" );
+			throw std::invalid_argument{ "Failed to deserialize DataChannelTypeNamesDto from JSON" };
 		}
 
 		return std::move( dtoOpt ).value();
@@ -340,11 +289,7 @@ namespace dnv::vista::sdk::transport
 			}
 			else
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "WARN: Skipping invalid DataChannelTypeNameDto item during ADL parsing\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "WARN: Skipping invalid DataChannelTypeNameDto item during ADL parsing\n" );
 			}
 		}
 
@@ -376,11 +321,7 @@ namespace dnv::vista::sdk::transport
 		{
 			if ( !json.is_object() )
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "ERROR: JSON value for FormatDataTypeDto is not an object\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "ERROR: JSON value for FormatDataTypeDto is not an object\n" );
 
 				return std::nullopt;
 			}
@@ -391,29 +332,15 @@ namespace dnv::vista::sdk::transport
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: JSON exception during FormatDataTypeDto parsing (hint: type='" );
-			builder.append( typeHint );
-			builder.append( "'): " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: JSON exception during FormatDataTypeDto parsing (hint: type='%.*s'): %s\n",
+				static_cast<int>( typeHint.size() ), typeHint.data(), ex.what() );
 
 			return std::nullopt;
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: Standard exception during FormatDataTypeDto parsing (hint: type='" );
-			builder.append( typeHint );
-			builder.append( "'): " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: Standard exception during FormatDataTypeDto parsing (hint: type='%.*s'): %s\n",
+				static_cast<int>( typeHint.size() ), typeHint.data(), ex.what() );
 
 			return std::nullopt;
 		}
@@ -431,7 +358,7 @@ namespace dnv::vista::sdk::transport
 			builder.append( typeHint );
 			builder.append( "')" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return std::move( dtoOpt ).value();
@@ -480,19 +407,11 @@ namespace dnv::vista::sdk::transport
 
 		if ( dto.m_type.empty() )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "WARN: Empty 'type' field found in FormatDataTypeDto\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "WARN: Empty 'type' field found in FormatDataTypeDto\n" );
 		}
 		if ( dto.m_description.empty() )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "WARN: Empty 'description' field found in FormatDataTypeDto\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "WARN: Empty 'description' field found in FormatDataTypeDto\n" );
 		}
 	}
 	void to_json( nlohmann::json& j, const FormatDataTypeDto& dto )
@@ -514,11 +433,7 @@ namespace dnv::vista::sdk::transport
 		{
 			if ( !json.is_object() )
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "ERROR: JSON value for FormatDataTypesDto is not an object\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "ERROR: JSON value for FormatDataTypesDto is not an object\n" );
 
 				return std::nullopt;
 			}
@@ -526,13 +441,8 @@ namespace dnv::vista::sdk::transport
 			const auto valuesIt = json.find( constants::dto::ISO19848_DTO_KEY_VALUES );
 			if ( valuesIt == json.end() || !valuesIt->is_array() )
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "ERROR: FormatDataTypesDto JSON missing required '" );
-				builder.append( constants::dto::ISO19848_DTO_KEY_VALUES );
-				builder.append( "' array\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "ERROR: FormatDataTypesDto JSON missing required '%s' array\n",
+					constants::dto::ISO19848_DTO_KEY_VALUES );
 
 				return std::nullopt;
 			}
@@ -557,10 +467,7 @@ namespace dnv::vista::sdk::transport
 				}
 				else
 				{
-					auto lease = nfx::string::StringBuilderPool::lease();
-					auto builder = lease.builder();
-					builder.append( "WARN: Skipping invalid FormatDataTypeDto item during parsing\n" );
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "WARN: Skipping invalid FormatDataTypeDto item during parsing\n" );
 				}
 			}
 
@@ -579,25 +486,13 @@ namespace dnv::vista::sdk::transport
 		}
 		catch ( const nlohmann::json::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: JSON exception during FormatDataTypesDto parsing: " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: JSON exception during FormatDataTypesDto parsing: %s\n", ex.what() );
 
 			return std::nullopt;
 		}
 		catch ( const std::exception& ex )
 		{
-			auto lease = nfx::string::StringBuilderPool::lease();
-			auto builder = lease.builder();
-			builder.append( "ERROR: Standard exception during FormatDataTypesDto parsing: " );
-			builder.append( ex.what() );
-			builder.append( "\n" );
-
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "ERROR: Standard exception during FormatDataTypesDto parsing: %s\n", ex.what() );
 
 			return std::nullopt;
 		}
@@ -608,7 +503,7 @@ namespace dnv::vista::sdk::transport
 		auto dtoOpt = FormatDataTypesDto::tryFromJson( json );
 		if ( !dtoOpt.has_value() )
 		{
-			throw std::invalid_argument( "Failed to deserialize FormatDataTypesDto from JSON" );
+			throw std::invalid_argument{ "Failed to deserialize FormatDataTypesDto from JSON" };
 		}
 
 		return std::move( dtoOpt ).value();
@@ -661,11 +556,7 @@ namespace dnv::vista::sdk::transport
 			}
 			else
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "WARN: Skipping invalid FormatDataTypeDto item during ADL parsing\n" );
-
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "WARN: Skipping invalid FormatDataTypeDto item during ADL parsing\n" );
 			}
 		}
 

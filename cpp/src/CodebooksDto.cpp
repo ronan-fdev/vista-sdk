@@ -3,9 +3,10 @@
  * @brief Implementation of ISO 19848 codebook data transfer objects
  */
 
-#include <nfx/string/StringBuilderPool.h>
-#include <fmt/format.h>
+#include <iostream>
+#include <cstdio>
 
+#include <nfx/string/StringBuilderPool.h>
 #include "dnv/vista/sdk/CodebooksDto.h"
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"
 
@@ -81,7 +82,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::CODEBOOK_DTO_KEY_NAME );
 				builder.append( "' field or field is not a string\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				return std::nullopt;
 			}
@@ -103,7 +104,7 @@ namespace dnv::vista::sdk
 					builder.append( std::string_view{ tempName } );
 					builder.append( "'\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 				else
 				{
@@ -123,7 +124,7 @@ namespace dnv::vista::sdk
 							builder.append( std::string_view{ tempName } );
 							builder.append( "', skipping\n" );
 
-							fmt::print( stderr, "{}", lease.toString() );
+							std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 							continue;
 						}
@@ -148,7 +149,7 @@ namespace dnv::vista::sdk
 							builder.append( ex.what() );
 							builder.append( ". Skipping group.\n" );
 
-							fmt::print( stderr, "{}", lease.toString() );
+							std::fprintf( stderr, "%s", lease.toString().c_str() );
 						}
 					}
 				}
@@ -163,7 +164,7 @@ namespace dnv::vista::sdk
 				builder.append( std::string_view{ tempName } );
 				builder.append( "'\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
 			/* Construct the final DTO using successfully parsed data */
@@ -181,7 +182,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -195,7 +196,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -213,7 +214,7 @@ namespace dnv::vista::sdk
 			builder.append( nameHint );
 			builder.append( "')" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return dtoOpt.value();
@@ -254,7 +255,7 @@ namespace dnv::vista::sdk
 			auto builder = lease.builder();
 			builder.append( "WARN: Empty name field found in CodebookDto\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 		}
 
 		CodebookDto::ValuesMap tempValues;
@@ -298,7 +299,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE );
 				builder.append( "' field or field is not a string\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				return std::nullopt;
 			}
@@ -322,7 +323,7 @@ namespace dnv::vista::sdk
 					builder.append( std::string_view{ tempVisVersion } );
 					builder.append( "\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 				else
 				{
@@ -348,7 +349,7 @@ namespace dnv::vista::sdk
 							builder.append( std::string_view{ tempVisVersion } );
 							builder.append( ".\n" );
 
-							fmt::print( stderr, "{}", lease.toString() );
+							std::fprintf( stderr, "%s", lease.toString().c_str() );
 						}
 					}
 
@@ -372,7 +373,7 @@ namespace dnv::vista::sdk
 				builder.append( std::string_view{ tempVisVersion } );
 				builder.append( "\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
 			/* Construct the final DTO using successfully parsed data */
@@ -390,7 +391,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -404,7 +405,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -422,7 +423,7 @@ namespace dnv::vista::sdk
 			builder.append( visHint );
 			builder.append( "')" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return std::move( dtoOpt ).value();

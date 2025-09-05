@@ -5,8 +5,6 @@
 
 #include <nfx/string/StringBuilderPool.h>
 
-#include <fmt/format.h>
-
 #include "dnv/vista/sdk/LocationBuilder.h"
 #include "dnv/vista/sdk/constants/LocationsConstants.h"
 #include "dnv/vista/sdk/Exceptions.h"
@@ -117,7 +115,7 @@ namespace dnv::vista::sdk
 					int parsedNumber;
 					if ( !Locations::tryParseInt( span, 0, static_cast<int>( i + 1 ), parsedNumber ) )
 					{
-						throw std::invalid_argument( "Should include a valid number" );
+						throw std::invalid_argument{ "Should include a valid number" };
 					}
 					number = parsedNumber;
 				}
@@ -213,12 +211,12 @@ namespace dnv::vista::sdk
 	{
 		if ( group != LocationGroup::Number )
 		{
-			throw ValidationException( "Integer values are only valid for Number group" );
+			throw ValidationException{ "Integer values are only valid for Number group" };
 		}
 
 		if ( value < 1 )
 		{
-			throw ValidationException( "Value should be greater than 0" );
+			throw ValidationException{ "Value should be greater than 0" };
 		}
 
 		LocationBuilder result = *this;
@@ -231,7 +229,7 @@ namespace dnv::vista::sdk
 	{
 		if ( group == LocationGroup::Number )
 		{
-			throw std::invalid_argument( "Character values are not valid for Number group" );
+			throw std::invalid_argument{ "Character values are not valid for Number group" };
 		}
 
 		const auto it = m_reversedGroups->find( value );
@@ -267,10 +265,14 @@ namespace dnv::vista::sdk
 				}
 			}();
 
-			throw ValidationException(
-				fmt::format( "The value '{}' is an invalid {} value",
-					value,
-					groupName ) );
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "The value '" );
+			builder.push_back( value );
+			builder.append( "' is an invalid " );
+			builder.append( groupName );
+			builder.append( " value" );
+			throw ValidationException{ lease.toString() };
 		}
 
 		LocationBuilder result = *this;
@@ -298,11 +300,11 @@ namespace dnv::vista::sdk
 			}
 			case LocationGroup::Number:
 			{
-				throw std::invalid_argument( "Number group should not contain character values" );
+				throw std::invalid_argument{ "Number group should not contain character values" };
 			}
 			default:
 			{
-				throw std::invalid_argument( "Unsupported LocationGroup" );
+				throw std::invalid_argument{ "Unsupported LocationGroup" };
 			}
 		}
 		return result;
@@ -322,7 +324,12 @@ namespace dnv::vista::sdk
 		const auto it = m_reversedGroups->find( value );
 		if ( it == m_reversedGroups->end() )
 		{
-			throw ValidationException( fmt::format( "The value '{}' is an invalid Locations value", value ) );
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "The value '" );
+			builder.push_back( value );
+			builder.append( "' is an invalid Locations value" );
+			throw ValidationException{ lease.toString() };
 		}
 
 		return withValueInternal( it->second, value );
@@ -361,7 +368,7 @@ namespace dnv::vista::sdk
 			}
 			default:
 			{
-				throw std::invalid_argument( "Unsupported LocationGroup" );
+				throw std::invalid_argument{ "Unsupported LocationGroup" };
 			}
 		}
 

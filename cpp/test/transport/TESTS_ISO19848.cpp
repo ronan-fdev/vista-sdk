@@ -523,7 +523,7 @@ namespace dnv::vista::sdk::tests
 				},
 				[&]( std::string_view s ) {
 					stringCalled = true;
-					stringValue = std::string( s );
+					stringValue = std::string{ s };
 				},
 				[]( const nfx::time::DateTimeOffset& tp ) {
 					static_cast<void>( tp );
@@ -766,7 +766,7 @@ namespace dnv::vista::sdk::tests
 				},
 				[&]( std::string_view s ) {
 					emptyCalled = true;
-					emptyValue = std::string( s );
+					emptyValue = std::string{ s };
 				},
 				[]( const nfx::time::DateTimeOffset& tp ) {
 					static_cast<void>( tp );
@@ -1271,7 +1271,7 @@ namespace dnv::vista::sdk::tests
 					return std::nullopt;
 				},
 				[]( std::string_view s ) -> std::optional<std::string> { return s.empty() ? std::nullopt
-																						  : std::make_optional( std::string( s ) ); },
+																						  : std::make_optional( std::string{ s } ); },
 				[]( const nfx::time::DateTimeOffset& ) -> std::optional<std::string> {
 					unexpectedDateTime();
 					return std::nullopt;

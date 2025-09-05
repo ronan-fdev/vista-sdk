@@ -42,7 +42,7 @@ namespace dnv::vista::sdk::test
 			std::ifstream file( hashValuesPath );
 			if ( !file.is_open() )
 			{
-				throw std::runtime_error( "Could not open hashValues.txt file. Checked paths: " + hashValuesPath );
+				throw std::runtime_error{ "Could not open hashValues.txt file. Checked paths: " + hashValuesPath };
 			}
 
 			std::string line;

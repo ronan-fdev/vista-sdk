@@ -244,7 +244,6 @@ function(configure_vista_target target_name)
 		nfx-cpp-essentials::static
 		nlohmann_json::nlohmann_json
 		zlib
-		fmt::fmt-header-only
 	)
 
 	# --- Properties ---
@@ -385,7 +384,6 @@ message(STATUS "")
 
 message(STATUS "--- Dependencies ---")
 message(STATUS "nlohmann/json version           : ${NLOHMANN_VERSION}")
-message(STATUS "{fmt} version                   : ${FMT_VERSION}")
 message(STATUS "zlib-ng version                 : ${ZLIBNG_HEADER_VERSION}")
 message(STATUS "GoogleTest version              : ${GTEST_VERSION}")
 message(STATUS "Google Benchmark version        : ${BENCHMARK_VERSION}")

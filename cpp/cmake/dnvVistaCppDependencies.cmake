@@ -40,7 +40,7 @@ set(NFX_CPP_ESSENTIALS_WITH_TIME        ON   CACHE BOOL  ""  FORCE)
 FetchContent_Declare(
 	nfx-cpp-essentials
 	GIT_REPOSITORY https://github.com/ronan-fdev/nfx-cpp-essentials.git
-	GIT_TAG        0.9.3
+	GIT_TAG        0.9.4
 	GIT_SHALLOW    TRUE
 )
 
@@ -65,25 +65,6 @@ FetchContent_Declare(
 	zlib-ng
 	GIT_REPOSITORY https://github.com/zlib-ng/zlib-ng.git
 	GIT_TAG        2.2.5
-	GIT_SHALLOW    TRUE
-)
-
-# --- {fmt} ---
-set(FMT_FUZZ            OFF  CACHE BOOL  "Build fmt fuzzing tests"           FORCE)
-set(FMT_TEST            OFF  CACHE BOOL  "Build fmt unit tests"              FORCE)
-set(FMT_CUDA_TEST       OFF  CACHE BOOL  "Build fmt cuda tests"              FORCE)
-set(FMT_DOC             OFF  CACHE BOOL  "Build fmt documentation"           FORCE)
-set(FMT_INSTALL         OFF  CACHE BOOL  "Install fmt targets"               FORCE)
-set(FMT_HEADER_ONLY     ON   CACHE BOOL  "Build fmt as header-only library"  FORCE)
-set(FMT_MODULE          OFF  CACHE BOOL  "Enable fmt C++20 module support"   FORCE)
-set(FMT_OS              OFF  CACHE BOOL  "Enable fmt OS-specific features"   FORCE)
-set(FMT_SYSTEM_HEADERS  OFF  CACHE BOOL  "Use system headers for fmt"        FORCE)
-set(FMT_UNICODE         ON   CACHE BOOL  "Enable Unicode support in fmt"     FORCE)
-
-FetchContent_Declare(
-	fmt
-	GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-	GIT_TAG        11.2.0
 	GIT_SHALLOW    TRUE
 )
 
@@ -138,7 +119,6 @@ FetchContent_MakeAvailable(
 	nfx-cpp-essentials
 	nlohmann_json
 	zlib-ng
-	fmt
 )
 
 if(VISTA_SDK_CPP_BUILD_TESTS)
@@ -198,14 +178,6 @@ if(zlib-ng_BINARY_DIR AND EXISTS "${zlib-ng_BINARY_DIR}/zlib.h")
 		string(REGEX REPLACE "^#define[ \t]+ZLIBNG_VERSION[ \t]+\"([^\"]*)\".*" "\\1"
 			ZLIBNG_HEADER_VERSION "${ZLIBNG_VER_LINES}")
 	endif()
-endif()
-
-#----------------------------
-# {fmt} configuration
-#----------------------------
-
-if(TARGET fmt::fmt)
-	get_target_property(FMT_VERSION fmt::fmt VERSION)
 endif()
 
 #----------------------------

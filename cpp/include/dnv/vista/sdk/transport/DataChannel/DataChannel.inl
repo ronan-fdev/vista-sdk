@@ -272,17 +272,17 @@ namespace dnv::vista::sdk::transport::datachannel
 	{
 		if ( low > high )
 		{
-			throw std::invalid_argument( "Range low bound cannot be greater than high bound" );
+			throw std::invalid_argument{ "Range low bound cannot be greater than high bound" };
 		}
 
 		if ( low < std::numeric_limits<double>::lowest() )
 		{
-			throw std::invalid_argument( "Range low value is below minimum limit" );
+			throw std::invalid_argument{ "Range low value is below minimum limit" };
 		}
 
 		if ( high > std::numeric_limits<double>::max() )
 		{
-			throw std::invalid_argument( "Range high value is above maximum limit" );
+			throw std::invalid_argument{ "Range high value is above maximum limit" };
 		}
 	}
 
@@ -509,7 +509,7 @@ namespace dnv::vista::sdk::transport::datachannel
 	{
 		if ( !m_type )
 		{
-			throw std::runtime_error( "Format type not set" );
+			throw std::runtime_error{ "Format type not set" };
 		}
 		return *m_type;
 	}
@@ -532,11 +532,11 @@ namespace dnv::vista::sdk::transport::datachannel
 	{
 		/* Validate against ISO19848 format types */
 		auto formatTypes = ISO19848::instance().formatDataTypes( ISO19848::LatestVersion );
-		auto result = formatTypes.parse( std::string( type ) );
+		auto result = formatTypes.parse( type );
 
 		if ( !result.isOk() )
 		{
-			throw std::invalid_argument( "Invalid format type: " + std::string( type ) );
+			throw std::invalid_argument{ "Invalid format type: " + std::string{ type } };
 		}
 
 		m_type = type;
@@ -799,7 +799,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		auto it = m_shortIdMap.find( shortId );
 		if ( it == m_shortIdMap.end() )
 		{
-			throw std::out_of_range( "Short ID not found: " + shortId );
+			throw std::out_of_range{ "Short ID not found: " + shortId };
 		}
 
 		return it->second.get();
@@ -810,7 +810,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		auto it = m_localIdMap.find( localId );
 		if ( it == m_localIdMap.end() )
 		{
-			throw std::out_of_range( "Local ID not found" );
+			throw std::out_of_range{ "Local ID not found" };
 		}
 
 		return it->second.get();

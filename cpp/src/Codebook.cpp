@@ -3,8 +3,8 @@
  * @brief Implementation of codebook-related components
  */
 
-#include "dnv/vista/sdk/Codebook.h"
 #include "dnv/vista/sdk/constants/CodebookConstants.h"
+#include "dnv/vista/sdk/Codebook.h"
 #include "dnv/vista/sdk/Codebooks.h"
 #include "dnv/vista/sdk/MetadataTag.h"
 #include "dnv/vista/sdk/VIS.h"
@@ -126,7 +126,7 @@ namespace dnv::vista::sdk
 					break;
 				}
 			}
-			throw std::invalid_argument( "Unknown codebook name: " + std::string{ name } );
+			throw std::invalid_argument{ "Unknown codebook name: " + std::string{ name } };
 		}
 	}
 
@@ -227,7 +227,7 @@ namespace dnv::vista::sdk
 	{
 		if ( name.empty() )
 		{
-			throw std::invalid_argument( "PositionValidationResult name cannot be empty" );
+			throw std::invalid_argument{ "PositionValidationResult name cannot be empty" };
 		}
 
 		const std::string lowerName = toLower( name );
@@ -240,10 +240,10 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		throw std::invalid_argument(
+		throw std::invalid_argument{
 			"Unknown PositionValidationResult name: '" +
 			std::string{ name } +
-			"'. Valid values are: Invalid, InvalidOrder, InvalidGrouping, Valid, Custom" );
+			"'. Valid values are: Invalid, InvalidOrder, InvalidGrouping, Valid, Custom" };
 	}
 
 	//=====================================================================
@@ -360,10 +360,10 @@ namespace dnv::vista::sdk
 		auto tagOpt = tryCreateTag( value );
 		if ( !tagOpt )
 		{
-			throw std::invalid_argument(
+			throw std::invalid_argument{
 				"Invalid value for metadata tag: codebook=" +
 				std::to_string( static_cast<int>( m_name ) ) +
-				", value=" + std::string{ value } );
+				", value=" + std::string{ value } };
 		}
 
 		return tagOpt.value();

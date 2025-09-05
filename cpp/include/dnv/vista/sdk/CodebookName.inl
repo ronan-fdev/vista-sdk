@@ -6,7 +6,7 @@
 #include <array>
 #include <stdexcept>
 
-#include <fmt/format.h>
+#include <nfx/string/StringBuilderPool.h>
 
 #include "config/config.h"
 #include "constants/CodebookConstants.h"
@@ -62,7 +62,11 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		throw std::invalid_argument{ fmt::format( "Unknown prefix: {}", prefix ) };
+		auto lease = nfx::string::StringBuilderPool::lease();
+		auto builder = lease.builder();
+		builder.append( "Unknown prefix: " );
+		builder.append( prefix );
+		throw std::invalid_argument{ lease.toString() };
 	}
 
 	inline std::string_view CodebookNames::toPrefix( CodebookName name )
@@ -115,7 +119,11 @@ namespace dnv::vista::sdk
 			}
 			default:
 			{
-				throw std::invalid_argument{ fmt::format( "Unknown codebook: {}", static_cast<int>( name ) ) };
+				auto lease = nfx::string::StringBuilderPool::lease();
+				auto builder = lease.builder();
+				builder.append( "Unknown codebook: " );
+				builder.append( std::to_string( static_cast<int>( name ) ) );
+				throw std::invalid_argument{ lease.toString() };
 			}
 		}
 	}

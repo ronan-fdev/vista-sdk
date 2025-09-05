@@ -5,8 +5,8 @@
 
 #include <stdexcept>
 
+#include <nfx/string/StringBuilderPool.h>
 #include <nfx/string/Utils.h>
-#include <fmt/format.h>
 
 #include "constants/CodebookConstants.h"
 #include "GmodNode.h"
@@ -30,7 +30,11 @@ namespace dnv::vista::sdk
 			return *nodePtr;
 		}
 
-		throw std::out_of_range{ fmt::format( "Key not found in Gmod node map: {}", key ) };
+		auto lease = nfx::string::StringBuilderPool::lease();
+		auto builder = lease.builder();
+		builder.append( "Key not found in Gmod node map: " );
+		builder.append( key );
+		throw std::out_of_range{ lease.toString() };
 	}
 
 	//----------------------------------------------

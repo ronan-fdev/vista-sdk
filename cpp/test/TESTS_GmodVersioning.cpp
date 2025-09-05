@@ -53,7 +53,7 @@ namespace dnv::vista::sdk::tests
 			}
 			catch ( [[maybe_unused]] const std::exception& ex )
 			{
-				fmt::print( stderr, "ERROR: Test setup failed: {}\n", ex.what() );
+				std::cerr << "ERROR: Test setup failed: " << ex.what() << "\n";
 				m_setupSuccess = false;
 			}
 		}
@@ -266,7 +266,9 @@ namespace dnv::vista::sdk::tests
 					errorNodes += code + ", ";
 				}
 
-				fmt::print( stderr, "ERROR: Failed nodes for {}: {}\n", dnv::vista::sdk::VisVersionExtensions::toVersionString( pair.first ), errorNodes );
+				std::cerr << "ERROR: Failed nodes for " 
+				         << dnv::vista::sdk::VisVersionExtensions::toVersionString( pair.first ) 
+				         << ": " << errorNodes << "\n";
 			}
 		}
 	}

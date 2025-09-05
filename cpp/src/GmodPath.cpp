@@ -80,12 +80,12 @@ namespace dnv::vista::sdk
 								if ( nodes.has_value() && std::get<2>( nodes.value() ).has_value() && setNode->location().has_value() &&
 									 std::get<2>( nodes.value() ) != setNode->location() )
 								{
-									throw std::runtime_error( "Mapping error: different locations in the same nodeset" );
+									throw std::runtime_error{ "Mapping error: different locations in the same nodeset" };
 								}
 
 								if ( skippedOne != std::numeric_limits<size_t>().max() )
 								{
-									throw std::runtime_error( "Can't skip in the middle of individualizable set" );
+									throw std::runtime_error{ "Can't skip in the middle of individualizable set" };
 								}
 
 								if ( setNode->isFunctionComposition() )
@@ -322,12 +322,12 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_gmod )
 		{
-			throw std::invalid_argument( "GmodPath constructor: gmod reference is null" );
+			throw std::invalid_argument{ "GmodPath constructor: gmod reference is null" };
 		}
 
 		if ( !m_node.has_value() )
 		{
-			throw std::invalid_argument( "GmodPath constructor: node is not valid" );
+			throw std::invalid_argument{ "GmodPath constructor: node is not valid" };
 		}
 
 		if ( skipVerify || m_parents.empty() )
@@ -933,16 +933,16 @@ namespace dnv::vista::sdk
 	{
 		if ( m_nodeIndices.empty() )
 		{
-			throw std::invalid_argument( "GmodIndividualizableSet constructor: nodeIndices cannot be empty." );
+			throw std::invalid_argument{ "GmodIndividualizableSet constructor: nodeIndices cannot be empty." };
 		}
 
 		for ( int nodeIdx : m_nodeIndices )
 		{
 			if ( static_cast<size_t>( nodeIdx ) >= m_path.length() || nodeIdx < 0 )
 			{
-				throw std::out_of_range(
+				throw std::out_of_range{
 					"GmodIndividualizableSet constructor: Node index " + std::to_string( nodeIdx ) +
-					" is out of bounds for path length " + std::to_string( m_path.length() ) + "." );
+					" is out of bounds for path length " + std::to_string( m_path.length() ) + "." };
 			}
 
 			const GmodNode& currentNode = m_path[static_cast<size_t>( nodeIdx )];
@@ -951,8 +951,8 @@ namespace dnv::vista::sdk
 			bool isInSet = ( m_nodeIndices.size() > 1 );
 			if ( !currentNode.isIndividualizable( isTargetNode, isInSet ) )
 			{
-				throw std::invalid_argument( "GmodIndividualizableSet constructor: Node '" + std::string{ currentNode.code().data() } + "' (at index " +
-											 std::to_string( nodeIdx ) + ") is not individualizable in the given context." );
+				throw std::invalid_argument{ "GmodIndividualizableSet constructor: Node '" + std::string{ currentNode.code().data() } + "' (at index " +
+											 std::to_string( nodeIdx ) + ") is not individualizable in the given context." };
 			}
 		}
 
@@ -967,10 +967,10 @@ namespace dnv::vista::sdk
 				const GmodNode& currentNode = m_path[static_cast<size_t>( currentIdx )];
 				if ( currentNode.location() != expectedLocation )
 				{
-					throw std::invalid_argument(
+					throw std::invalid_argument{
 						"GmodIndividualizableSet constructor: Nodes have different locations. Node '" +
 						std::string{ currentNode.code().data() } + "' (at index " + std::to_string( currentIdx ) +
-						") has location while first node in set had different or no location." );
+						") has location while first node in set had different or no location." };
 				}
 			}
 		}
@@ -989,8 +989,8 @@ namespace dnv::vista::sdk
 
 		if ( !foundPartOfShortPath )
 		{
-			throw std::invalid_argument(
-				"GmodIndividualizableSet constructor: No nodes in the set are part of the short path (final node or leaf node)." );
+			throw std::invalid_argument{
+				"GmodIndividualizableSet constructor: No nodes in the set are part of the short path (final node or leaf node)." };
 		}
 	}
 
@@ -1002,7 +1002,7 @@ namespace dnv::vista::sdk
 	{
 		if ( m_isBuilt )
 		{
-			throw std::runtime_error( "Tried to build individualizable set twice" );
+			throw std::runtime_error{ "Tried to build individualizable set twice" };
 		}
 
 		m_isBuilt = true;
@@ -1023,7 +1023,7 @@ namespace dnv::vista::sdk
 		{
 			if ( nodeIdx < 0 || static_cast<size_t>( nodeIdx ) >= m_path.length() )
 			{
-				throw std::out_of_range( "Node index out of bounds" );
+				throw std::out_of_range{ "Node index out of bounds" };
 			}
 
 			result.push_back( const_cast<GmodNode*>( &m_path[static_cast<size_t>( nodeIdx )] ) );

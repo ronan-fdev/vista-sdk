@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical VIS operations
  */
 
+#include <nfx/string/StringBuilderPool.h>
+
 #include "CodebooksDto.h"
 #include "EmbeddedResource.h"
 #include "GmodDto.h"
@@ -66,10 +68,11 @@ namespace dnv::vista::sdk
 	{
 		if ( !VisVersionExtensions::isValid( visVersion ) )
 		{
-			throw std::invalid_argument{
-				fmt::format(
-					"Invalid VIS version: {}",
-					static_cast<int>( visVersion ) ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version: " );
+			builder.append( std::to_string( static_cast<int>( visVersion ) ) );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return gmodsCache().getOrCreate( visVersion, [visVersion]() {
@@ -83,10 +86,11 @@ namespace dnv::vista::sdk
 	{
 		if ( !VisVersionExtensions::isValid( visVersion ) )
 		{
-			throw std::invalid_argument{
-				fmt::format(
-					"Invalid VIS version: {}",
-					static_cast<int>( visVersion ) ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version: " );
+			builder.append( std::to_string( static_cast<int>( visVersion ) ) );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return codebooksCache().getOrCreate( visVersion, [visVersion]() {
@@ -100,10 +104,11 @@ namespace dnv::vista::sdk
 	{
 		if ( !VisVersionExtensions::isValid( visVersion ) )
 		{
-			throw std::invalid_argument{
-				fmt::format(
-					"Invalid VIS version: {}",
-					static_cast<int>( visVersion ) ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version: " );
+			builder.append( std::to_string( static_cast<int>( visVersion ) ) );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return locationsCache().getOrCreate(
@@ -121,20 +126,22 @@ namespace dnv::vista::sdk
 	{
 		if ( !VisVersionExtensions::isValid( visVersion ) )
 		{
-			throw std::invalid_argument{
-				fmt::format(
-					"Invalid VIS version: {}",
-					static_cast<int>( visVersion ) ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version: " );
+			builder.append( std::to_string( static_cast<int>( visVersion ) ) );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return gmodDtoCache().getOrCreate( visVersion, [visVersion]() {
 			auto dto = loadGmodDto( visVersion );
 			if ( !dto )
 			{
-				throw std::runtime_error{
-					fmt::format(
-						"Failed to load GMOD DTO for version: {}",
-						VisVersionExtensions::toVersionString( visVersion ) ) };
+				auto lease = nfx::string::StringBuilderPool::lease();
+				auto builder = lease.builder();
+				builder.append( "Failed to load GMOD DTO for version: " );
+				builder.append( VisVersionExtensions::toVersionString( visVersion ) );
+				throw std::runtime_error{ lease.toString() };
 			}
 
 			return std::move( *dto );
@@ -145,20 +152,22 @@ namespace dnv::vista::sdk
 	{
 		if ( !VisVersionExtensions::isValid( visVersion ) )
 		{
-			throw std::invalid_argument{
-				fmt::format(
-					"Invalid VIS version: {}",
-					static_cast<int>( visVersion ) ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version: " );
+			builder.append( std::to_string( static_cast<int>( visVersion ) ) );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return codebooksDtoCache().getOrCreate( visVersion, [visVersion]() {
 			auto dto = EmbeddedResource::codebooks( VisVersionExtensions::toVersionString( visVersion ) );
 			if ( !dto )
 			{
-				throw std::runtime_error{
-					fmt::format(
-						"Failed to load codebooks DTO for version: {}",
-						VisVersionExtensions::toVersionString( visVersion ) ) };
+				auto lease = nfx::string::StringBuilderPool::lease();
+				auto builder = lease.builder();
+				builder.append( "Failed to load codebooks DTO for version: " );
+				builder.append( VisVersionExtensions::toVersionString( visVersion ) );
+				throw std::runtime_error{ lease.toString() };
 			}
 
 			return std::move( *dto );
@@ -169,20 +178,22 @@ namespace dnv::vista::sdk
 	{
 		if ( !VisVersionExtensions::isValid( visVersion ) )
 		{
-			throw std::invalid_argument{
-				fmt::format(
-					"Invalid VIS version: {}",
-					static_cast<int>( visVersion ) ) };
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto builder = lease.builder();
+			builder.append( "Invalid VIS version: " );
+			builder.append( std::to_string( static_cast<int>( visVersion ) ) );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return locationsDtoCache().getOrCreate( visVersion, [visVersion]() {
 			auto dto = EmbeddedResource::locations( VisVersionExtensions::toVersionString( visVersion ) );
 			if ( !dto )
 			{
-				throw std::runtime_error{
-					fmt::format(
-						"Failed to load locations DTO for version: {}",
-						VisVersionExtensions::toVersionString( visVersion ) ) };
+				auto lease = nfx::string::StringBuilderPool::lease();
+				auto builder = lease.builder();
+				builder.append( "Failed to load locations DTO for version: " );
+				builder.append( VisVersionExtensions::toVersionString( visVersion ) );
+				throw std::runtime_error{ lease.toString() };
 			}
 
 			return std::move( *dto );

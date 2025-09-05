@@ -141,11 +141,11 @@ namespace dnv::vista::sdk
 	{
 		if ( isEmpty() )
 		{
-			throw std::invalid_argument( "Cannot build LocalId: builder is empty." );
+			throw std::invalid_argument{ "Cannot build LocalId: builder is empty." };
 		}
 		if ( !isValid() )
 		{
-			throw std::invalid_argument( "Cannot build LocalId: builder state is invalid." );
+			throw std::invalid_argument{ "Cannot build LocalId: builder state is invalid." };
 		}
 
 		return LocalId( *this );
@@ -174,7 +174,7 @@ namespace dnv::vista::sdk
 
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "Failed to parse VIS version" );
+			throw std::invalid_argument{ "Failed to parse VIS version" };
 		}
 
 		return localIdBuilder;
@@ -187,7 +187,7 @@ namespace dnv::vista::sdk
 
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "withVisVersion" );
+			throw std::invalid_argument{ "withVisVersion" };
 		}
 
 		return localIdBuilder;
@@ -246,7 +246,7 @@ namespace dnv::vista::sdk
 
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "Failed to set primary item: invalid or empty GmodPath." );
+			throw std::invalid_argument{ "Failed to set primary item: invalid or empty GmodPath." };
 		}
 
 		return localIdBuilder;
@@ -317,7 +317,7 @@ namespace dnv::vista::sdk
 
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "Failed to set secondary item: invalid or empty GmodPath." );
+			throw std::invalid_argument{ "Failed to set secondary item: invalid or empty GmodPath." };
 		}
 
 		return localIdBuilder;
@@ -393,7 +393,7 @@ namespace dnv::vista::sdk
 			auto builder = lease.builder();
 			builder.append( "Invalid metadata codebook name: " );
 			builder.append( CodebookNames::toPrefix( metadataTag.name() ) );
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return localIdBuilder;
@@ -695,7 +695,7 @@ namespace dnv::vista::sdk
 			builder.append( localIdStr );
 			builder.append( "'. " );
 			builder.append( errors.toString() );
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return std::move( *localId );
@@ -786,7 +786,7 @@ namespace dnv::vista::sdk
 			}
 			default:
 			{
-				throw std::invalid_argument( "Unknown codebook: " + std::to_string( static_cast<int>( name ) ) );
+				throw std::invalid_argument{ "Unknown codebook: " + std::to_string( static_cast<int>( name ) ) };
 			}
 		}
 	}
@@ -796,7 +796,9 @@ namespace dnv::vista::sdk
 	//----------------------------------------------
 
 	bool LocalIdBuilder::tryParseInternal(
-		std::string_view localIdStr, internal::LocalIdParsingErrorBuilder& errorBuilder, std::optional<LocalIdBuilder>& localIdBuilder )
+		std::string_view localIdStr,
+		internal::LocalIdParsingErrorBuilder& errorBuilder,
+		std::optional<LocalIdBuilder>& localIdBuilder )
 	{
 		localIdBuilder = std::nullopt;
 

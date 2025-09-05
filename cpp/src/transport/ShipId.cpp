@@ -22,7 +22,7 @@ namespace dnv::vista::sdk::transport
 	{
 		if ( m_otherId->empty() )
 		{
-			throw std::invalid_argument( "ShipId otherId cannot be empty" );
+			throw std::invalid_argument{ "ShipId otherId cannot be empty" };
 		}
 	}
 
@@ -45,7 +45,7 @@ namespace dnv::vista::sdk::transport
 			}
 			default:
 			{
-				throw std::runtime_error( "Invalid ShipId state: corrupted tag" );
+				throw std::runtime_error{ "Invalid ShipId state: corrupted tag" };
 			}
 		}
 	}
@@ -58,7 +58,7 @@ namespace dnv::vista::sdk::transport
 	{
 		if ( value.empty() )
 		{
-			throw std::invalid_argument( "ShipId::parse: value cannot be empty" );
+			throw std::invalid_argument{ "ShipId::parse: value cannot be empty" };
 		}
 
 		/* In ISO-19848, IMO number as ShipID should be prefixed with "IMO" */

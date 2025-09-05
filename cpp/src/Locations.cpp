@@ -88,7 +88,7 @@ namespace dnv::vista::sdk
 			builder.append( "Unsupported code: " );
 			builder.append( std::to_string( static_cast<int>( key ) ) );
 
-			throw std::runtime_error( lease.toString() );
+			throw std::runtime_error{ lease.toString() };
 		}
 
 		auto index{ static_cast<size_t>( key ) - 1 };
@@ -99,7 +99,7 @@ namespace dnv::vista::sdk
 			builder.append( "Unsupported code: " );
 			builder.append( std::to_string( static_cast<int>( key ) ) );
 
-			throw std::runtime_error( lease.toString() );
+			throw std::runtime_error{ lease.toString() };
 		}
 
 		return m_table[index];
@@ -186,7 +186,7 @@ namespace dnv::vista::sdk
 				builder.append( "Unsupported code: " );
 				builder.append( std::string_view{ &code, 1 } );
 
-				throw std::invalid_argument( lease.toString() );
+				throw std::invalid_argument{ lease.toString() };
 			}
 
 			if ( m_groups.find( key ) == m_groups.end() )
@@ -241,7 +241,7 @@ namespace dnv::vista::sdk
 			auto builder = lease.builder();
 			builder.append( "Invalid location: " );
 			builder.append( locationStr );
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return location;

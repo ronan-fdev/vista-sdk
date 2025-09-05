@@ -42,12 +42,12 @@ namespace dnv::vista::sdk
 	{
 		if ( !m_imoNumber.has_value() )
 		{
-			throw std::invalid_argument( "Invalid Universal Id state: Missing IMO Number" );
+			throw std::invalid_argument{ "Invalid Universal Id state: Missing IMO Number" };
 		}
 
 		if ( !m_localIdBuilder.has_value() )
 		{
-			throw std::invalid_argument( "Invalid Universal Id state: Missing LocalId" );
+			throw std::invalid_argument{ "Invalid Universal Id state: Missing LocalId" };
 		}
 
 		auto lease = nfx::string::StringBuilderPool::lease();
@@ -90,7 +90,7 @@ namespace dnv::vista::sdk
 		auto result = tryWithLocalId( localId, succeeded );
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "withLocalId" );
+			throw std::invalid_argument{ "withLocalId" };
 		}
 		return result;
 	}
@@ -135,7 +135,7 @@ namespace dnv::vista::sdk
 		auto result = tryWithImoNumber( imoNumber, succeeded );
 		if ( !succeeded )
 		{
-			throw std::invalid_argument( "imoNumber" );
+			throw std::invalid_argument{ "imoNumber" };
 		}
 		return result;
 	}
@@ -179,7 +179,13 @@ namespace dnv::vista::sdk
 		std::optional<UniversalIdBuilder> builder;
 		if ( !tryParse( universalIdStr, errors, builder ) )
 		{
-			throw std::invalid_argument( fmt::format( "Couldn't parse universal ID from: '{}'. {}", universalIdStr, errors.toString() ) );
+			auto lease = nfx::string::StringBuilderPool::lease();
+			auto stringBuilder = lease.builder();
+			stringBuilder.append( "Couldn't parse universal ID from: '" );
+			stringBuilder.append( universalIdStr );
+			stringBuilder.append( "'. " );
+			stringBuilder.append( errors.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 		return builder.value();
 	}

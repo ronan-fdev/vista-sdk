@@ -175,32 +175,34 @@ namespace dnv::vista::sdk::tests
 		transport::timeseries::TabularData tabularData2( firstDataChannelId, dataSets2 );
 
 		/* Create event data */
-		std::vector<transport::timeseries::EventDataSet> eventDataSets = {
-			transport::timeseries::EventDataSet(
+		std::vector<transport::timeseries::EventDataSet> eventDataSets{
+			transport::timeseries::EventDataSet{
 				eventTimestamp,
 				allDataChannelIds[1],
 				"HIGH",
-				std::string( "0" ) ),
-			transport::timeseries::EventDataSet(
-				eventTimestamp,
-				allDataChannelIds[1],
-				"LOW",
-				std::string( "0" ) ),
-			transport::timeseries::EventDataSet(
-				eventTimestamp,
-				allDataChannelIds[1],
-				"AVERAGE",
-				std::string( "0" ) ) };
+				std::string{ "0" } } };
 
-		transport::timeseries::EventData eventData( eventDataSets );
+		transport::timeseries::EventDataSet{
+			eventTimestamp,
+			allDataChannelIds[1],
+			"LOW",
+			std::string{ "0" } };
+
+		transport::timeseries::EventDataSet{
+			eventTimestamp,
+			allDataChannelIds[1],
+			"AVERAGE",
+			std::string{ "0" } };
+
+		transport::timeseries::EventData eventData{ eventDataSets };
 
 		/* Create configuration reference */
-		transport::timeseries::ConfigurationReference dataConfig(
+		transport::timeseries::ConfigurationReference dataConfig{
 			"DataChannelList.xml",
-			nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" ) );
+			nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" ) };
 
 		/* Create system configuration references */
-		std::vector<transport::timeseries::ConfigurationReference> systemConfigs = {
+		std::vector<transport::timeseries::ConfigurationReference> systemConfigs{
 			transport::timeseries::ConfigurationReference(
 				"SystemConfiguration.xml",
 				configTimestamp ),
@@ -231,7 +233,7 @@ namespace dnv::vista::sdk::tests
 			timeRange,
 			createdModified,
 			createdModified,
-			std::string( "Shipboard data server" ),
+			std::string{ "Shipboard data server" },
 			systemConfigs,
 			std::nullopt );
 
@@ -377,7 +379,7 @@ namespace dnv::vista::sdk::tests
 			timestamp,
 			dataChannelId,
 			"HIGH",
-			std::string( "0" ) );
+			std::string{ "0" } );
 
 		eventData.add( eventDataSet1 );
 		EXPECT_EQ( eventData.dataSet().size(), 1U );
@@ -387,7 +389,7 @@ namespace dnv::vista::sdk::tests
 			timestamp,
 			dataChannelId,
 			"LOW",
-			std::string( "0" ) );
+			std::string{ "0" } );
 
 		eventData.add( eventDataSet2 );
 		EXPECT_EQ( eventData.dataSet().size(), 2U );
@@ -463,7 +465,7 @@ namespace dnv::vista::sdk::tests
 			timestamp,
 			dataChannelId,
 			"HIGH",
-			std::string( "0" ) );
+			std::string{ "0" } );
 
 		EXPECT_EQ( eventDataSet.timeStamp().toString(), timestamp.toString() );
 		EXPECT_EQ( eventDataSet.dataChannelId().toString(), dataChannelId.toString() );

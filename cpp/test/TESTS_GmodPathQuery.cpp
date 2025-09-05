@@ -141,7 +141,7 @@ namespace dnv::vista::sdk::tests
 						auto it = setNodes.find( nodeCode );
 						if ( it == setNodes.end() )
 						{
-							throw std::runtime_error( "Node not found in set nodes: " + nodeCode );
+							throw std::runtime_error{ "Node not found in set nodes: " + nodeCode };
 						}
 
 						return it->second;
@@ -161,7 +161,7 @@ namespace dnv::vista::sdk::tests
 						auto it = setNodes.find( nodeCode );
 						if ( it == setNodes.end() )
 						{
-							throw std::runtime_error( "Node not found in set nodes: " + nodeCode );
+							throw std::runtime_error{ "Node not found in set nodes: " + nodeCode };
 						}
 
 						return it->second;

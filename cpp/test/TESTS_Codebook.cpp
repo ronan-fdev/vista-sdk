@@ -136,17 +136,27 @@ namespace dnv::vista::sdk::test
 		PositionValidationResult positionValidationResultsFromString( std::string_view name )
 		{
 			if ( name == "Valid" )
+			{
 				return PositionValidationResult::Valid;
+			}
 			if ( name == "Invalid" )
+			{
 				return PositionValidationResult::Invalid;
+			}
 			if ( name == "InvalidOrder" )
+			{
 				return PositionValidationResult::InvalidOrder;
+			}
 			if ( name == "InvalidGrouping" )
+			{
 				return PositionValidationResult::InvalidGrouping;
+			}
 			if ( name == "Custom" )
+			{
 				return PositionValidationResult::Custom;
+			}
 
-			throw std::invalid_argument( "Unknown position validation result: " + std::string{ name } );
+			throw std::invalid_argument{ "Unknown position validation result: " + std::string{ name } };
 		}
 
 		TEST_P( PositionValidationTest, Test_Position_Validation )

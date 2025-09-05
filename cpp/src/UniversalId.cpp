@@ -26,7 +26,7 @@ namespace dnv::vista::sdk
 	{
 		if ( !builder.isValid() )
 		{
-			throw std::invalid_argument( "Invalid UniversalIdBuilder state" );
+			throw std::invalid_argument{ "Invalid UniversalIdBuilder state" };
 		}
 	}
 

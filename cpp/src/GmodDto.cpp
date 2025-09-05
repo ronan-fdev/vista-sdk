@@ -4,7 +4,7 @@
  */
 
 #include <nfx/string/StringBuilderPool.h>
-#include <fmt/format.h>
+#include <cstdio>
 
 #include "dnv/vista/sdk/GmodDto.h"
 #include "dnv/vista/sdk/constants/DtoKeysConstants.h"
@@ -80,7 +80,7 @@ namespace dnv::vista::sdk
 				builder.append( "ERROR: GMOD Node JSON missing required '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_CODE );
 				builder.append( "' field or not a string\n" );
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				return std::nullopt;
 			}
@@ -93,7 +93,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_CATEGORY );
 				builder.append( "' field or not a string\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				return std::nullopt;
 			}
@@ -106,7 +106,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_TYPE );
 				builder.append( "' field or not a string\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				return std::nullopt;
 			}
@@ -133,7 +133,7 @@ namespace dnv::vista::sdk
 					builder.append( constants::dto::GMOD_DTO_KEY_NAME );
 					builder.append( "' is present but not a string\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 					return std::nullopt;
 				}
@@ -148,7 +148,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_NAME );
 				builder.append( "' field. Defaulting name to empty string.\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				tempName = "";
 			}
@@ -159,7 +159,7 @@ namespace dnv::vista::sdk
 				auto builder = lease.builder();
 				builder.append( "WARN: Empty code field found in GMOD node\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 			if ( tempCategory.empty() )
 			{
@@ -169,7 +169,7 @@ namespace dnv::vista::sdk
 				builder.append( tempCode );
 				builder.append( "'\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 			if ( tempType.empty() )
 			{
@@ -179,7 +179,7 @@ namespace dnv::vista::sdk
 				builder.append( tempCode );
 				builder.append( "'\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 			if ( tempName.empty() )
 			{
@@ -189,7 +189,7 @@ namespace dnv::vista::sdk
 				builder.append( tempCode );
 				builder.append( "'\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
 			std::optional<std::string> tempCommonName = std::nullopt;
@@ -210,7 +210,7 @@ namespace dnv::vista::sdk
 					builder.append( constants::dto::GMOD_DTO_KEY_COMMON_NAME );
 					builder.append( "'\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 			}
 
@@ -232,7 +232,7 @@ namespace dnv::vista::sdk
 					builder.append( constants::dto::GMOD_DTO_KEY_DEFINITION );
 					builder.append( "'\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 			}
 
@@ -254,7 +254,7 @@ namespace dnv::vista::sdk
 					builder.append( constants::dto::GMOD_DTO_KEY_COMMON_DEFINITION );
 					builder.append( "'\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 			}
 
@@ -276,7 +276,7 @@ namespace dnv::vista::sdk
 					builder.append( constants::dto::GMOD_DTO_KEY_INSTALL_SUBSTRUCTURE );
 					builder.append( "'\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 			}
 
@@ -306,7 +306,7 @@ namespace dnv::vista::sdk
 						builder.append( ex.what() );
 						builder.append( "\n" );
 
-						fmt::print( stderr, "{}", lease.toString() );
+						std::fprintf( stderr, "%s", lease.toString().c_str() );
 					}
 				}
 				else if ( !assignmentIt->is_null() )
@@ -319,7 +319,7 @@ namespace dnv::vista::sdk
 					builder.append( constants::dto::GMOD_DTO_KEY_NORMAL_ASSIGNMENT_NAMES );
 					builder.append( "'\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 			}
 
@@ -346,7 +346,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -360,7 +360,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -378,7 +378,7 @@ namespace dnv::vista::sdk
 			builder.append( codeHint );
 			builder.append( "')" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return std::move( dtoOpt.value() );
@@ -458,7 +458,7 @@ namespace dnv::vista::sdk
 				builder.append( "') has null '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_NAME );
 				builder.append( "' field. Defaulting name to empty string.\n" );
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 				tempName = "";
 			}
 			else
@@ -470,7 +470,7 @@ namespace dnv::vista::sdk
 				builder.append( "') has non-string '" );
 				builder.append( constants::dto::GMOD_DTO_KEY_NAME );
 				builder.append( "' field. Defaulting name to empty string.\n" );
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 				tempName = "";
 			}
 		}
@@ -484,7 +484,7 @@ namespace dnv::vista::sdk
 			builder.append( constants::dto::GMOD_DTO_KEY_NAME );
 			builder.append( "' field. Defaulting name to empty string.\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 			tempName = "";
 		}
 
@@ -507,7 +507,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_COMMON_NAME );
 				builder.append( "' in from_json\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 		}
 
@@ -529,7 +529,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_DEFINITION );
 				builder.append( "' in from_json\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 		}
 
@@ -551,7 +551,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_COMMON_DEFINITION );
 				builder.append( "' in from_json\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 		}
 
@@ -573,7 +573,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_INSTALL_SUBSTRUCTURE );
 				builder.append( "' in from_json\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 		}
 
@@ -603,7 +603,7 @@ namespace dnv::vista::sdk
 					builder.append( ex.what() );
 					builder.append( "\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 			}
 			else if ( !assignmentIt->is_null() )
@@ -616,7 +616,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_NORMAL_ASSIGNMENT_NAMES );
 				builder.append( "' in from_json\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 		}
 
@@ -683,7 +683,7 @@ namespace dnv::vista::sdk
 				builder.append( constants::dto::GMOD_DTO_KEY_VIS_RELEASE );
 				builder.append( "' field or not a string\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 				return std::nullopt;
 			}
@@ -707,7 +707,7 @@ namespace dnv::vista::sdk
 					builder.append( tempVisVersion );
 					builder.append( "\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 				else
 				{
@@ -730,7 +730,7 @@ namespace dnv::vista::sdk
 							builder.append( "WARN: Skipping malformed GMOD node during GmodDto parsing for VIS version " );
 							builder.append( tempVisVersion );
 							builder.append( "\n" );
-							fmt::print( stderr, "{}", lease.toString() );
+							std::fprintf( stderr, "%s", lease.toString().c_str() );
 						}
 					}
 
@@ -754,7 +754,7 @@ namespace dnv::vista::sdk
 				builder.append( tempVisVersion );
 				builder.append( "\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
 			Relations tempRelations;
@@ -774,7 +774,7 @@ namespace dnv::vista::sdk
 					builder.append( tempVisVersion );
 					builder.append( "\n" );
 
-					fmt::print( stderr, "{}", lease.toString() );
+					std::fprintf( stderr, "%s", lease.toString().c_str() );
 				}
 				else
 				{
@@ -804,7 +804,7 @@ namespace dnv::vista::sdk
 									builder.append( tempVisVersion );
 									builder.append( "\n" );
 
-									fmt::print( stderr, "{}", lease.toString() );
+									std::fprintf( stderr, "%s", lease.toString().c_str() );
 									validPair = false;
 									break;
 								}
@@ -826,7 +826,7 @@ namespace dnv::vista::sdk
 							builder.append( tempVisVersion );
 							builder.append( "\n" );
 
-							fmt::print( stderr, "{}", lease.toString() );
+							std::fprintf( stderr, "%s", lease.toString().c_str() );
 						}
 					}
 
@@ -850,7 +850,7 @@ namespace dnv::vista::sdk
 				builder.append( tempVisVersion );
 				builder.append( "\n" );
 
-				fmt::print( stderr, "{}", lease.toString() );
+				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
 			if ( tempItems.size() > 10000 )
@@ -872,7 +872,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -886,7 +886,7 @@ namespace dnv::vista::sdk
 			builder.append( ex.what() );
 			builder.append( "\n" );
 
-			fmt::print( stderr, "{}", lease.toString() );
+			std::fprintf( stderr, "%s", lease.toString().c_str() );
 
 			return std::nullopt;
 		}
@@ -904,7 +904,7 @@ namespace dnv::vista::sdk
 			builder.append( visHint );
 			builder.append( "')" );
 
-			throw std::invalid_argument( lease.toString() );
+			throw std::invalid_argument{ lease.toString() };
 		}
 
 		return std::move( dtoOpt.value() );

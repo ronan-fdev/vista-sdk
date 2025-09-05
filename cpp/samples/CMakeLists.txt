@@ -107,7 +107,6 @@ foreach(sample_source ${SAMPLE_SOURCES})
 			nfx-cpp-essentials::static
 			nlohmann_json::nlohmann_json
 			zlib
-			fmt::fmt-header-only
 		)
 
 		target_include_directories(${sample_source_name} PRIVATE

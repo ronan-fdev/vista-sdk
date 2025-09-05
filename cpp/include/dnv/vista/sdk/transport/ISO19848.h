@@ -205,7 +205,7 @@ namespace dnv::vista::sdk::transport
 		//----------------------------------------------
 
 		/**
-		 * @brief 128-bit high-precision decimal value wrapper for format data type validation
+		 * @brief High-precision decimal value wrapper for format data type validation
 		 */
 		class Decimal final
 		{

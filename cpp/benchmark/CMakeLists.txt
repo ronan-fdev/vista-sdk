@@ -108,7 +108,6 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 			benchmark::benchmark
 			nlohmann_json::nlohmann_json
 			zlib
-			fmt::fmt-header-only
 		)
 
 		target_include_directories(${benchmark_target_name} PRIVATE
