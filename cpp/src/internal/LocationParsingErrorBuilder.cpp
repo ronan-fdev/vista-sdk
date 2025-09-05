@@ -3,7 +3,7 @@
  * @brief Implementation of the LocationParsingErrorBuilder class.
  */
 
-#include "dnv/vista/sdk/internal/LocationParsingErrorBuilder.h"
+#include "LocationParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/ParsingErrors.h"
 

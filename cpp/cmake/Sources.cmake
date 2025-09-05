@@ -104,52 +104,52 @@ set(PUBLIC_HEADERS
 )
 
 set(PRIVATE_HEADERS
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBuffer_impl.h
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBufferPool.h
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/DynamicStringBuffer_impl.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/DynamicStringBufferPool.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocalIdParsingErrorBuilder.h
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationParsingErrorBuilder.h
 )
 
 set(PRIVATE_SOURCES
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/DateTimeISO8601.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/Decimal128.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/datatypes/Int128.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/datatypes/DateTimeISO8601.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/datatypes/Decimal128.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/datatypes/Int128.cpp
 
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBuffer_impl.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/DynamicStringBufferPool.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/LocationParsingErrorBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/internal/StringBuilderPool.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/DynamicStringBuffer_impl.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/DynamicStringBufferPool.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocalIdParsingErrorBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/LocationParsingErrorBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/internal/StringBuilderPool.cpp
 
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/DataChannel/DataChannel.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/DataChannelId.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/TimeSeriesData/TimeSeriesData.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ISO19848Dtos.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/transport/ShipId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/DataChannel/DataChannel.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/TimeSeriesData/DataChannelId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/TimeSeriesData/TimeSeriesData.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/ISO19848.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/ISO19848Dtos.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/transport/ShipId.cpp
 
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Codebook.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Codebooks.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/CodebooksDto.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/EmbeddedResource.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Gmod.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodDto.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodNode.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodPath.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodPathQuery.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodVersioning.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/GmodVersioningDto.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/ImoNumber.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalId.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalIdBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocalIdQuery.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/Locations.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/LocationsDto.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/MetadataTag.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/MetadataTagsQuery.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/ParsingErrors.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/UniversalId.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/UniversalIdBuilder.cpp
-	${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/VIS.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Codebook.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Codebooks.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/CodebooksDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/EmbeddedResource.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Gmod.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodNode.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodPath.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodPathQuery.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodVersioning.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/GmodVersioningDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/ImoNumber.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocalId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocalIdBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocalIdQuery.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocationBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/Locations.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/LocationsDto.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/MetadataTag.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/MetadataTagsQuery.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/ParsingErrors.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/UniversalId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/UniversalIdBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/VIS.cpp
 )

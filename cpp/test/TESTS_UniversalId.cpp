@@ -5,7 +5,7 @@
 
 #include "TestDataLoader.h"
 
-#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "internal/LocalIdParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/Gmod.h"
 #include "dnv/vista/sdk/GmodPath.h"

@@ -3,7 +3,7 @@
  * @brief Implementation of the LocalIdParsingErrorBuilder class.
  */
 
-#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "LocalIdParsingErrorBuilder.h"
 
 #include "dnv/vista/sdk/ParsingErrors.h"
 

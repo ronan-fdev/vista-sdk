@@ -6,7 +6,7 @@
 #include "dnv/vista/sdk/Locations.h"
 
 #include "dnv/vista/sdk/constants/LocationsConstants.h"
-#include "dnv/vista/sdk/internal/LocationParsingErrorBuilder.h"
+#include "internal/LocationParsingErrorBuilder.h"
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/ParsingErrors.h"

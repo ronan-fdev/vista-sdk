@@ -247,7 +247,7 @@ function(configure_vista_target target_name)
 	)
 
 	# --- Precompiled headers---
-	target_precompile_headers(${target_name} PRIVATE ${VISTA_SDK_CPP_SOURCE_DIR}/dnv/vista/sdk/pch.h)
+	target_precompile_headers(${target_name} PRIVATE ${VISTA_SDK_CPP_SOURCE_DIR}/pch.h)
 
 	# --- Properties ---
 	set_target_properties(${target_name} PROPERTIES

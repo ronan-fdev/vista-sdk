@@ -6,7 +6,7 @@
 #include "dnv/vista/sdk/LocalIdBuilder.h"
 
 #include "dnv/vista/sdk/constants/LocalIdConstants.h"
-#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "internal/LocalIdParsingErrorBuilder.h"
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/CodebookName.h"

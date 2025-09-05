@@ -1,6 +1,6 @@
 #include "dnv/vista/sdk/UniversalIdBuilder.h"
 
-#include "dnv/vista/sdk/internal/LocalIdParsingErrorBuilder.h"
+#include "internal/LocalIdParsingErrorBuilder.h"
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
 
 #include "dnv/vista/sdk/ImoNumber.h"

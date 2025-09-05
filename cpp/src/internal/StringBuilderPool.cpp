@@ -4,7 +4,7 @@
  */
 
 #include "dnv/vista/sdk/internal/StringBuilderPool.h"
-#include "dnv/vista/sdk/internal/DynamicStringBufferPool.h"
+#include "DynamicStringBufferPool.h"
 
 #include "DynamicStringBuffer_impl.h"
 
