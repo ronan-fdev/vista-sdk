@@ -36,9 +36,9 @@ namespace dnv::vista::sdk::benchmarks
 			BenchmarkState benchState;
 
 			TraverseHandlerWithState<BenchmarkState> handler =
-				[]( BenchmarkState& state, const std::vector<const GmodNode*>&, const GmodNode& )
+				[]( BenchmarkState& bmState, const std::vector<const GmodNode*>&, const GmodNode& )
 				-> TraversalHandlerResult {
-				++state.nodeCount;
+				++bmState.nodeCount;
 
 				return TraversalHandlerResult::Continue;
 			};

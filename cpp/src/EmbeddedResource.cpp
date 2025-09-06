@@ -27,11 +27,16 @@ namespace dnv::vista::sdk
 		// Constants
 		//=====================================================================
 
-		inline static constexpr std::string_view VIS_RELEASE_KEY = "visRelease";
-		inline static constexpr std::string_view RESOURCES_DIR = "resources";
+		static constexpr std::string_view VIS_RELEASE_KEY = "visRelease";
+		static constexpr std::string_view RESOURCES_DIR = "resources";
 
-		static constexpr size_t CHUNK_IN_SIZE = 65536;
-		static constexpr size_t CHUNK_OUT_SIZE = 131072;
+		// Compression buffer sizes for zlib streaming decompression
+		static constexpr size_t CHUNK_IN_SIZE = 65536;	 // 64KB input buffer for reading compressed data
+		static constexpr size_t CHUNK_OUT_SIZE = 131072; // 128KB output buffer for decompressed data
+
+		// zlib window bits configuration for gzip format
+		// 15 = maximum window size (32KB), +16 = gzip format detection
+		static constexpr int GZIP_MAX_WINDOW_BITS = 15 + 16;
 	}
 
 	//=====================================================================
@@ -692,11 +697,11 @@ namespace dnv::vista::sdk
 		decompressedData.reserve( estimatedDecompressedSize );
 
 		::z_stream zs = {};
-		zs.zalloc = Z_NULL;
-		zs.zfree = Z_NULL;
-		zs.opaque = Z_NULL;
+		zs.zalloc = nullptr;
+		zs.zfree = nullptr;
+		zs.opaque = nullptr;
 
-		if ( ::inflateInit2( &zs, 15 + 16 ) != Z_OK )
+		if ( ::inflateInit2( &zs, GZIP_MAX_WINDOW_BITS ) != 0 )
 		{
 			auto lease = nfx::string::StringBuilderPool::lease();
 			auto builder = lease.builder();

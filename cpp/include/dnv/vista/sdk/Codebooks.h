@@ -97,6 +97,7 @@ namespace dnv::vista::sdk
 		 * @note This method does not validate the input for maximum performance.
 		 *       Use codebook() if you need bounds checking.
 		 * @warning Undefined behavior if name is invalid
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline constexpr const Codebook& operator[]( CodebookName name ) const noexcept;
 
@@ -107,6 +108,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the VIS version associated with these codebooks.
 		 * @return The `VisVersion` enum value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline VisVersion visVersion() const noexcept;
 
@@ -117,6 +119,7 @@ namespace dnv::vista::sdk
 		 * @throws std::invalid_argument If name is invalid
 		 * @note This method always validates the input. Use operator[] for maximum performance
 		 *       when you know the input is valid.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const Codebook& codebook( CodebookName name ) const;
 
@@ -131,6 +134,7 @@ namespace dnv::vista::sdk
 		 * @brief Returns iterator to the first codebook.
 		 * @return Iterator to the beginning of the codebook container
 		 * @note Zero-overhead pointer-based iteration
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Iterator begin() const noexcept;
 
@@ -138,6 +142,7 @@ namespace dnv::vista::sdk
 		 * @brief Returns iterator to one past the last codebook.
 		 * @return Iterator to the end of the codebook container
 		 * @note Zero-overhead pointer-based iteration
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Iterator end() const noexcept;
 
@@ -154,6 +159,7 @@ namespace dnv::vista::sdk
 		 * @return An `std::optional<MetadataTag>` containing the created tag if the value is valid
 		 *         (or if the codebook allows any value, like 'detail'), otherwise `std::nullopt`.
 		 * @throws std::invalid_argument If the `name` enum value is invalid (propagated from `operator[]`).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<MetadataTag> tryCreateTag( CodebookName name, std::string_view value ) const;
 
@@ -167,6 +173,7 @@ namespace dnv::vista::sdk
 		 * @return The created `MetadataTag`.
 		 * @throws std::invalid_argument If the `value` is invalid for the specified codebook,
 		 *         or if the `name` enum value is invalid.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline MetadataTag createTag( CodebookName name, const std::string& value ) const;
 

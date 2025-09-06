@@ -145,9 +145,9 @@ namespace dnv::vista::sdk
 		{
 			auto lease = nfx::string::StringBuilderPool::lease();
 			auto builder = lease.builder();
-			builder.append("Failed to deserialize GmodVersioningAssignmentChangeDto from JSON (hint: oldAssignment='");
-			builder.append(oldAssignmentHint);
-			builder.append("')");
+			builder.append( "Failed to deserialize GmodVersioningAssignmentChangeDto from JSON (hint: oldAssignment='" );
+			builder.append( oldAssignmentHint );
+			builder.append( "')" );
 			throw std::invalid_argument{ lease.toString() };
 		}
 
@@ -173,9 +173,9 @@ namespace dnv::vista::sdk
 		{
 			auto lease = nfx::string::StringBuilderPool::lease();
 			auto builder = lease.builder();
-			builder.append("GmodVersioningAssignmentChangeDto JSON missing required '");
-			builder.append(constants::dto::GMODVERSIONING_DTO_KEY_OLD_ASSIGNMENT);
-			builder.append("' field or not a string");
+			builder.append( "GmodVersioningAssignmentChangeDto JSON missing required '" );
+			builder.append( constants::dto::GMODVERSIONING_DTO_KEY_OLD_ASSIGNMENT );
+			builder.append( "' field or not a string" );
 			throw nlohmann::json::parse_error::create( 101, 0u, lease.toString(), nullptr );
 		}
 
@@ -184,9 +184,9 @@ namespace dnv::vista::sdk
 		{
 			auto lease = nfx::string::StringBuilderPool::lease();
 			auto builder = lease.builder();
-			builder.append("GmodVersioningAssignmentChangeDto JSON missing required '");
-			builder.append(constants::dto::GMODVERSIONING_DTO_KEY_CURRENT_ASSIGNMENT);
-			builder.append("' field or not a string");
+			builder.append( "GmodVersioningAssignmentChangeDto JSON missing required '" );
+			builder.append( constants::dto::GMODVERSIONING_DTO_KEY_CURRENT_ASSIGNMENT );
+			builder.append( "' field or not a string" );
 			throw nlohmann::json::parse_error::create( 101, 0u, lease.toString(), nullptr );
 		}
 
@@ -311,10 +311,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodNodeConversionDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_OPERATIONS);
-				builder.append("' is not an array");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodNodeConversionDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_OPERATIONS );
+				builder.append( "' is not an array" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 			dto.m_operations.clear();
 			const auto& opsArray = *opsIt;
@@ -326,10 +326,10 @@ namespace dnv::vista::sdk
 				{
 					auto lease = nfx::string::StringBuilderPool::lease();
 					auto builder = lease.builder();
-					builder.append("GmodNodeConversionDto JSON field '");
-					builder.append(constants::dto::GMODVERSIONING_DTO_KEY_OPERATIONS);
-					builder.append("' contains non-string element");
-					throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+					builder.append( "GmodNodeConversionDto JSON field '" );
+					builder.append( constants::dto::GMODVERSIONING_DTO_KEY_OPERATIONS );
+					builder.append( "' contains non-string element" );
+					throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 				}
 				dto.m_operations.insert( op.get<std::string>() );
 			}
@@ -353,10 +353,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodNodeConversionDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_SOURCE);
-				builder.append("' is not a string");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodNodeConversionDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_SOURCE );
+				builder.append( "' is not a string" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 			dto.m_source = sourceIt->get<std::string>();
 		}
@@ -379,10 +379,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodNodeConversionDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_TARGET);
-				builder.append("' is not a string");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodNodeConversionDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_TARGET );
+				builder.append( "' is not a string" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 			dto.m_target = targetIt->get<std::string>();
 		}
@@ -405,10 +405,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodNodeConversionDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_OLD_ASSIGNMENT);
-				builder.append("' is not a string");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodNodeConversionDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_OLD_ASSIGNMENT );
+				builder.append( "' is not a string" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 			dto.m_oldAssignment = oldAssignmentIt->get<std::string>();
 		}
@@ -424,10 +424,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodNodeConversionDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_NEW_ASSIGNMENT);
-				builder.append("' is not a string");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodNodeConversionDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_NEW_ASSIGNMENT );
+				builder.append( "' is not a string" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 			dto.m_newAssignment = newAssignmentIt->get<std::string>();
 		}
@@ -443,10 +443,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodNodeConversionDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_DELETE_ASSIGNMENT);
-				builder.append("' is not a boolean");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodNodeConversionDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_DELETE_ASSIGNMENT );
+				builder.append( "' is not a boolean" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 			dto.m_deleteAssignment = deleteAssignmentIt->get<bool>();
 		}
@@ -596,10 +596,10 @@ namespace dnv::vista::sdk
 			{
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
-				builder.append("GmodVersioningDto JSON field '");
-				builder.append(constants::dto::GMODVERSIONING_DTO_KEY_ITEMS);
-				builder.append("' is not an object");
-				throw nlohmann::json::type_error::create(302, lease.toString(), nullptr);
+				builder.append( "GmodVersioningDto JSON field '" );
+				builder.append( constants::dto::GMODVERSIONING_DTO_KEY_ITEMS );
+				builder.append( "' is not an object" );
+				throw nlohmann::json::type_error::create( 302, lease.toString(), nullptr );
 			}
 
 			const auto& itemsObj = *itemsIt;

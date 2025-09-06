@@ -122,6 +122,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets the VIS version currently set in the builder, if any.
 		 * @return An `std::optional<VisVersion>` containing the VIS version if set,
 		 *         or `std::nullopt` if no version is set.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<VisVersion> visVersion() const noexcept;
 
@@ -131,6 +132,7 @@ namespace dnv::vista::sdk
 		 *          This implementation returns a reference to the internal path.
 		 * @return A const reference to the primary item's `GmodPath`.
 		 * @warning Behavior is undefined if called when no primary item is set (`isValid()` is false).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<GmodPath>& primaryItem() const noexcept;
 
@@ -138,6 +140,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets the secondary item path, if one is set.
 		 * @return A const reference to an `std::optional<GmodPath>` containing the
 		 *         secondary item path if set, or `std::nullopt` otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<GmodPath>& secondaryItem() const noexcept;
 
@@ -146,6 +149,7 @@ namespace dnv::vista::sdk
 		 * @details Returns a collection of the `MetadataTag` objects configured.
 		 *          The order within the vector corresponds to the standard Local ID format.
 		 * @return A vector containing copies of the MetadataTag objects currently set.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::vector<MetadataTag> metadataTags() const noexcept;
 
@@ -158,6 +162,7 @@ namespace dnv::vista::sdk
 		 * @details Validity typically requires at least a VIS version and a primary item.
 		 *          Specific rules depend on the `LocalId` definition.
 		 * @return True if the current state allows for a successful `build()`, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isValid() const noexcept;
 
@@ -165,6 +170,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if the builder is in its initial, empty state.
 		 * @details An empty builder has no VIS version, no items, and no metadata tags set.
 		 * @return True if the builder holds no configuration data, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isEmpty() const noexcept;
 
@@ -172,6 +178,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if verbose mode is enabled for the `toString()` representation.
 		 * @details Verbose mode typically includes descriptive text alongside codes in the string output.
 		 * @return True if verbose mode is enabled, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isVerboseMode() const noexcept;
 
@@ -182,66 +189,77 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Checks if the builder has any custom (non-standard) metadata tags.
 		 * @return True if the builder contains custom tags, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool hasCustomTag() const noexcept;
 
 		/**
 		 * @brief Checks if the builder has no metadata tags set.
 		 * @return True if no metadata tags (quantity, content, etc.) are present, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isEmptyMetadata() const noexcept;
 
 		/**
 		 * @brief Gets the internal `LocalIdItems` object containing primary and secondary items.
 		 * @return A const reference to the `LocalIdItems` member.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const LocalIdItems& items() const noexcept;
 
 		/**
 		 * @brief Gets the quantity metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for quantity.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& quantity() const noexcept;
 
 		/**
 		 * @brief Gets the content metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for content.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& content() const noexcept;
 
 		/**
 		 * @brief Gets the calculation metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for calculation.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& calculation() const noexcept;
 
 		/**
 		 * @brief Gets the state metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for state.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& state() const noexcept;
 
 		/**
 		 * @brief Gets the command metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for command.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& command() const noexcept;
 
 		/**
 		 * @brief Gets the type metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for type.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& type() const noexcept;
 
 		/**
 		 * @brief Gets the position metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for position.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& position() const noexcept;
 
 		/**
 		 * @brief Gets the detail metadata tag, if present.
 		 * @return A const reference to an `std::optional<MetadataTag>` for detail.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& detail() const noexcept;
 
@@ -255,6 +273,7 @@ namespace dnv::vista::sdk
 		 *          The output is affected by the `isVerboseMode()` setting.
 		 * @return A `std::string` representing the configured Local ID.
 		 *         Returns an empty string if the state is not valid (`isValid()` is false).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string toString() const;
 
@@ -274,6 +293,7 @@ namespace dnv::vista::sdk
 		 * @brief Creates a new builder instance initialized with the specified VIS version.
 		 * @param[in] version The initial `VisVersion` for the builder.
 		 * @return A new `LocalIdBuilder` instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocalIdBuilder create( VisVersion version );
 
@@ -291,6 +311,7 @@ namespace dnv::vista::sdk
 		 *          on the configuration accumulated in the builder.
 		 * @return A new instance of `LocalId`.
 		 * @throws std::invalid_argument If the builder state is invalid (`isValid()` returns false).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalId build() const;
 
@@ -302,6 +323,7 @@ namespace dnv::vista::sdk
 		 * @brief Returns a new builder with the specified verbose mode setting.
 		 * @param[in] verboseMode True to enable verbose mode for `toString()`, false to disable.
 		 * @return A new `LocalIdBuilder` instance with the updated verbose mode setting.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withVerboseMode( bool verboseMode );
 
@@ -315,6 +337,7 @@ namespace dnv::vista::sdk
 		 * @param[in] visVersionStr The VIS version string to parse and set.
 		 * @return A new `LocalIdBuilder` instance with the updated VIS version.
 		 * @throws std::invalid_argument If the `visVersionStr` format is invalid or unrecognized.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withVisVersion( const std::string& visVersionStr );
 
@@ -322,6 +345,7 @@ namespace dnv::vista::sdk
 		 * @brief Returns a new builder with the VIS version set from an enum value.
 		 * @param[in] version The `VisVersion` enum value to set.
 		 * @return A new `LocalIdBuilder` instance with the updated VIS version.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withVisVersion( VisVersion version );
 
@@ -331,6 +355,7 @@ namespace dnv::vista::sdk
 		 *          Otherwise, returns a builder identical to the current one (effectively a no-op).
 		 * @param[in] version An `std::optional<VisVersion>` containing the version to set, if present.
 		 * @return A new `LocalIdBuilder` instance, potentially updated.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithVisVersion( const std::optional<VisVersion>& version );
 
@@ -342,6 +367,7 @@ namespace dnv::vista::sdk
 		 * @param[out] succeeded Set to true if the version was successfully set (i.e., optional had a value
 		 *                       and the string was valid), false otherwise.
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithVisVersion( const std::optional<std::string>& visVersionStr, bool& succeeded );
 
@@ -352,12 +378,14 @@ namespace dnv::vista::sdk
 		 * @param[in] version An `std::optional<VisVersion>` containing the version to set, if present.
 		 * @param[out] succeeded Set to true if the version was present and set, false otherwise.
 		 * @return A new `LocalIdBuilder` instance, potentially updated.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithVisVersion( const std::optional<VisVersion>& version, bool& succeeded );
 
 		/**
 		 * @brief Returns a new builder with the VIS version removed.
 		 * @return A new `LocalIdBuilder` instance without any VIS version set.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutVisVersion();
 
@@ -371,6 +399,7 @@ namespace dnv::vista::sdk
 		 * @param[in] item The `GmodPath` to set as the primary item (rvalue reference, will be moved).
 		 * @return A new `LocalIdBuilder` instance with the updated primary item.
 		 * @throws std::invalid_argument If setting the primary item fails (e.g., path validation).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withPrimaryItem( GmodPath&& item );
 
@@ -380,6 +409,7 @@ namespace dnv::vista::sdk
 		 *          it returns a builder identical to the current one.
 		 * @param[in] item The `GmodPath` to attempt to set as primary (rvalue reference, will be moved).
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithPrimaryItem( GmodPath&& item );
 
@@ -389,6 +419,7 @@ namespace dnv::vista::sdk
 		 * @param[in] item The `GmodPath` to attempt to set as primary (rvalue reference, will be moved).
 		 * @param[out] succeeded Set to true if the primary item was successfully set, false otherwise.
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithPrimaryItem( GmodPath&& item, bool& succeeded );
 
@@ -397,6 +428,7 @@ namespace dnv::vista::sdk
 		 * @details If `item` contains a value, attempts to set it as the primary item via move semantics.
 		 * @param[in] item An `std::optional<GmodPath>` containing the item to set, if present (rvalue reference).
 		 * @return A new `LocalIdBuilder` instance, potentially updated.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithPrimaryItem( std::optional<GmodPath>&& item );
 
@@ -406,12 +438,14 @@ namespace dnv::vista::sdk
 		 * @param[in] item An `std::optional<GmodPath>` containing the item to set, if present (rvalue reference).
 		 * @param[out] succeeded Set to true if the item was present and successfully set, false otherwise.
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithPrimaryItem( std::optional<GmodPath>&& item, bool& succeeded );
 
 		/**
 		 * @brief Returns a new builder with the primary item removed (reset to default/empty).
 		 * @return A new `LocalIdBuilder` instance without a primary item set.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutPrimaryItem();
 
@@ -425,6 +459,7 @@ namespace dnv::vista::sdk
 		 * @param[in] item The `GmodPath` to set as the secondary item (rvalue reference, will be moved).
 		 * @return A new `LocalIdBuilder` instance with the updated secondary item.
 		 * @throws std::invalid_argument If setting the secondary item fails (e.g., path validation).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withSecondaryItem( GmodPath&& item );
 
@@ -434,6 +469,7 @@ namespace dnv::vista::sdk
 		 *          it returns a builder identical to the current one.
 		 * @param[in] item The `GmodPath` to attempt to set as secondary (rvalue reference, will be moved).
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithSecondaryItem( GmodPath&& item );
 
@@ -443,6 +479,7 @@ namespace dnv::vista::sdk
 		 * @param[in] item The `GmodPath` to attempt to set as secondary (rvalue reference, will be moved).
 		 * @param[out] succeeded Set to true if the secondary item was successfully set, false otherwise.
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithSecondaryItem( GmodPath&& item, bool& succeeded );
 
@@ -451,6 +488,7 @@ namespace dnv::vista::sdk
 		 * @details If `item` contains a value, attempts to set it as the secondary item via move semantics.
 		 * @param[in] item An `std::optional<GmodPath>` containing the item to set, if present (rvalue reference).
 		 * @return A new `LocalIdBuilder` instance, potentially updated.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithSecondaryItem( std::optional<GmodPath>&& item );
 
@@ -460,12 +498,14 @@ namespace dnv::vista::sdk
 		 * @param[in] item An `std::optional<GmodPath>` containing the item to set, if present (rvalue reference).
 		 * @param[out] succeeded Set to true if the item was present and successfully set, false otherwise.
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithSecondaryItem( std::optional<GmodPath>&& item, bool& succeeded );
 
 		/**
 		 * @brief Returns a new builder with the secondary item removed.
 		 * @return A new `LocalIdBuilder` instance without a secondary item set.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutSecondaryItem();
 
@@ -481,6 +521,7 @@ namespace dnv::vista::sdk
 		 * @return A new `LocalIdBuilder` instance with the added or updated tag.
 		 * @throws std::invalid_argument If the tag's `CodebookName` is not one of the standard metadata types
 		 *         supported directly by `LocalId` (Quantity, Content, etc.).
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withMetadataTag( const MetadataTag& metadataTag );
 
@@ -490,6 +531,7 @@ namespace dnv::vista::sdk
 		 *          Otherwise, returns a builder identical to the current one.
 		 * @param[in] metadataTag An `std::optional<MetadataTag>` containing the tag to add/replace, if present.
 		 * @return A new `LocalIdBuilder` instance, potentially updated.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithMetadataTag( const std::optional<MetadataTag>& metadataTag );
 
@@ -499,6 +541,7 @@ namespace dnv::vista::sdk
 		 * @param[in] metadataTag An `std::optional<MetadataTag>` containing the tag to add/replace, if present.
 		 * @param[out] succeeded Set to true if the tag was present and successfully added/replaced (and was a valid standard tag), false otherwise.
 		 * @return A new `LocalIdBuilder` instance, updated if successful, otherwise identical to the current one.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder tryWithMetadataTag( const std::optional<MetadataTag>& metadataTag, bool& succeeded );
 
@@ -509,6 +552,7 @@ namespace dnv::vista::sdk
 		 * @param[in] name The `CodebookName` of the tag to remove.
 		 * @return A new `LocalIdBuilder` instance without the specified metadata tag.
 		 * @throws std::invalid_argument If the `name` is not one of the standard metadata types supported by `LocalId`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutMetadataTag( CodebookName name );
 
@@ -525,12 +569,14 @@ namespace dnv::vista::sdk
 		 * @param[in] quantity The quantity tag. Must have `CodebookName::Quantity`.
 		 * @return A new `LocalIdBuilder` instance with the updated quantity tag.
 		 * @throws std::invalid_argument If `quantity.name()` is not `CodebookName::Quantity`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withQuantity( const MetadataTag& quantity );
 
 		/**
 		 * @brief Returns a new builder with the quantity metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the quantity tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutQuantity();
 
@@ -543,12 +589,14 @@ namespace dnv::vista::sdk
 		 * @param[in] content The content tag. Must have `CodebookName::Content`.
 		 * @return A new `LocalIdBuilder` instance with the updated content tag.
 		 * @throws std::invalid_argument If `content.name()` is not `CodebookName::Content`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withContent( const MetadataTag& content );
 
 		/**
 		 * @brief Returns a new builder with the content metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the content tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutContent();
 
@@ -561,12 +609,14 @@ namespace dnv::vista::sdk
 		 * @param[in] calculation The calculation tag. Must have `CodebookName::Calculation`.
 		 * @return A new `LocalIdBuilder` instance with the updated calculation tag.
 		 * @throws std::invalid_argument If `calculation.name()` is not `CodebookName::Calculation`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withCalculation( const MetadataTag& calculation );
 
 		/**
 		 * @brief Returns a new builder with the calculation metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the calculation tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutCalculation();
 
@@ -579,12 +629,14 @@ namespace dnv::vista::sdk
 		 * @param[in] state The state tag. Must have `CodebookName::State`.
 		 * @return A new `LocalIdBuilder` instance with the updated state tag.
 		 * @throws std::invalid_argument If `state.name()` is not `CodebookName::State`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withState( const MetadataTag& state );
 
 		/**
 		 * @brief Returns a new builder with the state metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the state tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutState();
 
@@ -597,12 +649,14 @@ namespace dnv::vista::sdk
 		 * @param[in] command The command tag. Must have `CodebookName::Command`.
 		 * @return A new `LocalIdBuilder` instance with the updated command tag.
 		 * @throws std::invalid_argument If `command.name()` is not `CodebookName::Command`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withCommand( const MetadataTag& command );
 
 		/**
 		 * @brief Returns a new builder with the command metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the command tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutCommand();
 
@@ -615,12 +669,14 @@ namespace dnv::vista::sdk
 		 * @param[in] type The type tag. Must have `CodebookName::Type`.
 		 * @return A new `LocalIdBuilder` instance with the updated type tag.
 		 * @throws std::invalid_argument If `type.name()` is not `CodebookName::Type`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withType( const MetadataTag& type );
 
 		/**
 		 * @brief Returns a new builder with the type metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the type tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutType();
 
@@ -633,12 +689,14 @@ namespace dnv::vista::sdk
 		 * @param[in] position The position tag. Must have `CodebookName::Position`.
 		 * @return A new `LocalIdBuilder` instance with the updated position tag.
 		 * @throws std::invalid_argument If `position.name()` is not `CodebookName::Position`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withPosition( const MetadataTag& position );
 
 		/**
 		 * @brief Returns a new builder with the position metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the position tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutPosition();
 
@@ -651,12 +709,14 @@ namespace dnv::vista::sdk
 		 * @param[in] detail The detail tag. Must have `CodebookName::Detail`.
 		 * @return A new `LocalIdBuilder` instance with the updated detail tag.
 		 * @throws std::invalid_argument If `detail.name()` is not `CodebookName::Detail`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withDetail( const MetadataTag& detail );
 
 		/**
 		 * @brief Returns a new builder with the detail metadata tag removed.
 		 * @return A new `LocalIdBuilder` instance without the detail tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdBuilder withoutDetail();
 
@@ -671,6 +731,7 @@ namespace dnv::vista::sdk
 		 * @param[in] localIdStr The Local ID string to parse.
 		 * @return A new `LocalIdBuilder` instance representing the parsed string.
 		 * @throws std::invalid_argument If parsing fails due to invalid format or content.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocalIdBuilder parse( std::string_view localIdStr );
 
@@ -682,6 +743,7 @@ namespace dnv::vista::sdk
 		 * @param[out] localId An `std::optional<LocalIdBuilder>` that will contain the resulting builder
 		 *                     if parsing succeeds, or `std::nullopt` otherwise.
 		 * @return True if parsing was successful, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static bool tryParse( std::string_view localIdStr, std::optional<LocalIdBuilder>& localId );
 
@@ -694,6 +756,7 @@ namespace dnv::vista::sdk
 		 * @param[out] localId An `std::optional<LocalIdBuilder>` that will contain the resulting builder
 		 *                     if parsing succeeds, or `std::nullopt` otherwise.
 		 * @return True if parsing was successful, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static bool tryParse( std::string_view localIdStr, ParsingErrors& errors, std::optional<LocalIdBuilder>& localId );
 
@@ -720,6 +783,7 @@ namespace dnv::vista::sdk
 		 * @param[in,out] errorBuilder A helper object to accumulate parsing errors.
 		 * @param[out] localIdBuilder Output parameter where the successfully parsed builder is placed.
 		 * @return True if parsing succeeded (potentially with non-critical errors recorded), false if a critical error occurred.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static bool tryParseInternal(
 			std::string_view localIdStr, internal::LocalIdParsingErrorBuilder& errorBuilder, std::optional<LocalIdBuilder>& localIdBuilder );

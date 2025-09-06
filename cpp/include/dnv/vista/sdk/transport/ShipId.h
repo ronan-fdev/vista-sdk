@@ -78,6 +78,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Equality comparison operator
 		 * @param other The ShipId to compare with
 		 * @return True if both ShipIds represent the same identifier
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator==( const ShipId& other ) const noexcept;
 
@@ -85,6 +86,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Inequality comparison operator
 		 * @param other The ShipId to compare with
 		 * @return True if ShipIds represent different identifiers
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator!=( const ShipId& other ) const noexcept;
 
@@ -95,12 +97,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Check if this ShipId contains an IMO number
 		 * @return True if this contains an IMO number
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isImoNumber() const noexcept;
 
 		/**
 		 * @brief Check if this ShipId contains an other identifier
 		 * @return True if this contains an other identifier
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isOtherId() const noexcept;
 
@@ -111,12 +115,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get IMO number if present
 		 * @return Optional containing IMO number if present, empty otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<ImoNumber> imoNumber() const noexcept;
 
 		/**
 		 * @brief Get other identifier if present
 		 * @return Optional containing other identifier if present, empty otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<std::string_view> otherId() const noexcept;
 
@@ -130,6 +136,7 @@ namespace dnv::vista::sdk::transport
 		 * @param onImoNumber Function to call if ShipId contains IMO number
 		 * @param onOtherId Function to call if ShipId contains other identifier
 		 * @return Result of the matched function
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		template <typename T>
 		[[nodiscard]] inline T matchOn(
@@ -152,6 +159,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Convert to string representation
 		 * @return String representation of the ship identifier
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const;
 
@@ -164,6 +172,7 @@ namespace dnv::vista::sdk::transport
 		 * @param value String to parse (may include "IMO" prefix for IMO numbers)
 		 * @return Parsed ShipId
 		 * @throws std::invalid_argument If value is empty
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static ShipId parse( std::string_view value );
 

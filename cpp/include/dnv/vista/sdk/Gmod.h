@@ -13,6 +13,7 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include <nfx/containers/ChdHashMap.h>
 #include <nfx/containers/HashMap.h>
@@ -168,6 +169,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the VIS version of this GMOD instance.
 		 * @return The VisVersion enum value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline VisVersion visVersion() const;
 
@@ -177,6 +179,7 @@ namespace dnv::vista::sdk
 		 *          for traversing the GMOD structure.
 		 * @return A const reference to the root GmodNode.
 		 * @throws std::runtime_error If the GMOD is not properly initialized or has no root node.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const GmodNode& rootNode() const;
 
@@ -414,6 +417,7 @@ namespace dnv::vista::sdk
 			 * @return A const reference to the current GmodNode.
 			 * @throws std::runtime_error If called when the enumerator is in an invalid state
 			 *                            (e.g., before the first moveNext() or after iteration has ended).
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
 			[[nodiscard]] VISTA_SDK_CPP_INLINE const GmodNode& current() const;
 
@@ -451,11 +455,43 @@ namespace dnv::vista::sdk
 		class Parents
 		{
 		public:
+			/**
+			 * @brief Constructor for parent stack
+			 * @details Initializes an empty parent stack for traversal operations
+			 */
 			VISTA_SDK_CPP_INLINE Parents();
+
+			/**
+			 * @brief Pushes a parent node onto the stack
+			 * @param parent Pointer to the parent node to add
+			 */
 			VISTA_SDK_CPP_INLINE void push( const GmodNode* parent );
+
+			/**
+			 * @brief Pops the last parent node from the stack
+			 */
 			VISTA_SDK_CPP_INLINE void pop();
+
+			/**
+			 * @brief Gets the number of times a node appears in the parent stack
+			 * @param node The node to count occurrences for
+			 * @return Number of times the node appears in the stack
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline size_t occurrences( const GmodNode& node ) const noexcept;
+
+			/**
+			 * @brief Gets the last parent node in the stack
+			 * @return Pointer to the last parent node, or nullptr if stack is empty
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const GmodNode* lastOrDefault() const noexcept;
+
+			/**
+			 * @brief Gets the parent stack as a vector
+			 * @return Reference to the vector containing all parent nodes
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const std::vector<const GmodNode*>& asList() const noexcept;
 
 		private:
@@ -491,6 +527,7 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Core traversal implementation
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		template <typename TState>
 		[[nodiscard]] inline TraversalHandlerResult traverseNode( TraversalContext<TState>& context, const GmodNode& node ) const;

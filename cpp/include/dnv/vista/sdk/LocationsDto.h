@@ -74,18 +74,21 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the location code
 		 * @return The character code representing the location
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline char code() const noexcept;
 
 		/**
 		 * @brief Get the location name
 		 * @return The name of the location
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view name() const noexcept;
 
 		/**
 		 * @brief Get the location definition
 		 * @return The optional definition of the location
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& definition() const noexcept;
 
@@ -219,12 +222,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the VIS version string
 		 * @return The VIS version string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view visVersion() const noexcept;
 
 		/**
 		 * @brief Get the collection of relative locations
 		 * @return A vector of relative locations
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::vector<RelativeLocationsDto>& items() const noexcept;
 

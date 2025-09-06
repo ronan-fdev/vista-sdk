@@ -463,7 +463,6 @@ namespace dnv::vista::sdk::tests
 
 		TEST_F( LocalIdQueryTest, Test_Use_Case_4 )
 		{
-
 			auto localId = LocalIdBuilder::parse( "/dnv-v2/vis-3-7a/511.11/C101/meta/qty-pressure/cnt-lubricating.oil" ).build();
 			auto primaryPath = localId.primaryItem();
 			ASSERT_TRUE( primaryPath.has_value() );
@@ -535,7 +534,6 @@ namespace dnv::vista::sdk::tests
 			if ( !file.is_open() )
 			{
 				FAIL() << "Failed to open testdata/LocalIds.txt";
-				return;
 			}
 
 			std::vector<std::pair<std::string, std::optional<std::string>>> errored;
@@ -625,6 +623,5 @@ namespace dnv::vista::sdk::tests
 				"/dnv-v2/vis-3-4a/623.121/H201/sec/412.722-A/C542/meta/qty-level/cnt-lubricating.oil/state-low",
 				"/dnv-v2/vis-3-4a/412.723-A/CS6d/meta/qty-temperature",
 				"/dnv-v2/vis-3-4a/411.1/C101.64i-1/S201.1/C151.2/S110/meta/cnt-hydraulic.oil/state-running" ) );
-
 	}
 }

@@ -190,7 +190,7 @@ namespace dnv::vista::sdk::tests
 		auto& first = message.package().dataChannelList().dataChannels().front();
 		EXPECT_TRUE( first.dataChannelId().localId().builder().isValid() );
 
-		EXPECT_NO_THROW( first.property() );
+		EXPECT_NO_THROW( (void)first.property() );
 	}
 
 	TEST( IsoMessageTests, Test_LocalId_Lookup )

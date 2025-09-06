@@ -97,6 +97,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Explicit conversion to an integer.
 		 * @return The underlying 7-digit integer value of the IMO number.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline explicit operator int() const noexcept;
 
@@ -107,6 +108,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the string representation of this IMO number
 		 * @return String in format "IMO<number>"
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const;
 
@@ -120,6 +122,7 @@ namespace dnv::vista::sdk
 		 * This method validates the 7-digit structure and the checksum.
 		 * @param imoNumber The integer value to check (e.g., 9074729).
 		 * @return True if the integer is a valid IMO number, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static bool isValid( int imoNumber ) noexcept;
 
@@ -133,6 +136,7 @@ namespace dnv::vista::sdk
 		 *              Can optionally be prefixed with "IMO".
 		 * @return The parsed ImoNumber object.
 		 * @throws std::invalid_argument If the string is not a valid IMO number.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static ImoNumber parse( std::string_view value );
 
@@ -142,6 +146,7 @@ namespace dnv::vista::sdk
 		 *              Can optionally be prefixed with "IMO".
 		 * @return An std::optional containing the ImoNumber if parsing was successful,
 		 *         or std::nullopt if the string is not a valid IMO number.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static std::optional<ImoNumber> tryParse( std::string_view value );
 

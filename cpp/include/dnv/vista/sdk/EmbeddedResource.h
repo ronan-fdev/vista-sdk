@@ -6,7 +6,9 @@
 #pragma once
 
 #include <filesystem>
+#include <optional>
 #include <string_view>
+#include <vector>
 
 #include <nfx/containers/StringMap.h>
 

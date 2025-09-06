@@ -37,9 +37,8 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Constructs DataChannelId from string_view identifier
 		 * @param shortId String-based channel identifier
-		 * @throws std::invalid_argument If shortId is empty
 		 */
-		inline explicit DataChannelId( std::string_view shortId );
+		inline explicit DataChannelId( std::string_view shortId ) noexcept;
 
 		/** @brief Default constructor */
 		DataChannelId() = delete;
@@ -75,6 +74,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Equality comparison operator
 		 * @param other The DataChannelId to compare with
 		 * @return True if both DataChannelIds represent the same identifier
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator==( const DataChannelId& other ) const noexcept;
 
@@ -82,6 +82,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Inequality comparison operator
 		 * @param other The DataChannelId to compare with
 		 * @return True if DataChannelIds represent different identifiers
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator!=( const DataChannelId& other ) const noexcept;
 
@@ -92,12 +93,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Check if this DataChannelId contains a LocalId
 		 * @return True if this contains a LocalId
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isLocalId() const noexcept;
 
 		/**
 		 * @brief Check if this DataChannelId contains a short ID
 		 * @return True if this contains a short ID
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isShortId() const noexcept;
 
@@ -108,12 +111,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get LocalId if present
 		 * @return Optional containing LocalId if present, empty otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<LocalId> localId() const noexcept;
 
 		/**
 		 * @brief Get short identifier if present
 		 * @return Optional containing short identifier if present, empty otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<std::string_view> shortId() const noexcept;
 
@@ -129,6 +134,7 @@ namespace dnv::vista::sdk::transport
 		 * @param onLocalId Function to call if DataChannelId contains LocalId
 		 * @param onShortId Function to call if DataChannelId contains short identifier
 		 * @return Result of the matched function
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		template <typename T, typename LocalIdFunc, typename ShortIdFunc>
 		[[nodiscard]] inline T matchOn( LocalIdFunc&& onLocalId, ShortIdFunc&& onShortId ) const;
@@ -150,6 +156,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Convert to string representation
 		 * @return String representation of the data channel identifier
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const;
 
@@ -162,6 +169,7 @@ namespace dnv::vista::sdk::transport
 		 * @param value String to parse (tries LocalId first, then uses as short ID)
 		 * @return Parsed DataChannelId
 		 * @throws std::invalid_argument If value is empty
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static DataChannelId parse( std::string_view value );
 

@@ -91,6 +91,7 @@ namespace dnv::vista::sdk
 		 * @brief Equality operator.
 		 * @param other The other ParsingErrors object to compare.
 		 * @return True if the two ParsingErrors objects are equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator==( const ParsingErrors& other ) const noexcept;
 
@@ -98,6 +99,7 @@ namespace dnv::vista::sdk
 		 * @brief Inequality operator.
 		 * @param other The other ParsingErrors object to compare.
 		 * @return True if the two ParsingErrors objects are not equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator!=( const ParsingErrors& other ) const noexcept;
 
@@ -105,6 +107,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if this ParsingErrors object is equal to another.
 		 * @param other The other ParsingErrors object to compare.
 		 * @return True if the two ParsingErrors objects are equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool equals( const ParsingErrors& other ) const noexcept;
 
@@ -122,6 +125,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the number of error entries.
 		 * @return The count of error entries.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline size_t count() const noexcept;
 
@@ -132,6 +136,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Checks if there are any errors.
 		 * @return True if there are errors, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool hasErrors() const noexcept;
 
@@ -139,6 +144,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if there is an error of a specific type.
 		 * @param type The type of error to check for.
 		 * @return True if an error of the specified type exists, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool hasErrorType( std::string_view type ) const noexcept;
 
@@ -149,6 +155,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Converts the parsing errors to a string representation.
 		 * @return A string representation of the parsing errors.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const;
 
@@ -159,6 +166,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets an enumerator for the error entries.
 		 * @return An enumerator for iterating through the errors.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] Enumerator enumerator() const;
 
@@ -226,6 +234,7 @@ namespace dnv::vista::sdk
 			 * @brief Gets the current element.
 			 * @return The current error entry.
 			 * @throws std::out_of_range if enumerator is not positioned on a valid element
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
 			[[nodiscard]] const ErrorEntry& current() const;
 
@@ -266,7 +275,20 @@ namespace dnv::vista::sdk
 			// Operators
 			//----------------------------
 
+			/**
+			 * @brief Equality operator for error entries
+			 * @param other The other ErrorEntry to compare with
+			 * @return True if both type and message are equal, false otherwise
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool operator==( const ErrorEntry& other ) const noexcept;
+
+			/**
+			 * @brief Inequality operator for error entries
+			 * @param other The other ErrorEntry to compare with
+			 * @return True if type or message differ, false otherwise
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool operator!=( const ErrorEntry& other ) const noexcept;
 		};
 	};

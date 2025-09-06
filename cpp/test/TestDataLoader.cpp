@@ -10,7 +10,10 @@
 
 namespace dnv::vista::sdk::test
 {
-	static nfx::containers::HashMap<std::string, nlohmann::json> g_testDataCache;
+	namespace
+	{
+		static nfx::containers::HashMap<std::string, nlohmann::json> g_testDataCache;
+	}
 
 	const nlohmann::json& loadTestData( const char* testDataPath )
 	{

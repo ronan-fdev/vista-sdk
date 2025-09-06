@@ -80,12 +80,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the name of this codebook
 		 * @return The codebook name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view name() const noexcept;
 
 		/**
 		 * @brief Get the values map of this codebook
 		 * @return The map of group names to their corresponding values
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const ValuesMap& values() const noexcept;
 
@@ -112,6 +114,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Serialize this CodebookDto to a nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 
@@ -218,12 +221,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the VIS version string
 		 * @return The VIS version string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view visVersion() const noexcept;
 
 		/**
 		 * @brief Get the collection of codebooks
 		 * @return The vector of codebook DTOs
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const Items& items() const noexcept;
 
@@ -250,6 +255,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Serialize this CodebooksDto to a nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 

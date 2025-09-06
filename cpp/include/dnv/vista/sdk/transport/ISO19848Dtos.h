@@ -70,12 +70,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get the type name
 		 * @return Type name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view type() const noexcept;
 
 		/**
 		 * @brief Get the description
 		 * @return Description of the type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view description() const noexcept;
 
@@ -102,6 +104,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Serialize this DataChannelTypeNameDto to an nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 
@@ -201,6 +204,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get the collection of data channel type names
 		 * @return Collection of data channel type names
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::vector<DataChannelTypeNameDto>& values() const noexcept;
 
@@ -323,12 +327,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get the type name
 		 * @return Type name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view type() const noexcept;
 
 		/**
 		 * @brief Get the description
 		 * @return Description of the type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view description() const noexcept;
 
@@ -355,6 +361,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Serialize this FormatDataTypeDto to an nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 
@@ -454,6 +461,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get the collection of format data types
 		 * @return Collection of format data types
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::vector<FormatDataTypeDto>& values() const noexcept;
 
@@ -480,6 +488,7 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Serialize this FormatDataTypesDto to an nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 

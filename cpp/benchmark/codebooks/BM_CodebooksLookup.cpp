@@ -78,28 +78,72 @@ namespace dnv::vista::sdk::benchmarks
 
 		bool tryGetValue( const nfx::containers::ChdHashMap<Codebook>& dict, CodebookName key, const Codebook*& outValue ) const noexcept
 		{
-			static const char* const keyMappings[]{
-				nullptr,
-				"Quantity",
-				"Content",
-				"Calculation",
-				"State",
-				"Command",
-				"Type",
-				"FunctionalServices",
-				"MaintenanceCategory",
-				"ActivityType",
-				"Position",
-				"Detail" };
-
-			const int keyIndex = static_cast<int>( key );
-			if ( keyIndex < 1 || keyIndex >= static_cast<int>( std::size( keyMappings ) ) || keyMappings[keyIndex] == nullptr )
+			std::string_view keyName;
+			switch ( key )
 			{
-				outValue = nullptr;
-				return false;
+				case CodebookName::Quantity:
+				{
+					keyName = "Quantity";
+					break;
+				}
+				case CodebookName::Content:
+				{
+					keyName = "Content";
+					break;
+				}
+				case CodebookName::Calculation:
+				{
+					keyName = "Calculation";
+					break;
+				}
+				case CodebookName::State:
+				{
+					keyName = "State";
+					break;
+				}
+				case CodebookName::Command:
+				{
+					keyName = "Command";
+					break;
+				}
+				case CodebookName::Type:
+				{
+					keyName = "Type";
+					break;
+				}
+				case CodebookName::FunctionalServices:
+				{
+					keyName = "FunctionalServices";
+					break;
+				}
+				case CodebookName::MaintenanceCategory:
+				{
+					keyName = "MaintenanceCategory";
+					break;
+				}
+				case CodebookName::ActivityType:
+				{
+					keyName = "ActivityType";
+					break;
+				}
+				case CodebookName::Position:
+				{
+					keyName = "Position";
+					break;
+				}
+				case CodebookName::Detail:
+				{
+					keyName = "Detail";
+					break;
+				}
+				default:
+				{
+					outValue = nullptr;
+					return false;
+				}
 			}
 
-			return dict.tryGetValue( std::string_view( keyMappings[keyIndex] ), outValue );
+			return dict.tryGetValue( keyName, outValue );
 		}
 
 		template <typename T>

@@ -41,7 +41,15 @@ namespace dnv::vista::sdk::tests
 
 		struct TraversalState
 		{
-			TraversalState( int stopAfter ) : stopAfter{ stopAfter }, nodeCount{ 0 } {}
+			/**
+			 * @brief Constructs a TraversalState with a stopping condition
+			 * @param stopAfter Number of nodes after which traversal should stop
+			 */
+			TraversalState( int stopAfterNNode )
+				: stopAfter{ stopAfterNNode },
+				  nodeCount{ 0 }
+			{
+			}
 
 			int stopAfter;
 			int nodeCount;

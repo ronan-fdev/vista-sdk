@@ -56,12 +56,6 @@ namespace dnv::vista::sdk::tests
 		EXPECT_FALSE( localId.has_value() );
 	}
 
-	TEST( DataChannelId, ConstructFromEmptyStringThrows )
-	{
-		EXPECT_THROW( transport::DataChannelId{ "" }, std::invalid_argument );
-		EXPECT_THROW( transport::DataChannelId{ std::string_view{} }, std::invalid_argument );
-	}
-
 	//=====================================================================
 	// DataChannelId Equality Tests
 	//=====================================================================
@@ -192,8 +186,8 @@ namespace dnv::vista::sdk::tests
 
 	TEST( DataChannelId, ParseEmptyStringThrows )
 	{
-		EXPECT_THROW( transport::DataChannelId::parse( "" ), std::invalid_argument );
-		EXPECT_THROW( transport::DataChannelId::parse( std::string_view{} ), std::invalid_argument );
+		EXPECT_THROW( (void)transport::DataChannelId::parse( "" ), std::invalid_argument );
+		EXPECT_THROW( (void)transport::DataChannelId::parse( std::string_view{} ), std::invalid_argument );
 	}
 
 	//=====================================================================
@@ -212,7 +206,7 @@ namespace dnv::vista::sdk::tests
 		auto localId = localIdBuilderOpt->build();
 		transport::DataChannelId dataChannelId{ localId };
 		std::string result = dataChannelId.matchOn<std::string>(
-			[]( const LocalId& localId ) { return "LocalId: " + localId.toString(); },
+			[]( const LocalId& id ) { return "LocalId: " + id.toString(); },
 			[]( std::string_view shortId ) { return "ShortId: " + std::string{ shortId }; } );
 
 		EXPECT_EQ( result, "LocalId: " + localId.toString() );
@@ -242,7 +236,7 @@ namespace dnv::vista::sdk::tests
 		transport::DataChannelId dataChannelId{ localId };
 		std::string result;
 		dataChannelId.switchOn(
-			[&result]( const LocalId& localId ) { result = "LocalId: " + localId.toString(); },
+			[&result]( const LocalId& id ) { result = "LocalId: " + id.toString(); },
 			[&result]( std::string_view shortId ) { result = "ShortId: " + std::string{ shortId }; } );
 
 		EXPECT_EQ( result, "LocalId: " + localId.toString() );

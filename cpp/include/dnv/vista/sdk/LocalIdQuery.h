@@ -104,6 +104,7 @@ namespace dnv::vista::sdk
 		 * @brief Test if a LocalId matches this query's criteria
 		 * @param localId The LocalId to test against this query
 		 * @return True if the LocalId matches all query criteria
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool match( const LocalId& localId ) const;
 
@@ -111,6 +112,7 @@ namespace dnv::vista::sdk
 		 * @brief Test if a LocalId string matches this query's criteria
 		 * @param localIdStr The LocalId string to parse and test against this query
 		 * @return True if the parsed LocalId matches all query criteria
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool match( const std::string& localIdStr ) const;
 
@@ -176,6 +178,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Create an empty query builder
 		 * @return New empty query builder instance
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocalIdQueryBuilder empty();
 
@@ -183,6 +186,7 @@ namespace dnv::vista::sdk
 		 * @brief Create a query builder from an existing LocalId string
 		 * @param localIdStr The LocalId string to extract configuration from
 		 * @return New query builder instance configured from the LocalId
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocalIdQueryBuilder from( const std::string& localIdStr );
 
@@ -190,6 +194,7 @@ namespace dnv::vista::sdk
 		 * @brief Create a query builder from an existing LocalId
 		 * @param localId The LocalId to extract configuration from
 		 * @return New query builder instance configured from the LocalId
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocalIdQueryBuilder from( const LocalId& localId );
 
@@ -200,6 +205,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Build the final immutable LocalIdQuery
 		 * @return New LocalIdQuery instance with current configuration
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQuery build() const;
 
@@ -212,6 +218,7 @@ namespace dnv::vista::sdk
 		 * @param from From::Nodes to indicate node-based configuration
 		 * @param configure Function to configure the node-based query
 		 * @return New builder instance with primary item configured
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withPrimaryItem( ConfigureFrom from, QueryConfiguration configure ) const;
 
@@ -221,6 +228,7 @@ namespace dnv::vista::sdk
 		 * @param primaryItem The base GmodPath for the primary item
 		 * @param configure Function to further configure the path query
 		 * @return New builder instance with primary item configured
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withPrimaryItem( ConfigureFrom from, const GmodPath& primaryItem, QueryConfiguration configure ) const;
 
@@ -228,6 +236,7 @@ namespace dnv::vista::sdk
 		 * @brief Set primary item from GmodPath directly
 		 * @param primaryItem The GmodPath for the primary item
 		 * @return New builder instance with primary item set
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withPrimaryItem( const GmodPath& primaryItem ) const;
 
@@ -235,6 +244,7 @@ namespace dnv::vista::sdk
 		 * @brief Set primary item from GmodPathQuery directly
 		 * @param primaryItem The GmodPathQuery for the primary item
 		 * @return New builder instance with primary item set
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withPrimaryItem( const GmodPathQuery& primaryItem ) const;
 
@@ -247,6 +257,7 @@ namespace dnv::vista::sdk
 		 * @param from From::Nodes to indicate node-based configuration
 		 * @param configure Function to configure the node-based query
 		 * @return New builder instance with secondary item configured
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withSecondaryItem( ConfigureFrom from, QueryConfiguration configure ) const;
 
@@ -256,6 +267,7 @@ namespace dnv::vista::sdk
 		 * @param secondaryItem The base GmodPath for the secondary item
 		 * @param configure Function to further configure the path query
 		 * @return New builder instance with secondary item configured
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withSecondaryItem( ConfigureFrom from, const GmodPath& secondaryItem, QueryConfiguration configure ) const;
 
@@ -263,6 +275,7 @@ namespace dnv::vista::sdk
 		 * @brief Set secondary item from GmodPath directly
 		 * @param secondaryItem The GmodPath for the secondary item
 		 * @return New builder instance with secondary item set
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withSecondaryItem( const GmodPath& secondaryItem ) const;
 
@@ -270,6 +283,7 @@ namespace dnv::vista::sdk
 		 * @brief Set secondary item from GmodPathQuery directly
 		 * @param secondaryItem The GmodPathQuery for the secondary item
 		 * @return New builder instance with secondary item set
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withSecondaryItem( const GmodPathQuery& secondaryItem ) const;
 
@@ -281,6 +295,7 @@ namespace dnv::vista::sdk
 		 * @brief Configure metadata tags using existing tags with additional configuration
 		 * @param configure Function to configure the metadata tags
 		 * @return New builder instance with tags configured
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withTags( TagsConfiguration configure ) const;
 
@@ -288,6 +303,7 @@ namespace dnv::vista::sdk
 		 * @brief Set metadata tags query directly
 		 * @param tags The MetadataTagsQuery for tag filtering
 		 * @return New builder instance with tags set
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocalIdQueryBuilder withTags( const MetadataTagsQuery& tags ) const;
 
@@ -298,12 +314,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the current primary item path (if configured from path)
 		 * @return Optional GmodPath of the primary item, or nullopt if not set or configured differently
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodPath> primaryItem() const;
 
 		/**
 		 * @brief Get the current secondary item path (if configured from path)
 		 * @return Optional GmodPath of the secondary item, or nullopt if not set or configured differently
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodPath> secondaryItem() const;
 
@@ -320,7 +338,20 @@ namespace dnv::vista::sdk
 		// Internal matching methods
 		//----------------------------------------------
 
+		/**
+		 * @brief Test if a LocalId string matches this query's criteria
+		 * @param localIdStr The LocalId string to parse and test against this query
+		 * @return True if the parsed LocalId matches all query criteria
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] bool match( const std::string& localIdStr ) const;
+
+		/**
+		 * @brief Test if a LocalId matches this query's criteria
+		 * @param localId The LocalId to test against this query
+		 * @return True if the LocalId matches all query criteria
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] bool match( const LocalId& localId ) const;
 	};
 }

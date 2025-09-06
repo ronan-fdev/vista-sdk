@@ -11,14 +11,17 @@
 
 namespace dnv::vista::sdk::test
 {
-	struct SmokeContext
+	namespace
 	{
-		int count = 0;
-		int succeeded = 0;
-		std::vector<std::pair<std::string, std::optional<std::string>>> errors;
-	};
+		struct SmokeContext
+		{
+			int count = 0;
+			int succeeded = 0;
+			std::vector<std::pair<std::string, std::optional<std::string>>> errors;
+		};
 
-	const std::string AllAllowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~";
+		const std::string AllAllowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~";
+	}
 
 	TEST( IsISOStringTests, AllValidCharacters )
 	{
@@ -111,8 +114,8 @@ namespace dnv::vista::sdk::test
 		{
 			for ( [[maybe_unused]] const auto& [localId, error] : context.errors )
 			{
-				std::cerr << "ERROR: Failed to parse " << localId 
-				         << " with error " << (error.has_value() ? *error : "Not a match") << "\n";
+				std::cerr << "ERROR: Failed to parse " << localId
+						  << " with error " << ( error.has_value() ? *error : "Not a match" ) << "\n";
 			}
 		}
 

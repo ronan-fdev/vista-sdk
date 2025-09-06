@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(vista-sdk-cpp
-	VERSION 0.0.27
+	VERSION 0.0.29
 	DESCRIPTION "DNV VISTA SDK C++ port"
 	LANGUAGES CXX
 )
@@ -27,7 +27,7 @@ enable_testing()
 option(VISTA_SDK_CPP_BUILD_STATIC          "Build static library"                       ON   )
 option(VISTA_SDK_CPP_BUILD_SHARED          "Build shared library"                       ON   )
 option(VISTA_SDK_CPP_BUILD_TESTS           "Build tests"                                ON   )
-option(VISTA_SDK_CPP_BUILD_SMOKE_TESTS     "Build smoke tests"                          ON   )
+option(VISTA_SDK_CPP_BUILD_SMOKE_TESTS     "Build smoke tests"                          OFF  )
 option(VISTA_SDK_CPP_RUN_TESTS             "Run tests after build"                      OFF  )
 option(VISTA_SDK_CPP_BUILD_BENCHMARKS      "Build benchmarks"                           ON   )
 option(VISTA_SDK_CPP_RUN_BENCHMARKS        "Run benchmarks after build"                 OFF  )

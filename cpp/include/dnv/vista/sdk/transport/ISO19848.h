@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include <nfx/datatypes/Decimal.h>
 #include <nfx/memory/MemoryCache.h>
 #include <nfx/time/DateTime.h>
@@ -65,6 +67,10 @@ namespace dnv::vista::sdk::transport
 		class String final
 		{
 		public:
+			/**
+			 * @brief Construct string value from string view
+			 * @param value The string value to store
+			 */
 			inline explicit String( std::string_view value ) noexcept;
 
 			/** @brief Default constructor */
@@ -85,6 +91,11 @@ namespace dnv::vista::sdk::transport
 			/** @brief Move assignment */
 			String& operator=( String&& ) noexcept = default;
 
+			/**
+			 * @brief Get the string value
+			 * @return Reference to the internal string value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const std::string& value() const noexcept;
 
 		private:
@@ -102,7 +113,17 @@ namespace dnv::vista::sdk::transport
 		class Char final
 		{
 		public:
+			/**
+			 * @brief Construct character value from char
+			 * @param value The character value to store
+			 */
 			inline explicit Char( char value ) noexcept;
+
+			/**
+			 * @brief Get the character value
+			 * @return The internal character value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline char value() const noexcept;
 
 		private:
@@ -120,7 +141,17 @@ namespace dnv::vista::sdk::transport
 		class Boolean final
 		{
 		public:
+			/**
+			 * @brief Construct boolean value from bool
+			 * @param value The boolean value to store
+			 */
 			inline explicit Boolean( bool value ) noexcept;
+
+			/**
+			 * @brief Get the boolean value
+			 * @return The internal boolean value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool value() const noexcept;
 
 		private:
@@ -138,7 +169,17 @@ namespace dnv::vista::sdk::transport
 		class Integer final
 		{
 		public:
+			/**
+			 * @brief Construct integer value from int
+			 * @param value The integer value to store
+			 */
 			inline explicit Integer( int value ) noexcept;
+
+			/**
+			 * @brief Get the integer value
+			 * @return The internal integer value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline int value() const noexcept;
 
 		private:
@@ -156,7 +197,17 @@ namespace dnv::vista::sdk::transport
 		class UnsignedInteger final
 		{
 		public:
+			/**
+			 * @brief Construct unsigned integer value from uint32_t
+			 * @param value The unsigned integer value to store
+			 */
 			inline explicit UnsignedInteger( std::uint32_t value ) noexcept;
+
+			/**
+			 * @brief Get the unsigned integer value
+			 * @return The internal unsigned integer value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline std::uint32_t value() const noexcept;
 
 		private:
@@ -174,7 +225,17 @@ namespace dnv::vista::sdk::transport
 		class Long final
 		{
 		public:
+			/**
+			 * @brief Construct long integer value from int64_t
+			 * @param value The long integer value to store
+			 */
 			inline explicit Long( std::int64_t value ) noexcept;
+
+			/**
+			 * @brief Get the long integer value
+			 * @return The internal long integer value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline std::int64_t value() const noexcept;
 
 		private:
@@ -192,7 +253,17 @@ namespace dnv::vista::sdk::transport
 		class Double final
 		{
 		public:
+			/**
+			 * @brief Construct double precision value from double
+			 * @param value The double precision value to store
+			 */
 			inline explicit Double( double value ) noexcept;
+
+			/**
+			 * @brief Get the double precision value
+			 * @return The internal double precision value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline double value() const noexcept;
 
 		private:
@@ -210,8 +281,23 @@ namespace dnv::vista::sdk::transport
 		class Decimal final
 		{
 		public:
+			/**
+			 * @brief Construct decimal value from high-precision decimal
+			 * @param value The high-precision decimal value to store
+			 */
 			inline explicit Decimal( const nfx::datatypes::Decimal& value ) noexcept;
+
+			/**
+			 * @brief Construct decimal value from double
+			 * @param value The double value to convert and store as decimal
+			 */
 			inline explicit Decimal( double value ) noexcept;
+
+			/**
+			 * @brief Get the high-precision decimal value
+			 * @return Reference to the internal high-precision decimal value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const nfx::datatypes::Decimal& value() const noexcept;
 
 		private:
@@ -229,7 +315,17 @@ namespace dnv::vista::sdk::transport
 		class DateTime final
 		{
 		public:
+			/**
+			 * @brief Construct date time value from DateTimeOffset
+			 * @param value The date time offset value to store
+			 */
 			inline explicit DateTime( const nfx::time::DateTimeOffset& value ) noexcept;
+
+			/**
+			 * @brief Get the date and time value
+			 * @return Reference to the internal date and time value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const nfx::time::DateTimeOffset& value() const noexcept;
 
 		private:
@@ -277,28 +373,143 @@ namespace dnv::vista::sdk::transport
 		// Type checking
 		//----------------------------------------------
 
+		/**
+		 * @brief Check if value is a string
+		 * @return True if the value holds a string, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isString() const noexcept;
+
+		/**
+		 * @brief Check if value is a character
+		 * @return True if the value holds a character, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isChar() const noexcept;
+
+		/**
+		 * @brief Check if value is a boolean
+		 * @return True if the value holds a boolean, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isBoolean() const noexcept;
+
+		/**
+		 * @brief Check if value is an integer
+		 * @return True if the value holds an integer, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isInteger() const noexcept;
+
+		/**
+		 * @brief Check if value is an unsigned integer
+		 * @return True if the value holds an unsigned integer, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isUnsignedInteger() const noexcept;
+
+		/**
+		 * @brief Check if value is a long integer
+		 * @return True if the value holds a long integer, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isLong() const noexcept;
+
+		/**
+		 * @brief Check if value is a double precision number
+		 * @return True if the value holds a double, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isDouble() const noexcept;
+
+		/**
+		 * @brief Check if value is a high-precision decimal
+		 * @return True if the value holds a decimal, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isDecimal() const noexcept;
+
+		/**
+		 * @brief Check if value is a date and time
+		 * @return True if the value holds a datetime, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool isDateTime() const noexcept;
 
 		//----------------------------------------------
 		// Value access
 		//----------------------------------------------
 
+		/**
+		 * @brief Get the string value
+		 * @return Reference to the string value
+		 * @throws std::bad_variant_access if value is not a string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const String& string() const;
+
+		/**
+		 * @brief Get the character value
+		 * @return Reference to the character value
+		 * @throws std::bad_variant_access if value is not a character
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const Char& charValue() const;
+
+		/**
+		 * @brief Get the boolean value
+		 * @return Reference to the boolean value
+		 * @throws std::bad_variant_access if value is not a boolean
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const Boolean& boolean() const;
+
+		/**
+		 * @brief Get the integer value
+		 * @return Reference to the integer value
+		 * @throws std::bad_variant_access if value is not an integer
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const Integer& integer() const;
+
+		/**
+		 * @brief Get the unsigned integer value
+		 * @return Reference to the unsigned integer value
+		 * @throws std::bad_variant_access if value is not an unsigned integer
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const UnsignedInteger& unsignedInteger() const;
+
+		/**
+		 * @brief Get the long integer value
+		 * @return Reference to the long integer value
+		 * @throws std::bad_variant_access if value is not a long integer
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const Long& longValue() const;
+
+		/**
+		 * @brief Get the double precision value
+		 * @return Reference to the double precision value
+		 * @throws std::bad_variant_access if value is not a double
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const Double& doubleValue() const;
+
+		/**
+		 * @brief Get the high-precision decimal value
+		 * @return Reference to the decimal value
+		 * @throws std::bad_variant_access if value is not a decimal
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const Decimal& decimal() const;
+
+		/**
+		 * @brief Get the date and time value
+		 * @return Reference to the datetime value
+		 * @throws std::bad_variant_access if value is not a datetime
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const DateTime& dateTime() const;
 
 		//----------------------------------------------
@@ -308,12 +519,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get the variant index for switch statements
 		 * @return Index of the currently held type in the variant
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::size_t index() const noexcept;
 
 		/**
 		 * @brief Get the type as an enum for readable switch statements
 		 * @return Type enum representing the currently held type
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Type type() const noexcept;
 
@@ -378,12 +591,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get type name
 		 * @return Type name
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& type() const noexcept;
 
 		/**
 		 * @brief Get description
 		 * @return Description
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& description() const noexcept;
 
@@ -455,10 +670,23 @@ namespace dnv::vista::sdk::transport
 			// DataChannelTypeNames::ParseResult::Ok class
 			//----------------------------------------------
 
+			/**
+			 * @brief Successful parse result containing a data channel type name
+			 */
 			class Ok final
 			{
 			public:
+				/**
+				 * @brief Construct successful parse result
+				 * @param typeName The parsed data channel type name
+				 */
 				inline explicit Ok( DataChannelTypeName typeName ) noexcept;
+
+				/**
+				 * @brief Get the parsed data channel type name
+				 * @return Reference to the data channel type name
+				 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+				 */
 				[[nodiscard]] inline const DataChannelTypeName& typeName() const noexcept;
 
 			private:
@@ -469,6 +697,9 @@ namespace dnv::vista::sdk::transport
 			// DataChannelTypeNames::ParseResult::Invalid class
 			//----------------------------------------------
 
+			/**
+			 * @brief Failed parse result indicating invalid data channel type name
+			 */
 			class Invalid final
 			{
 			public:
@@ -479,24 +710,58 @@ namespace dnv::vista::sdk::transport
 			// Construction
 			//----------------------------------------------
 
+			/**
+			 * @brief Construct parse result from successful result
+			 * @param ok The successful parse result
+			 */
 			inline ParseResult( Ok ok ) noexcept;
+
+			/**
+			 * @brief Construct parse result from failed result
+			 * @param invalid The failed parse result
+			 */
 			inline ParseResult( Invalid invalid ) noexcept;
 
 			//----------------------------------------------
 			// Type checking
 			//----------------------------------------------
 
+			/**
+			 * @brief Check if parse result is successful
+			 * @return True if parse was successful, false otherwise
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool isOk() const noexcept;
+
+			/**
+			 * @brief Check if parse result is invalid
+			 * @return True if parse failed, false otherwise
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool isInvalid() const noexcept;
 
 			//----------------------------------------------
 			// Value access
 			//----------------------------------------------
 
+			/**
+			 * @brief Get the successful parse result
+			 * @return Reference to the successful result
+			 * @throws std::bad_variant_access if result is not successful
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const Ok& ok() const;
+
+			/**
+			 * @brief Get the failed parse result
+			 * @return Reference to the failed result
+			 * @throws std::bad_variant_access if result is not failed
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const Invalid& invalid() const;
 
 		private:
+			/** @brief Variant storage for parse result types */
 			std::variant<Ok, Invalid> m_value;
 		};
 
@@ -515,6 +780,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Parse type name from string
 		 * @param type Type string to parse
 		 * @return Parse result
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] ParseResult parse( std::string_view type ) const;
 
@@ -522,9 +788,32 @@ namespace dnv::vista::sdk::transport
 		// Iteration
 		//----------------------------------------------
 
+		/**
+		 * @brief Get iterator to beginning of data channel type names
+		 * @return Iterator pointing to the first data channel type name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline iterator begin() const noexcept;
+
+		/**
+		 * @brief Get iterator to end of data channel type names
+		 * @return Iterator pointing past the last data channel type name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline iterator end() const noexcept;
+
+		/**
+		 * @brief Get const iterator to beginning of data channel type names
+		 * @return Const iterator pointing to the first data channel type name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const_iterator cbegin() const noexcept;
+
+		/**
+		 * @brief Get const iterator to end of data channel type names
+		 * @return Const iterator pointing past the last data channel type name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const_iterator cend() const noexcept;
 
 	private:
@@ -583,12 +872,14 @@ namespace dnv::vista::sdk::transport
 		/**
 		 * @brief Get type name
 		 * @return Type name
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& type() const noexcept;
 
 		/**
 		 * @brief Get description
 		 * @return Description
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& description() const noexcept;
 
@@ -601,6 +892,7 @@ namespace dnv::vista::sdk::transport
 		 * @param value String value to validate
 		 * @param outValue Output typed value
 		 * @return Validation result
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] ValidateResult validate( std::string_view value, Value& outValue ) const;
 
@@ -697,7 +989,17 @@ namespace dnv::vista::sdk::transport
 			class Ok final
 			{
 			public:
+				/**
+				 * @brief Construct successful parse result
+				 * @param typeName The parsed format data type
+				 */
 				inline explicit Ok( FormatDataType typeName ) noexcept;
+
+				/**
+				 * @brief Get the parsed format data type
+				 * @return Reference to the format data type
+				 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+				 */
 				[[nodiscard]] inline const FormatDataType& typeName() const noexcept;
 
 			private:
@@ -708,6 +1010,9 @@ namespace dnv::vista::sdk::transport
 			class Invalid final
 			{
 			public:
+				/**
+				 * @brief Default constructor for failed parse result
+				 */
 				Invalid() = default;
 			};
 
@@ -715,21 +1020,54 @@ namespace dnv::vista::sdk::transport
 			// Construction from result
 			//-----------------------------
 
+			/**
+			 * @brief Construct parse result from successful result
+			 * @param ok The successful parse result
+			 */
 			inline ParseResult( Ok ok ) noexcept;
+
+			/**
+			 * @brief Construct parse result from failed result
+			 * @param invalid The failed parse result
+			 */
 			inline ParseResult( Invalid invalid ) noexcept;
 
 			//-----------------------------
 			// Type checking
 			//-----------------------------
 
+			/**
+			 * @brief Check if parse result is successful
+			 * @return True if parse was successful, false otherwise
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool isOk() const noexcept;
+
+			/**
+			 * @brief Check if parse result is invalid
+			 * @return True if parse failed, false otherwise
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline bool isInvalid() const noexcept;
 
 			//-----------------------------
 			// Value access
 			//-----------------------------
 
+			/**
+			 * @brief Get the successful parse result
+			 * @return Reference to the successful result
+			 * @throws std::bad_variant_access if result is not successful
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const Ok& ok() const;
+
+			/**
+			 * @brief Get the failed parse result
+			 * @return Reference to the failed result
+			 * @throws std::bad_variant_access if result is not failed
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+			 */
 			[[nodiscard]] inline const Invalid& invalid() const;
 
 		private:
@@ -752,6 +1090,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Parse type name from string
 		 * @param type Type string to parse
 		 * @return Parse result
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] ParseResult parse( std::string_view type ) const;
 
@@ -759,9 +1098,32 @@ namespace dnv::vista::sdk::transport
 		// Iteration
 		//----------------------------------------------
 
+		/**
+		 * @brief Get iterator to beginning of format data types
+		 * @return Iterator pointing to the first format data type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline iterator begin() const noexcept;
+
+		/**
+		 * @brief Get iterator to end of format data types
+		 * @return Iterator pointing past the last format data type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline iterator end() const noexcept;
+
+		/**
+		 * @brief Get const iterator to beginning of format data types
+		 * @return Const iterator pointing to the first format data type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const_iterator cbegin() const noexcept;
+
+		/**
+		 * @brief Get const iterator to end of format data types
+		 * @return Const iterator pointing past the last format data type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline const_iterator cend() const noexcept;
 
 	private:
@@ -805,6 +1167,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Get data channel type names for specified version
 		 * @param version ISO 19848 version
 		 * @return Data channel type names collection
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] DataChannelTypeNames dataChannelTypeNames( ISO19848Version version );
 
@@ -812,6 +1175,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Get format data types for specified version
 		 * @param version ISO 19848 version
 		 * @return Format data types collection
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] FormatDataTypes formatDataTypes( ISO19848Version version );
 
@@ -863,6 +1227,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Get data channel type names DTO (internal implementation)
 		 * @param version ISO 19848 version
 		 * @return Data channel type names DTO
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] DataChannelTypeNamesDto dataChannelTypeNamesDto( ISO19848Version version );
 
@@ -870,6 +1235,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Get format data types DTO (internal implementation)
 		 * @param version ISO 19848 version
 		 * @return Format data types DTO
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] FormatDataTypesDto formatDataTypesDto( ISO19848Version version );
 
@@ -881,6 +1247,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Load data channel type names DTO from resources
 		 * @param version ISO 19848 version
 		 * @return Data channel type names DTO if found
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static std::optional<DataChannelTypeNamesDto> loadDataChannelTypeNamesDto( ISO19848Version version );
 
@@ -888,6 +1255,7 @@ namespace dnv::vista::sdk::transport
 		 * @brief Load format data types DTO from resources
 		 * @param version ISO 19848 version
 		 * @return Format data types DTO if found
+		 *@note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static std::optional<FormatDataTypesDto> loadFormatDataTypesDto( ISO19848Version version );
 	};

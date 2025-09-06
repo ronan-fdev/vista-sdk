@@ -84,36 +84,42 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the VIS version this builder is configured for.
 		 * @return The VisVersion enum value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline VisVersion visVersion() const noexcept;
 
 		/**
 		 * @brief Gets the numeric component of the location.
 		 * @return Optional integer representing the number component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<int>& number() const noexcept;
 
 		/**
 		 * @brief Gets the side component of the location.
 		 * @return Optional character representing the side (e.g., 'P', 'C', 'S').
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<char>& side() const noexcept;
 
 		/**
 		 * @brief Gets the vertical component of the location.
 		 * @return Optional character representing vertical position (e.g., 'U', 'M', 'L').
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<char>& vertical() const noexcept;
 
 		/**
 		 * @brief Gets the transverse component of the location.
 		 * @return Optional character representing transverse position (e.g., 'I', 'O').
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<char>& transverse() const noexcept;
 
 		/**
 		 * @brief Gets the longitudinal component of the location.
 		 * @return Optional character representing longitudinal position (e.g., 'F', 'A').
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<char>& longitudinal() const noexcept;
 
@@ -125,6 +131,7 @@ namespace dnv::vista::sdk
 		 * @brief Generates the string representation of the location.
 		 * @details Components are alphabetically sorted as per VIS standard.
 		 * @return A string representing the current builder state.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const;
 
@@ -136,6 +143,7 @@ namespace dnv::vista::sdk
 		 * @brief Creates a new LocationBuilder for the specified Locations context.
 		 * @param locations The Locations object providing validation context.
 		 * @return A new LocationBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocationBuilder create( const Locations& locations );
 
@@ -151,6 +159,7 @@ namespace dnv::vista::sdk
 		 * @brief Builds a Location from the current builder state.
 		 * @return The constructed Location object.
 		 * @details The resulting location string is alphabetically sorted according to VIS standards.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] Location build() const;
 
@@ -163,6 +172,7 @@ namespace dnv::vista::sdk
 		 * @param location The Location to parse and apply to this builder.
 		 * @return A new LocationBuilder instance with the parsed components.
 		 * @throws std::invalid_argument If the location contains invalid components.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withLocation( const Location& location ) const;
 
@@ -175,12 +185,14 @@ namespace dnv::vista::sdk
 		 * @param number The number component (must be >= 1).
 		 * @return A new LocationBuilder instance with the updated number.
 		 * @throws std::invalid_argument If number is less than 1.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withNumber( int number ) const;
 
 		/**
 		 * @brief Removes the numeric component.
 		 * @return A new LocationBuilder instance without the number component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withoutNumber() const;
 
@@ -193,12 +205,14 @@ namespace dnv::vista::sdk
 		 * @param side The side character (e.g., 'P', 'C', 'S').
 		 * @return A new LocationBuilder instance with the updated side.
 		 * @throws std::runtime_error If the character is not a valid side value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withSide( char side ) const;
 
 		/**
 		 * @brief Removes the side component.
 		 * @return A new LocationBuilder instance without the side component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withoutSide() const;
 
@@ -211,12 +225,14 @@ namespace dnv::vista::sdk
 		 * @param vertical The vertical character (e.g., 'U', 'M', 'L').
 		 * @return A new LocationBuilder instance with the updated vertical.
 		 * @throws std::runtime_error If the character is not a valid vertical value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withVertical( char vertical ) const;
 
 		/**
 		 * @brief Removes the vertical component.
 		 * @return A new LocationBuilder instance without the vertical component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withoutVertical() const;
 
@@ -229,12 +245,14 @@ namespace dnv::vista::sdk
 		 * @param transverse The transverse character (e.g., 'I', 'O').
 		 * @return A new LocationBuilder instance with the updated transverse.
 		 * @throws std::runtime_error If the character is not a valid transverse value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withTransverse( char transverse ) const;
 
 		/**
 		 * @brief Removes the transverse component.
 		 * @return A new LocationBuilder instance without the transverse component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withoutTransverse() const;
 
@@ -247,12 +265,14 @@ namespace dnv::vista::sdk
 		 * @param longitudinal The longitudinal character (e.g., 'F', 'A').
 		 * @return A new LocationBuilder instance with the updated longitudinal.
 		 * @throws std::runtime_error If the character is not a valid longitudinal value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withLongitudinal( char longitudinal ) const;
 
 		/**
 		 * @brief Removes the longitudinal component.
 		 * @return A new LocationBuilder instance without the longitudinal component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withoutLongitudinal() const;
 
@@ -265,6 +285,7 @@ namespace dnv::vista::sdk
 		 * @param value The numeric value to set.
 		 * @return A new LocationBuilder instance with the updated number.
 		 * @throws std::invalid_argument If value is less than 1.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withValue( int value ) const;
 
@@ -273,6 +294,7 @@ namespace dnv::vista::sdk
 		 * @param value The character value to set.
 		 * @return A new LocationBuilder instance with the updated component.
 		 * @throws std::invalid_argument If the character is not valid for any component.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withValue( char value ) const;
 
@@ -280,6 +302,7 @@ namespace dnv::vista::sdk
 		 * @brief Removes a component by group type.
 		 * @param group The LocationGroup to remove.
 		 * @return A new LocationBuilder instance with the specified component removed.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withoutValue( LocationGroup group ) const;
 
@@ -294,6 +317,7 @@ namespace dnv::vista::sdk
 		 * @param value The integer value to set.
 		 * @return A new LocationBuilder instance with the updated component.
 		 * @throws std::invalid_argument If validation fails.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withValueInternal( LocationGroup group, int value ) const;
 
@@ -303,6 +327,7 @@ namespace dnv::vista::sdk
 		 * @param value The character value to set.
 		 * @return A new LocationBuilder instance with the updated component.
 		 * @throws std::invalid_argument If validation fails.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] LocationBuilder withValueInternal( LocationGroup group, char value ) const;
 

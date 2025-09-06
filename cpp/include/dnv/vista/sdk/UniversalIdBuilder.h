@@ -118,6 +118,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets the IMO number currently set in builder.
 		 * @return Constant reference to optional IMO number.
 		 * @note Zero-copy access via const reference.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<ImoNumber>& imoNumber() const noexcept;
 
@@ -125,6 +126,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets the Local ID builder currently set.
 		 * @return Constant reference to optional LocalIdBuilder.
 		 * @note Zero-copy access via const reference.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<LocalIdBuilder>& localId() const noexcept;
 
@@ -137,6 +139,7 @@ namespace dnv::vista::sdk
 		 * @details Requires both IMO number and valid LocalIdBuilder.
 		 * @return True if build() will succeed.
 		 * @note This method is guaranteed not to throw.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isValid() const noexcept;
 
@@ -148,6 +151,7 @@ namespace dnv::vista::sdk
 		 * @brief Generates string representation of current builder state.
 		 * @return String in Universal ID format.
 		 * @throws std::invalid_argument If builder state is invalid.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const;
 
@@ -170,6 +174,7 @@ namespace dnv::vista::sdk
 		 * @brief Builds UniversalId from current builder state.
 		 * @return Constructed UniversalId.
 		 * @throws std::invalid_argument If builder state is invalid.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalId build() const;
 
@@ -182,6 +187,7 @@ namespace dnv::vista::sdk
 		 * @param[in] localId LocalIdBuilder to set.
 		 * @return New UniversalIdBuilder instance.
 		 * @throws std::invalid_argument If localId is invalid.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder withLocalId( const LocalIdBuilder& localId ) const;
 
@@ -189,6 +195,7 @@ namespace dnv::vista::sdk
 		 * @brief Returns new builder with optional Local ID builder.
 		 * @param[in] localId Optional LocalIdBuilder to set.
 		 * @return New UniversalIdBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder tryWithLocalId( const std::optional<LocalIdBuilder>& localId ) const;
 
@@ -197,12 +204,14 @@ namespace dnv::vista::sdk
 		 * @param[in] localId Optional LocalIdBuilder to set.
 		 * @param[out] succeeded True if LocalIdBuilder was set successfully.
 		 * @return New UniversalIdBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder tryWithLocalId( const std::optional<LocalIdBuilder>& localId, bool& succeeded ) const;
 
 		/**
 		 * @brief Returns new builder without Local ID builder.
 		 * @return New UniversalIdBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder withoutLocalId() const;
 
@@ -215,6 +224,7 @@ namespace dnv::vista::sdk
 		 * @param[in] imoNumber IMO number to set.
 		 * @return New UniversalIdBuilder instance.
 		 * @throws std::invalid_argument If imoNumber is invalid.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder withImoNumber( const ImoNumber& imoNumber ) const;
 
@@ -222,6 +232,7 @@ namespace dnv::vista::sdk
 		 * @brief Returns new builder with optional IMO number.
 		 * @param[in] imoNumber Optional IMO number to set.
 		 * @return New UniversalIdBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder tryWithImoNumber( const std::optional<ImoNumber>& imoNumber ) const;
 
@@ -230,12 +241,14 @@ namespace dnv::vista::sdk
 		 * @param[in] imoNumber Optional IMO number to set.
 		 * @param[out] succeeded True if IMO number was set successfully.
 		 * @return New UniversalIdBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder tryWithImoNumber( const std::optional<ImoNumber>& imoNumber, bool& succeeded ) const;
 
 		/**
 		 * @brief Returns new builder without IMO number.
 		 * @return New UniversalIdBuilder instance.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] UniversalIdBuilder withoutImoNumber() const;
 

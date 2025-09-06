@@ -76,6 +76,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Create an empty query that matches all LocalIds (when allowOtherTags=true)
 		 * @return New empty query instance
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static MetadataTagsQuery empty();
 
@@ -84,6 +85,7 @@ namespace dnv::vista::sdk
 		 * @param localId The LocalId to extract metadata tags from
 		 * @param allowOtherTags If true, allows additional tags; if false, requires exact match
 		 * @return New query instance with the LocalId's metadata tags
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static MetadataTagsQuery from( const LocalId& localId, bool allowOtherTags = true );
 
@@ -96,6 +98,7 @@ namespace dnv::vista::sdk
 		 * @param name The codebook name for the tag
 		 * @param value The required tag value
 		 * @return New query instance with the tag constraint added
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] MetadataTagsQuery withTag( CodebookName name, const std::string& value ) const;
 
@@ -103,6 +106,7 @@ namespace dnv::vista::sdk
 		 * @brief Add a metadata tag constraint
 		 * @param tag The metadata tag to add to the query
 		 * @return New query instance with the tag constraint added
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] MetadataTagsQuery withTag( const MetadataTag& tag ) const;
 
@@ -110,6 +114,7 @@ namespace dnv::vista::sdk
 		 * @brief Add a metadata tag constraint (move version for performance)
 		 * @param tag The metadata tag to add to the query (will be moved)
 		 * @return New query instance with the tag constraint added
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] MetadataTagsQuery withTag( MetadataTag&& tag ) const;
 
@@ -117,6 +122,7 @@ namespace dnv::vista::sdk
 		 * @brief Configure whether to allow additional tags beyond those specified
 		 * @param allowOthers If true, allows additional tags; if false, requires exact match
 		 * @return New query instance with the matching mode set
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] MetadataTagsQuery withAllowOtherTags( bool allowOthers ) const;
 
@@ -128,6 +134,7 @@ namespace dnv::vista::sdk
 		 * @brief Test if a LocalId matches this query's metadata tag criteria
 		 * @param localId The LocalId to test against this query (nullable)
 		 * @return True if the LocalId matches all query criteria
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool match( const LocalId* localId ) const;
 
@@ -138,18 +145,21 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the metadata tags in this query
 		 * @return Const reference to the tags map
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::unordered_map<CodebookName, MetadataTag>& tags() const noexcept;
 
 		/**
 		 * @brief Check if this query requires exact matching
 		 * @return True if exact matching is required, false if additional tags are allowed
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool matchExact() const noexcept;
 
 		/**
 		 * @brief Check if this query is empty (no tag constraints)
 		 * @return True if no tag constraints are specified
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isEmpty() const noexcept;
 

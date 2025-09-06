@@ -297,7 +297,6 @@ namespace dnv::vista::sdk::tests
 		if ( !file.is_open() )
 		{
 			FAIL() << "Failed to open testdata/LocalIds.txt";
-			return;
 		}
 
 		struct ErrorInfo

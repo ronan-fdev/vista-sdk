@@ -83,9 +83,9 @@ endif()
 #----------------------------------------------
 
 # --- Vista SDK root ---
-set(VISTA_SDK_ROOT_DIR       "${VISTA_SDK_ROOT_DIR}"            CACHE PATH  "Vista SDK root directory"     )
-set(VISTA_SDK_RESOURCES_DIR  "${VISTA_SDK_ROOT_DIR}/resources"  CACHE PATH  "Vista SDK resources directory")
-set(VISTA_SDK_TESTDATA_DIR   "${VISTA_SDK_ROOT_DIR}/testdata"   CACHE PATH  "Vista SDK test data directory")
+set(VISTA_SDK_ROOT_DIR               "${VISTA_SDK_ROOT_DIR}"                CACHE PATH  "Vista SDK root directory"     )
+set(VISTA_SDK_RESOURCES_DIR          "${VISTA_SDK_ROOT_DIR}/resources"      CACHE PATH  "Vista SDK resources directory")
+set(VISTA_SDK_TESTDATA_DIR           "${VISTA_SDK_ROOT_DIR}/testdata"       CACHE PATH  "Vista SDK test data directory")
 
 # --- Vista c++ SDK ---
 set(VISTA_SDK_CPP_ROOT_DIR           "${VISTA_SDK_ROOT_DIR}/cpp"            CACHE PATH  "Vista SDK C++ SDK root directory"     )
@@ -241,7 +241,7 @@ function(configure_vista_target target_name)
 
 	# --- Link libraries---
 	target_link_libraries(${target_name} PRIVATE
-		nfx-cpp-essentials::static
+		nfx-core::static
 		nlohmann_json::nlohmann_json
 		zlib
 	)

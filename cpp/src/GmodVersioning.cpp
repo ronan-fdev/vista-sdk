@@ -21,9 +21,25 @@ namespace dnv::vista::sdk
 	// Static helper functions
 	//=====================================================================
 
-	thread_local static std::vector<const GmodNode*> t_currentParentsBuffer;
-	thread_local static std::vector<const GmodNode*> t_remainingBuffer;
+	/**
+	 * @brief Get thread-local buffer for current parents processing
+	 * @return Reference to thread-local vector for reuse across calls
+	 */
+	static std::vector<const GmodNode*>& currentParentsBuffer()
+	{
+		thread_local std::vector<const GmodNode*> buffer;
+		return buffer;
+	}
 
+	/**
+	 * @brief Get thread-local buffer for remaining nodes processing
+	 * @return Reference to thread-local vector for reuse across calls
+	 */
+	static std::vector<const GmodNode*>& remainingBuffer()
+	{
+		thread_local std::vector<const GmodNode*> buffer;
+		return buffer;
+	}
 	static void addToPath( const Gmod& gmod, std::vector<GmodNode>& path, const GmodNode& node )
 	{
 		if ( !path.empty() )
@@ -35,23 +51,25 @@ namespace dnv::vista::sdk
 				{
 					const GmodNode& parent = path[static_cast<size_t>( j )];
 
-					t_currentParentsBuffer.clear();
+					auto& currentParentsBuf = currentParentsBuffer();
+					currentParentsBuf.clear();
 					const size_t currentParentsCount = static_cast<size_t>( j + 1 );
-					t_currentParentsBuffer.reserve( currentParentsCount );
+					currentParentsBuf.reserve( currentParentsCount );
 
 					for ( size_t k = 0; k < currentParentsCount; ++k )
 					{
-						t_currentParentsBuffer.push_back( &path[k] );
+						currentParentsBuf.push_back( &path[k] );
 					}
 
-					t_remainingBuffer.clear();
-					t_remainingBuffer.reserve( 16 );
+					auto& remainingBuf = remainingBuffer();
+					remainingBuf.clear();
+					remainingBuf.reserve( 16 );
 
-					if ( !gmod.pathExistsBetween( t_currentParentsBuffer, node, t_remainingBuffer ) )
+					if ( !gmod.pathExistsBetween( currentParentsBuf, node, remainingBuf ) )
 					{
 						bool hasOtherAssetFunction = false;
 						const std::string_view parentCode = parent.code();
-						for ( const GmodNode* pathNode : t_currentParentsBuffer )
+						for ( const GmodNode* pathNode : currentParentsBuf )
 						{
 							if ( pathNode->isAssetFunctionNode() && pathNode->code() != parentCode )
 							{
@@ -71,9 +89,9 @@ namespace dnv::vista::sdk
 						const auto nodeLocation = node.location();
 						if ( nodeLocation.has_value() )
 						{
-							path.reserve( path.size() + t_remainingBuffer.size() );
+							path.reserve( path.size() + remainingBuf.size() );
 
-							for ( const GmodNode* n : t_remainingBuffer )
+							for ( const GmodNode* n : remainingBuf )
 							{
 								if ( n->isIndividualizable( false, true ) )
 								{
@@ -87,8 +105,8 @@ namespace dnv::vista::sdk
 						}
 						else
 						{
-							path.reserve( path.size() + t_remainingBuffer.size() );
-							for ( const GmodNode* n : t_remainingBuffer )
+							path.reserve( path.size() + remainingBuf.size() );
+							for ( const GmodNode* n : remainingBuf )
 							{
 								path.emplace_back( *n );
 							}

@@ -119,11 +119,7 @@ namespace dnv::vista::sdk
 			}
 			default:
 			{
-				auto lease = nfx::string::StringBuilderPool::lease();
-				auto builder = lease.builder();
-				builder.append( "Unknown codebook: " );
-				builder.append( std::to_string( static_cast<int>( name ) ) );
-				throw std::invalid_argument{ lease.toString() };
+				throw std::invalid_argument{ "Unknown codebook: " + std::to_string( static_cast<int>( name ) ) };
 			}
 		}
 	}

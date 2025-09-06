@@ -81,12 +81,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Convert a GmodNode from one version to a higher version
 		 * @throws std::invalid_argument If targetVersion is not higher than sourceVersion
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodNode> convertNode( VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion ) const;
 
 		/**
 		 * @brief Convert a GmodNode with cached target GMOD
 		 * @throws std::invalid_argument If targetVersion is not higher than sourceVersion
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodNode> convertNode(
 			VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion, const Gmod& targetGmod ) const;
@@ -98,6 +100,7 @@ namespace dnv::vista::sdk
 		 * @param targetVersion The target VIS version.
 		 * @return An optional containing the converted GmodPath if successful, otherwise std::nullopt.
 		 * @throws std::invalid_argument if source or target versions are invalid or source >= target.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodPath> convertPath( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) const;
 
@@ -221,6 +224,7 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Internal implementation for converting a node between adjacent versions
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodNode> convertNodeInternal(
 			VisVersion sourceVersion,
@@ -228,12 +232,14 @@ namespace dnv::vista::sdk
 
 		/**
 		 * @brief Internal implementation for converting a node with cached GMOD
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<GmodNode> convertNodeInternal(
 			VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion, const Gmod& targetGmod ) const;
 
 		/**
 		 * @brief Try to get a versioning node for a specific VIS version
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool tryGetVersioningNode( VisVersion visVersion, const GmodVersioningNode*& versioningNode ) const;
 

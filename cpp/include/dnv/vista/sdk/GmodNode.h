@@ -119,54 +119,63 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the category of the node
 		 * @return Reference to the category string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view category() const noexcept;
 
 		/**
 		 * @brief Get the type of the node
 		 * @return Reference to the type string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view type() const noexcept;
 
 		/**
 		 * @brief Get the full type string (category + type)
 		 * @return Reference to the full type string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view fullType() const noexcept;
 
 		/**
 		 * @brief Get the name of the node
 		 * @return Reference to the name string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view name() const noexcept;
 
 		/**
 		 * @brief Get the common name of the node
 		 * @return Optional reference to the common name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& commonName() const noexcept;
 
 		/**
 		 * @brief Get the definition of the node
 		 * @return Optional reference to the definition
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& definition() const noexcept;
 
 		/**
 		 * @brief Get the common definition of the node
 		 * @return Optional reference to the common definition
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& commonDefinition() const noexcept;
 
 		/**
 		 * @brief Get the install substructure flag
 		 * @return Optional reference to the install substructure flag
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<bool>& installSubstructure() const noexcept;
 
 		/**
 		 * @brief Get the normal assignment names mapping
 		 * @return Reference to the map of normal assignment names
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const nfx::containers::StringMap<std::string>& normalAssignmentNames() const noexcept;
 
@@ -282,6 +291,7 @@ namespace dnv::vista::sdk
 		 *          This method provides an explicit way to check equality, complementing `operator==`.
 		 * @param other The node to compare with.
 		 * @return True if this node is equal to the other node, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool equals( const GmodNode& other ) const;
 
@@ -292,24 +302,28 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the unique code identifier
 		 * @return Reference to the code string
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& code() const noexcept;
 
 		/**
 		 * @brief Get the location information
 		 * @return Optional reference to the location
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<Location>& location() const noexcept;
 
 		/**
 		 * @brief Get the VIS version
 		 * @return The VIS version enum value
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline VisVersion visVersion() const noexcept;
 
 		/**
 		 * @brief Get the node metadata
 		 * @return Reference to the metadata
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const GmodNodeMetadata& metadata() const noexcept;
 
@@ -320,12 +334,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the child nodes
 		 * @return Reference to the vector of child node pointers
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::vector<GmodNode*>& children() const noexcept;
 
 		/**
 		 * @brief Get the parent nodes
 		 * @return Reference to the vector of parent node pointers
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::vector<GmodNode*>& parents() const noexcept;
 
@@ -333,6 +349,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets the product type node associated with this function node, if applicable.
 		 * @details For a function node, this typically refers to its single child node if that child is a product type.
 		 * @return Optional GmodNode value, or std::nullopt if not applicable or not found.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<GmodNode> productType() const noexcept;
 
@@ -340,6 +357,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets the product selection node associated with this function node, if applicable.
 		 * @details For a function node, this typically refers to its single child node if that child is a product selection.
 		 * @return Optional GmodNode value, or std::nullopt if not applicable or not found.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::optional<GmodNode> productSelection() const noexcept;
 
@@ -350,6 +368,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Creates a new GmodNode instance identical to this one but without location information.
 		 * @return A new `GmodNode` instance with `location` set to `std::nullopt`.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] GmodNode withoutLocation() const;
 
@@ -357,6 +376,7 @@ namespace dnv::vista::sdk
 		 * @brief Creates a new GmodNode instance identical to this one but with the specified Location object.
 		 * @param location The Location object to set for the new node.
 		 * @return A new `GmodNode` instance with the given location.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline GmodNode withLocation( const Location& location ) const;
 
@@ -365,6 +385,7 @@ namespace dnv::vista::sdk
 		 * @param locationStr The location string to parse and set.
 		 * @return A new `GmodNode` instance with the parsed location.
 		 * @throws std::invalid_argument If the `locationStr` is invalid or cannot be parsed.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] GmodNode withLocation( std::string_view locationStr ) const;
 
@@ -375,6 +396,7 @@ namespace dnv::vista::sdk
 		 *          (without the new location) is returned. No exceptions are thrown for parsing errors.
 		 * @param locationStr The location string to parse and set.
 		 * @return A new `GmodNode` instance, with the location set if parsing was successful.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] GmodNode tryWithLocation( std::string_view locationStr ) const;
 
@@ -386,6 +408,7 @@ namespace dnv::vista::sdk
 		 * @param locationStr The location string to parse and set.
 		 * @param errors A `ParsingErrors` object to collect detailed error information if parsing fails.
 		 * @return A new `GmodNode` instance, with the location set if parsing was successful.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] GmodNode tryWithLocation( std::string_view locationStr, ParsingErrors& errors ) const;
 
@@ -395,6 +418,7 @@ namespace dnv::vista::sdk
 		 *          Otherwise, a new node identical to the original is returned.
 		 * @param location An `std::optional<Location>` to set.
 		 * @return A new `GmodNode` instance, with the location set if provided.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] GmodNode tryWithLocation( const std::optional<Location>& location ) const;
 
@@ -409,6 +433,7 @@ namespace dnv::vista::sdk
 		 * @param isTargetNode Flag indicating if this node is the target of an operation (e.g., in mapping). Defaults to false.
 		 * @param isInSet Flag indicating if this node is part of a set. Defaults to false.
 		 * @return True if the node is individualizable under the given conditions, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isIndividualizable( bool isTargetNode = false, bool isInSet = false ) const noexcept;
 
@@ -416,6 +441,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if the node represents a function composition.
 		 * @details A function composition node typically groups other function or product nodes.
 		 * @return True if the node's metadata indicates it's an asset or product function composition, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isFunctionComposition() const noexcept;
 
@@ -424,36 +450,42 @@ namespace dnv::vista::sdk
 		 * @details A mappable node is one that can be related to other nodes in a specific context,
 		 *          often used in creating Local IDs or other semantic links.
 		 * @return True if the node is considered mappable based on its type and properties, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isMappable() const noexcept;
 
 		/**
 		 * @brief Checks if the node is a product selection.
 		 * @return True if the node's metadata identifies it as a product selection, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool isProductSelection() const;
 
 		/**
 		 * @brief Checks if the node is a product type.
 		 * @return True if the node's metadata identifies it as a product type, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool isProductType() const;
 
 		/**
 		 * @brief Checks if the node is an asset.
 		 * @return True if the node's metadata identifies it as an asset, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool isAsset() const;
 
 		/**
 		 * @brief Checks if the node is a leaf node in the GMOD hierarchy (has no children).
 		 * @return True if the node has no children, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool isLeafNode() const;
 
 		/**
 		 * @brief Checks if the node is a function node (asset function or product function).
 		 * @return True if the node's metadata identifies it as any kind of function node, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool isFunctionNode() const;
 
@@ -467,6 +499,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if the node is the root node of the GMOD hierarchy.
 		 * @details The root node is conventionally identified by the code "VE".
 		 * @return True if the node's code is "VE", false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isRoot() const noexcept;
 
@@ -478,6 +511,7 @@ namespace dnv::vista::sdk
 		 * @brief Checks if this node has a specific GmodNode instance as a direct child.
 		 * @param node The potential child node to check for.
 		 * @return True if the provided `node` is a direct child of this node (checked by code), false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isChild( const GmodNode& node ) const noexcept;
 
@@ -486,6 +520,7 @@ namespace dnv::vista::sdk
 		 * @details This check is efficient due to an internal set of child codes (`m_childrenSet`).
 		 * @param code The code of the potential child node.
 		 * @return True if a direct child with the specified `code` exists, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isChild( std::string_view code ) const noexcept;
 
@@ -497,6 +532,7 @@ namespace dnv::vista::sdk
 		 * @brief Converts the node to its string representation.
 		 * @details The format is typically "<code>" or "<code>-<location>" if location is present.
 		 * @return A `std::string` representing the node.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string toString() const noexcept;
 

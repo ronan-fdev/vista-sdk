@@ -3,6 +3,8 @@
  * @brief Inline implementations for performance-critical Locations operations
  */
 
+#include <charconv>
+
 #include "config/config.h"
 
 namespace dnv::vista::sdk
@@ -54,15 +56,15 @@ namespace dnv::vista::sdk
 
 	VISTA_SDK_CPP_INLINE bool Locations::tryParseInt( std::string_view span, int start, int length, int& number )
 	{
-		if ( start < 0 || length <= 0 || static_cast<size_t>( start + length ) > span.length() )
+		if ( start < 0 || length <= 0 || static_cast<size_t>( start ) + static_cast<size_t>( length ) > span.length() )
 		{
 			return false;
 		}
 
-		const char* begin = span.data() + start;
-		const char* end = begin + length;
-		auto result = std::from_chars( begin, end, number );
-		if ( result.ec == std::errc() && result.ptr == end )
+		const char* const first = std::next( span.data(), start );
+		const char* const last = std::next( first, length );
+		auto result = std::from_chars( first, last, number );
+		if ( result.ec == std::errc() && result.ptr == last )
 		{
 			return true;
 		}

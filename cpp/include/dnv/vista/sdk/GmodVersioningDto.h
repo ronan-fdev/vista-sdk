@@ -77,12 +77,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the old assignment value.
 		 * @return The previous assignment value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view oldAssignment() const noexcept;
 
 		/**
 		 * @brief Get the current assignment value.
 		 * @return The current (new) assignment value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view currentAssignment() const noexcept;
 
@@ -109,6 +111,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Serialize this GmodVersioningAssignmentChangeDto to an nlohmann::json object.
 		 * @return The serialized nlohmann::json object.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 
@@ -221,36 +224,42 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the set of operations to apply.
 		 * @return The set of operation names.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const OperationSet& operations() const noexcept;
 
 		/**
 		 * @brief Get the source GMOD node code.
 		 * @return The source node code.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view source() const noexcept;
 
 		/**
 		 * @brief Get the target GMOD node code.
 		 * @return The target node code.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view target() const noexcept;
 
 		/**
 		 * @brief Get the old assignment code.
 		 * @return The old assignment code.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view oldAssignment() const noexcept;
 
 		/**
 		 * @brief Get the new assignment code.
 		 * @return The new assignment code.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view newAssignment() const noexcept;
 
 		/**
 		 * @brief Check if the assignment should be deleted.
 		 * @return True if the assignment should be deleted, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool deleteAssignment() const noexcept;
 
@@ -396,12 +405,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the target VIS version string.
 		 * @return The VIS version string.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view visVersion() const noexcept;
 
 		/**
 		 * @brief Get the map of GMOD node codes to their conversion rules.
 		 * @return The map of node codes to their conversion DTOs.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const ItemsMap& items() const noexcept;
 
@@ -428,6 +439,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Serialize this GmodVersioningDto to an nlohmann::json object.
 		 * @return The serialized nlohmann::json object.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 

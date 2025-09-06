@@ -19,14 +19,14 @@ set(SAMPLE_SOURCES
 
 # --- Configure sample executables ---
 foreach(sample_source ${SAMPLE_SOURCES})
-	get_filename_component(sample_source_name ${sample_source} NAME_WE)
+	get_filename_component(sample_target_name ${sample_source} NAME_WE)
 
-	if(NOT TARGET ${sample_source_name})
-		add_executable(${sample_source_name} ${sample_source})
+	if(NOT TARGET ${sample_target_name})
+		add_executable(${sample_target_name} ${sample_source})
 
 		# --- Target-specific MSVC optimisation ---
 		if(MSVC)
-			target_compile_options(${sample_source_name} PRIVATE
+			target_compile_options(${sample_target_name} PRIVATE
 				/std:c++20                             # C++20 standard
 				/MP                                    # Multi-processor compilation
 				/W4                                    # High warning level
@@ -51,7 +51,6 @@ foreach(sample_source ${SAMPLE_SOURCES})
 				$<$<CONFIG:Release>:/DNDEBUG>          # Disable debug assertions
 				$<$<CONFIG:Release>:/GS->              # Disable buffer security checks
 				$<$<CONFIG:Release>:/Gw>               # Optimize global data
-				$<$<CONFIG:Release>:/GT>               # Support fiber-safe TLS
 				$<$<CONFIG:Release>:/fp:except->       # Disable floating point exceptions
 
 				# Warning suppressions
@@ -69,16 +68,25 @@ foreach(sample_source ${SAMPLE_SOURCES})
 				/wd5026                                # move constructor was implicitly defined as deleted
 				/wd5027                                # move assignment operator was implicitly defined as deleted
 				/wd5045                                # Qspectre
+
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-pre-c++17-compat>          # Disable pre-C++17 warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>              # Disable C++98 compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>     # Suppress C++98 pedantic compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-global-constructors>       # Suppress global constructors warning (Clang/GCC)
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>    # Allow default in fully covered switch
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>            # Allow switches without default when all enum values are covered
+				$<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>     # Suppress POSIX deprecation warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>   # Suppress POSIX deprecation warnings
 			)
 
-			target_link_options(${sample_source_name} PRIVATE
+			target_link_options(${sample_target_name} PRIVATE
 				$<$<CONFIG:Release>:/OPT:REF>          # Remove unreferenced functions
 				$<$<CONFIG:Release>:/OPT:ICF>          # Identical COMDAT folding
 				$<$<CONFIG:Release>:/INCREMENTAL:NO>   # Disable incremental linking
 			)
 		else()
 			# GCC/Clang settings for samples
-			target_compile_options(${sample_source_name} PRIVATE
+			target_compile_options(${sample_target_name} PRIVATE
 				-std=c++20                             # C++20 standard
 				-Wall                                  # All warnings
 				-Wextra                                # Extra warnings
@@ -99,22 +107,32 @@ foreach(sample_source ${SAMPLE_SOURCES})
 				# Debug settings
 				$<$<CONFIG:Debug>:-O0>                 # No optimization
 				$<$<CONFIG:Debug>:-g>                  # Debug information
+
+				# Warning suppressions
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-system-headers>            # Suppress warnings from system headers
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-pre-c++17-compat>          # Disable pre-C++17 warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>              # Disable C++98 compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>     # Suppress C++98 pedantic compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>    # Allow default in fully covered switch
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>            # Allow switches without default when all enum values are covered
+				$<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>     # Suppress POSIX deprecation warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>   # Suppress POSIX deprecation warnings
 			)
 		endif()
 
-		target_link_libraries(${sample_source_name} PRIVATE
-			vista-sdk-cpp
-			nfx-cpp-essentials::static
+		target_link_libraries(${sample_target_name} PRIVATE
+			vista-sdk-cpp::static
+			nfx-core::static
 			nlohmann_json::nlohmann_json
 			zlib
 		)
 
-		target_include_directories(${sample_source_name} PRIVATE
+		target_include_directories(${sample_target_name} PRIVATE
 			${VISTA_SDK_CPP_INCLUDE_DIR}
 		)
 
 		# --- Properties ---
-		set_target_properties(${sample_source_name} PROPERTIES
+		set_target_properties(${sample_target_name} PROPERTIES
 			CXX_STANDARD 20
 			CXX_STANDARD_REQUIRED ON
 			CXX_EXTENSIONS OFF
@@ -126,7 +144,7 @@ foreach(sample_source ${SAMPLE_SOURCES})
 		if(NOT TARGET samples)
 			add_custom_target(samples)
 		endif()
-		add_dependencies(samples ${sample_source_name})
+		add_dependencies(samples ${sample_target_name})
 	endif()
 endforeach()
 

@@ -90,54 +90,63 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the category classification
 		 * @return The node's category
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view category() const noexcept;
 
 		/**
 		 * @brief Get the type classification
 		 * @return The node's type
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view type() const noexcept;
 
 		/**
 		 * @brief Get the unique code identifier
 		 * @return The node's unique code
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view code() const noexcept;
 
 		/**
 		 * @brief Get the human-readable name
 		 * @return The node's name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view name() const noexcept;
 
 		/**
 		 * @brief Get the optional common name/alias
 		 * @return The common name if available, empty optional otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& commonName() const;
 
 		/**
 		 * @brief Get the optional detailed definition
 		 * @return The detailed definition if available, empty optional otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& definition() const;
 
 		/**
 		 * @brief Get the optional common definition
 		 * @return The common definition if available, empty optional otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& commonDefinition() const;
 
 		/**
 		 * @brief Get the optional installation flag
 		 * @return The installation flag if available, empty optional otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<bool>& installSubstructure() const;
 
 		/**
 		 * @brief Get the optional assignment name mapping
 		 * @return The assignment name mapping if available, empty optional otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<NormalAssignmentNamesMap>& normalAssignmentNames() const;
 
@@ -164,6 +173,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Serialize this GmodNodeDto to an nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 
@@ -298,18 +308,21 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the VIS version string
 		 * @return The VIS version
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view visVersion() const noexcept;
 
 		/**
 		 * @brief Get the collection of GMOD node DTOs
 		 * @return The vector of node DTOs
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const Items& items() const noexcept;
 
 		/**
 		 * @brief Get the collection of relationships between nodes
 		 * @return The vector of relation arrays
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const Relations& relations() const noexcept;
 
@@ -336,6 +349,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Serialize this GmodDto to an nlohmann::json object
 		 * @return The serialized nlohmann::json object
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] nlohmann::json toJson() const;
 

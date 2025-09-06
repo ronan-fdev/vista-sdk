@@ -45,12 +45,12 @@ namespace dnv::vista::sdk
 			std::optional<GmodPath> path;
 			const Gmod* gmod;
 
-			ParseContext( std::queue<PathNode>&& p, PathNode&& t, std::optional<nfx::containers::StringMap<Location>>&& l,
-				std::optional<GmodPath>&& path, const Gmod& g )
-				: parts{ std::move( p ) },
+			ParseContext( std::queue<PathNode>&& pathNodeQueue, PathNode&& t, std::optional<nfx::containers::StringMap<Location>>&& l,
+				std::optional<GmodPath>&& gmodPath, const Gmod& g )
+				: parts{ std::move( pathNodeQueue ) },
 				  toFind{ std::move( t ) },
 				  locations{ std::move( l ) },
-				  path{ std::move( path ) },
+				  path{ std::move( gmodPath ) },
 				  gmod{ &g }
 			{
 			}
@@ -490,7 +490,7 @@ namespace dnv::vista::sdk
 		std::vector<GmodNode> nodes;
 		nodes.reserve( estimatedSegments );
 
-		for ( const auto& segment : nfx::string::splitView( item, '/' ) )
+		for ( const auto segment : nfx::string::splitView( item, '/' ) )
 		{
 			if ( segment.empty() )
 			{
@@ -721,10 +721,12 @@ namespace dnv::vista::sdk
 
 		std::queue<internal::PathNode> parts;
 
-		for ( const auto& partStr : nfx::string::splitView( item, '/' ) )
+		for ( const auto partStr : nfx::string::splitView( item, '/' ) )
 		{
 			if ( partStr.empty() )
+			{
 				continue;
+			}
 
 			if ( partStr.find( '-' ) != std::string_view::npos )
 			{

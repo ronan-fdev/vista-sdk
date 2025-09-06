@@ -52,7 +52,6 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 				$<$<CONFIG:Release>:/DNDEBUG>          # Disable debug assertions
 				$<$<CONFIG:Release>:/GS->              # Disable buffer security checks
 				$<$<CONFIG:Release>:/Gw>               # Optimize global data
-				$<$<CONFIG:Release>:/GT>               # Support fiber-safe TLS
 				$<$<CONFIG:Release>:/fp:except->       # Disable floating point exceptions
 
 				# Warning suppressions
@@ -69,6 +68,16 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 				/wd5026                                # move constructor was implicitly defined as deleted
 				/wd5027                                # move assignment operator was implicitly defined as deleted
 				/wd5045                                # Qspectre
+
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-pre-c++17-compat>          # Disable pre-C++17 warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>              # Disable C++98 compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>     # Suppress C++98 pedantic compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-global-constructors>       # Suppress global constructors warning (Clang/GCC)
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>    # Allow default in fully covered switch
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>            # Allow switches without default when all enum values are covered
+				$<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>     # Suppress POSIX deprecation warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>   # Suppress POSIX deprecation warnings
+
 			)
 
 			target_link_options(${benchmark_target_name} PRIVATE
@@ -99,12 +108,22 @@ foreach(benchmark_source ${BENCHMARK_SOURCES})
 				# Debug settings
 				$<$<CONFIG:Debug>:-O0>                 # No optimization
 				$<$<CONFIG:Debug>:-g>                  # Debug information
+
+				# Warning suppressions
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-system-headers>            # Suppress warnings from system headers
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-pre-c++17-compat>          # Disable pre-C++17 warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>              # Disable C++98 compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>     # Suppress C++98 pedantic compatibility warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>    # Allow default in fully covered switch
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>            # Allow switches without default when all enum values are covered
+				$<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>     # Suppress POSIX deprecation warnings
+				$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>   # Suppress POSIX deprecation warnings
 			)
 		endif()
 
 		target_link_libraries(${benchmark_target_name} PRIVATE
-			vista-sdk-cpp
-			nfx-cpp-essentials::static
+			vista-sdk-cpp::static
+			nfx-core::static
 			benchmark::benchmark
 			nlohmann_json::nlohmann_json
 			zlib

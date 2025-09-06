@@ -10,7 +10,7 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "Force static libraries for dependencies" F
 
 include(FetchContent)
 
-set(FETCHCONTENT_BASE_DIR "${VISTA_SDK_ROOT_DIR}/.deps")
+set(FETCHCONTENT_BASE_DIR "${VISTA_SDK_ROOT_DIR}/.deps/${COMPILER_DIR_NAME}")
 
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 set(FETCHCONTENT_QUIET OFF)
@@ -26,21 +26,21 @@ FetchContent_Declare(nlohmann_json
 	DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
-# --- nfx-cpp-essentials ---
-set(NFX_CPP_ESSENTIALS_BUILD_STATIC     ON   CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_BUILD_SHARED     OFF  CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_BUILD_TESTS      OFF  CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_BUILD_SAMPLES    OFF  CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_WITH_CONTAINERS  ON   CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_WITH_DATATYPES   ON   CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_WITH_MEMORY      ON   CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_WITH_STRING      ON   CACHE BOOL  ""  FORCE)
-set(NFX_CPP_ESSENTIALS_WITH_TIME        ON   CACHE BOOL  ""  FORCE)
+# --- nfx-core ---
+set(NFX_CORE_BUILD_STATIC     ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_BUILD_SHARED     ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_WITH_CONTAINERS  ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_WITH_DATATYPES   ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_WITH_MEMORY      ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_WITH_STRING      ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_WITH_TIME        ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_BUILD_TESTS      ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_BUILD_SAMPLES    ON   CACHE BOOL  ""  FORCE)
 
 FetchContent_Declare(
-	nfx-cpp-essentials
-	GIT_REPOSITORY https://github.com/ronan-fdev/nfx-cpp-essentials.git
-	GIT_TAG        0.9.4
+	nfx-core
+	GIT_REPOSITORY https://github.com/ronan-fdev/nfx-core.git
+	GIT_TAG        0.0.3
 	GIT_SHALLOW    TRUE
 )
 
@@ -77,7 +77,7 @@ if(VISTA_SDK_CPP_BUILD_TESTS)
 	FetchContent_Declare(
 		googletest
 		GIT_REPOSITORY https://github.com/google/googletest.git
-	    GIT_TAG        v1.17.0
+		GIT_TAG        v1.17.0
 		GIT_SHALLOW    TRUE
 	)
 endif()
@@ -116,7 +116,7 @@ endif()
 message(STATUS "Fetching dependencies...")
 
 FetchContent_MakeAvailable(
-	nfx-cpp-essentials
+	nfx-core
 	nlohmann_json
 	zlib-ng
 )
@@ -142,9 +142,9 @@ endif()
 #----------------------------
 
 if(NOT TARGET nlohmann_json)
-    add_library(nlohmann_json INTERFACE)
-    target_include_directories(nlohmann_json INTERFACE ${nlohmann_json_SOURCE_DIR}/include)
-    add_library(nlohmann_json::nlohmann_json ALIAS nlohmann_json)
+	add_library(nlohmann_json INTERFACE)
+	target_include_directories(nlohmann_json SYSTEM INTERFACE ${nlohmann_json_SOURCE_DIR}/include)
+	add_library(nlohmann_json::nlohmann_json ALIAS nlohmann_json)
 endif()
 
 if(nlohmann_json_SOURCE_DIR AND EXISTS "${nlohmann_json_SOURCE_DIR}/single_include/nlohmann/json.hpp")

@@ -177,7 +177,7 @@ namespace dnv::vista::sdk::transport
 			if ( valuesIt == json.end() || !valuesIt->is_array() )
 			{
 				std::fprintf( stderr, "ERROR: DataChannelTypeNamesDto JSON missing required '%s' array\n",
-					constants::dto::ISO19848_DTO_KEY_VALUES );
+					constants::dto::ISO19848_DTO_KEY_VALUES.data() );
 
 				return std::nullopt;
 			}
@@ -442,7 +442,7 @@ namespace dnv::vista::sdk::transport
 			if ( valuesIt == json.end() || !valuesIt->is_array() )
 			{
 				std::fprintf( stderr, "ERROR: FormatDataTypesDto JSON missing required '%s' array\n",
-					constants::dto::ISO19848_DTO_KEY_VALUES );
+					constants::dto::ISO19848_DTO_KEY_VALUES.data() );
 
 				return std::nullopt;
 			}

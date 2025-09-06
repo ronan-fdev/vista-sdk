@@ -98,6 +98,7 @@ namespace dnv::vista::sdk
 		 * @brief Implicit conversion to a std::string.
 		 * Returns the 'Value' part of the metadata tag.
 		 * @return The 'Value' of the metadata tag as a string.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline operator std::string() const;
 
@@ -108,18 +109,21 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the name of the metadata tag.
 		 * @return The CodebookName representing the name of the metadata tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline CodebookName name() const noexcept;
 
 		/**
 		 * @brief Gets the value of the metadata tag.
 		 * @return A constant reference to the string value of the metadata tag.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string_view value() const noexcept;
 
 		/**
 		 * @brief Gets the prefix character used for string representation of the metadata tag.
 		 * @return '~' if the tag is custom, '-' otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline char prefix() const noexcept;
 
@@ -130,6 +134,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Checks if the metadata tag is custom.
 		 * @return True if the tag is custom, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isCustom() const noexcept;
 
@@ -142,6 +147,7 @@ namespace dnv::vista::sdk
 		 * This method returns only the 'Value' part of the tag.
 		 * For a fully formatted string including prefix and name, use toString(std::string&, char).
 		 * @return The 'Value' of the metadata tag as a string.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::string toString() const noexcept;
 

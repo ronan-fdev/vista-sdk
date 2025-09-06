@@ -121,7 +121,7 @@ namespace dnv::vista::sdk::tests
 
 		PathState state( gmod );
 
-		TraverseHandlerWithState<PathState> handler = []( PathState& state, const std::vector<const GmodNode*>& parents,
+		TraverseHandlerWithState<PathState> handler = []( PathState& pathState, const std::vector<const GmodNode*>& parents,
 														  const GmodNode& node ) -> TraversalHandlerResult {
 			if ( parents.empty() )
 			{
@@ -138,9 +138,9 @@ namespace dnv::vista::sdk::tests
 				}
 			}
 
-			GmodPath path( state.gmod, node, std::move( parentValues ) );
+			GmodPath path( pathState.gmod, node, std::move( parentValues ) );
 
-			if ( path.toString() == state.targetPath )
+			if ( path.toString() == pathState.targetPath )
 			{
 				return TraversalHandlerResult::Stop;
 			}
@@ -462,7 +462,6 @@ namespace dnv::vista::sdk::tests
 
 	TEST_F( GmodVersioningTest, Test_Conversion_Exceptions )
 	{
-
 		// UNCOVERED MES CASE due to missing conversion codes, e.g. merge + normal assignment change
 		std::string sourcePath = "244.1i/H101.111/H401";
 		std::string targetExpected = "244.1i/H101.11/H407.1/H401";
@@ -490,7 +489,6 @@ namespace dnv::vista::sdk::tests
 
 	TEST_F( GmodVersioningTest, ConvertGmodPathWithLocation )
 	{
-
 		std::string sourcePath = "691.811i-A/H101.11-1";
 		std::string expectedPath = "691.83111i-A/H101.11-1";
 		VisVersion sourceVersion = VisVersion::v3_7a;

@@ -137,7 +137,7 @@ namespace dnv::vista::sdk::test
 		auto parsed4 = ImoNumber::parse( validImo );
 		EXPECT_EQ( parsed4.toString(), "IMO9074729" );
 
-		EXPECT_THROW( ImoNumber::parse( invalidImo ), std::invalid_argument );
+		EXPECT_THROW( (void)ImoNumber::parse( invalidImo ), std::invalid_argument );
 	}
 
 	TEST_F( ImoNumberTests, Test_StdStringInputs )
@@ -168,7 +168,7 @@ namespace dnv::vista::sdk::test
 		auto parsed5 = ImoNumber::parse( validImo );
 		EXPECT_EQ( parsed5.toString(), "IMO9074729" );
 
-		EXPECT_THROW( ImoNumber::parse( invalidImo ), std::invalid_argument );
+		EXPECT_THROW( (void)ImoNumber::parse( invalidImo ), std::invalid_argument );
 	}
 
 	TEST_F( ImoNumberTests, Test_StringLiteralInputs )

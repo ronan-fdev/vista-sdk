@@ -76,13 +76,23 @@ namespace dnv::vista::sdk
 		// Equality operators
 		//----------------------------------------------
 
+		/**
+		 * @brief Checks equality with another LocalId.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool operator==( const LocalId& other ) const noexcept;
+
+		/**
+		 * @brief Checks inequality with another LocalId.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
+		 */
 		[[nodiscard]] inline bool operator!=( const LocalId& other ) const noexcept;
 
 		/**
 		 * @brief Performs deep equality comparison.
 		 * @param[in] other LocalId to compare against.
 		 * @return true if semantically equal.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool equals( const LocalId& other ) const noexcept;
 
@@ -94,6 +104,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets direct access to underlying LocalIdBuilder.
 		 * @return Const reference to internal builder.
 		 * @note Zero-overhead access via direct reference.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const LocalIdBuilder& builder() const noexcept;
 
@@ -101,6 +112,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets VIS version of this Local ID.
 		 * @return VIS version enum value.
 		 * @note Guaranteed to contain value for valid LocalId.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline VisVersion visVersion() const noexcept;
 
@@ -108,6 +120,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets primary GMOD path item.
 		 * @return Const reference to optional containing primary item.
 		 * @note Zero-copy access. Guaranteed to contain value for valid LocalId.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<GmodPath>& primaryItem() const noexcept;
 
@@ -115,12 +128,14 @@ namespace dnv::vista::sdk
 		 * @brief Gets optional secondary GMOD path item.
 		 * @return Const reference to optional containing secondary item.
 		 * @note Zero-copy access. May be empty if no secondary item specified.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<GmodPath>& secondaryItem() const noexcept;
 
 		/**
 		 * @brief Gets all metadata tags as collection.
 		 * @return Vector containing copies of all present metadata tags.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::vector<MetadataTag> metadataTags() const noexcept;
 
@@ -131,48 +146,56 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets quantity metadata tag.
 		 * @return Const reference to optional quantity metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& quantity() const noexcept;
 
 		/**
 		 * @brief Gets content metadata tag.
 		 * @return Const reference to optional content metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& content() const noexcept;
 
 		/**
 		 * @brief Gets calculation metadata tag.
 		 * @return Const reference to optional calculation metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& calculation() const noexcept;
 
 		/**
 		 * @brief Gets state metadata tag.
 		 * @return Const reference to optional state metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& state() const noexcept;
 
 		/**
 		 * @brief Gets command metadata tag.
 		 * @return Const reference to optional command metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& command() const noexcept;
 
 		/**
 		 * @brief Gets type metadata tag.
 		 * @return Const reference to optional type metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& type() const noexcept;
 
 		/**
 		 * @brief Gets position metadata tag.
 		 * @return Const reference to optional position metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& position() const noexcept;
 
 		/**
 		 * @brief Gets detail metadata tag.
 		 * @return Const reference to optional detail metadata.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<MetadataTag>& detail() const noexcept;
 
@@ -183,12 +206,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Checks if Local ID is in verbose mode.
 		 * @return true if verbose mode enabled.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool isVerboseMode() const noexcept;
 
 		/**
 		 * @brief Checks if Local ID contains custom metadata tags.
 		 * @return true if any custom tags present.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool hasCustomTag() const noexcept;
 
@@ -200,6 +225,7 @@ namespace dnv::vista::sdk
 		 * @brief Converts LocalId to canonical string representation.
 		 * @return VIS-compliant Local ID string.
 		 * @throws std::invalid_argument If conversion fails.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline std::string toString() const;
 
@@ -212,6 +238,7 @@ namespace dnv::vista::sdk
 		 * @param[in] localIdStr VIS Local ID string to parse.
 		 * @return Parsed LocalId object.
 		 * @throws std::invalid_argument If parsing fails.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static LocalId parse( std::string_view localIdStr );
 
@@ -221,6 +248,7 @@ namespace dnv::vista::sdk
 		 * @param[out] errors Detailed parsing errors.
 		 * @param[out] localId Parsed result on success.
 		 * @return true if parsing succeeded.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static bool tryParse( std::string_view localIdStr, ParsingErrors& errors, std::optional<LocalId>& localId );
 
@@ -229,6 +257,7 @@ namespace dnv::vista::sdk
 		 * @param[in] localIdStr String to parse.
 		 * @param[out] localId Parsed result on success.
 		 * @return true if parsing succeeded.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static bool tryParse( std::string_view localIdStr, std::optional<LocalId>& localId );
 

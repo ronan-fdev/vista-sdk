@@ -171,7 +171,6 @@ namespace dnv::vista::sdk
 		// Check each filter criterion
 		for ( const auto& [code, item] : m_filter )
 		{
-
 			const auto& node = ensureNodeVersion( item.node() );
 			auto targetIt = targetNodes.find( node.code() );
 			if ( targetIt == targetNodes.end() )

@@ -235,18 +235,20 @@ namespace dnv::vista::sdk::transport::datachannel
 
 	uint32_t Restriction::countDecimalPlaces( nfx::datatypes::Decimal decimal )
 	{
-		std::string_view str = decimal.toString();
-		size_t decimalPos = str.find( '.' );
+		auto str = decimal.toString();
+		auto view = str;
+
+		size_t decimalPos = view.find( '.' );
 		if ( decimalPos == std::string_view::npos )
 		{
 			return 0;
 		}
 
-		/* Find last non-zero digit to remove trailing zeros */
-		size_t lastNonZero = str.find_last_not_of( '0' );
+		// Find last non-zero digit to remove trailing zeros
+		size_t lastNonZero = view.find_last_not_of( '0' );
 		if ( lastNonZero == std::string_view::npos || lastNonZero <= decimalPos )
 		{
-			/* No decimal digits or only trailing zeros */
+			// No decimal digits or only trailing zeros
 			return 0;
 		}
 
@@ -277,14 +279,14 @@ namespace dnv::vista::sdk::transport::datachannel
 			return ValidateResult::Invalid{ { "Format data type not initialized" } };
 		}
 
-		/* Use FormatDataType to validate and parse the value */
+		// Use FormatDataType to validate and parse the value
 		auto result = m_dataType->validate( value, parsedValue );
 		if ( !result.isOk() )
 		{
 			return result;
 		}
 
-		/* Apply additional restrictions if present */
+		// Apply additional restrictions if present
 		if ( m_restriction )
 		{
 			return m_restriction->validateValue( value, *this );
@@ -371,19 +373,19 @@ namespace dnv::vista::sdk::transport::datachannel
 
 	ValidateResult Property::validate() const
 	{
-		/* Business rule: If format is decimal, range should be specified */
+		// Business rule: If format is decimal, range should be specified
 		if ( m_format.isDecimal() && !m_range )
 		{
 			return ValidateResult::Invalid{ { "Decimal format requires range specification" } };
 		}
 
-		/* Business rule: If format is decimal, unit should be specified */
+		// Business rule: If format is decimal, unit should be specified
 		if ( m_format.isDecimal() && !m_unit )
 		{
 			return ValidateResult::Invalid{ { "Decimal format requires unit specification" } };
 		}
 
-		/* Business rule: If data channel type is alert, alert priority should be specified */
+		// Business rule: If data channel type is alert, alert priority should be specified
 		if ( m_dataChannelType.isAlert() && !m_alertPriority )
 		{
 			return ValidateResult::Invalid{ { "Alert data channel type requires alert priority specification" } };
@@ -406,7 +408,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		auto validationResult = property.validate();
 		if ( !validationResult.isOk() )
 		{
-			/* Extract error message from Invalid result */
+			// Extract error message from Invalid result
 			std::string errorMessage;
 			if ( !validationResult.invalid().errors().empty() )
 			{
@@ -441,7 +443,7 @@ namespace dnv::vista::sdk::transport::datachannel
 		auto validationResult = property.validate();
 		if ( !validationResult.isOk() )
 		{
-			/* Extract error message from Invalid result */
+			// Extract error message from Invalid result
 			std::string errorMessage;
 			if ( !validationResult.invalid().errors().empty() )
 			{
@@ -511,13 +513,13 @@ namespace dnv::vista::sdk::transport::datachannel
 
 	void DataChannelList::add( DataChannel dataChannel )
 	{
-		/* Check for LocalId conflicts */
+		// Check for LocalId conflicts
 		if ( m_localIdMap.find( dataChannel.dataChannelId().localId() ) != m_localIdMap.end() )
 		{
 			throw std::invalid_argument{ "LocalId already exists in collection" };
 		}
 
-		/* Check for ShortId conflicts (if ShortId is present) */
+		// Check for ShortId conflicts (if ShortId is present)
 		if ( dataChannel.dataChannelId().shortId() )
 		{
 			const auto& shortId = *dataChannel.dataChannelId().shortId();
@@ -532,11 +534,11 @@ namespace dnv::vista::sdk::transport::datachannel
 			}
 		}
 
-		/* Add to main collection*/
+		// Add to main collection
 		m_dataChannels.push_back( std::move( dataChannel ) );
 		const auto& addedChannel = m_dataChannels.back();
 
-		/* Update indexes */
+		// Update indexes
 		m_localIdMap.emplace( addedChannel.dataChannelId().localId(), std::cref( addedChannel ) );
 
 		if ( addedChannel.dataChannelId().shortId() )
@@ -555,7 +557,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 	bool DataChannelList::remove( const DataChannel& dataChannel )
 	{
-		/* Find in main collection */
+		// Find in main collection
 		auto it = std::find_if( m_dataChannels.begin(), m_dataChannels.end(),
 			[&]( const DataChannel& dc ) {
 				return dc.dataChannelId().localId() == dataChannel.dataChannelId().localId();
@@ -566,14 +568,14 @@ namespace dnv::vista::sdk::transport::datachannel
 			return false;
 		}
 
-		/* Remove from indexes */
+		// Remove from indexes
 		m_localIdMap.erase( it->dataChannelId().localId() );
 		if ( it->dataChannelId().shortId() )
 		{
 			m_shortIdMap.erase( *it->dataChannelId().shortId() );
 		}
 
-		/* Remove from main collection */
+		// Remove from main collection
 		m_dataChannels.erase( it );
 		return true;
 	}

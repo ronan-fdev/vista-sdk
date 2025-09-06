@@ -97,6 +97,7 @@ namespace dnv::vista::sdk
 		 * - "InvalidGrouping" -> PositionValidationResult::InvalidGrouping
 		 * - "Valid" -> PositionValidationResult::Valid
 		 * - "Custom" -> PositionValidationResult::Custom
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static PositionValidationResult fromString( std::string_view name );
 	};
@@ -164,6 +165,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the number of standard values
 		 * @return The count of standard values
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline size_t count() const noexcept;
 
@@ -181,12 +183,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get iterator to the beginning
 		 * @return Iterator to the first standard value
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Iterator begin() const noexcept;
 
 		/**
 		 * @brief Get iterator to the end
 		 * @return Iterator past the last standard value
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Iterator end() const noexcept;
 
@@ -266,6 +270,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the number of groups
 		 * @return The count of groups
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline size_t count() const noexcept;
 
@@ -283,12 +288,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get iterator to the beginning
 		 * @return Iterator to the first group
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Iterator begin() const noexcept;
 
 		/**
 		 * @brief Get iterator to the end
 		 * @return Iterator past the last group
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline Iterator end() const noexcept;
 
@@ -359,24 +366,28 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Get the codebook name
 		 * @return The codebook name
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline constexpr CodebookName name() const noexcept;
 
 		/**
 		 * @brief Get the groups
 		 * @return Reference to the groups container
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const CodebookGroups& groups() const noexcept;
 
 		/**
 		 * @brief Get the standard values
 		 * @return Reference to the standard values container
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const CodebookStandardValues& standardValues() const noexcept;
 
 		/**
 		 * @brief Get the raw data
 		 * @return Map of groups to their values with zero-copy string_view access
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const nfx::containers::StringMap<std::vector<std::string>>& rawData() const noexcept;
 
@@ -388,6 +399,7 @@ namespace dnv::vista::sdk
 		 * @brief Check if a group exists
 		 * @param group The group to check
 		 * @return True if the group exists
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool hasGroup( std::string_view group ) const noexcept;
 
@@ -395,6 +407,7 @@ namespace dnv::vista::sdk
 		 * @brief Check if a value is a standard value
 		 * @param value The value to check
 		 * @return True if the value is standard
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool hasStandardValue( std::string_view value ) const noexcept;
 
@@ -406,6 +419,7 @@ namespace dnv::vista::sdk
 		 * @brief Try to create a metadata tag
 		 * @param valueView The tag value
 		 * @return The metadata tag, or none if invalid
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] std::optional<MetadataTag> tryCreateTag( std::string_view valueView ) const;
 

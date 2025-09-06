@@ -3,6 +3,8 @@
  * @brief Inline implementation of Codebooks class methods
  */
 
+#include <iterator>
+
 namespace dnv::vista::sdk
 {
 	//=====================================================================
@@ -50,7 +52,7 @@ namespace dnv::vista::sdk
 
 	inline Codebooks::Iterator Codebooks::end() const noexcept
 	{
-		return m_codebooks.data() + NUM_CODEBOOKS;
+		return std::next( m_codebooks.data(), static_cast<std::ptrdiff_t>( m_codebooks.size() ) );
 	}
 
 	//----------------------------------------------

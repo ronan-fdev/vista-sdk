@@ -4,7 +4,6 @@
 
 include(CheckCXXSourceCompiles)
 
-
 set(TARGETS_TO_CONFIGURE "")
 if(VISTA_SDK_CPP_BUILD_SHARED AND TARGET ${PROJECT_NAME})
 	list(APPEND TARGETS_TO_CONFIGURE ${PROJECT_NAME})
@@ -57,7 +56,6 @@ foreach(target_name ${TARGETS_TO_CONFIGURE})
 			$<$<CONFIG:Release>:/DNDEBUG>                  # Disable debug assertions
 			$<$<CONFIG:Release>:/GS->                      # Disable buffer security checks
 			$<$<CONFIG:Release>:/Gw>                       # Optimize global data
-			$<$<CONFIG:Release>:/GT>                       # Support fiber-safe TLS
 			$<$<CONFIG:Release>:/fp:except->               # Disable floating point exceptions
 
 		#----------------------------------------------
@@ -78,40 +76,43 @@ foreach(target_name ${TARGETS_TO_CONFIGURE})
 		# ============================================================================
 		# Warning suppressions
 		# ============================================================================
-#			/wd4061                                                 # switch not handled
-#			/wd4100                                                 # unreferenced formal parameter
-#			/wd4189                                                 # local variable is initialized but not referenced
-#			/wd4244                                                 # conversion from 'type1' to 'type2', possible loss of data
-#			/wd4267                                                 # conversion from 'size_t' to 'type', possible loss of data
-#			/wd4365                                                 # conversion signed/unsigned mismatch
-#			/wd4388                                                 # signed/unsigned mismatch
-#			/wd4456                                                 # declaration hides previous local declaration
-#			/wd4505                                                 # unreferenced local function has been removed
-			/wd4514                                                 # unreferenced inline function has been removed
-#			/wd4625                                                 # copy constructor was implicitly defined as deleted
-			/wd4626                                                 # assignment operator was implicitly defined as deleted
-			/wd4702                                                 # unreachable code
-			/wd4710                                                 # function not inlined
-			/wd4711                                                 # function 'function' selected for inline expansion
-			/wd4820                                                 # padding
-#			/wd4834                                                 # discarding return value of function with 'nodiscard' attribute
-			/wd4866                                                 # compiler may not enforce left-to-right evaluation order for call to operator_name
-			/wd4868                                                 # compiler may not enforce left-to-right evaluation order in braced initializer list
-#			/wd5026                                                 # move constructor was implicitly defined as deleted
-#			/wd5027                                                 # move assignment operator was implicitly defined as deleted
-#			/wd5038                                                 # will be initialized after
-			/wd5045                                                 # Qspectre
-#			/wd5267                                                 # definition of implicit copy constructor/assignment operator is deprecated because it has a user-provided assignment operator/copy constructor
-#			/wd6031                                                 # return value ignored: 'called-function' could return unexpected value
-#			/wd6246                                                 # local declaration of 'variable' hides declaration of same name in outer scope
-#			/wd6326                                                 # potential comparison of a constant with another constant
-#			/wd6387                                                 # this does not adhere to the specification for the function
-			$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>           # Disable C++98 compatibility warnings
-			$<$<CXX_COMPILER_ID:Clang>:-Wno-pre-c++17-compat>       # Disable pre-C++17 warnings
-			$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>  # Suppress C++98 pedantic compatibility warnings
-			$<$<CXX_COMPILER_ID:Clang>:-Wno-exit-time-destructors>  # Suppress exit-time destructor warnings
-			$<$<CXX_COMPILER_ID:Clang>:-Wno-unsafe-buffer-usage>    # Suppress unsafe buffer usage warnings (Clang diagnostic)
-			$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default> # Allow default in fully covered switch
+#			/wd4061                                                   # switch not handled
+#			/wd4100                                                   # unreferenced formal parameter
+#			/wd4189                                                   # local variable is initialized but not referenced
+#			/wd4244                                                   # conversion from 'type1' to 'type2', possible loss of data
+#			/wd4267                                                   # conversion from 'size_t' to 'type', possible loss of data
+#			/wd4365                                                   # conversion signed/unsigned mismatch
+#			/wd4388                                                   # signed/unsigned mismatch
+#			/wd4456                                                   # declaration hides previous local declaration
+#			/wd4505                                                   # unreferenced local function has been removed
+			/wd4514                                                   # unreferenced inline function has been removed
+#			/wd4625                                                   # copy constructor was implicitly defined as deleted
+			/wd4626                                                   # assignment operator was implicitly defined as deleted
+			/wd4702                                                   # unreachable code
+			/wd4710                                                   # function not inlined
+			/wd4711                                                   # function 'function' selected for inline expansion
+			/wd4820                                                   # padding
+#			/wd4834                                                   # discarding return value of function with 'nodiscard' attribute
+			/wd4866                                                   # compiler may not enforce left-to-right evaluation order for call to operator_name
+			/wd4868                                                   # compiler may not enforce left-to-right evaluation order in braced initializer list
+#			/wd5026                                                   # move constructor was implicitly defined as deleted
+#			/wd5027                                                   # move assignment operator was implicitly defined as deleted
+#			/wd5038                                                   # will be initialized after
+			/wd5045                                                   # Qspectre
+#			/wd5267                                                   # definition of implicit copy constructor/assignment operator is deprecated because it has a user-provided assignment operator/copy constructor
+#			/wd6031                                                   # return value ignored: 'called-function' could return unexpected value
+#			/wd6246                                                   # local declaration of 'variable' hides declaration of same name in outer scope
+#			/wd6326                                                   # potential comparison of a constant with another constant
+#			/wd6387                                                   # this does not adhere to the specification for the function
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>             # Disable C++98 compatibility warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-pre-c++17-compat>         # Disable pre-C++17 warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>    # Suppress C++98 pedantic compatibility warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-exit-time-destructors>    # Suppress exit-time destructor warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-unsafe-buffer-usage>      # Suppress unsafe buffer usage warnings (Clang diagnostic)
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>   # Allow default in fully covered switch
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>           # Allow switches without default when all enum values are covered
+			$<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>    # Suppress POSIX deprecation warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>  # Suppress POSIX deprecation warnings
 		)
 
 		target_link_options(${target_name} PRIVATE
@@ -190,8 +191,13 @@ foreach(target_name ${TARGETS_TO_CONFIGURE})
 		# ============================================================================
 		# Warning suppressions
 		# ============================================================================
-			$<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic>                                 # Suppress pedantic warnings for all GCC (like __int128 warnings)
-			$<$<CXX_COMPILER_ID:GNU>:-Wno-maybe-uninitialized>                      # Suppress false positive warnings
+			$<$<CXX_COMPILER_ID:GNU>:-Wno-pedantic>                                   # Suppress pedantic warnings for all GCC (like __int128 warnings)
+			$<$<CXX_COMPILER_ID:GNU>:-Wno-maybe-uninitialized>                        # Suppress false positive warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-system-headers>                           # Suppress warnings from system headers
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>                   # Allow default in fully covered switch
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>                           # Allow switches without default when all enum values are covered
+			$<$<CXX_COMPILER_ID:GNU>:-Wno-deprecated-declarations>                    # Suppress POSIX deprecation warnings
+			$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>                  # Suppress POSIX deprecation warnings
 		)
 
 		target_link_options(${target_name} PRIVATE

@@ -114,6 +114,7 @@ namespace dnv::vista::sdk
 		 * @param prefix The string prefix to convert (e.g., "pos", "qty", "calc"). Must not be empty.
 		 * @return The corresponding CodebookName.
 		 * @throws std::invalid_argument If the prefix is empty or unknown.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline static CodebookName fromPrefix( std::string_view prefix );
 
@@ -122,6 +123,7 @@ namespace dnv::vista::sdk
 		 * @param name The CodebookName to convert
 		 * @return The corresponding string prefix view (e.g., "pos" for Position)
 		 * @throws std::invalid_argument If the name is unknown
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline static std::string_view toPrefix( CodebookName name );
 	};

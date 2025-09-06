@@ -91,6 +91,7 @@ namespace dnv::vista::sdk
 			/**
 			 * @brief Checks if any errors have been added to the builder.
 			 * @return `true` if at least one error has been added, `false` otherwise.
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
 			[[nodiscard]] bool hasError() const noexcept;
 
@@ -102,6 +103,7 @@ namespace dnv::vista::sdk
 			 * @brief Creates a new, empty LocationParsingErrorBuilder instance.
 			 * @details Provides a clear entry point for creating a builder.
 			 * @return A new instance of `LocationParsingErrorBuilder`.
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
 			[[nodiscard]] static LocationParsingErrorBuilder create();
 
@@ -114,6 +116,7 @@ namespace dnv::vista::sdk
 			 * @details Formats the collected validation result/message pairs into a final `ParsingErrors` object.
 			 * @return A `ParsingErrors` object containing the formatted error messages.
 			 *         Returns `ParsingErrors::Empty` if `hasError()` is false.
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
 			[[nodiscard]] ParsingErrors build() const;
 

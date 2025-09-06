@@ -170,8 +170,8 @@ namespace dnv::vista::sdk::tests
 
 	TEST( ShipId, ParseEmptyStringThrows )
 	{
-		EXPECT_THROW( transport::ShipId::parse( "" ), std::invalid_argument );
-		EXPECT_THROW( transport::ShipId::parse( std::string_view{} ), std::invalid_argument );
+		EXPECT_THROW( (void)transport::ShipId::parse( "" ), std::invalid_argument );
+		EXPECT_THROW( (void)transport::ShipId::parse( std::string_view{} ), std::invalid_argument );
 	}
 
 	//=====================================================================

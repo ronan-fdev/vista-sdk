@@ -85,14 +85,15 @@ namespace dnv::vista::sdk
 			/**
 			 * @brief Get start timestamp
 			 * @return Start time
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
 			[[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& start() const noexcept;
 
 			/**
 			 * @brief Get end timestamp
-			 * @return End time
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& end() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& end() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -170,15 +171,15 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get configuration ID
-			 * @return Configuration identifier
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::string& id() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::string& id() const noexcept;
 
 			/**
 			 * @brief Get timestamp
-			 * @return Configuration timestamp
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -267,21 +268,21 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get timestamp
-			 * @return Data timestamp
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			/**
 			 * @brief Get values
-			 * @return Data values vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<std::string>& value() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<std::string>& value() const noexcept;
 
 			/**
 			 * @brief Get quality values
-			 * @return Optional quality values vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::vector<std::string>>& quality() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::vector<std::string>>& quality() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -359,7 +360,7 @@ namespace dnv::vista::sdk
 			//----------------------------------------------
 
 			/** @brief Copy assignment operator */
-			EventDataSet& operator=( const EventDataSet& ) = default;
+			EventDataSet& operator=( const EventDataSet& ) = delete;
 
 			/** @brief Move assignment operator */
 			EventDataSet& operator=( EventDataSet&& ) noexcept = default;
@@ -370,27 +371,27 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get timestamp
-			 * @return Event timestamp
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const nfx::time::DateTimeOffset& timeStamp() const noexcept;
 
 			/**
 			 * @brief Get data channel ID
-			 * @return Channel identifier
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const DataChannelId& dataChannelId() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const DataChannelId& dataChannelId() const noexcept;
 
 			/**
 			 * @brief Get value
-			 * @return Event value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::string& value() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::string& value() const noexcept;
 
 			/**
 			 * @brief Get quality
-			 * @return Optional quality value
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::string>& quality() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::string>& quality() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -482,15 +483,15 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get data channel IDs
-			 * @return Channel identifiers vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<DataChannelId>& dataChannelIds() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<DataChannelId>& dataChannelIds() const noexcept;
 
 			/**
 			 * @brief Get data sets
-			 * @return Data sets vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<TabularDataSet>& dataSets() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<TabularDataSet>& dataSets() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -514,16 +515,16 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Validate tabular data structure (instance method)
-			 * @return ValidateResult with success or error messages
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] ValidateResult validate() const;
+			[[nodiscard]] [[nodiscard]] ValidateResult validate() const;
 
 			/**
 			 * @brief Static validation method
 			 * @param table TabularData instance to validate
-			 * @return ValidateResult with success or error messages
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] static ValidateResult Validate( const TabularData& table );
+			[[nodiscard]] [[nodiscard]] static ValidateResult Validate( const TabularData& table );
 
 		private:
 			//----------------------------------------------
@@ -582,9 +583,9 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get data set
-			 * @return Event data sets vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<EventDataSet>& dataSet() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<EventDataSet>& dataSet() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -691,45 +692,45 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get ship ID
-			 * @return Ship identifier
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const ShipId& shipId() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const ShipId& shipId() const noexcept;
 
 			/**
 			 * @brief Get time range
-			 * @return Optional time range
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<TimeRange>& timeRange() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<TimeRange>& timeRange() const noexcept;
 
 			/**
 			 * @brief Get date created
-			 * @return Optional creation timestamp
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::time::DateTimeOffset>& dateCreated() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::time::DateTimeOffset>& dateCreated() const noexcept;
 
 			/**
 			 * @brief Get date modified
-			 * @return Optional modification timestamp
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::time::DateTimeOffset>& dateModified() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::time::DateTimeOffset>& dateModified() const noexcept;
 
 			/**
 			 * @brief Get author
-			 * @return Optional author string
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::string>& author() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::string>& author() const noexcept;
 
 			/**
 			 * @brief Get system configuration
-			 * @return Optional system configuration references
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::vector<ConfigurationReference>>& systemConfiguration() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::vector<ConfigurationReference>>& systemConfiguration() const noexcept;
 
 			/**
 			 * @brief Get custom headers
-			 * @return Optional custom headers dictionary
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::containers::StringMap<Value>>& customHeaders() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::containers::StringMap<Value>>& customHeaders() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -859,27 +860,27 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get data configuration
-			 * @return Optional data configuration reference
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<ConfigurationReference>& dataConfiguration() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<ConfigurationReference>& dataConfiguration() const noexcept;
 
 			/**
 			 * @brief Get tabular data
-			 * @return Optional tabular data vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::vector<TabularData>>& tabularData() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<std::vector<TabularData>>& tabularData() const noexcept;
 
 			/**
 			 * @brief Get event data
-			 * @return Optional event data
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<EventData>& eventData() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<EventData>& eventData() const noexcept;
 
 			/**
 			 * @brief Get custom data kinds
-			 * @return Optional custom data kinds dictionary
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::containers::StringMap<Value>>& customDataKinds() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<nfx::containers::StringMap<Value>>& customDataKinds() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -918,9 +919,9 @@ namespace dnv::vista::sdk
 			 * @param dcPackage Data channel list package for validation
 			 * @param onTabularData Validation function for tabular data
 			 * @param onEventData Validation function for event data
-			 * @return ValidateResult with success or error messages
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] ValidateResult validate(
+			[[nodiscard]] [[nodiscard]] ValidateResult validate(
 				const datachannel::DataChannelListPackage& dcPackage,
 				ValidateData onTabularData,
 				ValidateData onEventData ) const;
@@ -987,15 +988,15 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get header
-			 * @return Optional package header
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<Header>& header() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::optional<Header>& header() const noexcept;
 
 			/**
 			 * @brief Get time series data
-			 * @return Time series data vector
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<TimeSeriesData>& timeSeriesData() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const std::vector<TimeSeriesData>& timeSeriesData() const noexcept;
 
 			//----------------------------------------------
 			// Setters
@@ -1071,15 +1072,15 @@ namespace dnv::vista::sdk
 
 			/**
 			 * @brief Get package
-			 * @return Reference to contained package
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE const Package& package() const noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE const Package& package() const noexcept;
 
 			/**
 			 * @brief Get package (mutable)
-			 * @return Mutable reference to contained package
+			 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 			 */
-			[[nodiscard]] VISTA_SDK_CPP_INLINE Package& package() noexcept;
+			[[nodiscard]] [[nodiscard]] VISTA_SDK_CPP_INLINE Package& package() noexcept;
 
 			//----------------------------------------------
 			// Setters

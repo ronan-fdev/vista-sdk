@@ -105,6 +105,7 @@ namespace dnv::vista::sdk
 		 * @brief Equality operator. Compares this Location with another.
 		 * @param other The other Location to compare.
 		 * @return True if the location values are equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator==( const Location& other ) const;
 
@@ -112,6 +113,7 @@ namespace dnv::vista::sdk
 		 * @brief Inequality operator. Compares this Location with another.
 		 * @param other The other Location to compare.
 		 * @return True if the location values are not equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator!=( const Location& other ) const;
 
@@ -122,6 +124,7 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Implicit conversion to std::string.
 		 * @return The location value as a string.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline operator std::string() const noexcept;
 
@@ -142,12 +145,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the string value of the location.
 		 * @return A constant reference to the location string value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& value() const noexcept;
 
 		/**
 		 * @brief Gets the string value of the location.
 		 * @return A constant reference to the location string value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& toString() const noexcept;
 
@@ -224,6 +229,7 @@ namespace dnv::vista::sdk
 		 * @brief Equality operator. Compares based on the `code` member.
 		 * @param other The other RelativeLocation to compare.
 		 * @return True if the codes are equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator==( const RelativeLocation& other ) const;
 
@@ -231,6 +237,7 @@ namespace dnv::vista::sdk
 		 * @brief Inequality operator. Compares based on the `code` member.
 		 * @param other The other RelativeLocation to compare.
 		 * @return True if the codes are not equal, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline bool operator!=( const RelativeLocation& other ) const;
 
@@ -241,24 +248,28 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the character code of the relative location.
 		 * @return The character code.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline char code() const noexcept;
 
 		/**
 		 * @brief Gets the name of the relative location.
 		 * @return A constant reference to the name string.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::string& name() const noexcept;
 
 		/**
 		 * @brief Gets the optional definition of the relative location.
 		 * @return A constant reference to an optional string containing the definition.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const std::optional<std::string>& definition() const noexcept;
 
 		/**
 		 * @brief Gets the `Location` object associated with this relative location.
 		 * @return A constant reference to the `Location` object.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] inline const Location& location() const noexcept;
 
@@ -346,6 +357,7 @@ namespace dnv::vista::sdk
 		 * @param value The character value to add
 		 * @param existingValue Output parameter for the existing value, if any
 		 * @return True if the value was added, false otherwise
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryAdd( LocationGroup key, char value, std::optional<char>& existingValue );
 
@@ -420,12 +432,14 @@ namespace dnv::vista::sdk
 		/**
 		 * @brief Gets the VIS version this Locations instance pertains to.
 		 * @return The `VisVersion` enum value.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] VisVersion visVersion() const noexcept;
 
 		/**
 		 * @brief Gets a read-only list of all defined relative locations.
 		 * @return A constant reference to a vector of `RelativeLocation` objects.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] const std::vector<RelativeLocation>& relativeLocations() const noexcept;
 
@@ -433,6 +447,7 @@ namespace dnv::vista::sdk
 		 * @brief Gets a read-only map of location groups to their respective relative locations.
 		 * @return A constant reference to an unordered_map where keys are `LocationGroup`
 		 *         and values are vectors of `RelativeLocation` objects belonging to that group.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] const std::unordered_map<LocationGroup, std::vector<RelativeLocation>>& groups() const noexcept;
 
@@ -445,6 +460,7 @@ namespace dnv::vista::sdk
 		 * @return A constant reference to an unordered_map where keys are character codes
 		 *         (e.g., 'P', 'C', 'S', 'U', 'M', 'L', 'I', 'O', 'F', 'A') and values
 		 *         are their corresponding `LocationGroup` classifications.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] const std::map<char, LocationGroup>& reversedGroups() const noexcept;
 
@@ -457,6 +473,7 @@ namespace dnv::vista::sdk
 		 * @param locationStr The location string_view to parse.
 		 * @return The parsed `Location` object.
 		 * @throws std::invalid_argument If parsing fails.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] Location parse( std::string_view locationStr ) const;
 
@@ -466,6 +483,7 @@ namespace dnv::vista::sdk
 		 * @param location Output parameter: if parsing succeeds, this is set to the parsed `Location`.
 		 *                 The state of `location` is undefined if parsing fails.
 		 * @return True if parsing succeeded, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryParse( const std::string& value, Location& location ) const;
 
@@ -475,6 +493,7 @@ namespace dnv::vista::sdk
 		 * @param location Output parameter: if parsing succeeds, this is set to the parsed `Location`.
 		 *                 The state of `location` is undefined if parsing fails.
 		 * @return True if parsing succeeded, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryParse( const std::optional<std::string>& value, Location& location ) const;
 
@@ -485,6 +504,7 @@ namespace dnv::vista::sdk
 		 * @param errors Output parameter: populated with any parsing errors encountered.
 		 * @return True if parsing succeeded (even if `errors` object indicates warnings or non-critical issues,
 		 *         as long as a valid `Location` could be formed), false if a fundamental parsing error occurred.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryParse( const std::optional<std::string>& value, Location& location, ParsingErrors& errors ) const;
 
@@ -493,6 +513,7 @@ namespace dnv::vista::sdk
 		 * @param value The location string_view to parse.
 		 * @param location Output parameter: if parsing succeeds, this is set to the parsed `Location`.
 		 * @return True if parsing succeeded, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryParse( std::string_view value, Location& location ) const;
 
@@ -502,6 +523,7 @@ namespace dnv::vista::sdk
 		 * @param location Output parameter: if parsing succeeds, this is set to the parsed `Location`.
 		 * @param errors Output parameter: populated with any parsing errors encountered.
 		 * @return True if parsing succeeded, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryParse( std::string_view value, Location& location, ParsingErrors& errors ) const;
 
@@ -517,6 +539,7 @@ namespace dnv::vista::sdk
 		 * @param length The length of the integer substring.
 		 * @param number Output parameter: if parsing succeeds, this is set to the parsed integer.
 		 * @return True if parsing succeeded, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] static VISTA_SDK_CPP_INLINE bool tryParseInt( std::string_view span, int start, int length, int& number );
 
@@ -532,6 +555,7 @@ namespace dnv::vista::sdk
 		 * @param location Output parameter: if parsing succeeds, this is set to the parsed `Location`.
 		 * @param errorBuilder The `LocationParsingErrorBuilder` to accumulate errors.
 		 * @return True if parsing was successful to the point of forming a valid `Location`, false otherwise.
+		 * @note This function is marked [[nodiscard]] - the return value should not be ignored
 		 */
 		[[nodiscard]] bool tryParseInternal(
 			std::string_view span,
