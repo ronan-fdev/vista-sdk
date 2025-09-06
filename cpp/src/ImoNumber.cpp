@@ -141,7 +141,6 @@ namespace dnv::vista::sdk
 			sv = sv.substr( 3 );
 		}
 
-		/* Parse the numeric part using std::from_chars for fast, locale-independent conversion */
 		int num = 0;
 		auto [ptr, ec] = std::from_chars( sv.data(), sv.data() + sv.length(), num );
 

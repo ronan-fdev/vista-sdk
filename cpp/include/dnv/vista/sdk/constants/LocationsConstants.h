@@ -17,26 +17,26 @@ namespace dnv::vista::sdk::constants::locations
 	// Location character constants
 	//----------------------------------------------
 
-	/* Special characters */
+	// Special characters
 	inline constexpr char CHAR_HORIZONTAL = 'H';
 	inline constexpr char CHAR_VERTICAL = 'V';
 	inline constexpr char CHAR_NUMBER = 'N';
 
-	/* Side group */
+	// Side group
 	inline constexpr char CHAR_PORT = 'P';
 	inline constexpr char CHAR_CENTER = 'C';
 	inline constexpr char CHAR_STARBOARD = 'S';
 
-	/* Vertical group */
+	// Vertical group
 	inline constexpr char CHAR_UPPER = 'U';
 	inline constexpr char CHAR_MIDDLE = 'M';
 	inline constexpr char CHAR_LOWER = 'L';
 
-	/* Transverse group */
+	// Transverse group
 	inline constexpr char CHAR_INBOARD = 'I';
 	inline constexpr char CHAR_OUTBOARD = 'O';
 
-	/* Longitudinal group */
+	// Longitudinal group
 	inline constexpr char CHAR_FORWARD = 'F';
 	inline constexpr char CHAR_AFT = 'A';
 

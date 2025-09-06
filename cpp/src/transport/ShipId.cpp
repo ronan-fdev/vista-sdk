@@ -36,7 +36,7 @@ namespace dnv::vista::sdk::transport
 		{
 			case Tag::IMO:
 			{
-				/* In ISO-19848, IMO number as ShipID should include "IMO" prefix */
+				// In ISO-19848, IMO number as ShipID should include "IMO" prefix
 				return m_imoNumber->toString();
 			}
 			case Tag::Other:
@@ -61,7 +61,7 @@ namespace dnv::vista::sdk::transport
 			throw std::invalid_argument{ "ShipId::parse: value cannot be empty" };
 		}
 
-		/* In ISO-19848, IMO number as ShipID should be prefixed with "IMO" */
+		// In ISO-19848, IMO number as ShipID should be prefixed with "IMO"
 		if ( value.size() >= 3 && nfx::string::iequals( value.substr( 0, 3 ), "IMO" ) )
 		{
 			auto imoOpt = ImoNumber::tryParse( value );
@@ -71,7 +71,7 @@ namespace dnv::vista::sdk::transport
 			}
 		}
 
-		/* If not a valid IMO number, treat as other identifier */
-		return ShipId{ std::string{ value } };
+		// If not a valid IMO number, treat as other identifier
+		return ShipId{ value };
 	}
 }

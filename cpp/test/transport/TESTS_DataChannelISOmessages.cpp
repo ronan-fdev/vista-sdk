@@ -22,14 +22,14 @@ namespace dnv::vista::sdk::tests
 	 */
 	transport::datachannel::DataChannelListPackage createValidFullyCustomDataChannelList()
 	{
-		/* Create ConfigurationReference for DataChannelListId */
+		// Create ConfigurationReference for DataChannelListId
 		auto timeStamp = nfx::time::DateTimeOffset::parse( "2016-01-01T00:00:00Z" );
 		transport::datachannel::ConfigurationReference dataChannelListId{
 			"DataChannelList.xml",
 			timeStamp,
 			"1.0" };
 
-		/* Create Header */
+		// Create Header
 		transport::datachannel::Header header{
 			transport::ShipId::parse( "IMO1234567" ),
 			dataChannelListId,
@@ -43,15 +43,15 @@ namespace dnv::vista::sdk::tests
 
 		header.setDateCreated( nfx::time::DateTimeOffset::parse( "2015-12-01T00:00:00Z" ) );
 
-		/* Add custom headers */
+		// Add custom headers
 		nfx::containers::StringMap<transport::Value> customHeaders;
 		customHeaders["nr:CustomHeaderElement"] = transport::Value::String{ "Vendor specific headers" };
 		header.setCustomHeaders( customHeaders );
 
-		/* Create DataChannelList */
+		// Create DataChannelList
 		transport::datachannel::DataChannelList dataChannelList;
 
-		/* First DataChannel - Temperature sensor */
+		// First DataChannel - Temperature sensor
 		{
 			std::optional<LocalIdBuilder> localIdBuilderOpt;
 			bool parsed = LocalIdBuilder::tryParse(
@@ -65,7 +65,7 @@ namespace dnv::vista::sdk::tests
 			transport::datachannel::NameObject nameObject;
 			nameObject.setNamingRule( "Naming_Rule" );
 
-			/* Add custom name objects */
+			// Add custom name objects
 			nfx::containers::StringMap<transport::Value> customNameObjects;
 			customNameObjects["nr:CustomNameObject"] = transport::Value::String{ "Vendor specific NameObject" };
 			nameObject.setCustomNameObjects( customNameObjects );
@@ -87,7 +87,7 @@ namespace dnv::vista::sdk::tests
 			transport::datachannel::Unit unit{ "°C" };
 			unit.setQuantityName( "Temperature" );
 
-			/* Add custom elements to unit */
+			// Add custom elements to unit
 			nfx::containers::StringMap<transport::Value> customElements;
 			customElements["nr:CustomUnitElement"] = transport::Value::String{ "Vendor specific unit element" };
 			unit.setCustomElements( customElements );
@@ -97,7 +97,7 @@ namespace dnv::vista::sdk::tests
 			property.setName( "M/E #1 Air Cooler CFW OUT Temp" );
 			property.setRemarks( " Location: ECR, Manufacturer: AAA Company, Type: TYPE-AAA " );
 
-			/* Add custom properties */
+			// Add custom properties
 			nfx::containers::StringMap<transport::Value> customProperties;
 			customProperties["nr:CustomPropertyElement"] = transport::Value::String{ "Vendor specific property element" };
 			property.setCustomProperties( customProperties );
@@ -106,7 +106,7 @@ namespace dnv::vista::sdk::tests
 			dataChannelList.add( dataChannel );
 		}
 
-		/* Second DataChannel - Alert type */
+		// Second DataChannel - Alert type
 		{
 			std::optional<LocalIdBuilder> localIdBuilderOpt;
 			bool parsed = LocalIdBuilder::tryParse(
@@ -140,21 +140,21 @@ namespace dnv::vista::sdk::tests
 	 */
 	transport::datachannel::DataChannelListPackage createValidDataChannelList()
 	{
-		/* Create ConfigurationReference for DataChannelListId */
+		// Create ConfigurationReference for DataChannelListId
 		transport::datachannel::ConfigurationReference dataChannelListId{
 			"some-id",
 			nfx::time::DateTimeOffset( "2016-01-01T00:00:00Z" ) };
 
-		/* Create Header */
+		// Create Header
 		transport::datachannel::Header header{
 			transport::ShipId::parse( "IMO1234567" ),
 			dataChannelListId,
 			"some-author" };
 
-		/* Create DataChannelList */
+		// Create DataChannelList
 		transport::datachannel::DataChannelList dataChannelList;
 
-		/* Single DataChannel */
+		// Single DataChannel
 		{
 			std::optional<LocalIdBuilder> localIdBuilderOpt;
 			bool parsed = LocalIdBuilder::tryParse(
@@ -226,7 +226,7 @@ namespace dnv::vista::sdk::tests
 		size_t counter = 0;
 		EXPECT_EQ( expectedLength, actualLength );
 
-		/* Test range-based for loop iteration */
+		// Test range-based for loop iteration
 		for ( const auto& dc : message.package().dataChannelList() )
 		{
 			EXPECT_NE( &dc, nullptr );
@@ -234,7 +234,7 @@ namespace dnv::vista::sdk::tests
 		}
 		EXPECT_EQ( expectedLength, counter );
 
-		/* Test iterator-based iteration */
+		// Test iterator-based iteration
 		counter = 0;
 		for ( auto it = message.package().dataChannelList().begin(); it != message.package().dataChannelList().end(); ++it )
 		{
@@ -254,7 +254,7 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( IsoMessageTests, DataChannelListJson )
 	{
-		/* TODO */
+		// TODO
 	}
 
 	//=====================================================================
@@ -271,7 +271,7 @@ namespace dnv::vista::sdk::tests
 
 		EXPECT_EQ( dataChannelList.package().dataChannelList().size(), 2U );
 
-		/* Test custom headers */
+		// Test custom headers
 		const auto& header = dataChannelList.package().header();
 		EXPECT_TRUE( header.customHeaders().has_value() );
 		const auto& customHeaders = *header.customHeaders();
@@ -280,7 +280,7 @@ namespace dnv::vista::sdk::tests
 		EXPECT_EQ( headerValue.type(), transport::Value::Type::String );
 		EXPECT_EQ( headerValue.string().value(), "Vendor specific headers" );
 
-		/* Test first DataChannel (temperature sensor) */
+		// Test first DataChannel (temperature sensor)
 		const auto& tempChannel = dataChannelList.package().dataChannelList()[0];
 		const auto& tempProperty = tempChannel.property();
 
@@ -318,7 +318,7 @@ namespace dnv::vista::sdk::tests
 		EXPECT_TRUE( tempProperty.remarks().has_value() );
 		EXPECT_EQ( *tempProperty.remarks(), " Location: ECR, Manufacturer: AAA Company, Type: TYPE-AAA " );
 
-		/* Test second DataChannel (alert type) */
+		// Test second DataChannel (alert type)
 		const auto& alertChannel = dataChannelList.package().dataChannelList()[1];
 		const auto& alertProperty = alertChannel.property();
 
@@ -345,7 +345,7 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( DataChannelTests, Test_Property_Validation )
 	{
-		/* Test valid decimal property */
+		// Test valid decimal property
 		{
 			transport::datachannel::DataChannelType dataChannelType{ "Inst" };
 			transport::datachannel::Format format{ "Decimal" };
@@ -357,7 +357,7 @@ namespace dnv::vista::sdk::tests
 			EXPECT_TRUE( result.isOk() );
 		}
 
-		/* Test alert property with priority */
+		// Test alert property with priority
 		{
 			transport::datachannel::DataChannelType dataChannelType{ "Alert" };
 			transport::datachannel::Format format{ "String" };
@@ -377,7 +377,7 @@ namespace dnv::vista::sdk::tests
 		transport::datachannel::Restriction restriction;
 		transport::datachannel::Format format{ "String" };
 
-		/* Test length validation */
+		// Test length validation
 		restriction.setLength( 5 );
 		auto result = restriction.validateValue( "hello", format );
 		EXPECT_TRUE( result.isOk() );
@@ -388,7 +388,7 @@ namespace dnv::vista::sdk::tests
 		result = restriction.validateValue( "toolong", format );
 		EXPECT_FALSE( result.isOk() );
 
-		/* Test min/max length validation */
+		// Test min/max length validation
 		restriction = transport::datachannel::Restriction{};
 		restriction.setMinLength( 2 );
 		restriction.setMaxLength( 10 );
@@ -409,22 +409,22 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( RangeTest, RangeCreationAndValidation )
 	{
-		/* Test valid range construction */
+		// Test valid range construction
 		transport::datachannel::Range range{ 0.0, 100.0 };
 		EXPECT_EQ( range.low(), 0.0 );
 		EXPECT_EQ( range.high(), 100.0 );
 
-		/* Test invalid range construction should throw */
+		// Test invalid range construction should throw
 		EXPECT_THROW( transport::datachannel::Range( 100.0, 0.0 ), std::invalid_argument );
 
-		/* Test setting range values */
+		// Test setting range values
 		range.setLow( 10.0 );
 		EXPECT_EQ( range.low(), 10.0 );
 
 		range.setHigh( 90.0 );
 		EXPECT_EQ( range.high(), 90.0 );
 
-		/* low > high */
+		// low > high
 		EXPECT_THROW( range.setLow( 200.0 ), std::invalid_argument );
 		/*high < low*/
 		EXPECT_THROW( range.setHigh( -10.0 ), std::invalid_argument );
@@ -440,23 +440,23 @@ namespace dnv::vista::sdk::tests
 		EXPECT_TRUE( dataChannelList.isEmpty() );
 		EXPECT_EQ( dataChannelList.size(), 0U );
 
-		/* Add single DataChannel */
+		// Add single DataChannel
 		auto singleList = createValidDataChannelList();
 		const auto& originalChannel = singleList.package().dataChannelList()[0];
 
-		/* Create a copy for adding */
+		// Create a copy for adding
 		transport::datachannel::DataChannel channelCopy = originalChannel;
 		dataChannelList.add( channelCopy );
 
 		EXPECT_FALSE( dataChannelList.isEmpty() );
 		EXPECT_EQ( dataChannelList.size(), 1U );
 
-		/* Test lookups work */
+		// Test lookups work
 		const auto& localId = originalChannel.dataChannelId().localId();
 		const auto* foundChannel = dataChannelList.tryGetByLocalId( localId );
 		EXPECT_NE( foundChannel, nullptr );
 
-		/* Test clear */
+		// Test clear
 		dataChannelList.clear();
 		EXPECT_TRUE( dataChannelList.isEmpty() );
 		EXPECT_EQ( dataChannelList.size(), 0U );
@@ -472,22 +472,22 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( DataChannelTests, Test_Error_Handling )
 	{
-		/* Test invalid DataChannelType construction */
+		// Test invalid DataChannelType construction
 		EXPECT_THROW( transport::datachannel::DataChannelType{ "InvalidType" }, std::invalid_argument );
 
-		/* Test invalid Format type */
+		// Test invalid Format type
 		EXPECT_THROW( transport::datachannel::Format{ "InvalidFormat" }, std::invalid_argument );
 
-		/* Test duplicate LocalId addition */
+		// Test duplicate LocalId addition
 		transport::datachannel::DataChannelList dataChannelList;
 		auto validList = createValidDataChannelList();
 		const auto& originalChannel = validList.package().dataChannelList()[0];
 
-		/* Add first channel */
+		// Add first channel
 		transport::datachannel::DataChannel firstChannel = originalChannel;
 		dataChannelList.add( firstChannel );
 
-		/* Try to add duplicate LocalId - should throw */
+		// Try to add duplicate LocalId - should throw
 		transport::datachannel::DataChannel duplicateChannel = originalChannel;
 		EXPECT_THROW( dataChannelList.add( duplicateChannel ), std::invalid_argument );
 	}
@@ -497,13 +497,13 @@ namespace dnv::vista::sdk::tests
 	 */
 	TEST( RestrictionTest, StringLengthRestrictionValidation )
 	{
-		/* Test exact length validation with StringBuilderPool error messages */
+		// Test exact length validation with StringBuilderPool error messages
 		transport::datachannel::Restriction restriction;
 		restriction.setLength( 5 );
 
 		transport::datachannel::Format format{ "String" };
 
-		/* Test that error messages are properly constructed using StringBuilderPool */
+		// Test that error messages are properly constructed using StringBuilderPool
 		auto result = restriction.validateValue( "toolongstring", format );
 		EXPECT_FALSE( result.isOk() );
 

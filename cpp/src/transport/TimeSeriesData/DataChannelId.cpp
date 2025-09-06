@@ -57,14 +57,14 @@ namespace dnv::vista::sdk::transport
 			throw std::invalid_argument{ lease.toString() };
 		}
 
-		/* Try to parse as LocalId first */
+		// Try to parse as LocalId first
 		std::optional<LocalId> localId;
 		if ( LocalId::tryParse( value, localId ) )
 		{
 			return DataChannelId{ *localId };
 		}
 
-		/* If not a valid LocalId, treat as short identifier */
+		// If not a valid LocalId, treat as short identifier
 		return DataChannelId{ value };
 	}
 }

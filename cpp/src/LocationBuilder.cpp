@@ -106,8 +106,8 @@ namespace dnv::vista::sdk
 			{
 				if ( !number.has_value() )
 				{
-					/* Convert ASCII digit character to numeric value: '0'=48, '1'=49, ..., '9'=57
-					 * Subtracting '0' (ASCII 48) gives: '0'-'0'=0, '1'-'0'=1, ..., '9'-'0'=9 */
+					// Convert ASCII digit character to numeric value: '0'=48, '1'=49, ..., '9'=57
+					// Subtracting '0' (ASCII 48) gives: '0'-'0'=0, '1'-'0'=1, ..., '9'-'0'=9
 					number = ch - '0';
 				}
 				else

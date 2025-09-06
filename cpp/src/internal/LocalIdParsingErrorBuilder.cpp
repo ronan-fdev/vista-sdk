@@ -239,7 +239,7 @@ namespace dnv::vista::sdk::internal
 
 	LocalIdParsingErrorBuilder::LocalIdParsingErrorBuilder()
 	{
-		/* 8 × sizeof(std::pair<LocalIdParsingState, std::string>) = 8 × (4 + 32) = ~288 bytes */
+		// 8 × sizeof(std::pair<LocalIdParsingState, std::string>) = 8 × (4 + 32) = ~288 bytes
 		m_errors.reserve( 8 );
 	}
 
@@ -307,7 +307,7 @@ namespace dnv::vista::sdk::internal
 	{
 		if ( m_errors.size() == m_errors.capacity() )
 		{
-			/* 8 × sizeof(std::pair<LocationValidationResult, std::string>) = 8 × (4 + 32) = ~288 bytes */
+			// 8 × sizeof(std::pair<LocationValidationResult, std::string>) = 8 × (4 + 32) = ~288 bytes
 			m_errors.reserve( std::max( static_cast<size_t>( 8 ), m_errors.capacity() * 2 ) );
 		}
 

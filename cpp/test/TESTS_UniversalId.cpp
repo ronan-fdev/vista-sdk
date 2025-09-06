@@ -149,7 +149,8 @@ namespace dnv::vista::sdk::tests::test
 	//----------------------------------------------
 
 	TEST( UniversalIdTests, Test_UniversalBuilder_TryWith )
-	{ /* TODO: Check this ! */
+	{
+		// TODO: Check this !
 		auto universalBuilder = UniversalIdBuilder::create( VisVersion::v3_4a ).withoutLocalId().withoutImoNumber();
 
 		(void)universalBuilder.tryWithLocalId( std::nullopt );

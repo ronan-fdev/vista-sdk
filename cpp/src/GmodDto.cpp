@@ -323,7 +323,7 @@ namespace dnv::vista::sdk
 				}
 			}
 
-			/* Construct the final DTO using successfully parsed data */
+			// Construct the final DTO using successfully parsed data
 			GmodNodeDto result( std::move( tempCategory ),
 				std::move( tempType ),
 				std::move( tempCode ),
@@ -398,7 +398,7 @@ namespace dnv::vista::sdk
 
 	void from_json( const nlohmann::json& j, GmodNodeDto& dto )
 	{
-		/* ADL hook for nlohmann::json deserialization. */
+		// ADL hook for nlohmann::json deserialization.
 		const auto categoryIt = j.find( constants::dto::GMOD_DTO_KEY_CATEGORY );
 		if ( categoryIt == j.end() || !categoryIt->is_string() )
 		{
@@ -435,12 +435,12 @@ namespace dnv::vista::sdk
 			throw nlohmann::json::parse_error::create( 103, 0u, lease.toString(), &j );
 		}
 
-		/* Extract required fields with cached iterators */
+		// Extract required fields with cached iterators
 		std::string tempCategory = categoryIt->get<std::string>();
 		std::string tempType = typeIt->get<std::string>();
 		std::string tempCode = codeIt->get<std::string>();
 
-		/* SPECIAL CASE: Name field handling - matches tryFromJson logic */
+		// SPECIAL CASE: Name field handling - matches tryFromJson logic
 		std::string tempName;
 		const auto nameIt = j.find( constants::dto::GMOD_DTO_KEY_NAME );
 		if ( nameIt != j.end() )
@@ -488,7 +488,7 @@ namespace dnv::vista::sdk
 			tempName = "";
 		}
 
-		/* Optional fields with robust validation (matches tryFromJson pattern) */
+		// Optional fields with robust validation (matches tryFromJson pattern)
 		std::optional<std::string> tempCommonName = std::nullopt;
 		const auto commonNameIt = j.find( constants::dto::GMOD_DTO_KEY_COMMON_NAME );
 		if ( commonNameIt != j.end() )
@@ -620,7 +620,7 @@ namespace dnv::vista::sdk
 			}
 		}
 
-		/* Assign all fields to DTO using successfully parsed data */
+		// Assign all fields to DTO using successfully parsed data
 		dto.m_category = std::move( tempCategory );
 		dto.m_type = std::move( tempType );
 		dto.m_code = std::move( tempCode );
@@ -634,7 +634,7 @@ namespace dnv::vista::sdk
 
 	void to_json( nlohmann::json& j, const GmodNodeDto& dto )
 	{
-		/* ADL hook for nlohmann::json serialization. */
+		// ADL hook for nlohmann::json serialization.
 		j = { { constants::dto::GMOD_DTO_KEY_CATEGORY, dto.category() }, { constants::dto::GMOD_DTO_KEY_TYPE, dto.type() },
 			{ constants::dto::GMOD_DTO_KEY_CODE, dto.code() }, { constants::dto::GMOD_DTO_KEY_NAME, dto.name() } };
 
@@ -734,7 +734,7 @@ namespace dnv::vista::sdk
 						}
 					}
 
-					/* If parsing failed for more than 10% of items, shrink the vector to potentially save memory */
+					// If parsing failed for more than 10% of items, shrink the vector to potentially save memory
 					if ( totalItems > 0 && successCount < totalItems * 9 / 10 )
 					{
 						if ( tempItems.capacity() > tempItems.size() * 4 / 3 )
@@ -830,7 +830,7 @@ namespace dnv::vista::sdk
 						}
 					}
 
-					/* If parsing failed for more than 10% of relations, shrink the vector to potentially save memory */
+					// If parsing failed for more than 10% of relations, shrink the vector to potentially save memory
 					if ( relationCount > 0 && validRelationCount < relationCount * 9 / 10 )
 					{
 						if ( tempRelations.capacity() > tempRelations.size() * 4 / 3 )
@@ -857,7 +857,7 @@ namespace dnv::vista::sdk
 			{
 			}
 
-			/* Construct the final DTO using successfully parsed data */
+			// Construct the final DTO using successfully parsed data
 			GmodDto resultDto( std::move( tempVisVersion ), std::move( tempItems ), std::move( tempRelations ) );
 
 			return resultDto;
@@ -924,7 +924,7 @@ namespace dnv::vista::sdk
 
 	void from_json( const nlohmann::json& j, GmodDto& dto )
 	{
-		/* ADL hook for nlohmann::json deserialization. */
+		// ADL hook for nlohmann::json deserialization.
 		const auto visIt = j.find( constants::dto::GMOD_DTO_KEY_VIS_RELEASE );
 		if ( visIt == j.end() || !visIt->is_string() )
 		{
@@ -961,7 +961,7 @@ namespace dnv::vista::sdk
 			throw nlohmann::json::parse_error::create( 203, 0u, lease.toString(), &j );
 		}
 
-		/* Extract required fields with cached iterators */
+		// Extract required fields with cached iterators
 		std::string tempVisVersion = visIt->get<std::string>();
 
 		GmodDto::Items tempItems;
@@ -1026,7 +1026,7 @@ namespace dnv::vista::sdk
 			tempRelations.shrink_to_fit();
 		}
 
-		/* Assign all fields to DTO using successfully parsed data */
+		// Assign all fields to DTO using successfully parsed data
 		dto.m_visVersion = std::move( tempVisVersion );
 		dto.m_items = std::move( tempItems );
 		dto.m_relations = std::move( tempRelations );
@@ -1034,7 +1034,7 @@ namespace dnv::vista::sdk
 
 	void to_json( nlohmann::json& j, const GmodDto& dto )
 	{
-		/* ADL hook for nlohmann::json serialization. */
+		// ADL hook for nlohmann::json serialization.
 		j = { { constants::dto::GMOD_DTO_KEY_VIS_RELEASE, dto.visVersion() },
 			{ constants::dto::GMOD_DTO_KEY_ITEMS, dto.items() },
 			{ constants::dto::GMOD_DTO_KEY_RELATIONS, dto.relations() } };

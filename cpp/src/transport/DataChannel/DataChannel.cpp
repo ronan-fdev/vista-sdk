@@ -166,7 +166,7 @@ namespace dnv::vista::sdk::transport::datachannel
 			{
 				std::string numStr = decimalValueResult.toString();
 
-				/* Remove decimal point and minus sign for counting */
+				// Remove decimal point and minus sign for counting
 				numStr.erase( std::remove_if( numStr.begin(), numStr.end(), []( char c ) { return c == '.' || c == '-'; } ), numStr.end() );
 				if ( numStr.length() > *m_totalDigits )
 				{

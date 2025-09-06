@@ -336,7 +336,7 @@ namespace dnv::vista::sdk::tests
 		auto& vis = VIS::instance();
 		const auto& locations = vis.locations( VisVersion::v3_4a );
 
-		/* Test single digit location parsing */
+		// Test single digit location parsing
 		auto builder1 = LocationBuilder::create( locations ).withLocation( Location{ "1" } );
 		ASSERT_EQ( 1, builder1.number().value() );
 		ASSERT_EQ( "1", builder1.toString() );
@@ -349,7 +349,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_EQ( 9, builder9.number().value() );
 		ASSERT_EQ( "9", builder9.toString() );
 
-		/* Test single digit with characters */
+		// Test single digit with characters
 		auto builderMixed = LocationBuilder::create( locations ).withLocation( Location{ "1FIPU" } );
 		ASSERT_EQ( 1, builderMixed.number().value() );
 		ASSERT_EQ( 'P', builderMixed.side().value() );

@@ -108,7 +108,7 @@ namespace dnv::vista::sdk
 				}
 				else
 				{
-					/* Each key is a group name, and its value should be an array of strings. */
+					// Each key is a group name, and its value should be an array of strings.
 					const auto& valuesObject = *valuesIt;
 					tempValues.reserve( valuesObject.size() + valuesObject.size() / 4 );
 
@@ -133,7 +133,7 @@ namespace dnv::vista::sdk
 						groupValues.reserve( groupValueJson.size() );
 						try
 						{
-							/* Attempt to parse the array of strings for the current group */
+							// Attempt to parse the array of strings for the current group
 							groupValues = groupValueJson.get<ValueGroup>();
 							tempValues.emplace( groupName, std::move( groupValues ) );
 						}
@@ -167,7 +167,7 @@ namespace dnv::vista::sdk
 				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
-			/* Construct the final DTO using successfully parsed data */
+			// Construct the final DTO using successfully parsed data
 			CodebookDto resultDto( std::move( tempName ), std::move( tempValues ) );
 
 			return resultDto;
@@ -234,7 +234,7 @@ namespace dnv::vista::sdk
 
 	void from_json( const nlohmann::json& j, CodebookDto& dto )
 	{
-		/* ADL hook for nlohmann::json deserialization. */
+		// ADL hook for nlohmann::json deserialization.
 		const auto nameIt = j.find( constants::dto::CODEBOOK_DTO_KEY_NAME );
 		if ( nameIt == j.end() || !nameIt->is_string() )
 		{
@@ -247,7 +247,7 @@ namespace dnv::vista::sdk
 			throw nlohmann::json::parse_error::create( 101, 0u, lease.toString(), nullptr );
 		}
 
-		/* Extract required fields */
+		// Extract required fields
 		std::string tempName = nameIt->get<std::string>();
 		if ( tempName.empty() )
 		{
@@ -271,7 +271,7 @@ namespace dnv::vista::sdk
 
 	void to_json( nlohmann::json& j, const CodebookDto& dto )
 	{
-		/* ADL hook for nlohmann::json serialization. */
+		// ADL hook for nlohmann::json serialization.
 		j = nlohmann::json{ { constants::dto::CODEBOOK_DTO_KEY_NAME, dto.name() },
 			{ constants::dto::CODEBOOK_DTO_KEY_VALUES, dto.values() } };
 	}
@@ -327,14 +327,14 @@ namespace dnv::vista::sdk
 				}
 				else
 				{
-					/* The "items" key should contain a JSON array of codebook objects. */
+					// The "items" key should contain a JSON array of codebook objects.
 					const auto& itemsArray = *itemsIt;
 					totalItems = itemsArray.size();
 					tempItems.reserve( totalItems );
 
 					for ( const auto& itemJson : itemsArray )
 					{
-						/* Recursively parse each codebook item using its own tryFromJson. */
+						// Recursively parse each codebook item using its own tryFromJson.
 						auto codebookOpt = CodebookDto::tryFromJson( itemJson );
 						if ( codebookOpt.has_value() )
 						{
@@ -353,7 +353,7 @@ namespace dnv::vista::sdk
 						}
 					}
 
-					/* If parsing failed for more than 10% of items, shrink the vector to potentially save memory. */
+					// If parsing failed for more than 10% of items, shrink the vector to potentially save memory.
 					if ( totalItems > 0 && successCount < totalItems * 9 / 10 )
 					{
 						if ( tempItems.capacity() > tempItems.size() * 4 / 3 )
@@ -376,7 +376,7 @@ namespace dnv::vista::sdk
 				std::fprintf( stderr, "%s", lease.toString().c_str() );
 			}
 
-			/* Construct the final DTO using successfully parsed data */
+			// Construct the final DTO using successfully parsed data
 			CodebooksDto resultDto( std::move( tempVisVersion ), std::move( tempItems ) );
 
 			return resultDto;
@@ -443,7 +443,7 @@ namespace dnv::vista::sdk
 
 	void from_json( const nlohmann::json& j, CodebooksDto& dto )
 	{
-		/* ADL hook for nlohmann::json deserialization. */
+		// ADL hook for nlohmann::json deserialization.
 		const auto visIt = j.find( constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE );
 		if ( visIt == j.end() || !visIt->is_string() )
 		{
@@ -468,7 +468,7 @@ namespace dnv::vista::sdk
 			throw nlohmann::json::parse_error::create( 202, 0u, lease.toString(), nullptr );
 		}
 
-		/* Extract required fields */
+		// Extract required fields
 		dto.m_visVersion = visIt->get<std::string>();
 
 		if ( itemsIt->is_array() )
@@ -508,7 +508,7 @@ namespace dnv::vista::sdk
 
 	void to_json( nlohmann::json& j, const CodebooksDto& dto )
 	{
-		/* ADL hook for nlohmann::json serialization. */
+		// ADL hook for nlohmann::json serialization.
 		j = { { constants::dto::CODEBOOK_DTO_KEY_VIS_RELEASE, dto.visVersion() },
 			{ constants::dto::CODEBOOK_DTO_KEY_ITEMS, dto.items() } };
 	}

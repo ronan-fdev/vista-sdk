@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(vista-sdk-cpp
-	VERSION 0.0.29
+	VERSION 0.0.30
 	DESCRIPTION "DNV VISTA SDK C++ port"
 	LANGUAGES CXX
 )

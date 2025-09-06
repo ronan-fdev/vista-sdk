@@ -648,7 +648,7 @@ namespace dnv::vista::sdk
 				}
 			}
 
-			/* If parsing failed for more than 10% of items, rebuild the map to potentially save memory */
+			// If parsing failed for more than 10% of items, rebuild the map to potentially save memory
 			if ( itemCount > 0 && successCount < itemCount * 9 / 10 )
 			{
 				if ( dto.m_items.bucket_count() > dto.m_items.size() * 4 / 3 )

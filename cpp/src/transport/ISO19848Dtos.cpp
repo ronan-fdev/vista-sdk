@@ -206,7 +206,7 @@ namespace dnv::vista::sdk::transport
 				}
 			}
 
-			/* If parsing failed for more than 10% of items, shrink the vector to potentially save memory */
+			// If parsing failed for more than 10% of items, shrink the vector to potentially save memory
 			if ( totalItems > 0 && successCount < totalItems * 9 / 10 )
 			{
 				if ( tempValues.capacity() > tempValues.size() * 4 / 3 )
@@ -293,7 +293,7 @@ namespace dnv::vista::sdk::transport
 			}
 		}
 
-		/* If parsing failed for more than 10% of items, shrink the vector to potentially save memory */
+		// If parsing failed for more than 10% of items, shrink the vector to potentially save memory
 		if ( totalItems > 0 && successCount < totalItems * 9 / 10 )
 		{
 			if ( dto.m_values.capacity() > dto.m_values.size() * 4 / 3 )
@@ -471,7 +471,7 @@ namespace dnv::vista::sdk::transport
 				}
 			}
 
-			/* If parsing failed for more than 10% of items, shrink the vector to potentially save memory */
+			// If parsing failed for more than 10% of items, shrink the vector to potentially save memory
 			if ( totalItems > 0 && successCount < totalItems * 9 / 10 )
 			{
 				if ( tempValues.capacity() > tempValues.size() * 4 / 3 )
@@ -560,7 +560,7 @@ namespace dnv::vista::sdk::transport
 			}
 		}
 
-		/* If parsing failed for more than 10% of items, shrink the vector to potentially save memory */
+		// If parsing failed for more than 10% of items, shrink the vector to potentially save memory
 		if ( totalItems > 0 && successCount < totalItems * 9 / 10 )
 		{
 			if ( dto.m_values.capacity() > dto.m_values.size() * 4 / 3 )

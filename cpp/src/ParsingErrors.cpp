@@ -50,13 +50,13 @@ namespace dnv::vista::sdk
 
 		constexpr std::string_view header = "Parsing errors:\n";
 
-		/* Pre-calculate exact capacity */
+		// Pre-calculate exact capacity
 		size_t capacity = header.size();
 		for ( const auto& error : m_errors )
 		{
 			capacity += 1 + error.type.size() + 3 + error.message.size() + 1;
-			/*          ↑                       ↑                          ↑  */
-			/*        '\t'                    " - "                      '\n' */
+			//          ↑                       ↑                          ↑
+			//        '\t'                    " - "                      '\n'
 		}
 
 		std::string result;

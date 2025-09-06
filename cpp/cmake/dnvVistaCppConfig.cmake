@@ -243,7 +243,7 @@ function(configure_vista_target target_name)
 	target_link_libraries(${target_name} PRIVATE
 		nfx-core::static
 		nlohmann_json::nlohmann_json
-		zlib
+		zlibstatic
 	)
 
 	# --- Properties ---

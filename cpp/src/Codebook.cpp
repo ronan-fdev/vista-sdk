@@ -161,7 +161,7 @@ namespace dnv::vista::sdk
 				return {};
 			}
 
-			/* Find first non-whitespace */
+			// Find first non-whitespace
 			size_t first = 0;
 			const size_t size = str.size();
 			while ( first < size && isWhitespace( str[first] ) )
@@ -174,7 +174,7 @@ namespace dnv::vista::sdk
 				return {};
 			}
 
-			/* Find last non-whitespace */
+			// Find last non-whitespace
 			size_t last = size - 1;
 			while ( last > first && isWhitespace( str[last] ) )
 			{
@@ -260,7 +260,7 @@ namespace dnv::vista::sdk
 		  m_groups{},
 		  m_rawData{}
 	{
-		/* Pre-calculate total size for better memory allocation */
+		// Pre-calculate total size for better memory allocation
 		size_t totalEstimate = 0;
 		const auto& dtoValues = dto.values();
 		const size_t groupCount = dtoValues.size();
@@ -270,11 +270,11 @@ namespace dnv::vista::sdk
 			totalEstimate += values.size();
 		}
 
-		/* Load factor calculation */
-		const size_t capacity = totalEstimate + ( totalEstimate >> 1 ); /* 1.5x */
+		// Load factor calculation
+		const size_t capacity = totalEstimate + ( totalEstimate >> 1 ); // 1.5x
 
 		m_groupMap.reserve( capacity );
-		m_rawData.reserve( groupCount + ( groupCount >> 2 ) ); /* 1.25x */
+		m_rawData.reserve( groupCount + ( groupCount >> 2 ) ); // 1.25x
 
 		nfx::containers::StringSet valueSet;
 		nfx::containers::StringSet groupSet;

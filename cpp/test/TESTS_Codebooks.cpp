@@ -71,7 +71,7 @@ namespace dnv::vista::sdk::test
 				actualEnumValues.push_back( static_cast<int>( cn ) );
 			}
 
-			/* Verify uniqueness of underlying integer values */
+			// Verify uniqueness of underlying integer values
 			std::set<int> uniqueValues( actualEnumValues.begin(), actualEnumValues.end() );
 			ASSERT_EQ( actualEnumValues.size(), uniqueValues.size() );
 

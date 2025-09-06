@@ -21,7 +21,7 @@ namespace dnv::vista::sdk::tests
 
 		void TearDown() override {}
 
-		/* Helper functions to reduce lambda verbosity */
+		// Helper functions to reduce lambda verbosity
 		static void unexpectedDecimal()
 		{
 			static_cast<void>( 0 );
@@ -52,10 +52,10 @@ namespace dnv::vista::sdk::tests
 			ADD_FAILURE() << "Expected specific type, got datetime";
 		}
 
-		/* Helper function to extract year from DateTimeOffset */
+		// Helper function to extract year from DateTimeOffset
 		static std::string extractYearFromDateTimeOffset( const nfx::time::DateTimeOffset& dto ) { return "datetime:" + std::to_string( dto.year() ); }
 
-		/* Type-specific suppression helpers */
+		// Type-specific suppression helpers
 		template <typename T>
 		static void suppressUnused( const T& ) { static_cast<void>( 0 ); }
 	};
@@ -97,14 +97,14 @@ namespace dnv::vista::sdk::tests
 
 	TEST_F( ISO19848Tests, Test_EmbeddedResource )
 	{
-		/* Test that we can find and read ISO19848 embedded resources */
+		// Test that we can find and read ISO19848 embedded resources
 		auto& iso = transport::ISO19848::instance();
 
-		/* Verify we can load data channel type names (uses embedded resources) */
+		// Verify we can load data channel type names (uses embedded resources)
 		auto dataChannelTypeNames = iso.dataChannelTypeNames( transport::ISO19848Version::v2024 );
 		ASSERT_NE( dataChannelTypeNames.begin(), dataChannelTypeNames.end() );
 
-		/* Verify we can load format data types (uses embedded resources) */
+		// Verify we can load format data types (uses embedded resources)
 		auto formatDataTypes = iso.formatDataTypes( transport::ISO19848Version::v2024 );
 		ASSERT_NE( formatDataTypes.begin(), formatDataTypes.end() );
 	}
@@ -267,12 +267,12 @@ namespace dnv::vista::sdk::tests
 		auto& iso = transport::ISO19848::instance();
 		auto formatDataTypes = iso.formatDataTypes( transport::ISO19848Version::v2024 );
 
-		/* Find the Integer format type for testing */
+		// Find the Integer format type for testing
 		auto parseResult = formatDataTypes.parse( "Integer" );
 		ASSERT_TRUE( parseResult.isOk() );
 		auto integerType = parseResult.ok().typeName();
 
-		/* Test switchOn method with valid integer */
+		// Test switchOn method with valid integer
 		bool switchCalled = false;
 		int switchValue = 0;
 		ASSERT_NO_THROW( {
@@ -302,7 +302,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( switchCalled );
 		ASSERT_EQ( switchValue, 42 );
 
-		/* Test match method with valid integer */
+		// Test match method with valid integer
 		std::string matchResult;
 		ASSERT_NO_THROW( {
 			matchResult = integerType.matchOn<std::string>(
@@ -331,7 +331,7 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_EQ( matchResult, "Matched integer: 123" );
 
-		/* Test that invalid values throw exceptions */
+		// Test that invalid values throw exceptions
 		ASSERT_THROW(
 			{
 				integerType.switchOn(
@@ -410,7 +410,7 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_TRUE( decimalCalled );
 
-		/* Test with reasonable tolerance for IEEE 754 precision limits */
+		// Test with reasonable tolerance for IEEE 754 precision limits
 		nfx::datatypes::Decimal expected( "123.456" );
 		nfx::datatypes::Decimal tolerance( "0.000001" );
 		nfx::datatypes::Decimal difference = ( decimalValue - expected ).abs();
@@ -577,7 +577,7 @@ namespace dnv::vista::sdk::tests
 		auto& iso = transport::ISO19848::instance();
 		auto formatDataTypes = iso.formatDataTypes( transport::ISO19848Version::v2024 );
 
-		/* Test Decimal with invalid value */
+		// Test Decimal with invalid value
 		auto decimalResult = formatDataTypes.parse( "Decimal" );
 		ASSERT_TRUE( decimalResult.isOk() );
 		auto decimalType = decimalResult.ok().typeName();
@@ -590,7 +590,7 @@ namespace dnv::vista::sdk::tests
 			},
 			ValidationException );
 
-		/* Test Integer with invalid value */
+		// Test Integer with invalid value
 		auto integerResult = formatDataTypes.parse( "Integer" );
 		ASSERT_TRUE( integerResult.isOk() );
 		auto integerType = integerResult.ok().typeName();
@@ -603,7 +603,7 @@ namespace dnv::vista::sdk::tests
 			},
 			ValidationException );
 
-		/* Test Boolean with invalid value */
+		// Test Boolean with invalid value
 		auto booleanResult = formatDataTypes.parse( "Boolean" );
 		ASSERT_TRUE( booleanResult.isOk() );
 		auto booleanType = booleanResult.ok().typeName();
@@ -616,7 +616,7 @@ namespace dnv::vista::sdk::tests
 			},
 			ValidationException );
 
-		/* Test DateTime with invalid value */
+		// Test DateTime with invalid value
 		auto dateTimeResult = formatDataTypes.parse( "DateTime" );
 		ASSERT_TRUE( dateTimeResult.isOk() );
 		auto dateTimeType = dateTimeResult.ok().typeName();
@@ -635,7 +635,7 @@ namespace dnv::vista::sdk::tests
 		auto& iso = transport::ISO19848::instance();
 		auto formatDataTypes = iso.formatDataTypes( transport::ISO19848Version::v2024 );
 
-		/* Test negative decimal */
+		// Test negative decimal
 		auto decimalResult = formatDataTypes.parse( "Decimal" );
 		ASSERT_TRUE( decimalResult.isOk() );
 		auto decimalType = decimalResult.ok().typeName();
@@ -668,13 +668,13 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_TRUE( negativeCalled );
 
-		/* Test with reasonable tolerance for IEEE 754 precision limits */
+		// Test with reasonable tolerance for IEEE 754 precision limits
 		nfx::datatypes::Decimal expected( "-456.789" );
 		nfx::datatypes::Decimal tolerance( "0.000001" );
 		nfx::datatypes::Decimal difference = ( negativeValue - expected ).abs();
 		ASSERT_TRUE( difference < tolerance );
 
-		/* Test negative integer */
+		// Test negative integer
 		auto integerResult = formatDataTypes.parse( "Integer" );
 		ASSERT_TRUE( integerResult.isOk() );
 		auto integerType = integerResult.ok().typeName();
@@ -708,7 +708,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( negativeIntCalled );
 		ASSERT_EQ( negativeIntValue, -123 );
 
-		/* Test false boolean */
+		// Test false boolean
 		auto booleanResult = formatDataTypes.parse( "Boolean" );
 		ASSERT_TRUE( booleanResult.isOk() );
 		auto booleanType = booleanResult.ok().typeName();
@@ -742,7 +742,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( falseCalled );
 		ASSERT_FALSE( falseValue );
 
-		/* Test empty string */
+		// Test empty string
 		auto stringResult = formatDataTypes.parse( "String" );
 		ASSERT_TRUE( stringResult.isOk() );
 		auto stringType = stringResult.ok().typeName();
@@ -790,7 +790,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( parseResult.isOk() );
 		auto decimalType = parseResult.ok().typeName();
 
-		/* Test match with decimal value - returns string representation */
+		// Test match with decimal value - returns string representation
 		std::string result;
 		ASSERT_NO_THROW( {
 			result = decimalType.matchOn<std::string>(
@@ -813,11 +813,11 @@ namespace dnv::vista::sdk::tests
 				} );
 		} );
 
-		/* Test with reasonable tolerance for the result comparison */
+		// Test with reasonable tolerance for the result comparison
 		std::string expected = "decimal:" + nfx::datatypes::Decimal( "123.456" ).toString();
 		ASSERT_EQ( result, expected );
 
-		/* Test match with decimal value - returns double */
+		// Test match with decimal value - returns double
 		double doubleResult = 0.0;
 		ASSERT_NO_THROW( {
 			doubleResult = decimalType.matchOn<double>(
@@ -851,7 +851,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( parseResult.isOk() );
 		auto integerType = parseResult.ok().typeName();
 
-		/* Test match with integer value - returns string representation */
+		// Test match with integer value - returns string representation
 		std::string result;
 		ASSERT_NO_THROW( {
 			result = integerType.matchOn<std::string>(
@@ -876,7 +876,7 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_EQ( result, "integer:42" );
 
-		/* Test match with integer value - returns squared value */
+		// Test match with integer value - returns squared value
 		int squaredResult = 0;
 		ASSERT_NO_THROW( {
 			squaredResult = integerType.matchOn<int>(
@@ -911,7 +911,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( parseResult.isOk() );
 		auto booleanType = parseResult.ok().typeName();
 
-		/* Test match with boolean true - returns string representation */
+		// Test match with boolean true - returns string representation
 		std::string result;
 		ASSERT_NO_THROW( {
 			result = booleanType.matchOn<std::string>(
@@ -938,7 +938,7 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_EQ( result, "boolean:true" );
 
-		/* Test match with boolean false - returns inverted value */
+		// Test match with boolean false - returns inverted value
 		bool invertedResult = true;
 		ASSERT_NO_THROW( {
 			invertedResult = booleanType.matchOn<bool>(
@@ -973,7 +973,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( parseResult.isOk() );
 		auto stringType = parseResult.ok().typeName();
 
-		/* Test match with string value - returns length */
+		// Test match with string value - returns length
 		size_t lengthResult = 0;
 		ASSERT_NO_THROW( {
 			lengthResult = stringType.matchOn<size_t>(
@@ -998,7 +998,7 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_EQ( lengthResult, 11 );
 
-		/* Test match with string value - returns uppercase */
+		// Test match with string value - returns uppercase
 		std::string uppercaseResult;
 		ASSERT_NO_THROW( {
 			uppercaseResult = stringType.matchOn<std::string>(
@@ -1037,7 +1037,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( parseResult.isOk() );
 		auto dateTimeType = parseResult.ok().typeName();
 
-		/* Test match with datetime value - returns year */
+		// Test match with datetime value - returns year
 		std::string result;
 		ASSERT_NO_THROW( {
 			result = dateTimeType.matchOn<std::string>(
@@ -1062,7 +1062,7 @@ namespace dnv::vista::sdk::tests
 		} );
 		ASSERT_EQ( result, "datetime:1994" );
 
-		/* Test match with datetime value - returns time_point duration */
+		// Test match with datetime value - returns time_point duration
 		bool durationResult = false;
 		ASSERT_NO_THROW( {
 			durationResult = dateTimeType.matchOn<bool>(
@@ -1084,7 +1084,7 @@ namespace dnv::vista::sdk::tests
 					return false;
 				},
 				[]( const nfx::time::DateTimeOffset& dto ) -> bool {
-					/* Just verify we got a valid DateTimeOffset with the expected year */
+					// Just verify we got a valid DateTimeOffset with the expected year
 					return dto.year() == 1994;
 				} );
 		} );
@@ -1096,7 +1096,7 @@ namespace dnv::vista::sdk::tests
 		auto& iso = transport::ISO19848::instance();
 		auto formatDataTypes = iso.formatDataTypes( transport::ISO19848Version::v2024 );
 
-		/* Test Decimal with invalid value */
+		// Test Decimal with invalid value
 		auto decimalResult = formatDataTypes.parse( "Decimal" );
 		ASSERT_TRUE( decimalResult.isOk() );
 		auto decimalType = decimalResult.ok().typeName();
@@ -1109,7 +1109,7 @@ namespace dnv::vista::sdk::tests
 			},
 			ValidationException );
 
-		/* Test Integer with invalid value */
+		// Test Integer with invalid value
 		auto integerResult = formatDataTypes.parse( "Integer" );
 		ASSERT_TRUE( integerResult.isOk() );
 		auto integerType = integerResult.ok().typeName();
@@ -1121,7 +1121,7 @@ namespace dnv::vista::sdk::tests
 			},
 			ValidationException );
 
-		/* Test Boolean with invalid value */
+		// Test Boolean with invalid value
 		auto booleanResult = formatDataTypes.parse( "Boolean" );
 		ASSERT_TRUE( booleanResult.isOk() );
 		auto booleanType = booleanResult.ok().typeName();
@@ -1133,7 +1133,7 @@ namespace dnv::vista::sdk::tests
 			},
 			ValidationException );
 
-		/* Test DateTime with invalid value */
+		// Test DateTime with invalid value
 		auto dateTimeResult = formatDataTypes.parse( "DateTime" );
 		ASSERT_TRUE( dateTimeResult.isOk() );
 		auto dateTimeType = dateTimeResult.ok().typeName();
@@ -1152,7 +1152,7 @@ namespace dnv::vista::sdk::tests
 		auto& iso = transport::ISO19848::instance();
 		auto formatDataTypes = iso.formatDataTypes( transport::ISO19848Version::v2024 );
 
-		/* Test negative decimal with custom struct return type */
+		// Test negative decimal with custom struct return type
 		struct DecimalInfo
 		{
 			nfx::datatypes::Decimal value;
@@ -1188,7 +1188,7 @@ namespace dnv::vista::sdk::tests
 				} );
 		} );
 
-		/* Test with reasonable tolerance for IEEE 754 precision limits */
+		// Test with reasonable tolerance for IEEE 754 precision limits
 		nfx::datatypes::Decimal expected( "-456.789" );
 		nfx::datatypes::Decimal tolerance( "0.000001" );
 		nfx::datatypes::Decimal difference = ( info.value - expected ).abs();
@@ -1196,7 +1196,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_TRUE( info.isNegative );
 		ASSERT_EQ( info.toString(), "negative:" + expected.toString() );
 
-		/* Test integer with complex calculation return */
+		// Test integer with complex calculation return
 		auto integerResult = formatDataTypes.parse( "Integer" );
 		ASSERT_TRUE( integerResult.isOk() );
 		auto integerType = integerResult.ok().typeName();
@@ -1210,7 +1210,7 @@ namespace dnv::vista::sdk::tests
 					return {};
 				},
 				[]( int n ) -> std::vector<int> {
-					/* Generate fibonacci sequence up to n */
+					// Generate fibonacci sequence up to n
 					std::vector<int> fib;
 					if ( n <= 0 )
 					{
@@ -1249,7 +1249,7 @@ namespace dnv::vista::sdk::tests
 		ASSERT_EQ( fibResult[3], 2 );
 		ASSERT_EQ( fibResult[4], 3 );
 
-		/* Test empty string with optional return type */
+		// Test empty string with optional return type
 		auto stringResult = formatDataTypes.parse( "String" );
 		ASSERT_TRUE( stringResult.isOk() );
 		auto stringType = stringResult.ok().typeName();
@@ -1286,9 +1286,9 @@ namespace dnv::vista::sdk::tests
 
 	TEST_F( ISO19848Tests, Test_FormatDataType_Value_Types_API )
 	{
-		/* Test all Value types for complete API coverage */
+		// Test all Value types for complete API coverage
 
-		/* Test String Value */
+		// Test String Value
 		{
 			transport::Value::String stringVal{ std::string_view{ "test" } };
 			ASSERT_EQ( stringVal.value(), "test" );
@@ -1306,7 +1306,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.string().value(), "test" );
 		}
 
-		/* Test Decimal Value */
+		// Test Decimal Value
 		{
 			transport::Value::Decimal decimalVal{ 3.14 };
 			ASSERT_EQ( decimalVal.value(), nfx::datatypes::Decimal( 3.14 ) );
@@ -1324,7 +1324,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.decimal().value(), nfx::datatypes::Decimal( 3.14 ) );
 		}
 
-		/* Test Integer Value */
+		// Test Integer Value
 		{
 			transport::Value::Integer intVal{ 42 };
 			ASSERT_EQ( intVal.value(), 42 );
@@ -1342,7 +1342,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.integer().value(), 42 );
 		}
 
-		/* Test Boolean Value */
+		// Test Boolean Value
 		{
 			transport::Value::Boolean boolVal{ true };
 			ASSERT_EQ( boolVal.value(), true );
@@ -1360,7 +1360,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.boolean().value(), true );
 		}
 
-		/* Test DateTime Value */
+		// Test DateTime Value
 		{
 			auto dateTimeOffset = nfx::time::DateTimeOffset::now();
 			transport::Value::DateTime dateTimeVal{ dateTimeOffset };
@@ -1379,7 +1379,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.dateTime().value(), dateTimeOffset );
 		}
 
-		/* Test Char Value */
+		// Test Char Value
 		{
 			transport::Value::Char charVal{ 'X' };
 			ASSERT_EQ( charVal.value(), 'X' );
@@ -1397,7 +1397,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.charValue().value(), 'X' );
 		}
 
-		/* Test UnsignedInteger Value */
+		// Test UnsignedInteger Value
 		{
 			transport::Value::UnsignedInteger uintVal{ 42u };
 			ASSERT_EQ( uintVal.value(), 42u );
@@ -1415,7 +1415,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.unsignedInteger().value(), 42u );
 		}
 
-		/* Test Long Value */
+		// Test Long Value
 		{
 			transport::Value::Long longVal{ 9223372036854775807LL };
 			ASSERT_EQ( longVal.value(), 9223372036854775807LL );
@@ -1433,7 +1433,7 @@ namespace dnv::vista::sdk::tests
 			ASSERT_EQ( value.longValue().value(), 9223372036854775807LL );
 		}
 
-		/* Test Double Value */
+		// Test Double Value
 		{
 			transport::Value::Double doubleVal{ 2.71828 };
 			ASSERT_EQ( doubleVal.value(), 2.71828 );

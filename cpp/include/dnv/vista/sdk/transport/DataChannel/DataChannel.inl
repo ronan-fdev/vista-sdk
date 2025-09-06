@@ -530,7 +530,7 @@ namespace dnv::vista::sdk::transport::datachannel
 
 	VISTA_SDK_CPP_INLINE void Format::setType( std::string_view type )
 	{
-		/* Validate against ISO19848 format types */
+		// Validate against ISO19848 format types
 		auto formatTypes = ISO19848::instance().formatDataTypes( ISO19848::LatestVersion );
 		auto result = formatTypes.parse( type );
 
@@ -618,13 +618,13 @@ namespace dnv::vista::sdk::transport::datachannel
 
 	VISTA_SDK_CPP_INLINE const std::optional<std::string>& Property::qualityCoding() const noexcept
 	{
-		/* TODO: Validate Quality coding 'In the case of “IEC 61162-STATUS”, “A” (Data valid) and “V” (Data invalid) are used for the data quality.' */
+		// TODO: Validate Quality coding 'In the case of “IEC 61162-STATUS”, “A” (Data valid) and “V” (Data invalid) are used for the data quality.'
 		return m_qualityCoding;
 	}
 
 	VISTA_SDK_CPP_INLINE const std::optional<std::string>& Property::alertPriority() const noexcept
 	{
-		/* TODO: Validate - Priority level and criteria for classification shall be in accordance with IEC 62923-1:2018, 6.2.2.1 */
+		// TODO: Validate - Priority level and criteria for classification shall be in accordance with IEC 62923-1:2018, 6.2.2.1
 		return m_alertPriority;
 	}
 

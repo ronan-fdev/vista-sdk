@@ -28,7 +28,7 @@ FetchContent_Declare(nlohmann_json
 
 # --- nfx-core ---
 set(NFX_CORE_BUILD_STATIC     ON   CACHE BOOL  ""  FORCE)
-set(NFX_CORE_BUILD_SHARED     ON   CACHE BOOL  ""  FORCE)
+set(NFX_CORE_BUILD_SHARED     OFF  CACHE BOOL  ""  FORCE)
 set(NFX_CORE_WITH_CONTAINERS  ON   CACHE BOOL  ""  FORCE)
 set(NFX_CORE_WITH_DATATYPES   ON   CACHE BOOL  ""  FORCE)
 set(NFX_CORE_WITH_MEMORY      ON   CACHE BOOL  ""  FORCE)
@@ -40,20 +40,20 @@ set(NFX_CORE_BUILD_SAMPLES    ON   CACHE BOOL  ""  FORCE)
 FetchContent_Declare(
 	nfx-core
 	GIT_REPOSITORY https://github.com/ronan-fdev/nfx-core.git
-	GIT_TAG        0.0.3
+	GIT_TAG        0.0.4
 	GIT_SHALLOW    TRUE
 )
 
 
 # --- zlib-ng ---
-set(ZLIB_COMPAT                 ON   CACHE BOOL  "Compile with zlib compatible API"       FORCE)
+set(ZLIB_COMPAT                 OFF  CACHE BOOL  "Compile with zlib compatible API"       FORCE)
 set(ZLIB_ENABLE_TESTS           OFF  CACHE BOOL  "Build zlib-ng test binaries"            FORCE)
 set(ZLIBNG_ENABLE_TESTS         OFF  CACHE BOOL  "Build zlib-ng test binaries"            FORCE)
 set(WITH_GZFILEOP               ON   CACHE BOOL  "Support for gzFile related functions"   FORCE)
 set(WITH_OPTIM                  ON   CACHE BOOL  "Build with optimisations"               FORCE)
 set(WITH_NEW_STRATEGIES         ON   CACHE BOOL  "Use new strategies"                     FORCE)
 set(WITH_NATIVE_INSTRUCTIONS    OFF  CACHE BOOL  "Use host-specific instructions"         FORCE)
-set(WITH_RUNTIME_CPU_DETECTION  ON   CACHE BOOL  "Runtime CPU detection"                  FORCE)
+set(WITH_RUNTIME_CPU_DETECTION  OFF  CACHE BOOL  "Runtime CPU detection"                  FORCE)
 set(WITH_SANITIZER              OFF  CACHE BOOL  "Build with sanitizer"                   FORCE)
 set(WITH_GTEST                  OFF  CACHE BOOL  "Build gtest_zlib"                       FORCE)
 set(WITH_FUZZERS                OFF  CACHE BOOL  "Build test/fuzz"                        FORCE)

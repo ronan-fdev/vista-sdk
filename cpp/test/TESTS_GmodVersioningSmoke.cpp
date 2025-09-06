@@ -243,7 +243,7 @@ namespace dnv::vista::sdk::tests
 		std::cout << "Success/failed - " << success << "/" << failed << " (" << std::fixed << std::setprecision( 2 ) << successRate << "% success)"
 				  << std::endl;
 
-		/* Group errors by exception message */
+		// Group errors by exception message
 		std::map<std::string, int> errorGroups;
 		for ( const auto& [sourcePath, targetPath, exceptionPtr] : context.failedConversions )
 		{
@@ -267,7 +267,7 @@ namespace dnv::vista::sdk::tests
 			std::cout << "--------------------------------------------------------" << std::endl;
 		}
 
-		/* Write output files */
+		// Write output files
 		std::string sourceVersionStr{ dnv::vista::sdk::VisVersionExtensions::toVersionString( sourceGmod.visVersion() ) };
 		std::string targetVersionStr{ dnv::vista::sdk::VisVersionExtensions::toVersionString( targetGmod.visVersion() ) };
 

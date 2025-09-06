@@ -85,7 +85,7 @@ namespace dnv::vista::sdk
 				return std::nullopt;
 			}
 
-			/* Cache iterators to avoid multiple lookups */
+			// Cache iterators to avoid multiple lookups
 			const auto codeIt = json.find( constants::dto::LOCATIONS_DTO_KEY_CODE );
 			const auto nameIt = json.find( constants::dto::LOCATIONS_DTO_KEY_NAME );
 			const auto defIt = json.find( constants::dto::LOCATIONS_DTO_KEY_DEFINITION );
@@ -306,7 +306,7 @@ namespace dnv::vista::sdk
 				return std::nullopt;
 			}
 
-			/* Cache iterators to avoid multiple lookups */
+			// Cache iterators to avoid multiple lookups
 			const auto visIt = json.find( constants::dto::LOCATIONS_DTO_KEY_VIS_RELEASE );
 			const auto itemsIt = json.find( constants::dto::LOCATIONS_DTO_KEY_ITEMS );
 

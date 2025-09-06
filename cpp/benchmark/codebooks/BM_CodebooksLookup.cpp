@@ -180,34 +180,38 @@ namespace dnv::vista::sdk::benchmarks
 
 	public:
 		CodebooksLookup() = default;
+		CodebooksLookup( const CodebooksLookup& ) = delete;
+		CodebooksLookup& operator=( const CodebooksLookup& ) = delete;
+		CodebooksLookup( CodebooksLookup&& ) = delete;
+		CodebooksLookup& operator=( CodebooksLookup&& ) = delete;
 
 		void Setup()
 		{
-			/* Initialize VIS instance and get codebooks reference */
+			// Initialize VIS instance and get codebooks reference
 			auto& vis = VIS::instance();
 			m_codebooksReference = std::cref( vis.codebooks( VisVersion::v3_7a ) );
 			const auto& codebooks_ref = m_codebooksReference->get();
 
-			/* Setup array (fixed-size, stack allocated) */
+			// Setup array (fixed-size, stack allocated)
 			m_array[0] = { CodebookName::Quantity, codebooks_ref[CodebookName::Quantity] };
 			m_array[1] = { CodebookName::Type, codebooks_ref[CodebookName::Type] };
 			m_array[2] = { CodebookName::Detail, codebooks_ref[CodebookName::Detail] };
 
-			/* Setup vector (dynamic array, heap allocated) */
+			// Setup vector (dynamic array, heap allocated)
 			m_vector.clear();
 			m_vector.reserve( 3 );
 			m_vector.emplace_back( CodebookName::Quantity, codebooks_ref[CodebookName::Quantity] );
 			m_vector.emplace_back( CodebookName::Type, codebooks_ref[CodebookName::Type] );
 			m_vector.emplace_back( CodebookName::Detail, codebooks_ref[CodebookName::Detail] );
 
-			/* Setup unordered_map (hash table, heap allocated) */
+			// Setup unordered_map (hash table, heap allocated)
 			m_unorderedMap.clear();
 			m_unorderedMap.reserve( 3 );
 			m_unorderedMap[CodebookName::Quantity] = codebooks_ref[CodebookName::Quantity];
 			m_unorderedMap[CodebookName::Type] = codebooks_ref[CodebookName::Type];
 			m_unorderedMap[CodebookName::Detail] = codebooks_ref[CodebookName::Detail];
 
-			/* Setup ChdHashMap (optimized read-only hash table) */
+			// Setup ChdHashMap (optimized read-only hash table)
 			std::vector<std::pair<std::string, Codebook>> chdItems;
 			chdItems.reserve( 3 );
 			chdItems.emplace_back( "Quantity", codebooks_ref[CodebookName::Quantity] );
@@ -215,7 +219,7 @@ namespace dnv::vista::sdk::benchmarks
 			chdItems.emplace_back( "Detail", codebooks_ref[CodebookName::Detail] );
 			m_chdHashMap = std::make_unique<nfx::containers::ChdHashMap<Codebook>>( std::move( chdItems ) );
 
-			/* Setup map (red-black tree) */
+			// Setup map (red-black tree)
 			m_map.clear();
 			m_map[CodebookName::Quantity] = codebooks_ref[CodebookName::Quantity];
 			m_map[CodebookName::Type] = codebooks_ref[CodebookName::Type];

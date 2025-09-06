@@ -251,12 +251,12 @@ namespace dnv::vista::sdk
 
 	inline constexpr bool VIS::matchAsciiDecimal( int code ) noexcept
 	{
-		return ( code >= 48 && code <= 57 )		/* Numbers:     0-9  */
-			   || ( code >= 65 && code <= 90 )	/* Uppercase:   A-Z  */
-			   || ( code >= 97 && code <= 122 ) /* Lowercase:   a-z  */
-			   || ( code == 45					/* Hyphen:      -    */
-					  || code == 46				/* Period:      .    */
-					  || code == 95				/* Underscore:  _    */
-					  || code == 126 );			/* Tilde:       ~    */
+		return ( code >= 48 && code <= 57 )		// Numbers:     0-9
+			   || ( code >= 65 && code <= 90 )	// Uppercase:   A-Z
+			   || ( code >= 97 && code <= 122 ) // Lowercase:   a-z
+			   || ( code == 45					// Hyphen:      -
+					  || code == 46				// Period:      .
+					  || code == 95				// Underscore:  _
+					  || code == 126 );			// Tilde:       ~
 	}
 }

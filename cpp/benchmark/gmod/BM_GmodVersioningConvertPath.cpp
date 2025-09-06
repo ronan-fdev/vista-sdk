@@ -14,6 +14,8 @@ namespace dnv::vista::sdk::benchmarks
 	class GmodVersioningFixture : public benchmark::Fixture
 	{
 	public:
+		GmodVersioningFixture() = default;
+
 		virtual void SetUp( const benchmark::State& state ) override
 		{
 			(void)state;
@@ -30,7 +32,10 @@ namespace dnv::vista::sdk::benchmarks
 			m_gmodPath = std::move( parsedPath.value() );
 		}
 
-		virtual void TearDown( const benchmark::State& state ) override { (void)state; }
+		virtual void TearDown( const benchmark::State& state ) override
+		{
+			(void)state;
+		}
 
 	protected:
 		const Gmod* m_gmod = nullptr;
