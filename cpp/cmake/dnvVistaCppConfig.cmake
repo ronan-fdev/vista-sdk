@@ -235,6 +235,7 @@ function(configure_vista_target target_name)
 		PUBLIC
 			$<BUILD_INTERFACE:${VISTA_SDK_CPP_INCLUDE_DIR}>
 			$<INSTALL_INTERFACE:include>
+			${nlohmann_json_SOURCE_DIR}/include
 		PRIVATE
 			${VISTA_SDK_CPP_SOURCE_DIR}
 	)

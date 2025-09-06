@@ -546,7 +546,7 @@ namespace dnv::vista::sdk::tests
 		std::vector<transport::timeseries::TimeSeriesData> emptyTimeSeriesData;
 
 		// Create minimal header
-		transport::timeseries::Header header(
+		transport::timeseries::Header header{
 			transport::ShipId::parse( "IMO1234567" ),
 			std::nullopt, // no time range
 			std::nullopt, // no date created
@@ -554,7 +554,7 @@ namespace dnv::vista::sdk::tests
 			std::nullopt, // no author
 			std::nullopt, // no system configuration
 			std::nullopt  // no custom headers
-		);
+		};
 
 		// This should be allowed but worth testing
 		transport::timeseries::Package package( header, emptyTimeSeriesData );

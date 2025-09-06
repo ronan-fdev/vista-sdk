@@ -10,7 +10,7 @@
 #include <string>
 
 #include <nfx/string/StringBuilderPool.h>
-#include <zlib.h>
+#include <zlib-ng.h>
 
 #include "dnv/vista/sdk/EmbeddedResource.h"
 #include "dnv/vista/sdk/transport/ISO19848Dtos.h"
@@ -696,12 +696,12 @@ namespace dnv::vista::sdk
 		std::string decompressedData;
 		decompressedData.reserve( estimatedDecompressedSize );
 
-		::z_stream zs = {};
+		zng_stream zs = {};
 		zs.zalloc = nullptr;
 		zs.zfree = nullptr;
 		zs.opaque = nullptr;
 
-		if ( ::inflateInit2( &zs, GZIP_MAX_WINDOW_BITS ) != 0 )
+		if ( ::zng_inflateInit2( &zs, GZIP_MAX_WINDOW_BITS ) != 0 )
 		{
 			auto lease = nfx::string::StringBuilderPool::lease();
 			auto builder = lease.builder();
@@ -721,7 +721,7 @@ namespace dnv::vista::sdk
 
 			if ( zs.avail_in == 0 && !compressedStream->eof() )
 			{
-				::inflateEnd( &zs );
+				::zng_inflateEnd( &zs );
 
 				auto lease = nfx::string::StringBuilderPool::lease();
 				auto builder = lease.builder();
@@ -737,12 +737,12 @@ namespace dnv::vista::sdk
 				zs.avail_out = CHUNK_OUT_SIZE;
 				zs.next_out = reinterpret_cast<Bytef*>( outBuffer.data() );
 
-				ret = ::inflate( &zs, Z_NO_FLUSH );
+				ret = ::zng_inflate( &zs, Z_NO_FLUSH );
 
 				if ( ret != Z_OK && ret != Z_STREAM_END && ret != Z_BUF_ERROR )
 				{
 					auto errorMsg = ( zs.msg ) ? zs.msg : "Unknown zlib error";
-					::inflateEnd( &zs );
+					::zng_inflateEnd( &zs );
 
 					// Use fprintf for the numeric error code to avoid append issues
 					char errorBuffer[512];
@@ -758,7 +758,7 @@ namespace dnv::vista::sdk
 			} while ( zs.avail_out == 0 );
 		} while ( ret != Z_STREAM_END );
 
-		::inflateEnd( &zs );
+		::zng_inflateEnd( &zs );
 
 		auto decompressedBuffer = std::make_shared<std::istringstream>( std::move( decompressedData ) );
 		return decompressedBuffer;

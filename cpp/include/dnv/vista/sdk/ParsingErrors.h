@@ -268,8 +268,8 @@ namespace dnv::vista::sdk
 			std::string message;
 
 			ErrorEntry() = default;
-			ErrorEntry( std::string_view type, std::string_view message );
-			ErrorEntry( std::string&& type, std::string&& message );
+			ErrorEntry( std::string_view errorType, std::string_view errorMessage );
+			ErrorEntry( std::string&& errorType, std::string&& errorMessage );
 
 			//----------------------------
 			// Operators

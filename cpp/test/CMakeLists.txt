@@ -191,6 +191,7 @@ foreach(test_source ${TEST_SOURCES})
 			vista-sdk-cpp::static
 			nfx-core::static
 			GTest::gtest_main
+			nlohmann_json::nlohmann_json
 		)
 
 		#----------------------------------------------
@@ -198,7 +199,8 @@ foreach(test_source ${TEST_SOURCES})
 		#----------------------------------------------
 
 		target_include_directories(${test_target_name} PRIVATE
-			${VISTA_SDK_CPP_SOURCE_DIR} # For Vista SDG private source access
+			${VISTA_SDK_CPP_INCLUDE_DIR}
+			${VISTA_SDK_CPP_SOURCE_DIR}
 		)
 
 		#----------------------------------------------

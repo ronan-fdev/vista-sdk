@@ -145,6 +145,7 @@ foreach(target_name ${TARGETS_TO_CONFIGURE})
 		$<$<CXX_COMPILER_ID:Clang>:-Wno-covered-switch-default>               # Allow default in fully covered switch
 		$<$<CXX_COMPILER_ID:Clang>:-Wno-switch-default>                       # Allow switches without default when all enum values are covered
 		$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-declarations>              # Suppress POSIX deprecation warnings
+		$<$<CXX_COMPILER_ID:Clang>:-Wno-unneeded-member-function>             # Suppress warnings for unneeded member functions in external libraries
 	)
 
 	#----------------------------------------------

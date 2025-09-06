@@ -115,15 +115,15 @@ namespace dnv::vista::sdk
 	// ParsingErrors::ErrorEntry struct
 	//----------------------------------------------
 
-	ParsingErrors::ErrorEntry::ErrorEntry( std::string_view type, std::string_view message )
-		: type{ type },
-		  message{ message }
+	ParsingErrors::ErrorEntry::ErrorEntry( std::string_view errorType, std::string_view errorMessage )
+		: type{ errorType },
+		  message{ errorMessage }
 	{
 	}
 
-	ParsingErrors::ErrorEntry::ErrorEntry( std::string&& type, std::string&& message )
-		: type{ std::move( type ) },
-		  message{ std::move( message ) }
+	ParsingErrors::ErrorEntry::ErrorEntry( std::string&& errorType, std::string&& errorMessage )
+		: type{ std::move( errorType ) },
+		  message{ std::move( errorMessage ) }
 	{
 	}
 }
