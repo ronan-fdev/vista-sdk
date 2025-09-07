@@ -48,13 +48,16 @@ public sealed record VersionInformation
 }
 
 // DataChannelList
-public sealed record DataChannelList : ICollection<DataChannel>
+public sealed record DataChannelList() : ICollection<DataChannel>
 {
     private List<DataChannel> dataChannels = new();
     private Dictionary<string, DataChannel> shortIdMap = new();
     private Dictionary<LocalId, DataChannel> localIdMap = new();
 
     public IReadOnlyList<DataChannel> DataChannels => dataChannels.AsReadOnly();
+
+    public DataChannelList(IReadOnlyList<DataChannel> dataChannels)
+        : this() => Add(dataChannels);
 
     public int Count => dataChannels.Count;
 
@@ -156,7 +159,7 @@ public sealed record NameObject
 }
 
 // Property
-public sealed class Property
+public sealed record Property
 {
     public required DataChannelType DataChannelType { get; set; }
     public required Format Format { get; set; }

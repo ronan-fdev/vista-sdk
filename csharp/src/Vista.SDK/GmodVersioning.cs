@@ -130,12 +130,55 @@ internal sealed class GmodVersioning
             return new GmodPath(potentialParents, targetEndNode, skipVerify: true);
 
         var path = new List<GmodNode>();
-        for (int i = 0; i <= qualifyingNodes.Length - 1; i++)
+        for (int i = 0; i < qualifyingNodes.Length; i++)
         {
             var qualifyingNode = qualifyingNodes[i];
-
+            // Continue if next qualifying node is the same as the previous
             if (i > 0 && qualifyingNode.TargetNode.Code == qualifyingNodes[i - 1].TargetNode.Code)
+            {
+                /*
+                    (Mes) The same as the current qualifying node, assumes same normal assignment [IF NOT THROW EXCEPTION, uncovered case]
+                */
+                if (qualifyingNode.TargetNode.Code == qualifyingNodes[i - 1].TargetNode.Code)
+                {
+                    if (
+                        qualifyingNode.SourceNode.ProductType is not null
+                        && qualifyingNode.SourceNode.ProductType != qualifyingNodes[i - 1].TargetNode.ProductType
+                    )
+                        throw new InvalidOperationException(
+                            $"Failed to convert path at node {qualifyingNode.TargetNode}. Uncovered case of merge where target node also has a new assignment"
+                        );
+                }
+                /*
+                    Check if skipped node is individualized
+                */
+                if (qualifyingNode.TargetNode.Location is not null)
+                {
+                    // Find node in path
+                    var index = path.FindIndex(n => n.Code == qualifyingNode.TargetNode.Code);
+                    if (index != -1)
+                    {
+                        if (
+                            path[index].Location is not null
+                            && path[index].Location != qualifyingNode.TargetNode.Location
+                        )
+                            throw new InvalidOperationException(
+                                $"Failed to convert path at node {qualifyingNode.TargetNode}. Uncovered case of multiple colliding locations while converting nodes"
+                            );
+                        if (!path[index].IsIndividualizable(false, false))
+                        {
+                            throw new InvalidOperationException(
+                                $"Failed to convert path at node {path[index]}. Uncovered case of losing individualization information"
+                            );
+                        }
+
+                        // Dont overwrite existing location
+                        if (path[index].Location is null)
+                            path[index] = path[index].WithLocation(qualifyingNode.TargetNode.Location);
+                    }
+                }
                 continue;
+            }
 
             var codeChanged = qualifyingNode.SourceNode.Code != qualifyingNode.TargetNode.Code;
 
@@ -218,7 +261,28 @@ internal sealed class GmodVersioning
                 else if (qualifyingNode.TargetNode.Code != targetEndNode.Code)
                 {
                     AddToPath(targetGmod, path, targetNormalAssignment!);
-                    i++;
+                    /*
+                        - (AC) The previous normal assignment
+                    */
+
+                    if (
+                        sourceNormalAssignment is not null
+                        && targetNormalAssignment is not null
+                        && sourceNormalAssignment.Code != targetNormalAssignment.Code
+                    )
+                    {
+                        // Sanity check that the next node is actually the old assignment
+                        if (
+                            i + 1 < qualifyingNodes.Length
+                            && qualifyingNodes[i + 1].SourceNode.Code != sourceNormalAssignment.Code
+                        )
+                            throw new InvalidOperationException(
+                                $"Failed to convert path at node {qualifyingNode.TargetNode}. Expected next qualifying source node to match target normal assignment"
+                            );
+
+                        // Skip next node, since that is the old assignment
+                        i++;
+                    }
                 }
             }
             if (selectionChanged) // SC || SN || SD
@@ -236,7 +300,33 @@ internal sealed class GmodVersioning
         potentialParents = path.Take(path.Count - 1).ToList();
         targetEndNode = path.Last();
 
-        if (!GmodPath.IsValid(potentialParents, targetEndNode, out var missinkLinkAt))
+        // Fix individualization
+        var visitor = new GmodPath.LocationSetsVisitor();
+        for (var i = 0; i < potentialParents.Count + 1; i++)
+        {
+            var n = i < potentialParents.Count ? potentialParents[i] : targetEndNode;
+            var set = visitor.Visit(n, i, potentialParents, targetEndNode);
+            if (set is null)
+            {
+                if (n.Location is not null)
+                    break;
+                continue;
+            }
+
+            var (start, end, location) = set.Value;
+            if (start == end)
+                continue;
+
+            for (int j = start; j <= end; j++)
+            {
+                if (j < potentialParents.Count)
+                    potentialParents[j] = potentialParents[j] with { Location = location };
+                else
+                    targetEndNode = targetEndNode with { Location = location };
+            }
+        }
+
+        if (!GmodPath.IsValid(potentialParents, targetEndNode, out var missingLinkAt))
             throw new Exception($"Didnt end up with valid path for {sourcePath}");
 
         return new GmodPath(potentialParents, targetEndNode);

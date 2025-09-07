@@ -130,6 +130,11 @@ public sealed record LocalIdQueryBuilder
         return this with { _tags = tags };
     }
 
+    public LocalIdQueryBuilder WithoutLocations()
+    {
+        return WithPrimaryItem(p => p.WithoutLocations().Build()).WithSecondaryItem(s => s.WithoutLocations().Build());
+    }
+
     internal bool Match(string other) => Match(LocalId.Parse(other));
 
     internal bool Match(LocalId other)

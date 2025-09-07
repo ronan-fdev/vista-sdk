@@ -57,7 +57,7 @@ public class LocalIdQueryTests
                     LocalIdQueryBuilder
                         .From("/dnv-v2/vis-3-7a/433.1-S/C322.91/S205/meta/qty-conductivity")
                         .WithPrimaryItem(builder =>
-                            builder.WithNode(nodes => nodes["433.1"], MatchAllLocations: true).Build()
+                            builder.WithNode(nodes => nodes["433.1"], matchAllLocations: true).Build()
                         ).Build(),
                     true
                 )
@@ -152,6 +152,15 @@ public class LocalIdQueryTests
         }
     }
 
+    [Theory]
+    [MemberData(nameof(Test_Data))]
+    public void MatchAll(InputData input)
+    {
+        var builder = LocalIdQueryBuilder.Empty();
+        var query = builder.Build();
+        Assert.True(query.Match(input.LocalId));
+    }
+
     [Fact]
     public void Test_Variations()
     {
@@ -212,6 +221,7 @@ public class LocalIdQueryTests
     [InlineData("/dnv-v2/vis-3-4a/623.121/H201/sec/412.722-A/C542/meta/qty-level/cnt-lubricating.oil/state-high")]
     [InlineData("/dnv-v2/vis-3-4a/623.121/H201/sec/412.722-A/C542/meta/qty-level/cnt-lubricating.oil/state-low")]
     [InlineData("/dnv-v2/vis-3-4a/412.723-A/CS6d/meta/qty-temperature")]
+    [InlineData("/dnv-v2/vis-3-4a/411.1/C101.64i-1/S201.1/C151.2/S110/meta/cnt-hydraulic.oil/state-running")]
     public void Test_Samples(string localIdStr)
     {
         var localId = LocalId.Parse(localIdStr);
