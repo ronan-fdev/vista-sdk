@@ -52,9 +52,9 @@ public sealed partial class Gmod
 
     private TraversalHandlerResult TraverseNode<TState>(in TraversalContext<TState> context, GmodNode node)
     {
-        if (node.Metadata.InstallSubstructure == false)
-            return TraversalHandlerResult.Continue;
-
+        // note: installSubstructure doesn't work - martinothamar
+        // if (node.Metadata.InstallSubstructure == false)
+        //     return TraversalHandlerResult.Continue;
         var result = context.Handler(context.State, context.Parents.AsList, node);
         if (result is TraversalHandlerResult.Stop or TraversalHandlerResult.SkipSubtree)
             return result;

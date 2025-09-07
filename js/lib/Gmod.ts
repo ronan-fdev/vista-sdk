@@ -224,8 +224,9 @@ export class Gmod {
         context: TraversalContext<T>,
         node: GmodNode
     ): TraversalHandlerResult {
-        if (node.metadata.installSubstructure === false)
-            return TraversalHandlerResult.Continue;
+        // note: installSubstructure doesn't work - martinothamar
+        // if (node.metadata.installSubstructure === false)
+        //     return TraversalHandlerResult.Continue;
 
         let result = context.handler(
             context.parents.asList,

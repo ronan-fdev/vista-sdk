@@ -55,8 +55,7 @@ public class GmodVersioningTests
             ["221.31/C1141.41/C664.2/C471", "221.31/C1141.41/C664.2/C471",],
             //new string[] { "354.2/C1096", "354.2/C1096" }, // Was deleted, as path to root is gone
             ["514/E15", "514"],
-            ["244.1i/H101.111/H401", "244.1i/H101.11/H407.1/H401", VisVersion.v3_7a, VisVersion.v3_8a],
-            ["1346/S201.1/C151.31/S110.2/C111.1/C109.16/C509", "1346/S201.1/C151.31/S110.2/C111.1/C109.126/C509", VisVersion.v3_7a, VisVersion.v3_8a]
+            ["1346/S201.1/C151.31/S110.2/C111.1/C109.16/C509", "1346/S201.1/C151.31/S110.2/C111.1/C109.126/C509", VisVersion.v3_7a, VisVersion.v3_8a],
         // ["851/H231", "851", VisVersion.v3_6a, VisVersion.v3_7a], // Effect of SD - no idea how to version this
         ];
     public static IEnumerable<object[]> Valid_Test_Data_FullPath =>
@@ -126,6 +125,23 @@ public class GmodVersioningTests
 
         Assert.NotNull(targetPath);
         Assert.Equal(expectedPath, targetPath?.ToFullPathString());
+    }
+
+    [Theory]
+    [InlineData("244.1i/H101.111/H401", "244.1i/H101.11/H407.1/H401", VisVersion.v3_7a, VisVersion.v3_8a)] // UNCOVERED MES CASE due to missing conversion codes, e.g. merge + normal assingment change
+    public void Test_Conversion_Exceptions(
+        string source,
+        string target,
+        VisVersion sourceVersion,
+        VisVersion targetVersion
+    )
+    {
+        var sourcePath = GmodPath.Parse(source, sourceVersion);
+        var expectedPath = GmodPath.Parse(target, targetVersion);
+
+        Assert.Throws<InvalidOperationException>(
+            () => VIS.Instance.ConvertPath(sourceVersion, sourcePath, targetVersion)
+        );
     }
 
     [Fact]
@@ -207,6 +223,10 @@ public class GmodVersioningTests
         "/dnv-v2/vis-3-4a/411.1/C101/sec/411.1/C101.64i/S201/meta/cnt-condensate",
         "/dnv-v2/vis-3-5a/411.1/C101/sec/411.1/C101.64/S201/meta/cnt-condensate"
     )]
+    [InlineData(
+        "/dnv-v2/vis-3-4a/411.1/C101.64i-1/S201.1/C151.2/S110/meta/cnt-hydraulic.oil/state-running",
+        "/dnv-v2/vis-3-9a/411.1/C101.64-1/S201.1/C151.2/S110/meta/cnt-hydraulic.oil/state-running"
+    )]
     public void ConvertLocalId(string sourceLocalIdStr, string targetLocalIdStr)
     {
         var sourceLocalId = LocalIdBuilder.Parse(sourceLocalIdStr);
@@ -226,6 +246,24 @@ public class GmodVersioningTests
         Assert.True(GmodPath.TryParse(item.Path, sourceVersion, out var sourcePath));
         var targetPath = vis.ConvertPath(sourceVersion, sourcePath, VIS.LatestVisVersion);
         Assert.NotNull(targetPath);
+    }
+
+    [Theory]
+    [InlineData("691.811i-A/H101.11-1", "691.83111i-A/H101.11-1", VisVersion.v3_7a, VisVersion.v3_9a)]
+    public void ConvertGmodPathWithLocation(
+        string source,
+        string target,
+        VisVersion sourceVersion,
+        VisVersion targetVersion
+    )
+    {
+        var (_, vis) = VISTests.GetVis();
+        var sourcePath = GmodPath.Parse(source, sourceVersion);
+        var expectedPath = GmodPath.Parse(target, targetVersion);
+
+        var convertedPath = vis.ConvertPath(sourceVersion, sourcePath, targetVersion);
+        Assert.NotNull(convertedPath);
+        Assert.Equal(expectedPath, convertedPath);
     }
 
     [Fact(Skip = "3-8 S204 is not in 3-8a")]
