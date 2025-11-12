@@ -303,7 +303,13 @@ export class GmodPath {
         return this.getCommonNames().pop()?.name || this.node.metadata.name;
     }
 
-    public getCommonNames(): { depth: number; name: string }[] {
+    public getCommonNames(): { depth: number; name: string }[];
+    public getCommonNames(
+        excludeLocation: boolean
+    ): { depth: number; name: string }[];
+    public getCommonNames(
+        excludeLocation?: boolean
+    ): { depth: number; name: string }[] {
         const commonNames: { depth: number; name: string }[] = [];
         const fullPath = this.getFullPath();
 
@@ -330,6 +336,10 @@ export class GmodPath {
                     if (!assignment) continue;
                     name = assignment;
                 }
+            }
+
+            if (!excludeLocation && node.location) {
+                name += ` ${node.location.toString()}`;
             }
             commonNames.push({ depth, name });
         }

@@ -34,11 +34,7 @@ export class LocalIdItems {
                 } of this.primaryItem.getCommonNames()) {
                     builder.push("~");
                     const location = this.primaryItem.getNode(depth).location;
-                    LocalIdItems.appendCommonName(
-                        builder,
-                        name,
-                        location?.toString()
-                    );
+                    LocalIdItems.appendCommonName(builder, name);
                     builder.push("/");
                 }
             }
@@ -52,21 +48,13 @@ export class LocalIdItems {
                     builder.push(prefix);
                     if (prefix !== "~") prefix = "~";
                     const location = this.secondaryItem.getNode(depth).location;
-                    LocalIdItems.appendCommonName(
-                        builder,
-                        name,
-                        location?.toString()
-                    );
+                    LocalIdItems.appendCommonName(builder, name);
                     builder.push("/");
                 }
             }
         }
     }
-    private static appendCommonName(
-        builder: string[],
-        commonName: string,
-        location?: string
-    ) {
+    private static appendCommonName(builder: string[], commonName: string) {
         let prev: string | undefined = undefined;
         for (const ch of commonName) {
             if (ch === "/") continue;
@@ -89,11 +77,6 @@ export class LocalIdItems {
             if (current === "." && prev === ".") continue;
             builder.push(current);
             prev = current;
-        }
-
-        if (!!location) {
-            builder.push(".");
-            builder.push(location);
         }
     }
 

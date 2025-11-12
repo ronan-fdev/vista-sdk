@@ -212,4 +212,34 @@ describe("GmodPath", () => {
             }
         }
     );
+
+    it("CommonNames", () => {
+        const { gmod, locations } = getVIS(VisVersion.v3_9a);
+
+        const path = gmod.parsePath("411.1-1P/C101.44i-1/C261", locations);
+        const commonNames = path.getCommonNames();
+
+        expect(commonNames).toEqual([
+            {
+                depth: 5,
+                name: "Propulsion engine 1P",
+            },
+            {
+                depth: 10,
+                name: "Main bearing 1",
+            },
+        ]);
+
+        const commonNamesExclLocation = path.getCommonNames(true);
+        expect(commonNamesExclLocation).toEqual([
+            {
+                depth: 5,
+                name: "Propulsion engine",
+            },
+            {
+                depth: 10,
+                name: "Main bearing",
+            },
+        ]);
+    });
 });
