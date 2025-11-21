@@ -340,6 +340,67 @@ public class LocalIdQueryTests
     }
 
     [Fact]
+    public void Test_UnspecifiedSecondary()
+    {
+        var baseLocalId = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/meta/qty-power");
+        var queryBuilder = LocalIdQueryBuilder.From(baseLocalId);
+        var otherLocalId = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/sec/412.3/meta/qty-power");
+        var query = queryBuilder.Build();
+        Assert.True(query.Match(baseLocalId));
+        Assert.False(query.Match(otherLocalId));
+
+        query = queryBuilder.WithoutSecondaryItem().Build();
+
+        Assert.False(query.Match(otherLocalId));
+
+        query = queryBuilder.WithAnySecondaryItem().Build();
+        Assert.True(query.Match(otherLocalId));
+    }
+
+    [Fact]
+    // Match all LocalIds with any node before C101 in its primary item - basically /dnv-v2/vis-3-9a/.../C101.31/sec/412.3/meta/qty-power
+    public void Test_WithAnyNodeBefore()
+    {
+        var codebooks = VIS.Instance.GetCodebooks(VisVersion.v3_9a);
+
+        // Build query: Any path before C101, but C101 onwards must match, plus qty-power tag
+        var basePath = GmodPath.Parse("411.1/C101.31", VisVersion.v3_9a);
+        var baseLocalId = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/sec/412.3/meta/qty-power");
+        var specificQuery = LocalIdQueryBuilder
+            .From(baseLocalId)
+            .WithPrimaryItem(path => path.WithAnyNodeBefore(path => path["C101"]).Build())
+            .Build();
+        var generalQuery = LocalIdQueryBuilder
+            .Empty()
+            .WithPrimaryItem(basePath, path => path.WithAnyNodeBefore(path => path["C101"]).Build())
+            .WithTags(tags => tags.WithTag(codebooks.CreateTag(CodebookName.Quantity, "power")).Build())
+            .Build();
+
+        // Base - Should match
+        Assert.True(generalQuery.Match(baseLocalId));
+
+        var l2 = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/sec/412.3/meta/qty-power");
+        Assert.True(specificQuery.Match(l2));
+        Assert.True(generalQuery.Match(l2));
+
+        var l3 = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/meta/qty-power");
+        Assert.False(specificQuery.Match(l3)); // No sec node
+        Assert.True(generalQuery.Match(l3));
+
+        var l4 = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C102.31/meta/qty-power");
+        Assert.False(generalQuery.Match(l4)); // Different C-node
+        Assert.False(specificQuery.Match(l4));
+
+        var l5 = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/sec/412.2/meta/qty-power");
+        Assert.False(specificQuery.Match(l5)); // Different sec
+        Assert.True(generalQuery.Match(l5));
+
+        var l6 = LocalId.Parse("/dnv-v2/vis-3-9a/411.1/C101.31/sec/412.2/meta/qty-pressure");
+        Assert.False(specificQuery.Match(l6)); // Different quantity
+        Assert.False(generalQuery.Match(l6));
+    }
+
+    [Fact]
     public void Test_Use_Case_1()
     {
         var locations = VIS.Instance.GetLocations(VIS.LatestVisVersion);

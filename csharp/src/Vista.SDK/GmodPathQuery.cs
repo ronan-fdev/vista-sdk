@@ -28,10 +28,11 @@ public abstract record GmodPathQueryBuilder
     {
         public readonly GmodPath GmodPath;
         private Dictionary<string, GmodNode> _setNodes;
+        private Dictionary<string, GmodNode> _nodes;
 
         internal Path(GmodPath path)
         {
-            _setNodes = new();
+            _setNodes =  [];
 
             foreach (var set in path.IndividualizableSets)
             {
@@ -44,6 +45,7 @@ public abstract record GmodPathQueryBuilder
             }
 
             GmodPath = path;
+            _nodes = GmodPath.GetFullPath().ToDictionary(v => v.Node.Code, kv => kv.Node);
         }
 
         public Path WithNode(
@@ -66,6 +68,31 @@ public abstract record GmodPathQueryBuilder
                 throw new Exception("Expected to find a filter on the node in the path");
             item.Locations = locations is null ? new HashSet<Location>() : new(locations);
             return this with { };
+        }
+
+        public Path WithAnyNodeBefore(Func<IReadOnlyDictionary<string, GmodNode>, GmodNode> select)
+        {
+            var node = select(_nodes);
+            return WithAnyNodeBeforeInternal(node);
+        }
+
+        private Path WithAnyNodeBeforeInternal(GmodNode node)
+        {
+            var fullPath = GmodPath.GetFullPath();
+            if (!fullPath.Any(v => v.Node.Code == node.Code))
+                throw new ArgumentException($"Node {node.Code} is not in the path");
+            foreach (var (_, pathNode) in fullPath)
+            {
+                if (pathNode.Code == node.Code)
+                    break;
+                if (!_filter.TryGetValue(pathNode.Code, out var item))
+                    continue;
+                item.IgnoreInMatching = true;
+            }
+
+            return this with
+            {
+                };
         }
 
         public Path WithoutLocations()
@@ -157,6 +184,10 @@ public abstract record GmodPathQueryBuilder
             var item = kvp.Value;
             var node = EnsureNodeVersion(item.Node);
 
+            // Skip nodes marked as ignorable
+            if (item.IgnoreInMatching)
+                continue;
+
             if (!targetNodes.TryGetValue(node.Code, out var potentialLocations))
                 return false;
             if (item.MatchAllLocations)
@@ -191,4 +222,5 @@ internal sealed record NodeItem
     public HashSet<Location> Locations { get; set; }
 
     public bool MatchAllLocations { get; set; }
+    public bool IgnoreInMatching { get; set; }
 }

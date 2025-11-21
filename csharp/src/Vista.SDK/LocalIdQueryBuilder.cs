@@ -8,6 +8,7 @@ public sealed record LocalIdQueryBuilder
     private GmodPathQuery? _primaryItem;
     private GmodPathQuery? _secondaryItem;
     private MetadataTagsQuery? _tags;
+    private bool? _requireSecondaryItem;
 
     public LocalIdQuery Build() => new(this);
 
@@ -21,8 +22,11 @@ public sealed record LocalIdQueryBuilder
     public static LocalIdQueryBuilder From(LocalId localId)
     {
         var builder = new LocalIdQueryBuilder().WithPrimaryItem(GmodPathQueryBuilder.From(localId.PrimaryItem).Build());
-        if (localId.SecondaryItem != null)
-            builder = builder.WithSecondaryItem(GmodPathQueryBuilder.From(localId.SecondaryItem).Build());
+
+        builder = localId.SecondaryItem is not null
+            ? builder.WithSecondaryItem(GmodPathQueryBuilder.From(localId.SecondaryItem).Build())
+            : builder.WithoutSecondaryItem();
+
         builder = builder.WithTags(MetadataTagsQueryBuilder.From(localId).Build());
         return builder;
     }
@@ -116,7 +120,19 @@ public sealed record LocalIdQueryBuilder
     /// <summary>See documentation for <see cref="WithPrimaryItem(GmodPath, PathQueryConfiguration)"/></summary>
     public LocalIdQueryBuilder WithSecondaryItem(GmodPathQuery secondaryItem)
     {
-        return this with { _secondaryItem = secondaryItem };
+        return this with { _secondaryItem = secondaryItem, _requireSecondaryItem = true };
+    }
+
+    /// <summary>Match any LocalId regardless of whether it has a secondary item or not.</summary>
+    public LocalIdQueryBuilder WithAnySecondaryItem()
+    {
+        return this with { _secondaryItem = null, _requireSecondaryItem = null };
+    }
+
+    /// <summary>Match only LocalIds that do not have a secondary item.</summary>
+    public LocalIdQueryBuilder WithoutSecondaryItem()
+    {
+        return this with { _secondaryItem = null, _requireSecondaryItem = false };
     }
 
     public LocalIdQueryBuilder WithTags(Func<MetadataTagsQueryBuilder, MetadataTagsQuery> configure)
@@ -152,6 +168,12 @@ public sealed record LocalIdQueryBuilder
             return false;
         if (_secondaryItem != null && _secondaryItem.Match(localId.SecondaryItem) == false)
             return false;
+        if (_requireSecondaryItem.HasValue)
+        {
+            bool hasSecondary = localId.SecondaryItem != null;
+            if (_requireSecondaryItem.Value != hasSecondary)
+                return false;
+        }
         if (_tags != null && _tags.Match(localId) == false)
             return false;
 
