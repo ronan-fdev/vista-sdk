@@ -22,6 +22,11 @@
     <PackageTags>dnv dnvgl vis maritime iso-19847 iso-19848</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <DotNetVersion>10.0.0</DotNetVersion>
+    <SystemTextDotNetVersion>10.0.0</SystemTextDotNetVersion>
+    <MemoryCacheDotNetVersion>10.0.0</MemoryCacheDotNetVersion>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0'">
     <DotNetVersion>9.0.6</DotNetVersion>
     <SystemTextDotNetVersion>9.0.6</SystemTextDotNetVersion>
@@ -32,7 +37,8 @@
     <SystemTextDotNetVersion>8.0.5</SystemTextDotNetVersion>
     <MemoryCacheDotNetVersion>8.0.1</MemoryCacheDotNetVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' != 'net9.0' and '$(TargetFramework)' != 'net8.0'">
+  <PropertyGroup
+    Condition=" '$(TargetFramework)' != 'net10.0' and '$(TargetFramework)' != 'net9.0' and '$(TargetFramework)' != 'net8.0'">
     <DotNetVersion>6.0.0</DotNetVersion>
     <SystemTextDotNetVersion>6.0.10</SystemTextDotNetVersion>
     <MemoryCacheDotNetVersion>6.0.2</MemoryCacheDotNetVersion>
