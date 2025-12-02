@@ -1,0 +1,43 @@
+#==============================================================================
+# vista-sdk-cpp - CMake Package Configuration
+#==============================================================================
+# This file provides CMake targets for the vista-sdk-cpp library.
+#
+# Usage:
+#   find_package(vista-sdk-cpp REQUIRED)
+#   target_link_libraries(your_target PRIVATE vista-sdk-cpp::vista-sdk-cpp) # Shared library
+#   # OR
+#   target_link_libraries(your_target PRIVATE vista-sdk-cpp::static)        # Static library
+#
+# Available targets:
+#   vista-sdk-cpp::vista-sdk-cpp - Shared library
+#   vista-sdk-cpp::static        - Static library
+#==============================================================================
+
+@PACKAGE_INIT@
+
+# Version information
+set(VISTA_SDK_CPP_VERSION "@PROJECT_VERSION@")
+set(VISTA_SDK_CPP_VERSION_MAJOR "@PROJECT_VERSION_MAJOR@")
+set(VISTA_SDK_CPP_VERSION_MINOR "@PROJECT_VERSION_MINOR@")
+set(VISTA_SDK_CPP_VERSION_PATCH "@PROJECT_VERSION_PATCH@")
+
+# Installation paths (for reference)
+set_and_check(VISTA_SDK_CPP_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set_and_check(VISTA_SDK_CPP_LIB_DIR "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
+
+# Include the targets file
+include("${CMAKE_CURRENT_LIST_DIR}/vista-sdk-cpp-targets.cmake")
+
+# For multi-config generators, include config-specific targets if available
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/vista-sdk-cpp-targets-${CMAKE_BUILD_TYPE}.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/vista-sdk-cpp-targets-${CMAKE_BUILD_TYPE}.cmake")
+endif()
+
+# Verify that the expected targets are available
+if(NOT TARGET vista-sdk-cpp::vista-sdk-cpp AND NOT TARGET vista-sdk-cpp::static)
+    message(FATAL_ERROR "vista-sdk-cpp installation is broken: no library targets found")
+endif()
+
+# Check that the requested components are available
+check_required_components(vista-sdk-cpp)

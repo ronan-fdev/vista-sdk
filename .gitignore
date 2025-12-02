@@ -95,3 +95,9 @@ Thumbs.db
 
 # Python test files
 *.pytest_cache/
+
+# C++ build directories
+build
+out
+cpp/build
+cpp/out
