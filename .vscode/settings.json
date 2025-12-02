@@ -19,11 +19,10 @@
     "python.testing.autoTestDiscoverOnSaveEnabled": true,
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
-    "python.testing.pytestArgs": [
-
-    ],
+    "python.testing.pytestArgs": [],
     "jest.debugMode": true,
     "jest.runMode": "on-demand",
     "jest.jestCommandLine": "node_modules/.bin/jest",
-    "jest.rootPath": "js"
+    "jest.rootPath": "js",
+    "cmake.sourceDirectory": "${workspaceFolder}/cpp"
 }
