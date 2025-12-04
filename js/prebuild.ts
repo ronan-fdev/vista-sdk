@@ -64,7 +64,7 @@ module.exports = (async () => {
     // Remove existing file
     if (fs.existsSync(out_path)) fs.unlinkSync(out_path);
 
-    const visVersions = await EmbeddedResource.getGmodVisVersions();
+    const visVersions = await EmbeddedResource.getVisVersions();
     if (!visVersions) return;
     const file = VisGenerator.assembleVisVersionFile(visVersions);
     console.log("> Write VisVersion.ts");

@@ -46,6 +46,19 @@ export class Locations {
     public reversedGroups: Map<string, LocationGroup>;
 
     public groups: Map<LocationGroup, RelativeLocations[]>;
+    private static readonly locationGroups: Record<string, LocationGroup> = {
+        N: LocationGroup.Number,
+        P: LocationGroup.Side,
+        C: LocationGroup.Side,
+        S: LocationGroup.Side,
+        U: LocationGroup.Vertical,
+        M: LocationGroup.Vertical,
+        L: LocationGroup.Vertical,
+        I: LocationGroup.Transverse,
+        O: LocationGroup.Transverse,
+        F: LocationGroup.Longitudinal,
+        A: LocationGroup.Longitudinal,
+    };
 
     public constructor(visVersion: VisVersion, dto: LocationsDto) {
         this.visVersion = visVersion;
@@ -66,19 +79,7 @@ export class Locations {
             this._relativeLocations.push(relativeLocation);
             // Not interested in horizontal and vertical codes
             if (["H", "V"].includes(relativeLocationDto.code)) continue;
-            const key = {
-                N: LocationGroup.Number,
-                P: LocationGroup.Side,
-                C: LocationGroup.Side,
-                S: LocationGroup.Side,
-                U: LocationGroup.Vertical,
-                M: LocationGroup.Vertical,
-                L: LocationGroup.Vertical,
-                I: LocationGroup.Transverse,
-                O: LocationGroup.Transverse,
-                F: LocationGroup.Longitudinal,
-                A: LocationGroup.Longitudinal,
-            }[relativeLocationDto.code];
+            const key = Locations.locationGroups[relativeLocationDto.code];
 
             if (key === undefined)
                 throw new Error(
