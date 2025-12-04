@@ -56,4 +56,15 @@ public class VISTests
         var task = stream.ReadAsync(buffer, default);
         Assert.True(task.IsCompletedSuccessfully);
     }
+
+    [Fact]
+    public void Test_OrderedVisVersions()
+    {
+        var versions = EmbeddedResource.GetVisVersions();
+        var sortedVersions = new List<string>(versions);
+
+        var index34 = sortedVersions.IndexOf("3-4a");
+        var index310 = sortedVersions.IndexOf("3-10a");
+        Assert.True(index34 < index310);
+    }
 }

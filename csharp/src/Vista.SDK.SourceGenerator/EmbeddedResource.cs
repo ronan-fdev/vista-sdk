@@ -34,6 +34,7 @@ internal static class EmbeddedResource
                 visVersions.Add(gmod.VisVersion);
             }
         }
+        visVersions.Sort(NaturalSortComparer.Instance);
         return visVersions;
     }
 
