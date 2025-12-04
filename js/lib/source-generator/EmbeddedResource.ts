@@ -1,6 +1,7 @@
 import * as fs from "fs-extra";
 import * as zlib from "zlib";
 import { GmodDto } from "../types/GmodDto";
+import { naturalSort } from "../util/util";
 
 export class EmbeddedResource {
     public static readonly RESOURCE_DIR = "./lib/resources";
@@ -10,7 +11,7 @@ export class EmbeddedResource {
         return fs.readdirSync(EmbeddedResource.RESOURCE_DIR);
     }
 
-    public static async getGmodVisVersions(): Promise<string[]> {
+    public static async getVisVersions(): Promise<string[]> {
         const resources = this.getResourceNames().filter(
             (r) =>
                 r.endsWith(".gz") &&
@@ -30,6 +31,8 @@ export class EmbeddedResource {
 
             versions.push(gmod.visRelease);
         }
+
+        versions.sort(naturalSort);
 
         return versions;
     }

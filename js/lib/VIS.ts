@@ -12,7 +12,7 @@ import { Locations } from "./Location";
 export class VIS {
     public static readonly instance = new VIS();
 
-    public static readonly latestVisVersion: VisVersion = VisVersion.v3_9a;
+    public static readonly latestVisVersion: VisVersion = VisVersion.v3_10a;
 
     private readonly _gmodDtoCache: LRUCache<VisVersion, Promise<GmodDto>>;
     private readonly _gmodCache: LRUCache<VisVersion, Gmod>;
