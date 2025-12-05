@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   NIL
+-   `ResourceGenerator` tool for compile-time resource embedding
+-   `EmbeddedResource` library with zlib-ng decompression
+-   DTOs for Gmod, Codebooks, Locations, GmodVersioning, ISO19848
 
 ### Changed
 

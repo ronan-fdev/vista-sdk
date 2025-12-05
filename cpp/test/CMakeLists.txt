@@ -142,3 +142,9 @@ if(EXISTS "${VISTA_SDK_TESTDATA_DIR}")
 		COMMENT "Copying testdata to tests output directory"
 	)
 endif()
+
+#----------------------------------------------
+# SourceGenerator tests
+#----------------------------------------------
+
+add_subdirectory(EmbeddedResource)

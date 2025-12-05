@@ -77,6 +77,13 @@ include(dnvVistaSdkCppInstall)
 include(dnvVistaSdkCppPackaging)
 
 #----------------------------------------------
+# Code generation
+#----------------------------------------------
+
+include(dnvVistaSdkCppResourceGenerator)
+include(dnvVistaSdkCppEmbeddedResource)
+
+#----------------------------------------------
 # Targets
 #----------------------------------------------
 
