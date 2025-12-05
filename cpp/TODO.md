@@ -4,10 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add `ResourceGenerator` tool for compile-time resource embedding
--   [ ] Add `EmbeddedResource` static library (embed `.gz` files as byte arrays)
--   [ ] Add `EmbeddedTestData` static library (embed test data files)
--   [ ] Add DTOs with nfx-serialization for JSON deserialization
 -   [ ] Add `VisVersionsGenerator` tool to link against `EmbeddedResource` library and create `VisVersions.h` and `VisVersionsExtensions.h`
 -   [ ] Add `VIS` singleton
 -   [ ] Add`CodebookName` enumeration with string conversion utilities
@@ -30,14 +26,19 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [ ] Add `GmodPathQuery` (query API for GmodPaths)
 -   [ ] Add `MetadataTagsQuery` (query API for metadata tags)
 -   [ ] Add `ParsingErrors` class (error collection and reporting)
--   [ ] Add unit tests
 -   [ ] Add benchmark suite
 -   [ ] Add sample programs demonstrating SDK usage
 
 ### In Progress
 
--   NIL
+-   [ ] Add unit tests
+    -   [x] Add `TESTS_EmbeddedResource`
+    -   [x] Add `TESTS_EmbeddedTestData`
 
 ### Done ✓
 
 -   [x] Create Basic CMake structure
+-   [x] Add `ResourceGenerator` tool for compile-time resource embedding
+-   [x] Add `EmbeddedResource` static library (embed `.gz` files as byte arrays)
+-   [x] Add `EmbeddedTestData` static library (embed test data files)
+-   [x] Add DTOs with nfx-serialization for JSON deserialization
