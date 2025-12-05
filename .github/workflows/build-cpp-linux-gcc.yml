@@ -1,0 +1,84 @@
+name: vista-sdk-cpp - Linux GCC
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feature/cpp]
+
+env:
+  BUILD_TYPE: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build-linux-gcc:
+    runs-on: ubuntu-latest
+    name: Ubuntu GCC
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Cache CMake build
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ~/.cache/ccache
+          key: ${{ runner.os }}-gcc-ninja-${{ hashFiles('**/CMakeLists.txt', 'cpp/**') }}
+          restore-keys: |
+            ${{ runner.os }}-gcc-ninja-
+
+      - name: Set up build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build gcc g++ ccache
+
+      - name: Set environment variables
+        run: |
+          echo "CC=ccache gcc" >> $GITHUB_ENV
+          echo "CXX=ccache g++" >> $GITHUB_ENV
+          echo "CCACHE_DIR=$HOME/.cache/ccache" >> $GITHUB_ENV
+          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
+          echo "CCACHE_COMPRESS=true" >> $GITHUB_ENV
+          echo "CCACHE_MAXSIZE=200M" >> $GITHUB_ENV
+
+      - name: Setup ccache
+        run: |
+          ccache --zero-stats
+          ccache --show-config
+
+      - name: Configure CMake
+        run: |
+          cmake -S cpp -B build \
+                -G "Ninja" \
+                -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DVISTA_SDK_CPP_BUILD_STATIC=ON \
+                -DVISTA_SDK_CPP_BUILD_SHARED=OFF \
+                -DVISTA_SDK_CPP_BUILD_TESTS=ON \
+                -DVISTA_SDK_CPP_BUILD_BENCHMARKS=OFF \
+                -DVISTA_SDK_CPP_BUILD_SAMPLES=OFF \
+                -DVISTA_SDK_CPP_BUILD_DOCUMENTATION=OFF
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        working-directory: build
+        run: ctest --output-on-failure --parallel
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-linux-gcc
+          path: |
+            build/Testing/Temporary/LastTest.log
+            build/Testing/Temporary/LastTestsFailed.log
+          retention-days: 7
+
+      - name: Show ccache statistics
+        run: ccache --show-stats
