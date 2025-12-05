@@ -141,3 +141,10 @@ foreach(test_source ${test_sources})
 		)
 	endif()
 endforeach()
+
+#----------------------------------------------
+# SourceGenerator tests
+#----------------------------------------------
+
+add_subdirectory(EmbeddedResource)
+add_subdirectory(EmbeddedTestData)

@@ -59,6 +59,13 @@ See the [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes, new feat
 
 This project is licensed under the MIT License.
 
+## Core dependencies
+
+-   **[zlib-ng](https://github.com/zlib-ng/zlib-ng)**: zlib replacement for .gz decompression (zlib License)
+-   **[nfx-serialization](https://github.com/nfx-libs/nfx-serialization)**: JSON serialization library for C++ (MIT License)
+    -   **[nfx-stringutils](https://github.com/nfx-libs/nfx-stringutils)**: String utilities library (MIT License)
+    -   **[nlohmann/json](https://github.com/nlohmann/json)**: JSON for Modern C++ (MIT License)
+
 ### Development Dependencies
 
 -   **[GoogleTest](https://github.com/google/googletest)**: Testing framework (BSD 3-Clause License) - Development only
@@ -68,4 +75,4 @@ All dependencies are automatically fetched via CMake FetchContent when building 
 
 ---
 
-_Updated on December 02, 2025_
+_Updated on December 05, 2025_
