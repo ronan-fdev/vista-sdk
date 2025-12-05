@@ -1,0 +1,98 @@
+name: vista-sdk-cpp - Windows MinGW
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feature/cpp]
+
+env:
+  BUILD_TYPE: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-mingw:
+    runs-on: windows-2022
+    name: Windows MinGW
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Cache CMake build and ccache
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ${{ runner.temp }}/ccache
+          key: ${{ runner.os }}-mingw-cmake-${{ hashFiles('**/CMakeLists.txt', 'cpp/**') }}
+          restore-keys: |
+            ${{ runner.os }}-mingw-cmake-
+
+      - name: Set up MinGW
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-ccache
+
+      - name: Setup ccache
+        shell: msys2 {0}
+        run: |
+          export CCACHE_DIR="${{ runner.temp }}/ccache"
+          export CCACHE_COMPILERCHECK=content
+          export CCACHE_COMPRESS=true
+          export CCACHE_MAXSIZE=200M
+          mkdir -p "$CCACHE_DIR"
+          ccache --zero-stats
+          ccache --show-config
+
+      - name: Configure CMake
+        shell: msys2 {0}
+        run: |
+          export CC="ccache gcc"
+          export CXX="ccache g++"
+          export CCACHE_DIR="${{ runner.temp }}/ccache"
+          cmake -S cpp -B build \
+                -G "Ninja" \
+                -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+                -DVISTA_SDK_CPP_BUILD_STATIC=ON \
+                -DVISTA_SDK_CPP_BUILD_SHARED=OFF \
+                -DVISTA_SDK_CPP_BUILD_TESTS=ON \
+                -DVISTA_SDK_CPP_BUILD_SAMPLES=OFF \
+                -DVISTA_SDK_CPP_BUILD_BENCHMARKS=OFF \
+                -DVISTA_SDK_CPP_BUILD_DOCUMENTATION=OFF
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+          export CCACHE_DIR="${{ runner.temp }}/ccache"
+          cmake --build build --parallel
+
+      - name: Test
+        shell: msys2 {0}
+        working-directory: build
+        run: ctest --output-on-failure --parallel
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-windows-mingw
+          path: |
+            build/Testing/Temporary/LastTest.log
+            build/Testing/Temporary/LastTestsFailed.log
+          retention-days: 7
+
+      - name: Show ccache statistics
+        shell: msys2 {0}
+        run: |
+          export CCACHE_DIR="${{ runner.temp }}/ccache"
+          ccache --show-stats

@@ -1,0 +1,78 @@
+name: CodeQL Security Analysis
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feature/cpp]
+    paths:
+      - "cpp/**/*.cpp"
+      - "cpp/**/*.h"
+      - "cpp/**/*.inl"
+      - "cpp/**/*.cmake"
+      - "cpp/**/CMakeLists.txt"
+      - ".github/workflows/codeql-cpp.yml"
+  pull_request:
+    branches: [main, feature/cpp]
+    paths:
+      - "cpp/**/*.cpp"
+      - "cpp/**/*.h"
+      - "cpp/**/*.inl"
+      - "cpp/**/*.cmake"
+      - "cpp/**/CMakeLists.txt"
+      - ".github/workflows/codeql-cpp.yml"
+  schedule:
+    - cron: "0 0 * * 1" # Weekly on Mondays at midnight UTC
+
+jobs:
+  analyze:
+    name: Analyze C++
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["cpp"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build
+
+      - name: Configure CMake
+        run: |
+          cmake -S cpp -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DVISTA_SDK_CPP_BUILD_STATIC=ON \
+            -DVISTA_SDK_CPP_BUILD_SHARED=ON \
+            -DVISTA_SDK_CPP_BUILD_TESTS=OFF \
+            -DVISTA_SDK_CPP_BUILD_SAMPLES=OFF \
+            -DVISTA_SDK_CPP_BUILD_BENCHMARKS=OFF \
+            -DVISTA_SDK_CPP_BUILD_DOCUMENTATION=OFF \
+            -DVISTA_SDK_CPP_INSTALL_PROJECT=OFF \
+            -DVISTA_SDK_CPP_PACKAGE_SOURCE=OFF \
+            -DVISTA_SDK_CPP_PACKAGE_ARCHIVE=OFF \
+            -DVISTA_SDK_CPP_PACKAGE_DEB=OFF \
+            -DVISTA_SDK_CPP_PACKAGE_RPM=OFF \
+            -DVISTA_SDK_CPP_PACKAGE_WIX=OFF
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
