@@ -4,7 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add `VisVersionsGenerator` tool to link against `EmbeddedResource` library and create `VisVersions.h` and `VisVersionsExtensions.h`
 -   [ ] Add `VIS` singleton
 -   [ ] Add`CodebookName` enumeration with string conversion utilities
 -   [ ] Add `StringBuilder` class with object pooling
@@ -34,6 +33,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [ ] Add unit tests
     -   [x] Add `TESTS_EmbeddedResource`
     -   [x] Add `TESTS_EmbeddedTestData`
+    -   [x] Add `TESTS_VisVersions`
 
 ### Done ✓
 
@@ -42,3 +42,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add `EmbeddedResource` static library (embed `.gz` files as byte arrays)
 -   [x] Add `EmbeddedTestData` static library (embed test data files)
 -   [x] Add DTOs with nfx-serialization for JSON deserialization
+-   [x] Add `VisVersionsGenerator` tool to link against `EmbeddedResource` library and create `VisVersions.h` and `VisVersionsExtensions.h`

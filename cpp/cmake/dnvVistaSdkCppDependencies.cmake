@@ -20,6 +20,7 @@ set(CMAKE_FIND_QUIETLY      ON     )
 
 set(VISTA_SDK_CPP_ZLIB_NG_VERSION                "2.3.1")
 set(VISTA_SDK_CPP_DEPS_NFX_SERIALIZATION_VERSION "0.3.0")
+set(VISTA_SDK_CPP_DEPS_NFX_STRINGBUILDER_VERSION "0.4.1")
 
 #----------------------------------------------
 # FetchContent dependencies
@@ -100,6 +101,34 @@ endif()
 
 if(NOT nfx-serialization_FOUND)
 	FetchContent_MakeAvailable(nfx-serialization)
+endif()
+
+# --- nfx-stringbuilder ---
+find_package(nfx-stringbuilder ${VISTA_SDK_CPP_DEPS_NFX_STRINGBUILDER_VERSION} EXACT QUIET)
+if(NOT nfx-stringbuilder_FOUND)
+	set(NFX_STRINGBUILDER_BUILD_STATIC        ON  CACHE BOOL "Build static library"        FORCE)
+	set(NFX_STRINGBUILDER_BUILD_SHARED        OFF CACHE BOOL "Build shared library"        FORCE)
+	set(NFX_STRINGBUILDER_BUILD_TESTS         OFF CACHE BOOL "Build tests"                 FORCE)
+	set(NFX_STRINGBUILDER_BUILD_SAMPLES       OFF CACHE BOOL "Build samples"               FORCE)
+	set(NFX_STRINGBUILDER_BUILD_BENCHMARKS    OFF CACHE BOOL "Build benchmarks"            FORCE)
+	set(NFX_STRINGBUILDER_BUILD_DOCUMENTATION OFF CACHE BOOL "Build Doxygen documentation" FORCE)
+	set(NFX_STRINGBUILDER_INSTALL_PROJECT     OFF CACHE BOOL "Install project"             FORCE)
+	set(NFX_STRINGBUILDER_PACKAGE_SOURCE      OFF CACHE BOOL "Enable source package"       FORCE)
+	set(NFX_STRINGBUILDER_PACKAGE_ARCHIVE     OFF CACHE BOOL "Enable archive package"      FORCE)
+	set(NFX_STRINGBUILDER_PACKAGE_DEB         OFF CACHE BOOL "Enable DEB package"          FORCE)
+	set(NFX_STRINGBUILDER_PACKAGE_RPM         OFF CACHE BOOL "Enable RPM package"          FORCE)
+	set(NFX_STRINGBUILDER_PACKAGE_WIX         OFF CACHE BOOL "Enable WIX package"          FORCE)
+
+	FetchContent_Declare(
+		nfx-stringbuilder
+		GIT_REPOSITORY https://github.com/nfx-libs/nfx-stringbuilder
+		GIT_TAG        ${VISTA_SDK_CPP_DEPS_NFX_STRINGBUILDER_VERSION}
+		GIT_SHALLOW    TRUE
+	)
+endif()
+
+if(NOT nfx-stringbuilder_FOUND)
+	FetchContent_MakeAvailable(nfx-stringbuilder)
 endif()
 
 #----------------------------------------------
