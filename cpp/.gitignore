@@ -89,3 +89,7 @@ coverage/
 vista-sdk-cpp*/
 lib/
 tests/TESTS_*[1]_*
+
+# Generated files
+VisVersions.h
+VisVersionsExtensions.h

@@ -229,6 +229,11 @@ if(Doxygen_FOUND)
 		COMMENT "Generate documentation."
 	)
 
+	# Make documentation depend on VisVersions.h generation
+	if(TARGET generate_VisVersions)
+		add_dependencies(vista-sdk-cpp-documentation generate_VisVersions)
+	endif()
+
 	# Create index.html shortcut in doc directory
 	if(TARGET vista-sdk-cpp-documentation)
 		if(WIN32)

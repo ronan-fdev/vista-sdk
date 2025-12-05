@@ -71,6 +71,7 @@ endif()
 set(test_sources)
 
 list(APPEND test_sources
+	SDK/TESTS_VisVersions.cpp
 )
 
 #----------------------------------------------
