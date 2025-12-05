@@ -61,6 +61,10 @@ function(configure_target target_name)
 			${VISTA_SDK_CPP_SOURCE_DIR}
 	)
 
+	target_link_libraries(${target_name} PUBLIC
+		nfx-stringbuilder::static
+	)
+
 	# --- Properties ---
 	set_target_properties(${target_name} PROPERTIES
 		CXX_STANDARD 20

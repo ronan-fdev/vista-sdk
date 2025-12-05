@@ -72,6 +72,7 @@ endif()
 set(test_sources)
 
 list(APPEND test_sources
+	TESTS_VISVersions.cpp
 )
 
 #----------------------------------------------
@@ -91,6 +92,19 @@ foreach(test_source ${test_sources})
 		target_link_libraries(${test_target_name} PRIVATE
 			GTest::gtest_main
 		)
+
+		target_include_directories(${test_target_name} PUBLIC
+			${VISTA_SDK_CPP_INCLUDE_DIR}
+		)
+
+		#----------------------------------------------
+		# Dependencies
+		#----------------------------------------------
+
+		# Ensure VISVersions.h is generated before building tests
+		if(TARGET generate_VISVersion)
+			add_dependencies(${test_target_name} generate_VISVersion)
+		endif()
 
 		#----------------------------------------------
 		# Enable specific CPU features

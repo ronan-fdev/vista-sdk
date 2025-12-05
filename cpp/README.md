@@ -5,6 +5,66 @@
 > **⚠️ WARNING: API NOT STABLE - LIBRARY UNDER ACTIVE DEVELOPMENT**
 > This library is in active development and the API may change without notice. Use with caution in production environments.
 
+## CMake Integration
+
+```cmake
+# --- Library build types ---
+option(VISTA_SDK_CPP_BUILD_STATIC           "Build static library"                OFF )
+option(VISTA_SDK_CPP_BUILD_SHARED           "Build shared library"                OFF )
+
+# --- Build components ---
+option(VISTA_SDK_CPP_BUILD_TESTS            "Build tests"                         OFF )
+option(VISTA_SDK_CPP_BUILD_SAMPLES          "Build samples"                       OFF )
+option(VISTA_SDK_CPP_BUILD_BENCHMARKS       "Build benchmarks"                    OFF )
+option(VISTA_SDK_CPP_BUILD_DOCUMENTATION    "Build Doxygen documentation"         OFF )
+
+# --- Installation ---
+option(VISTA_SDK_CPP_INSTALL_PROJECT        "Install project"                     OFF )
+
+# --- Packaging ---
+option(VISTA_SDK_CPP_PACKAGE_SOURCE         "Enable source package generation"    OFF )
+option(VISTA_SDK_CPP_PACKAGE_ARCHIVE        "Enable TGZ/ZIP package generation"   OFF )
+option(VISTA_SDK_CPP_PACKAGE_DEB            "Enable DEB package generation"       OFF )
+option(VISTA_SDK_CPP_PACKAGE_RPM            "Enable RPM package generation"       OFF )
+option(VISTA_SDK_CPP_PACKAGE_WIX            "Enable WiX Windows installer (MSI)"  OFF )
+```
+
+## Build Workflow
+
+The SDK uses a multi-stage code generation pipeline:
+
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│ Stage 1: Resource Embedding                                               │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  resources/*.json.gz ──► ResourceGenerator ──► embedded_*.cpp ──► .lib    │
+│                                                                           │
+│  Converts .gz resources to C++ byte arrays at build time                  │
+└───────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│ Stage 2: Type-Safe API Generation                                         │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  EmbeddedResource.lib ──► VISVersionsGenerator ──► VISVersions.h          │
+│                                                                           │
+│  Generates VISVersion enum and utilities from embedded VIS data           │
+└───────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌───────────────────────────────────────────────────────────────────────────┐
+│ Stage 3: SDK Library & Tests                                              │
+├───────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  VISVersions.h + SDK sources ──► vista-sdk-cpp.lib                        │
+│                                                                           │
+└───────────────────────────────────────────────────────────────────────────┘
+```
+
+All stages are automated via CMake custom commands and run during the build.
+
 ## Project Structure
 
 ```
@@ -41,6 +101,7 @@ This project is licensed under the MIT License.
 -   **[nfx-serialization](https://github.com/nfx-libs/nfx-serialization)**: JSON serialization library for C++ (MIT License)
     -   **[nfx-stringutils](https://github.com/nfx-libs/nfx-stringutils)**: String utilities library (MIT License)
     -   **[nlohmann/json](https://github.com/nlohmann/json)**: JSON for Modern C++ (MIT License)
+-   **[nfx-stringbuilder](https://github.com/nfx-libs/nfx-stringbuilder)**: String builder library for C++ (MIT License)
 
 ### Development Dependencies
 
@@ -51,4 +112,4 @@ All dependencies are automatically fetched via CMake FetchContent when building 
 
 ---
 
-_Updated on December 02, 2025_
+_Updated on December 05, 2025_
