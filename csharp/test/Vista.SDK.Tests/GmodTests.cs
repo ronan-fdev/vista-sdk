@@ -15,6 +15,7 @@ public class GmodTests
             { VisVersion.v3_7a, new("H346.11113", 6672) },
             { VisVersion.v3_8a, new("H346.11113", 6335) },
             { VisVersion.v3_9a, new("H346.11113", 6553) },
+            { VisVersion.v3_10a, new("H346.11113", 6555) },
         };
 
     [Theory]

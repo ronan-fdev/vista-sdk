@@ -3,6 +3,8 @@ export class VisGenerator {
         return `
         ${this.generateVisVersionEnum(versions)}
 
+        ${this.generateVisVersionValues(versions)}
+
         ${this.generateVisVersionExtensionClass(versions)}
 
         ${this.generateVisVersionsClass(versions)}
@@ -17,16 +19,28 @@ export class VisGenerator {
         }`;
     }
 
+    private static generateVisVersionValues(versions: string[]) {
+        return `export const allVisVersions: VisVersion[] = [
+            ${versions
+                .map((v) => `VisVersion.${this.toVersionEnumKeyString(v)}`)
+                .join(",\n")}
+        ];`;
+    }
+
     private static generateVisVersionExtensionClass(versions: string[]) {
         return `export class VisVersionExtension {
             public static toVersionString(version: VisVersion, builder?: string[]): string {
               let v: string;
               switch (version) {
-                  ${versions.map(
-                      (v) => `case VisVersion.${this.toVersionEnumKeyString(v)}:
+                  ${versions
+                      .map(
+                          (v) => `case VisVersion.${this.toVersionEnumKeyString(
+                              v
+                          )}:
                   v = "${v}";
                   break;`
-                  ).join('')}
+                      )
+                      .join("")}
                 default:
                   throw new Error('Invalid VisVersion enum value: ' + version);
               }
@@ -40,13 +54,17 @@ export class VisGenerator {
             public static toString(version: VisVersion, builder?: string[]): string {
               let v: string;
               switch (version) {
-                    ${versions.map(
-                        (v) => `case VisVersion.${this.toVersionEnumKeyString(
-                            v
-                        )}:
+                    ${versions
+                        .map(
+                            (
+                                v
+                            ) => `case VisVersion.${this.toVersionEnumKeyString(
+                                v
+                            )}:
                     v = "${v}";
                     break;`
-                    ).join('')}
+                        )
+                        .join("")}
                 default:
                   throw new Error('Invalid VisVersion enum value: ' + version);
               }
@@ -59,25 +77,58 @@ export class VisGenerator {
 
             public static isValid(version: VisVersion): boolean {
               switch (version) {
-                    ${versions.map(
-                        (v) => `case VisVersion.${this.toVersionEnumKeyString(
-                            v
-                        )}:
+                    ${versions
+                        .map(
+                            (
+                                v
+                            ) => `case VisVersion.${this.toVersionEnumKeyString(
+                                v
+                            )}:
                     return true;\n`
-                    ).join('')}
+                        )
+                        .join("")}
                 default:
                   return false;
               }
             }
+
+            public static compare(a: VisVersion, b: VisVersion): number {
+                    const aStr = VisVersionExtension.toVersionString(a);
+                    const bStr = VisVersionExtension.toVersionString(b);
+                    return aStr.localeCompare(bStr, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                        ignorePunctuation: true,
+                    });
+                }
+
+            public static lessThan(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) < 0;
+            }
+
+            public static lessThanOrEqual(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) <= 0;
+            }
+
+            public static greaterThan(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) > 0;
+            }
+
+            public static greaterThanOrEqual(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) >= 0;
+            }
+
+            public static equals(a: VisVersion, b: VisVersion): boolean {
+                return a === b;
+            }
+
           }`;
     }
 
     private static generateVisVersionsClass(versions: string[]) {
         return `export class VisVersions {
             public static get all(): VisVersion[] {
-              return Object.values(VisVersion)
-                .map(v => this.tryParse(v))
-                .filter(v => v) as VisVersion[];
+              return allVisVersions;
             }
 
             public static parse(version: string): VisVersion {
@@ -91,14 +142,18 @@ export class VisGenerator {
 
             public static tryParse(version: string): VisVersion | undefined {
               switch (version) {
-                  ${versions.map(
-                      (v) => `case "${v}":
+                  ${versions
+                      .map(
+                          (v) => `case "${v}":
                     return VisVersion.${this.toVersionEnumKeyString(v)};\n`
-                  ).join('')}
+                      )
+                      .join("")}
                 default:
                   return;
               }
             }
+
+
           }`;
     }
 

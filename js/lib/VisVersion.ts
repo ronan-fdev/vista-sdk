@@ -6,8 +6,19 @@
 ,v3_7a = "3-7a"
 ,v3_8a = "3-8a"
 ,v3_9a = "3-9a"
+,v3_10a = "3-10a"
 
         }
+
+        export const allVisVersions: VisVersion[] = [
+            VisVersion.v3_4a,
+VisVersion.v3_5a,
+VisVersion.v3_6a,
+VisVersion.v3_7a,
+VisVersion.v3_8a,
+VisVersion.v3_9a,
+VisVersion.v3_10a
+        ];
 
         export class VisVersionExtension {
             public static toVersionString(version: VisVersion, builder?: string[]): string {
@@ -25,6 +36,8 @@
                   v = "3-8a";
                   break;case VisVersion.v3_9a:
                   v = "3-9a";
+                  break;case VisVersion.v3_10a:
+                  v = "3-10a";
                   break;
                 default:
                   throw new Error('Invalid VisVersion enum value: ' + version);
@@ -51,6 +64,8 @@
                     v = "3-8a";
                     break;case VisVersion.v3_9a:
                     v = "3-9a";
+                    break;case VisVersion.v3_10a:
+                    v = "3-10a";
                     break;
                 default:
                   throw new Error('Invalid VisVersion enum value: ' + version);
@@ -76,18 +91,49 @@ case VisVersion.v3_8a:
                     return true;
 case VisVersion.v3_9a:
                     return true;
+case VisVersion.v3_10a:
+                    return true;
 
                 default:
                   return false;
               }
             }
+
+            public static compare(a: VisVersion, b: VisVersion): number {
+                    const aStr = VisVersionExtension.toVersionString(a);
+                    const bStr = VisVersionExtension.toVersionString(b);
+                    return aStr.localeCompare(bStr, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                        ignorePunctuation: true,
+                    });
+                }
+
+            public static lessThan(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) < 0;
+            }
+
+            public static lessThanOrEqual(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) <= 0;
+            }
+
+            public static greaterThan(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) > 0;
+            }
+
+            public static greaterThanOrEqual(a: VisVersion, b: VisVersion): boolean {
+                return this.compare(a, b) >= 0;
+            }
+
+            public static equals(a: VisVersion, b: VisVersion): boolean {
+                return a === b;
+            }
+
           }
 
         export class VisVersions {
             public static get all(): VisVersion[] {
-              return Object.values(VisVersion)
-                .map(v => this.tryParse(v))
-                .filter(v => v) as VisVersion[];
+              return allVisVersions;
             }
 
             public static parse(version: string): VisVersion {
@@ -113,10 +159,14 @@ case "3-8a":
                     return VisVersion.v3_8a;
 case "3-9a":
                     return VisVersion.v3_9a;
+case "3-10a":
+                    return VisVersion.v3_10a;
 
                 default:
                   return;
               }
             }
+
+
           }
         
