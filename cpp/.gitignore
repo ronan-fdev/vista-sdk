@@ -91,4 +91,5 @@ lib/
 tests/TESTS_*[1]_*
 
 # Generated files
-VISVersions.h
+VisVersions.h
+VisVersionsExtensions.h

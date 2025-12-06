@@ -20,4 +20,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 -   [x] Create Basic CMake structure
 -   [x] Create `EmbeddedResource` static library (embed `.gz` files as byte arrays)
--   [x] Create `VISVersionsGenerator` tool to link against `EmbeddedResource` library and create `VISVersions.h`
+-   [x] Create `VisVersionsGenerator` tool to link against `EmbeddedResource` library and create `VisVersions.h`

@@ -23,73 +23,58 @@
  */
 
 /**
- * @file TESTS_VISVersions.cpp
- * @brief Unit tests for VISVersion and VISVersions utilities
+ * @file TESTS_VisVersions.cpp
+ * @brief Unit tests for VisVersion and VisVersions utilities
  */
 
 #include <gtest/gtest.h>
 
-#include <dnv/vista/sdk/VISVersions.h>
+#include <dnv/vista/sdk/VisVersions.h>
 
 namespace dnv::vista::sdk::test
 {
 	//=====================================================================
-	// VISVersions tests
+	// VisVersions tests
 	//=====================================================================
 
-	TEST( VISVersionsTests, ToString )
+	TEST( VisVersionsTests, ToString )
 	{
-		auto visVersion = VISVersion::v3_9a;
-		auto visVersionString = VISVersions::toString( visVersion );
+		auto VisVersion = VisVersion::v3_9a;
+		auto VisVersionstring = VisVersions::toString( VisVersion );
 
-		EXPECT_EQ( "3-9a", visVersionString );
+		EXPECT_EQ( "3-9a", VisVersionstring );
 	}
 
-	TEST( VISVersionsTests, FromString_OptionalOverload )
+	TEST( VisVersionsTests, FromString_OptionalOverload )
 	{
 		// Test valid versions
-		auto v34a = VISVersions::fromString( "3-4a" );
+		auto v34a = VisVersions::fromString( "3-4a" );
 		ASSERT_TRUE( v34a.has_value() );
-		EXPECT_EQ( VISVersion::v3_4a, *v34a );
+		EXPECT_EQ( VisVersion::v3_4a, *v34a );
 
-		auto v39a = VISVersions::fromString( "3-9a" );
+		auto v39a = VisVersions::fromString( "3-9a" );
 		ASSERT_TRUE( v39a.has_value() );
-		EXPECT_EQ( VISVersion::v3_9a, *v39a );
+		EXPECT_EQ( VisVersion::v3_9a, *v39a );
 
 		// Test invalid version
-		auto invalid = VISVersions::fromString( "invalid" );
+		auto invalid = VisVersions::fromString( "invalid" );
 		EXPECT_FALSE( invalid.has_value() );
 	}
 
-	TEST( VISVersionsTests, FromString_OutParameterOverload )
+	TEST( VisVersionsTests, FromString_OutParameterOverload )
 	{
 		// Test valid versions
-		VISVersion result;
-		bool success = VISVersions::fromString( "3-4a", result );
+		VisVersion result;
+		bool success = VisVersions::fromString( "3-4a", result );
 		EXPECT_TRUE( success );
-		EXPECT_EQ( VISVersion::v3_4a, result );
+		EXPECT_EQ( VisVersion::v3_4a, result );
 
-		success = VISVersions::fromString( "3-9a", result );
+		success = VisVersions::fromString( "3-9a", result );
 		EXPECT_TRUE( success );
-		EXPECT_EQ( VISVersion::v3_9a, result );
+		EXPECT_EQ( VisVersion::v3_9a, result );
 
 		// Test invalid version
-		success = VISVersions::fromString( "invalid", result );
+		success = VisVersions::fromString( "invalid", result );
 		EXPECT_FALSE( success );
-	}
-
-	TEST( VISVersionsTests, Ordered )
-	{
-		const auto versions = VISVersions::all();
-
-		// Find indices of 3-4a and 3-10a
-		auto it34 = std::find( versions.begin(), versions.end(), VISVersion::v3_4a );
-		auto it310 = std::find( versions.begin(), versions.end(), VISVersion::v3_10a );
-
-		ASSERT_NE( it34, versions.end() );
-		ASSERT_NE( it310, versions.end() );
-
-		// v3_4a should come before v3_10a
-		EXPECT_LT( std::distance( versions.begin(), it34 ), std::distance( versions.begin(), it310 ) );
 	}
 } // namespace dnv::vista::sdk::test

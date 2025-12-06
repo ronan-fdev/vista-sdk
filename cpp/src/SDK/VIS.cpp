@@ -30,6 +30,8 @@
 
 #include "dnv/vista/sdk/VIS.h"
 
+#include "VisVersionsExtensions.h"
+
 namespace dnv::vista::sdk
 {
 	const VIS& VIS::instance()
@@ -39,16 +41,16 @@ namespace dnv::vista::sdk
 		return instance;
 	}
 
-	VISVersion VIS::latest() const noexcept
+	VisVersion VIS::latest() const noexcept
 	{
-		return VISVersions::latest();
+		return VisVersions::latest();
 	}
 
-	const std::vector<VISVersion>& VIS::all() const noexcept
+	const std::vector<VisVersion>& VIS::versions() const noexcept
 	{
-		static const std::vector<VISVersion> versions = []() {
-			const auto arr = VISVersions::all();
-			return std::vector<VISVersion>( arr.begin(), arr.end() );
+		static const std::vector<VisVersion> versions = []() {
+			const auto arr = VisVersions::all();
+			return std::vector<VisVersion>( arr.begin(), arr.end() );
 		}();
 
 		return versions;

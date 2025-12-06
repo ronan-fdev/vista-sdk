@@ -48,6 +48,18 @@ if(VISTA_SDK_CPP_BUILD_STATIC)
 endif()
 
 #----------------------------------------------
+# Dependencies
+#----------------------------------------------
+
+if(VISTA_SDK_CPP_BUILD_SHARED)
+	add_dependencies(${PROJECT_NAME} generate_VisVersions)
+endif()
+
+if(VISTA_SDK_CPP_BUILD_STATIC)
+	add_dependencies(${PROJECT_NAME}-static generate_VisVersions)
+endif()
+
+#----------------------------------------------
 # Targets properties
 #----------------------------------------------
 
@@ -74,9 +86,9 @@ function(configure_target target_name)
 		CXX_STANDARD 20
 		CXX_STANDARD_REQUIRED ON
 		CXX_EXTENSIONS OFF
+		POSITION_INDEPENDENT_CODE ON
 		VERSION ${PROJECT_VERSION}
 		SOVERSION ${PROJECT_VERSION_MAJOR}
-		POSITION_INDEPENDENT_CODE ON
 		DEBUG_POSTFIX "-d"
 	)
 endfunction()

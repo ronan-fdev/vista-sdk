@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   `ResourceGenerator` tool for compile-time resource embedding
 -   `EmbeddedResource` library with zlib-ng decompression
 -   DTOs for Gmod, Codebooks, Locations, GmodVersioning, ISO19848
--   `VISVersionsGenerator` tool for VISVersions.h code generation
+-   `VisVersionsGenerator` tool for VisVersions.h code generation
 
 ### Changed
 

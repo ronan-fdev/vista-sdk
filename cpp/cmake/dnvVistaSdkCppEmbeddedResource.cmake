@@ -107,7 +107,7 @@ namespace dnv::vista::sdk::registry
 
 ${REGISTRY_INCLUDES}
 
-	const std::vector<Resource>& getAll()
+	const std::vector<Resource>& all()
 	{
 		static const std::vector<Resource> resources = {
 ${REGISTRY_ENTRIES}

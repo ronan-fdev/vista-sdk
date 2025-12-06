@@ -9,7 +9,7 @@
 
 ```cmake
 # --- Library build types ---
-option(VISTA_SDK_CPP_BUILD_STATIC           "Build static library"                OFF )
+option(VISTA_SDK_CPP_BUILD_STATIC           "Build static library"                ON  )
 option(VISTA_SDK_CPP_BUILD_SHARED           "Build shared library"                OFF )
 
 # --- Build components ---
@@ -48,9 +48,9 @@ The SDK uses a multi-stage code generation pipeline:
 │ Stage 2: Type-Safe API Generation                                         │
 ├───────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
-│  EmbeddedResource.lib ──► VISVersionsGenerator ──► VISVersions.h          │
+│  EmbeddedResource.lib ──► VisVersionsGenerator ──► VisVersions.h          │
 │                                                                           │
-│  Generates VISVersion enum and utilities from embedded VIS data           │
+│  Generates VisVersion enum and utilities from embedded VIS data           │
 └───────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
@@ -58,7 +58,7 @@ The SDK uses a multi-stage code generation pipeline:
 │ Stage 3: SDK Library & Tests                                              │
 ├───────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
-│  VISVersions.h + SDK sources ──► vista-sdk-cpp.lib                        │
+│  VisVersions.h + SDK sources ──► vista-sdk-cpp.lib                        │
 │                                                                           │
 └───────────────────────────────────────────────────────────────────────────┘
 ```

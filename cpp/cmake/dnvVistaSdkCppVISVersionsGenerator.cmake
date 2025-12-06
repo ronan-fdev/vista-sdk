@@ -1,5 +1,5 @@
 #==============================================================================
-# vista-sdk-cpp - VISVersionsGenerator executable CMake configuration
+# vista-sdk-cpp - VisVersionsGenerator executable CMake configuration
 #==============================================================================
 
 cmake_minimum_required(VERSION 3.20)
@@ -8,15 +8,15 @@ cmake_minimum_required(VERSION 3.20)
 # Target definition
 #----------------------------------------------
 
-add_executable(VISVersionsGenerator
-	${VISTA_SDK_CPP_SOURCE_DIR}/SourceGenerator/VISVersionsGenerator.cpp
+add_executable(VisVersionsGenerator
+	${VISTA_SDK_CPP_SOURCE_DIR}/SourceGenerator/VisVersionsGenerator.cpp
 )
 
 #----------------------------------------------
 # Link libraries
 #----------------------------------------------
 
-target_link_libraries(VISVersionsGenerator PRIVATE
+target_link_libraries(VisVersionsGenerator PRIVATE
 	EmbeddedResource
 	nfx-stringbuilder::static
 )
@@ -25,7 +25,7 @@ target_link_libraries(VISVersionsGenerator PRIVATE
 # Target properties
 #----------------------------------------------
 
-set_target_properties(VISVersionsGenerator PROPERTIES
+set_target_properties(VisVersionsGenerator PROPERTIES
 	CXX_STANDARD 20
 	CXX_STANDARD_REQUIRED ON
 	CXX_EXTENSIONS OFF
@@ -38,18 +38,20 @@ set_target_properties(VISVersionsGenerator PROPERTIES
 # Code generation
 #----------------------------------------------
 
-set(VISTA_SDK_CPP_GENERATED_HEADER "${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/VISVersions.h")
+set(VISTA_SDK_CPP_GENERATED_HEADER      "${VISTA_SDK_CPP_INCLUDE_DIR}/dnv/vista/sdk/VisVersions.h")
+set(VISTA_SDK_CPP_GENERATED_EXTENSIONS  "${VISTA_SDK_CPP_SOURCE_DIR}/SDK/VisVersionsExtensions.h")
 
 add_custom_command(
-	OUTPUT "${VISTA_SDK_CPP_GENERATED_HEADER}"
-	COMMAND VISVersionsGenerator "${VISTA_SDK_CPP_GENERATED_HEADER}" "${VISTA_SDK_CPP_VERSION}"
-	COMMAND ${CMAKE_COMMAND} -E env clang-format -i "${VISTA_SDK_CPP_GENERATED_HEADER}" || ${CMAKE_COMMAND} -E true
-	DEPENDS VISVersionsGenerator
+	OUTPUT "${VISTA_SDK_CPP_GENERATED_HEADER}" "${VISTA_SDK_CPP_GENERATED_EXTENSIONS}"
+	COMMAND VisVersionsGenerator "${VISTA_SDK_CPP_GENERATED_HEADER}" "${VISTA_SDK_CPP_GENERATED_EXTENSIONS}" "${VISTA_SDK_CPP_VERSION}"
+	COMMAND clang-format -i "${VISTA_SDK_CPP_GENERATED_HEADER}" || ${CMAKE_COMMAND} -E true
+	COMMAND clang-format -i "${VISTA_SDK_CPP_GENERATED_EXTENSIONS}" || ${CMAKE_COMMAND} -E true
+	DEPENDS VisVersionsGenerator
 	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/tools"
-	COMMENT "Generating VISVersions.h from embedded resources..."
+	COMMENT "Generating VisVersions.h and VisVersionsExtensions.h from embedded resources..."
 	VERBATIM
 )
 
-add_custom_target(generate_VISVersion ALL
-	DEPENDS "${VISTA_SDK_CPP_GENERATED_HEADER}"
+add_custom_target(generate_VisVersions ALL
+	DEPENDS "${VISTA_SDK_CPP_GENERATED_HEADER}" "${VISTA_SDK_CPP_GENERATED_EXTENSIONS}"
 )

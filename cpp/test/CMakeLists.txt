@@ -72,7 +72,7 @@ endif()
 set(test_sources)
 
 list(APPEND test_sources
-	TESTS_VISVersions.cpp
+	TESTS_VisVersions.cpp
 	TESTS_VIS.cpp
 )
 
@@ -103,9 +103,9 @@ foreach(test_source ${test_sources})
 		# Dependencies
 		#----------------------------------------------
 
-		# Ensure VISVersions.h is generated before building tests
-		if(TARGET generate_VISVersion)
-			add_dependencies(${test_target_name} generate_VISVersion)
+		# Ensure VisVersions.h is generated before building tests
+		if(TARGET generate_VisVersions)
+			add_dependencies(${test_target_name} generate_VisVersions)
 		endif()
 
 		#----------------------------------------------

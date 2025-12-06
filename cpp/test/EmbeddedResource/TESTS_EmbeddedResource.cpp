@@ -46,10 +46,10 @@ namespace dnv::vista::sdk::test
 	//=====================================================================
 
 	//----------------------------------------------
-	// VISVersions
+	// VisVersions
 	//----------------------------------------------
 
-	TEST( EmbeddedResourceTest, VISVersions_ContainsExpectedVersions )
+	TEST( EmbeddedResourceTest, VisVersions_ContainsExpectedVersions )
 	{
 		auto versions = EmbeddedResource::visVersions();
 

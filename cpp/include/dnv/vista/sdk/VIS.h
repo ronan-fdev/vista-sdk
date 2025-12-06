@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "VISVersions.h"
+#include "VisVersions.h"
 
 #include <vector>
 
@@ -64,12 +64,12 @@ namespace dnv::vista::sdk
 		 * @brief Get all available VIS versions
 		 * @return Vector containing all supported VIS versions in lexicographical order
 		 */
-		const std::vector<VISVersion>& all() const noexcept;
+		const std::vector<VisVersion>& versions() const noexcept;
 
 		/**
 		 * @brief Get the latest VIS version
 		 * @return The most recent VIS version
 		 */
-		VISVersion latest() const noexcept;
+		VisVersion latest() const noexcept;
 	};
 } // namespace dnv::vista::sdk

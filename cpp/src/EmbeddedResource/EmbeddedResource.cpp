@@ -55,14 +55,14 @@ namespace dnv::vista::sdk::registry
 		size_t size;
 	};
 
-	const std::vector<Resource>& getAll();
+	const std::vector<Resource>& all();
 } // namespace dnv::vista::sdk::registry
 
 namespace dnv::vista::sdk
 {
 	std::vector<std::string> EmbeddedResource::visVersions()
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		std::vector<std::string> versions;
 
@@ -102,7 +102,7 @@ namespace dnv::vista::sdk
 
 	std::optional<GmodDto> EmbeddedResource::gmod( std::string_view visVersion )
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		// Find gmod resource: contains "gmod", ends with ".gz", NOT "versioning", contains visVersion
 		auto it = std::ranges::find_if( resources, [visVersion]( const auto& r ) {
@@ -127,7 +127,7 @@ namespace dnv::vista::sdk
 
 	std::optional<CodebooksDto> EmbeddedResource::codebooks( std::string_view visVersion )
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		// Find codebooks resource: contains "codebooks", ends with ".gz", contains visVersion
 		auto it = std::ranges::find_if( resources, [visVersion]( const auto& r ) {
@@ -151,7 +151,7 @@ namespace dnv::vista::sdk
 
 	std::optional<LocationsDto> EmbeddedResource::locations( std::string_view visVersion )
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		// Find locations resource: contains "locations", ends with ".gz", contains visVersion
 		auto it = std::ranges::find_if( resources, [visVersion]( const auto& r ) {
@@ -175,7 +175,7 @@ namespace dnv::vista::sdk
 
 	std::optional<std::unordered_map<std::string, GmodVersioningDto>> EmbeddedResource::gmodVersioning()
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		std::unordered_map<std::string, GmodVersioningDto> dtos;
 
@@ -205,7 +205,7 @@ namespace dnv::vista::sdk
 
 	std::optional<DataChannelTypeNamesDto> EmbeddedResource::dataChannelTypeNames( std::string_view version )
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		// Find data-channel-type-names resource
 		auto it = std::ranges::find_if( resources, [version]( const auto& r ) {
@@ -229,7 +229,7 @@ namespace dnv::vista::sdk
 
 	std::optional<FormatDataTypesDto> EmbeddedResource::formatDataTypes( std::string_view version )
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		// Find format-data-types resource
 		auto it = std::ranges::find_if( resources, [version]( const auto& r ) {
@@ -253,7 +253,7 @@ namespace dnv::vista::sdk
 
 	std::vector<std::string> EmbeddedResource::resourceNames()
 	{
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 
 		std::vector<std::string> names;
 		names.reserve( resources.size() );
@@ -269,7 +269,7 @@ namespace dnv::vista::sdk
 	std::vector<uint8_t> EmbeddedResource::decompressedStream( std::string_view resourceName )
 	{
 		// Find resource in embedded registry
-		const auto& resources = registry::getAll();
+		const auto& resources = registry::all();
 		const auto it = std::ranges::find_if( resources,
 			[resourceName]( const auto& res ) { return res.name == resourceName; } );
 

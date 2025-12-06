@@ -30,7 +30,8 @@
 #include <gtest/gtest.h>
 
 #include <dnv/vista/sdk/VIS.h>
-#include <dnv/vista/sdk/VISVersions.h>
+
+#include <algorithm>
 
 namespace dnv::vista::sdk::test
 {
@@ -50,32 +51,45 @@ namespace dnv::vista::sdk::test
 	{
 		const auto& latestVisVersion = VIS::instance().latest();
 
-		// Assert - Latest should be v3_10a
-		EXPECT_EQ( latestVisVersion, VISVersion::v3_10a );
-		EXPECT_EQ( latestVisVersion, VISVersions::latest() );
+		EXPECT_EQ( latestVisVersion, VisVersion::v3_10a );
 	}
 
 	TEST( VISTests, VisVersionsReturnsAllVersions )
 	{
-		const auto& allVisVersions = VIS::instance().all();
+		const auto& allVisVersions = VIS::instance().versions();
 
 		EXPECT_EQ( allVisVersions.size(), 7 );
-		EXPECT_EQ( allVisVersions[0], VISVersion::v3_4a );
-		EXPECT_EQ( allVisVersions[1], VISVersion::v3_5a );
-		EXPECT_EQ( allVisVersions[2], VISVersion::v3_6a );
-		EXPECT_EQ( allVisVersions[3], VISVersion::v3_7a );
-		EXPECT_EQ( allVisVersions[4], VISVersion::v3_8a );
-		EXPECT_EQ( allVisVersions[5], VISVersion::v3_9a );
-		EXPECT_EQ( allVisVersions[6], VISVersion::v3_10a );
+		EXPECT_EQ( allVisVersions[0], VisVersion::v3_4a );
+		EXPECT_EQ( allVisVersions[1], VisVersion::v3_5a );
+		EXPECT_EQ( allVisVersions[2], VisVersion::v3_6a );
+		EXPECT_EQ( allVisVersions[3], VisVersion::v3_7a );
+		EXPECT_EQ( allVisVersions[4], VisVersion::v3_8a );
+		EXPECT_EQ( allVisVersions[5], VisVersion::v3_9a );
+		EXPECT_EQ( allVisVersions[6], VisVersion::v3_10a );
 	}
 
 	TEST( VISTests, VisVersionsReturnsSameReference )
 	{
 		const auto& vis = VIS::instance();
 
-		const auto& allVisVersions1 = vis.all();
-		const auto& allVisVersions2 = vis.all();
+		const auto& allVisVersions1 = vis.versions();
+		const auto& allVisVersions2 = vis.versions();
 
 		EXPECT_EQ( &allVisVersions1, &allVisVersions2 );
+	}
+
+	TEST( VISTests, VisVersionsReturnsOrdered )
+	{
+		const auto& VisVersions = VIS::instance().versions();
+
+		// Find indices of 3-4a and 3-10a
+		auto it34 = std::find( VisVersions.begin(), VisVersions.end(), VisVersion::v3_4a );
+		auto it310 = std::find( VisVersions.begin(), VisVersions.end(), VisVersion::v3_10a );
+
+		ASSERT_NE( it34, VisVersions.end() );
+		ASSERT_NE( it310, VisVersions.end() );
+
+		// v3_4a should come before v3_10a
+		EXPECT_LT( std::distance( VisVersions.begin(), it34 ), std::distance( VisVersions.begin(), it310 ) );
 	}
 } // namespace dnv::vista::sdk::test
