@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.20)
 # Target definition
 #----------------------------------------------
 
-add_library(EmbeddedResource STATIC
+add_library(EmbeddedResource OBJECT
 	${VISTA_SDK_CPP_SOURCE_DIR}/EmbeddedResource/EmbeddedResource.cpp
 )
 
@@ -28,7 +28,7 @@ target_include_directories(EmbeddedResource
 # Link libraries
 #----------------------------------------------
 
-target_link_libraries(EmbeddedResource PUBLIC
+target_link_libraries(EmbeddedResource PRIVATE
 	zlib-ng
 	nfx-serialization::static
 	nfx-stringutils::nfx-stringutils
@@ -44,10 +44,7 @@ set_target_properties(EmbeddedResource PROPERTIES
 	CXX_EXTENSIONS OFF
 	POSITION_INDEPENDENT_CODE ON
 	DEBUG_POSTFIX "-d"
-	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 )
-
 #----------------------------------------------
 # Embed resources at build time
 #----------------------------------------------

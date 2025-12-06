@@ -79,8 +79,8 @@ foreach(benchmark_source ${benchmark_sources})
 		#----------------------------------------------
 
 		target_link_libraries(${benchmark_target_name} PRIVATE
-			vista-sdk-cpp::static
 			benchmark::benchmark
+			vista-sdk-cpp::static
 		)
 
 		#----------------------------------------------

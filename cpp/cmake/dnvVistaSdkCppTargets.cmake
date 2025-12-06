@@ -62,7 +62,6 @@ function(configure_target target_name)
 	)
 
 	target_link_libraries(${target_name} PUBLIC
-		nfx-stringbuilder::static
 	)
 
 	# --- Properties ---

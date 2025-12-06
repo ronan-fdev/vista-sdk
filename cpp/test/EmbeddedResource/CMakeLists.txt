@@ -9,6 +9,7 @@ add_executable(TESTS_EmbeddedResource
 target_link_libraries(TESTS_EmbeddedResource PRIVATE
 	GTest::gtest_main
 	EmbeddedResource
+	nfx-serialization::static
 )
 
 target_compile_options(TESTS_EmbeddedResource PRIVATE
