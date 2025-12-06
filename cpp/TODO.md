@@ -4,7 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add`CodebookName` enumeration with string conversion utilities
 -   [ ] Add `StringBuilder` class with object pooling
 -   [ ] Add`MetadataTag` class (metadata tag representation)
 -   [ ] Add`Codebook` class (codebook access and lookup)
@@ -34,6 +33,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `TESTS_EmbeddedTestData`
     -   [x] Add `TESTS_VisVersions`
     -   [x] Add `TESTS_VIS`
+    -   [x] Add `TESTS_CodebookNames`
 
 ### Done ✓
 
@@ -44,3 +44,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add DTOs with nfx-serialization for JSON deserialization
 -   [x] Add `VisVersionsGenerator` tool to link against `EmbeddedResource` library and create `VisVersions.h` and `VisVersionsExtensions.h`
 -   [x] Add `VIS` singleton
+-   [x] Add`CodebookName` enumeration with string conversion utilities
