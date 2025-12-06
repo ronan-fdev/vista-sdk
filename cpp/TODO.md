@@ -13,7 +13,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 -   [ ] Implement core SDK classes (`VIS`, `Codebook`, `Location`, `Gmod `, `GmodPath`, etc.)
     -   [x] `VIS` singleton class (access to versions and embedded resources)
-    -   [ ] `CodebookName` enumeration with string conversion utilities
+    -   [x] `CodebookName` enumeration with string conversion utilities
     -   [ ] `MetadataTag` class (metadata tag representation)
     -   [ ] `Codebook` class (codebook access and lookup)
     -   [ ] `Codebooks` class (container for version-specific codebooks)
