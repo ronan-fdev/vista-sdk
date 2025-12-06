@@ -98,6 +98,21 @@ namespace dnv::vista::sdk::test
 		EXPECT_FALSE( gmod.has_value() );
 	}
 
+	TEST( EmbeddedResourceTest, Gmod_AllVersionsLoad )
+	{
+		auto allVersions = EmbeddedResource::visVersions();
+
+		for ( const auto& version : allVersions )
+		{
+			auto gmod = EmbeddedResource::gmod( version );
+
+			ASSERT_TRUE( gmod.has_value() ) << "Failed to load Gmod for version: " << version;
+			EXPECT_EQ( version, gmod->visVersion );
+			EXPECT_FALSE( gmod->items.empty() ) << "Gmod items empty for version: " << version;
+			EXPECT_FALSE( gmod->relations.empty() ) << "Gmod relations empty for version: " << version;
+		}
+	}
+
 	//----------------------------------------------
 	// Codebooks
 	//----------------------------------------------
@@ -126,6 +141,25 @@ namespace dnv::vista::sdk::test
 		EXPECT_FALSE( codebooks.has_value() );
 	}
 
+	TEST( EmbeddedResourceTest, Codebooks_AllVersionsLoad )
+	{
+		auto allVersions = EmbeddedResource::visVersions();
+
+		for ( const auto& version : allVersions )
+		{
+			auto codebooks = EmbeddedResource::codebooks( version );
+
+			ASSERT_TRUE( codebooks.has_value() ) << "Failed to load Codebooks for version: " << version;
+			EXPECT_EQ( version, codebooks->visVersion );
+			EXPECT_FALSE( codebooks->items.empty() ) << "Codebooks items empty for version: " << version;
+
+			// Validate first codebook structure
+			const auto& firstCodebook = codebooks->items[0];
+			EXPECT_FALSE( firstCodebook.name.empty() ) << "Codebook name empty for version: " << version;
+			EXPECT_FALSE( firstCodebook.values.empty() ) << "Codebook values empty for version: " << version;
+		}
+	}
+
 	//----------------------------------------------
 	// Locations
 	//----------------------------------------------
@@ -152,6 +186,25 @@ namespace dnv::vista::sdk::test
 		auto locations = EmbeddedResource::locations( "invalid-version" );
 
 		EXPECT_FALSE( locations.has_value() );
+	}
+
+	TEST( EmbeddedResourceTest, Locations_AllVersionsLoad )
+	{
+		auto allVersions = EmbeddedResource::visVersions();
+
+		for ( const auto& version : allVersions )
+		{
+			auto locations = EmbeddedResource::locations( version );
+
+			ASSERT_TRUE( locations.has_value() ) << "Failed to load Locations for version: " << version;
+			EXPECT_EQ( version, locations->visVersion );
+			EXPECT_FALSE( locations->items.empty() ) << "Locations items empty for version: " << version;
+
+			// Validate first location structure
+			const auto& firstLocation = locations->items[0];
+			EXPECT_NE( '\0', firstLocation.code ) << "Location code empty for version: " << version;
+			EXPECT_FALSE( firstLocation.name.empty() ) << "Location name empty for version: " << version;
+		}
 	}
 
 	//----------------------------------------------
@@ -194,7 +247,8 @@ namespace dnv::vista::sdk::test
 					 versioningMap->find( "3-6a" ) != versioningMap->end() ||
 					 versioningMap->find( "3-7a" ) != versioningMap->end() ||
 					 versioningMap->find( "3-8a" ) != versioningMap->end() ||
-					 versioningMap->find( "3-9a" ) != versioningMap->end() )
+					 versioningMap->find( "3-9a" ) != versioningMap->end() ||
+					 versioningMap->find( "3-10a" ) != versioningMap->end() )
 			<< "Expected to find at least one versioning file";
 	}
 

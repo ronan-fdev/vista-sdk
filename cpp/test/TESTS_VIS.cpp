@@ -32,12 +32,18 @@
 #include <dnv/vista/sdk/VIS.h>
 
 #include <algorithm>
+#include <thread>
+#include <vector>
 
 namespace dnv::vista::sdk::test
 {
 	//=====================================================================
 	// VIS tests
 	//=====================================================================
+
+	//----------------------------------------------
+	// Instance
+	//----------------------------------------------
 
 	TEST( VISTests, InstanceReturnsSameObject )
 	{
@@ -47,12 +53,9 @@ namespace dnv::vista::sdk::test
 		EXPECT_EQ( &visInstance1, &visInstance2 );
 	}
 
-	TEST( VISTests, LatestReturnsValidVersion )
-	{
-		const auto& latestVisVersion = VIS::instance().latest();
-
-		EXPECT_EQ( latestVisVersion, VisVersion::v3_10a );
-	}
+	//----------------------------------------------
+	// Versions
+	//----------------------------------------------
 
 	TEST( VISTests, VisVersionsReturnsAllVersions )
 	{
@@ -91,5 +94,51 @@ namespace dnv::vista::sdk::test
 
 		// v3_4a should come before v3_10a
 		EXPECT_LT( std::distance( VisVersions.begin(), it34 ), std::distance( VisVersions.begin(), it310 ) );
+	}
+
+	TEST( VISTests, LatestReturnsValidVersion )
+	{
+		const auto& latestVisVersion = VIS::instance().latest();
+
+		EXPECT_EQ( latestVisVersion, VisVersion::v3_10a );
+	}
+
+	//----------------------------------------------
+	// Thread safety
+	//----------------------------------------------
+
+	TEST( VISTests, ConcurrentSingletonAccess_ThreadSafety )
+	{
+		// Test that multiple threads can safely access the const singleton simultaneously
+		constexpr int numThreads = 10;
+		std::vector<std::thread> threads;
+		std::vector<const VIS*> instances( numThreads, nullptr );
+
+		// Launch threads that all try to access the const singleton at the same time
+		for ( int i = 0; i < numThreads; ++i )
+		{
+			threads.emplace_back(
+				[&instances, i]() {
+					instances[i] = &VIS::instance();
+
+					const auto& versions = instances[i]->versions();
+					const auto& latest = instances[i]->latest();
+
+					EXPECT_EQ( versions.size(), 7 );
+					EXPECT_EQ( latest, VisVersion::v3_10a );
+				} );
+		}
+
+		// Wait for all threads to complete
+		for ( auto& thread : threads )
+		{
+			thread.join();
+		}
+
+		// All threads should have received the exact same const instance pointer
+		for ( int i = 1; i < numThreads; ++i )
+		{
+			EXPECT_EQ( instances[0], instances[i] );
+		}
 	}
 } // namespace dnv::vista::sdk::test
