@@ -9,4 +9,5 @@
 set(private_sources)
 
 list(APPEND private_sources
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/VIS.cpp
 )

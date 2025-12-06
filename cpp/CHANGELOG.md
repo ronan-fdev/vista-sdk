@@ -9,6 +9,7 @@
 -   `EmbeddedTestData` library for embedding test data files
 -   DTOs for Gmod, Codebooks, Locations, GmodVersioning, ISO19848
 -   `VisVersionsGenerator` tool for `VisVersions.h` and `VisVersionsExtensions.h` code generation
+-   `VIS` singleton class for accessing VIS versions and embedded resources
 
 ### Changed
 
