@@ -19,7 +19,6 @@ add_executable(VISVersionsGenerator
 target_link_libraries(VISVersionsGenerator PRIVATE
 	EmbeddedResource
 	nfx-stringbuilder::static
-	nfx-stringutils::nfx-stringutils
 )
 
 #----------------------------------------------

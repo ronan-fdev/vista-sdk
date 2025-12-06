@@ -4,7 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Implement core SDK classes (`Gmod`, `VIS`, `GmodPath`, `Location`, etc.)
 -   [ ] Implement `LocalId` parsing and building
 -   [ ] Implement `UniversalId` parsing and building
 -   [ ] Implement `Codebook` classes
@@ -15,7 +14,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### In Progress
 
--   NIL
+-   [ ] Implement core SDK classes (`Gmod`, `VIS`, `GmodPath`, `Location`, etc.)
 
 ### Done ✓
 

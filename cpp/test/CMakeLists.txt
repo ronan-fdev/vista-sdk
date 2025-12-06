@@ -73,6 +73,7 @@ set(test_sources)
 
 list(APPEND test_sources
 	TESTS_VISVersions.cpp
+	TESTS_VIS.cpp
 )
 
 #----------------------------------------------
@@ -91,6 +92,7 @@ foreach(test_source ${test_sources})
 
 		target_link_libraries(${test_target_name} PRIVATE
 			GTest::gtest_main
+			vista-sdk-cpp::static
 		)
 
 		target_include_directories(${test_target_name} PUBLIC

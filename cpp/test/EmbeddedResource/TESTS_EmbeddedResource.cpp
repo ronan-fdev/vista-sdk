@@ -62,6 +62,21 @@ namespace dnv::vista::sdk::test
 		}
 	}
 
+	TEST( EmbeddedResourceTest, Ordered )
+	{
+		const auto versions = EmbeddedResource::visVersions();
+
+		// Find indices of 3-4a and 3-10a
+		auto it34 = std::find( versions.begin(), versions.end(), "3-4a" );
+		auto it310 = std::find( versions.begin(), versions.end(), "3-10a" );
+
+		ASSERT_NE( it34, versions.end() );
+		ASSERT_NE( it310, versions.end() );
+
+		// v3_4a should come before v3_10a
+		EXPECT_LT( std::distance( versions.begin(), it34 ), std::distance( versions.begin(), it310 ) );
+	}
+
 	//----------------------------------------------
 	// Gmod
 	//----------------------------------------------

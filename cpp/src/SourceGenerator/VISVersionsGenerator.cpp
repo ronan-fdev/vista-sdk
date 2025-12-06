@@ -31,7 +31,6 @@
 #include <EmbeddedResource/EmbeddedResource.h>
 
 #include <nfx/string/StringBuilder.h>
-#include <nfx/string/Utils.h>
 
 #include <algorithm>
 #include <cstdio>
@@ -253,7 +252,7 @@ static bool generateVISVersionHeader( const std::vector<std::string>& versions, 
 
 	auto& buffer = lease.buffer();
 	outputFile.write( buffer.data(), static_cast<std::streamsize>( buffer.size() ) );
-	
+
 	if ( !outputFile )
 	{
 		fprintf( stderr, "Failed to write to output file: %s\n", outputPath.string().c_str() );
@@ -284,10 +283,6 @@ int main( int argc, char* argv[] )
 		return 1;
 	}
 
-	std::sort( versions.begin(), versions.end(), []( const std::string& a, const std::string& b ) {
-		return nfx::string::naturalCompare( a, b ) < 0;
-	} );
-
 	printf( "Found %zu VIS versions:\n", versions.size() );
 	for ( const auto& version : versions )
 	{
@@ -301,6 +296,5 @@ int main( int argc, char* argv[] )
 		return 1;
 	}
 
-	printf( "Success!\n" );
 	return 0;
 }

@@ -40,7 +40,7 @@ if(VISTA_SDK_CPP_BUILD_STATIC)
 	)
 
 	set_target_properties(${PROJECT_NAME}-static PROPERTIES
-		OUTPUT_NAME ${PROJECT_NAME}-static-${PROJECT_VERSION}
+		OUTPUT_NAME ${PROJECT_NAME}-static
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
 	)
 
@@ -61,7 +61,12 @@ function(configure_target target_name)
 			${VISTA_SDK_CPP_SOURCE_DIR}
 	)
 
-	target_link_libraries(${target_name} PUBLIC
+	target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:EmbeddedResource>)
+
+	target_link_libraries(${target_name} PRIVATE
+		$<BUILD_INTERFACE:zlib-ng>
+		$<BUILD_INTERFACE:nfx-serialization::static>
+		$<BUILD_INTERFACE:nfx-stringutils::nfx-stringutils>
 	)
 
 	# --- Properties ---

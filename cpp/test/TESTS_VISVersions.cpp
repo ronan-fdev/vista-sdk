@@ -37,20 +37,15 @@ namespace dnv::vista::sdk::test
 	// VISVersions tests
 	//=====================================================================
 
-	TEST( EmbeddedResourceTest, VISVersions_ToString )
+	TEST( VISVersionsTests, ToString )
 	{
 		auto visVersion = VISVersion::v3_9a;
 		auto visVersionString = VISVersions::toString( visVersion );
 
 		EXPECT_EQ( "3-9a", visVersionString );
-
-		// Test std::optional overload
-		auto parsed = VISVersions::fromString( visVersionString );
-		ASSERT_TRUE( parsed.has_value() );
-		EXPECT_EQ( visVersion, *parsed );
 	}
 
-	TEST( EmbeddedResourceTest, VISVersions_FromString_OptionalOverload )
+	TEST( VISVersionsTests, FromString_OptionalOverload )
 	{
 		// Test valid versions
 		auto v34a = VISVersions::fromString( "3-4a" );
@@ -66,7 +61,7 @@ namespace dnv::vista::sdk::test
 		EXPECT_FALSE( invalid.has_value() );
 	}
 
-	TEST( EmbeddedResourceTest, VISVersions_FromString_OutParameterOverload )
+	TEST( VISVersionsTests, FromString_OutParameterOverload )
 	{
 		// Test valid versions
 		VISVersion result;
@@ -81,5 +76,20 @@ namespace dnv::vista::sdk::test
 		// Test invalid version
 		success = VISVersions::fromString( "invalid", result );
 		EXPECT_FALSE( success );
+	}
+
+	TEST( VISVersionsTests, Ordered )
+	{
+		const auto versions = VISVersions::all();
+
+		// Find indices of 3-4a and 3-10a
+		auto it34 = std::find( versions.begin(), versions.end(), VISVersion::v3_4a );
+		auto it310 = std::find( versions.begin(), versions.end(), VISVersion::v3_10a );
+
+		ASSERT_NE( it34, versions.end() );
+		ASSERT_NE( it310, versions.end() );
+
+		// v3_4a should come before v3_10a
+		EXPECT_LT( std::distance( versions.begin(), it34 ), std::distance( versions.begin(), it310 ) );
 	}
 } // namespace dnv::vista::sdk::test

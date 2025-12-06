@@ -58,6 +58,8 @@ function(embed_all_resources_to_target TARGET_NAME RESOURCE_DIR OUTPUT_DIR)
 		return()
 	endif()
 
+	list(SORT RESOURCE_FILES COMPARE NATURAL)
+
 	set(ALL_FILES "")
 	set(ALL_RESOURCE_IDS "")
 
