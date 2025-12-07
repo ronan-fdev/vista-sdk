@@ -74,6 +74,8 @@ list(APPEND test_sources
 	SDK/TESTS_CodebookNames.cpp
 	SDK/TESTS_VIS.cpp
 	SDK/TESTS_VisVersions.cpp
+
+	StringBuilder/TESTS_StringBuilder.cpp
 )
 
 #----------------------------------------------
