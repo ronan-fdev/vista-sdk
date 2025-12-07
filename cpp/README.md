@@ -83,6 +83,10 @@ vista-sdk/cpp/
 └── TODO.md                 # Project roadmap and task tracking
 ```
 
+## Performance
+
+For detailed performance metrics and benchmarks, see the [benchmark documentation](benchmark/README.md).
+
 ## Roadmap
 
 See [TODO.md](TODO.md) for upcoming features and project roadmap.
@@ -112,4 +116,4 @@ All dependencies are automatically fetched via CMake FetchContent when building 
 
 ---
 
-_Updated on December 05, 2025_
+_Updated on December 07, 2025_

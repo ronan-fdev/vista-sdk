@@ -57,6 +57,7 @@ endif()
 set(benchmark_sources)
 
 list(APPEND benchmark_sources
+	BM_StringBuilder.cpp
 )
 
 if(NOT benchmark_sources)
@@ -79,6 +80,7 @@ foreach(benchmark_source ${benchmark_sources})
 		target_link_libraries(${benchmark_target_name} PRIVATE
 			benchmark::benchmark
 			vista-sdk-cpp::static
+			nfx-stringbuilder::static
 		)
 
 		#----------------------------------------------

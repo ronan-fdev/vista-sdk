@@ -11,6 +11,7 @@
 -   `VisVersionsGenerator` tool for `VisVersions.h` and `VisVersionsExtensions.h` code generation
 -   `VIS` singleton class for accessing VIS versions and embedded resources
 -   `CodebookName` enumeration and conversion utilities for VIS codebook types
+-   `StringBuilder` class
 
 ### Changed
 
