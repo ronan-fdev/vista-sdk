@@ -13,6 +13,7 @@
 -   `CodebookName` enumeration and conversion utilities for VIS codebook types
 -   `StringBuilder` class
 -   `MetadataTag` class for VIS Local ID metadata with `StringBuilder` integration
+-   `Codebook` class with position validation and `MetadataTag` creation
 
 ### Changed
 
