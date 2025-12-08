@@ -71,7 +71,9 @@ endif()
 set(test_sources)
 
 list(APPEND test_sources
+	SDK/TESTS_Codebook.cpp
 	SDK/TESTS_CodebookNames.cpp
+	SDK/TESTS_Codebooks.cpp
 	SDK/TESTS_VIS.cpp
 	SDK/TESTS_VisVersions.cpp
 
@@ -94,7 +96,9 @@ foreach(test_source ${test_sources})
 
 		target_link_libraries(${test_target_name} PRIVATE
 			GTest::gtest_main
+			EmbeddedTestData
 			vista-sdk-cpp::static
+			nfx-serialization::static
 		)
 
 		#----------------------------------------------
