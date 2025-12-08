@@ -4,7 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add`Codebooks` class (container for version-specific codebooks)
 -   [ ] Add `Location` class and `LocationBuilder`
 -   [ ] Add `Locations` class (locations collection/parser per VIS version)
 -   [ ] Add `ImoNumber` class (IMO number validation for UniversalId)
@@ -47,3 +46,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add `StringBuilder` class
 -   [x] Add`MetadataTag` class (metadata tag representation)
 -   [x] Add`Codebook` class (codebook access and lookup)
+-   [x] Add`Codebooks` class (container for version-specific codebooks)
