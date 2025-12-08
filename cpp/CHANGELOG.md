@@ -15,6 +15,7 @@
 -   `MetadataTag` class for VIS Local ID metadata with `StringBuilder` integration
 -   `Codebook` class with position validation and `MetadataTag` creation
 -   `Codebooks` class for VIS version-specific codebook access
+-   `VIS::codebooks()` method with lazy loading and caching
 
 ### Changed
 

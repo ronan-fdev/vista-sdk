@@ -34,6 +34,18 @@
 
 # Performance Results
 
+## VIS Benchmarks
+
+### Caching
+
+| Operation                         | Linux GCC  | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
+| --------------------------------- | ---------- | ----------- | ----------------: | --------------------: | ---------------------: | -----------: |
+| **BM_Codebooks_ColdStart**        | 34.6ns     | **32.9ns**  |            87.9ns |                76.7ns |                 73.2ns |       69.8ns |
+| **BM_Codebooks_CachedAccess**     | 34.3ns     | **33.2ns**  |            83.7ns |                87.9ns |                 73.9ns |       69.7ns |
+| **BM_Codebooks_MultipleVersions** | 37.3ns     | **35.4ns**  |            88.9ns |                94.9ns |                 75.0ns |       69.8ns |
+| **BM_Codebooks_RealisticUsage**   | 104ns      | **98.6ns**  |             262ns |                 226ns |                  215ns |        218ns |
+| **BM_Codebooks_LookupAfterCache** | **18.5ns** | 22.4ns      |            19.5ns |                21.3ns |                 19.7ns |       21.5ns |
+
 ## StringBuilder Benchmarks
 
 ### Short Strings
@@ -83,4 +95,4 @@
 
 ---
 
-_Updated on December 07, 2025_
+_Updated on December 08, 2025_
