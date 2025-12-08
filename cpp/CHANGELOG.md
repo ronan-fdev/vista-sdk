@@ -13,6 +13,7 @@
 -   `CodebookName` enumeration and conversion utilities for VIS codebook types
 -   `MetadataTag` class for VIS Local ID metadata
 -   `Codebook` class with position validation and `MetadataTag` creation
+-   `Codebooks` class for VIS version-specific codebook access
 
 ### Changed
 

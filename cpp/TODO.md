@@ -16,7 +16,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] `CodebookName` enumeration with string conversion utilities
     -   [x] `MetadataTag` class (metadata tag representation)
     -   [x] `Codebook` class (codebook access and lookup)
-    -   [ ] `Codebooks` class (container for version-specific codebooks)
+    -   [x] `Codebooks` class (container for version-specific codebooks)
     -   [ ] `Location` class (location representation)
     -   [ ] `Gmod` class (wrapper around GmodDto with query/navigation API)
     -   [ ] `GmodPath` class (path representation and parsing)
