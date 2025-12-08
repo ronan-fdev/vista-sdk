@@ -30,10 +30,29 @@
 
 #include "dnv/vista/sdk/VIS.h"
 
+#include "dnv/vista/sdk/Codebooks.h"
+#include "dnv/vista/sdk/Locations.h"
+#include "dto/CodebooksDto.h"
+#include "dto/GmodDto.h"
+#include "dto/GmodVersioningDto.h"
+#include "dto/LocationsDto.h"
 #include "VisVersionsExtensions.h"
+
+#include <EmbeddedResource/EmbeddedResource.h>
+
+#include <mutex>
+#include <shared_mutex>
+#include <stdexcept>
+#include <unordered_map>
 
 namespace dnv::vista::sdk
 {
+	namespace internal
+	{
+		static std::unordered_map<VisVersion, Codebooks> codebooksCache;
+		static std::shared_mutex codebooksMutex;
+	} // namespace internal
+
 	const VIS& VIS::instance()
 	{
 		static VIS instance;
@@ -54,5 +73,40 @@ namespace dnv::vista::sdk
 		}();
 
 		return versions;
+	}
+
+	const Codebooks& VIS::codebooks( VisVersion visVersion ) const
+	{
+		// Fast path: read-only access
+		{
+			std::shared_lock lock( internal::codebooksMutex );
+			auto it = internal::codebooksCache.find( visVersion );
+			if ( it != internal::codebooksCache.end() )
+			{
+				return it->second;
+			}
+		}
+
+		// Slow path: load and cache
+		std::unique_lock lock( internal::codebooksMutex );
+
+		// Double-check
+		auto it = internal::codebooksCache.find( visVersion );
+		if ( it != internal::codebooksCache.end() )
+		{
+			return it->second;
+		}
+
+		// Load from embedded resource
+		auto versionStr = VisVersions::toString( visVersion );
+		auto dto = EmbeddedResource::codebooks( versionStr );
+
+		if ( !dto.has_value() )
+		{
+			throw std::out_of_range{ "Codebooks not available for version: " + std::string{ versionStr } };
+		}
+
+		auto [inserted, _] = internal::codebooksCache.emplace( visVersion, Codebooks{ visVersion, *dto } );
+		return inserted->second;
 	}
 } // namespace dnv::vista::sdk

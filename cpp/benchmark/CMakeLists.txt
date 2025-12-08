@@ -58,6 +58,7 @@ set(benchmark_sources)
 
 list(APPEND benchmark_sources
 	BM_StringBuilder.cpp
+	BM_VISCacheEfficiency.cpp
 )
 
 if(NOT benchmark_sources)
