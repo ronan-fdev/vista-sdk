@@ -32,6 +32,13 @@
 
 #include "VisVersionsExtensions.h"
 
+#include "dnv/vista/sdk/Codebooks.h"
+#include "dto/CodebooksDto.h"
+
+#include <EmbeddedResource/EmbeddedResource.h>
+
+#include <stdexcept>
+
 namespace dnv::vista::sdk
 {
 	const VIS& VIS::instance()
@@ -54,5 +61,24 @@ namespace dnv::vista::sdk
 		}();
 
 		return versions;
+	}
+
+	const Codebooks& VIS::codebooks( VisVersion visVersion ) const
+	{
+		// Check cache first
+		auto it = m_codebooksCache.find( visVersion );
+		if ( it != m_codebooksCache.end() )
+			return it->second;
+
+		// Load from embedded resource
+		auto versionStr = VisVersions::toString( visVersion );
+		auto dto = EmbeddedResource::codebooks( versionStr );
+
+		if ( !dto.has_value() )
+			throw std::out_of_range{ "Codebooks not available for version: " + std::string{ versionStr } };
+
+		// Construct and cache
+		auto [cacheIt, inserted] = m_codebooksCache.emplace( visVersion, Codebooks{ visVersion, *dto } );
+		return cacheIt->second;
 	}
 } // namespace dnv::vista::sdk
