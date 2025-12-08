@@ -4,7 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add`MetadataTag` class (metadata tag representation)
 -   [ ] Add`Codebook` class (codebook access and lookup)
 -   [ ] Add`Codebooks` class (container for version-specific codebooks)
 -   [ ] Add `Location` class and `LocationBuilder`
@@ -47,3 +46,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add `VIS` singleton
 -   [x] Add`CodebookName` enumeration with string conversion utilities
 -   [x] Add `StringBuilder` class
+-   [x] Add`MetadataTag` class (metadata tag representation)
