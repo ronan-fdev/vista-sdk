@@ -12,6 +12,7 @@
 -   `VIS` singleton class for accessing VIS versions and embedded resources
 -   `CodebookName` enumeration and conversion utilities for VIS codebook types
 -   `MetadataTag` class for VIS Local ID metadata
+-   `Codebook` class with position validation and `MetadataTag` creation
 
 ### Changed
 
