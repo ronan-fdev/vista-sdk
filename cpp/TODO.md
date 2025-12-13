@@ -19,7 +19,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [ ] Add `GmodPathQuery` (query API for GmodPaths)
 -   [ ] Add `MetadataTagsQuery` (query API for metadata tags)
 -   [ ] Add `ParsingErrors` class (error collection and reporting)
--   [ ] Add sample programs demonstrating SDK usage
 
 ### In Progress
 
@@ -35,6 +34,8 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
+-   [ ] Add sample programs demonstrating SDK usage
+    -   [x] Add `Sample_Codebooks`
 
 ### Done ✓
 

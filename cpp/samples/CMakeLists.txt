@@ -17,6 +17,7 @@ endif()
 set(sample_sources)
 
 list(APPEND sample_sources
+	simple/Sample_Codebooks.cpp
 )
 
 if(NOT sample_sources)
