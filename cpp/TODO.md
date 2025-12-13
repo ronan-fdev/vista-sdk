@@ -34,6 +34,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
+    -   [x] Add `BM_CodebooksLookup`
 -   [ ] Add sample programs demonstrating SDK usage
     -   [x] Add `Sample_Codebooks`
 

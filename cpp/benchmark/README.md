@@ -34,6 +34,16 @@
 
 # Performance Results
 
+## Codebooks Benchmarks
+
+### Codebooks lookup
+
+| Operation           | Linux GCC   | Linux Clang | Windows MinGW GCC | Windows Clang-GNU-CLI | Windows Clang-MSVC-CLI | Windows MSVC |
+| ------------------- | ----------- | ----------- | ----------------: | --------------------: | ---------------------: | -----------: |
+| **BM_UnorderedMap** | 6.40ns      | 1.78ns      |            7.17ns |                2.02ns |             **1.35ns** |       2.01ns |
+| **BM_Map**          | **3.66ns**  | 5.62ns      |            4.33ns |                11.6ns |                 8.99ns |       9.51ns |
+| **BM_Codebooks**    | **0.826ns** | 0.890ns     |           0.948ns |                1.17ns |                0.855ns |       1.02ns |
+
 ## VIS Benchmarks
 
 ### Caching
@@ -95,4 +105,4 @@
 
 ---
 
-_Updated on December 08, 2025_
+_Updated on December 12, 2025_
