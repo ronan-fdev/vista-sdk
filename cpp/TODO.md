@@ -18,7 +18,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [ ] Add `LocalIdQuery` / `LocalIdQueryBuilder` (fluent query API for LocalIds)
 -   [ ] Add `GmodPathQuery` (query API for GmodPaths)
 -   [ ] Add `MetadataTagsQuery` (query API for metadata tags)
--   [ ] Add `ParsingErrors` class (error collection and reporting)
 
 ### In Progress
 
@@ -31,6 +30,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `TESTS_StringBuilder`
     -   [x] Add `TESTS_Codebook`
     -   [x] Add `TESTS_Codebooks`
+    -   [x] Add `TESTS_ParsingErrors`
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
@@ -52,3 +52,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add`MetadataTag` class (metadata tag representation)
 -   [x] Add`Codebook` class (codebook access and lookup)
 -   [x] Add`Codebooks` class (container for version-specific codebooks)
+-   [x] Add `ParsingErrors` class (error collection and reporting)
