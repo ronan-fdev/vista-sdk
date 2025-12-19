@@ -4,8 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add `Location` class and `LocationBuilder`
--   [ ] Add `Locations` class (locations collection/parser per VIS version)
 -   [ ] Add `ImoNumber` class (IMO number validation for UniversalId)
 -   [ ] Add`GmodNode` class (Gmod tree node with metadata)
 -   [ ] Add`Gmod` class (wrapper around GmodDto with query/navigation API)
@@ -21,6 +19,9 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### In Progress
 
+-   [ ] Add `Locations` classes and `LocationBuilder`
+    -   [x] Add `Locations` classes
+    -   [ ] Add `LocationBuilder` class
 -   [ ] Add unit tests
     -   [x] Add `TESTS_EmbeddedResource`
     -   [x] Add `TESTS_EmbeddedTestData`
@@ -31,6 +32,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `TESTS_Codebook`
     -   [x] Add `TESTS_Codebooks`
     -   [x] Add `TESTS_ParsingErrors`
+    -   [x] Add `TESTS_Locations`
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
