@@ -31,6 +31,7 @@
 #pragma once
 
 #include "Codebooks.h"
+#include "Locations.h"
 #include "ParsingErrors.h"
 #include "VisVersions.h"
 
@@ -98,5 +99,14 @@ namespace dnv::vista::sdk
 		 * @note The returned reference is to an internal cached object owned by the `VIS` singleton.
 		 */
 		const Codebooks& codebooks( VisVersion visVersion ) const;
+
+		/**
+		 * @brief Get locations for a specific VIS version
+		 * @param visVersion The VIS version for which to retrieve locations
+		 * @return Reference to a `Locations` container for the requested version
+		 * @throws std::out_of_range if the requested version is not available
+		 * @note The returned reference is to an internal cached object owned by the `VIS` singleton.
+		 */
+		const Locations& locations( VisVersion visVersion ) const;
 	};
 } // namespace dnv::vista::sdk

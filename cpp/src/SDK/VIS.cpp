@@ -51,6 +51,9 @@ namespace dnv::vista::sdk
 	{
 		static std::unordered_map<VisVersion, Codebooks> codebooksCache;
 		static std::shared_mutex codebooksMutex;
+
+		static std::unordered_map<VisVersion, Locations> locationsCache;
+		static std::shared_mutex locationsMutex;
 	} // namespace internal
 
 	const VIS& VIS::instance()
@@ -107,6 +110,41 @@ namespace dnv::vista::sdk
 		}
 
 		auto [inserted, _] = internal::codebooksCache.emplace( visVersion, Codebooks{ visVersion, *dto } );
+		return inserted->second;
+	}
+
+	const Locations& VIS::locations( VisVersion visVersion ) const
+	{
+		// Fast path: read-only access
+		{
+			std::shared_lock lock( internal::locationsMutex );
+			auto it = internal::locationsCache.find( visVersion );
+			if ( it != internal::locationsCache.end() )
+			{
+				return it->second;
+			}
+		}
+
+		// Slow path: load and cache
+		std::unique_lock lock( internal::locationsMutex );
+
+		// Double-check
+		auto it = internal::locationsCache.find( visVersion );
+		if ( it != internal::locationsCache.end() )
+		{
+			return it->second;
+		}
+
+		// Load from embedded resource
+		auto versionStr = VisVersions::toString( visVersion );
+		auto dto = EmbeddedResource::locations( versionStr );
+
+		if ( !dto.has_value() )
+		{
+			throw std::out_of_range{ "Locations not available for version: " + std::string{ versionStr } };
+		}
+
+		auto [inserted, _] = internal::locationsCache.emplace( visVersion, Locations{ visVersion, *dto } );
 		return inserted->second;
 	}
 } // namespace dnv::vista::sdk

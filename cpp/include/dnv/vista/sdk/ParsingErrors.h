@@ -37,6 +37,11 @@
 
 namespace dnv::vista::sdk
 {
+	namespace internal
+	{
+		class LocationParsingErrorBuilder;
+	} // namespace internal
+
 	/**
 	 * @brief Container for parsing validation errors
 	 * @details Immutable collection of typed error messages from parsing operations.
@@ -45,6 +50,8 @@ namespace dnv::vista::sdk
 	 */
 	class ParsingErrors final
 	{
+		friend class internal::LocationParsingErrorBuilder;
+
 	public:
 		/**
 		 * @brief Single error entry with type and message

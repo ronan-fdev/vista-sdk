@@ -17,6 +17,12 @@
 -   `Codebooks` class for VIS version-specific codebook access
 -   `VIS::codebooks()` method with lazy loading and caching
 -   `ParsingErrors` class for error accumulation with STL-compatible iteration
+-   `LocationParsingErrorBuilder` for typed validation error accumulation
+-   `LocationGroup` enumeration for classifying VIS location codes
+-   `Location` value class for VIS location representation
+-   `RelativeLocation` class with code, name, definition, and Location
+-   `Locations` class for version-specific location collections with parsing and validation
+-   `VIS::locations()` method with lazy loading and caching
 
 ### Changed
 
