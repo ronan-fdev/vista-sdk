@@ -36,6 +36,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `BM_CodebooksLookup`
 -   [ ] Add sample programs demonstrating SDK usage
     -   [x] Add `Sample_Codebooks`
+    -   [x] Add `Sample_Locations`
 
 ### Done ✓
 
