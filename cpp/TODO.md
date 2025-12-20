@@ -4,7 +4,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### Todo
 
--   [ ] Add `ImoNumber` class (IMO number validation for UniversalId)
 -   [ ] Add`GmodNode` class (Gmod tree node with metadata)
 -   [ ] Add`Gmod` class (wrapper around GmodDto with query/navigation API)
 -   [ ] Add`GmodPath` class (path representation and parsing)
@@ -30,6 +29,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `TESTS_Codebooks`
     -   [x] Add `TESTS_ParsingErrors`
     -   [x] Add `TESTS_Locations`
+    -   [x] Add `TESTS_ImoNumber`
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
@@ -55,3 +55,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add `ParsingErrors` class (error collection and reporting)
 -   [x] Add `Locations` classes (`Location`, `RelativeLocation`, `Locations`)
 -   [x] Add `LocationBuilder` class with immutable builder pattern
+-   [x] Add `ImoNumber` class (IMO number validation for UniversalId)

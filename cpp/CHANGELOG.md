@@ -24,6 +24,7 @@
 -   `Locations` class for version-specific location collections with parsing and validation
 -   `VIS::locations()` method with lazy loading and caching
 -   `LocationBuilder` class with immutable builder pattern for constructing Location instances
+-   `ImoNumber` class for IMO number validation with checksum verification
 
 ### Changed
 
