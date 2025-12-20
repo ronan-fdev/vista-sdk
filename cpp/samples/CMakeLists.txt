@@ -18,6 +18,7 @@ set(sample_sources)
 
 list(APPEND sample_sources
 	simple/Sample_Codebooks.cpp
+	simple/Sample_Locations.cpp
 )
 
 if(NOT sample_sources)
