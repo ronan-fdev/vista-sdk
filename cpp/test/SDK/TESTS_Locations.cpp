@@ -203,4 +203,94 @@ namespace dnv::vista::sdk::test
 		EXPECT_FALSE( result2.has_value() );
 	}
 
+	TEST( LocationsTests, LocationBuilder )
+	{
+		const auto& locations = VIS::instance().locations( VisVersion::v3_4a );
+
+		auto locationStr = "11FIPU";
+		auto location = locations.fromString( locationStr );
+
+		auto builder = LocationBuilder::create( locations );
+
+		builder = builder.withNumber( 11 )
+					  .withSide( 'P' )
+					  .withTransverse( 'I' )
+					  .withLongitudinal( 'F' )
+					  .withCode( 'U' );
+
+		ASSERT_EQ( "11FIPU", builder.toString() );
+		ASSERT_EQ( 11, builder.number().value() );
+		ASSERT_EQ( 'P', builder.side().value() );
+		ASSERT_EQ( 'U', builder.vertical().value() );
+		ASSERT_EQ( 'I', builder.transverse().value() );
+		ASSERT_EQ( 'F', builder.longitudinal().value() );
+
+		EXPECT_THROW( (void)builder.withCode( 'X' ), std::invalid_argument );
+		EXPECT_THROW( (void)builder.withNumber( -1 ), std::invalid_argument );
+		EXPECT_THROW( (void)builder.withNumber( 0 ), std::invalid_argument );
+		EXPECT_THROW( (void)builder.withSide( 'A' ), std::invalid_argument );
+		EXPECT_THROW( (void)builder.withCode( 'a' ), std::invalid_argument );
+
+		ASSERT_EQ( location, builder.build() );
+
+		builder = LocationBuilder::create( locations ).withLocation( builder.build() );
+
+		ASSERT_EQ( "11FIPU", builder.toString() );
+		ASSERT_EQ( 11, builder.number().value() );
+		ASSERT_EQ( 'P', builder.side().value() );
+		ASSERT_EQ( 'U', builder.vertical().value() );
+		ASSERT_EQ( 'I', builder.transverse().value() );
+		ASSERT_EQ( 'F', builder.longitudinal().value() );
+
+		builder = builder.withCode( 'S' ).withNumber( 2 );
+
+		ASSERT_EQ( "2FISU", builder.toString() );
+		ASSERT_EQ( 2, builder.number().value() );
+		ASSERT_EQ( 'S', builder.side().value() );
+		ASSERT_EQ( 'U', builder.vertical().value() );
+		ASSERT_EQ( 'I', builder.transverse().value() );
+		ASSERT_EQ( 'F', builder.longitudinal().value() );
+	}
+
+	TEST( LocationsTests, LocationBuilderWithLocationSingleDigit )
+	{
+		const auto& locations = VIS::instance().locations( VisVersion::v3_4a );
+
+		auto builder1 = LocationBuilder::create( locations ).withLocation( locations.fromString( "1" ) );
+		ASSERT_EQ( 1, builder1.number().value() );
+		ASSERT_EQ( "1", builder1.toString() );
+
+		auto builder5 = LocationBuilder::create( locations ).withLocation( locations.fromString( "5" ) );
+		ASSERT_EQ( 5, builder5.number().value() );
+		ASSERT_EQ( "5", builder5.toString() );
+
+		auto builder9 = LocationBuilder::create( locations ).withLocation( locations.fromString( "9" ) );
+		ASSERT_EQ( 9, builder9.number().value() );
+		ASSERT_EQ( "9", builder9.toString() );
+
+		auto builderMixed = LocationBuilder::create( locations ).withLocation( locations.fromString( "1FIPU" ) );
+		ASSERT_EQ( 1, builderMixed.number().value() );
+		ASSERT_EQ( 'P', builderMixed.side().value() );
+		ASSERT_EQ( 'U', builderMixed.vertical().value() );
+		ASSERT_EQ( 'I', builderMixed.transverse().value() );
+		ASSERT_EQ( 'F', builderMixed.longitudinal().value() );
+		ASSERT_EQ( "1FIPU", builderMixed.toString() );
+	}
+
+	TEST( LocationsTests, LocationBuilderMultiDigitNumberNotSorted )
+	{
+		const auto& locations = VIS::instance().locations( VisVersion::v3_4a );
+
+		// Test that multi-digit numbers are NOT sorted
+		auto builder = LocationBuilder::create( locations )
+						   .withNumber( 10 )
+						   .withSide( 'S' )
+						   .withVertical( 'U' )
+						   .withLongitudinal( 'F' );
+
+		// Should be "10FSU" NOT "01FSU"
+		// The number "10" should stay together, not be sorted as individual characters
+		ASSERT_EQ( "10FSU", builder.toString() );
+		ASSERT_EQ( 10, builder.number().value() );
+	}
 } // namespace dnv::vista::sdk::test

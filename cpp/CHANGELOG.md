@@ -23,6 +23,7 @@
 -   `RelativeLocation` class with code, name, definition, and Location
 -   `Locations` class for version-specific location collections with parsing and validation
 -   `VIS::locations()` method with lazy loading and caching
+-   `LocationBuilder` class with immutable builder pattern for constructing Location instances
 
 ### Changed
 

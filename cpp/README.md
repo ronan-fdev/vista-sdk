@@ -103,9 +103,9 @@ This project is licensed under the MIT License.
 
 -   **[zlib-ng](https://github.com/zlib-ng/zlib-ng)**: zlib replacement for .gz decompression (zlib License)
 -   **[nfx-serialization](https://github.com/nfx-libs/nfx-serialization)**: JSON serialization library for C++ (MIT License)
-    -   **[nfx-stringutils](https://github.com/nfx-libs/nfx-stringutils)**: String utilities library (MIT License)
     -   **[nlohmann/json](https://github.com/nlohmann/json)**: JSON for Modern C++ (MIT License)
 -   **[nfx-stringbuilder](https://github.com/nfx-libs/nfx-stringbuilder)**: String builder library for C++ (MIT License)
+-   **[nfx-stringutils](https://github.com/nfx-libs/nfx-stringutils)**: String utilities library (MIT License)
 
 ### Development Dependencies
 
@@ -116,4 +116,4 @@ All dependencies are automatically fetched via CMake FetchContent when building 
 
 ---
 
-_Updated on December 07, 2025_
+_Updated on December 20, 2025_

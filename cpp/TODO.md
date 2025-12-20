@@ -19,9 +19,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 
 ### In Progress
 
--   [ ] Add `Locations` classes and `LocationBuilder`
-    -   [x] Add `Locations` classes
-    -   [ ] Add `LocationBuilder` class
 -   [ ] Add unit tests
     -   [x] Add `TESTS_EmbeddedResource`
     -   [x] Add `TESTS_EmbeddedTestData`
@@ -55,3 +52,5 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add`Codebook` class (codebook access and lookup)
 -   [x] Add`Codebooks` class (container for version-specific codebooks)
 -   [x] Add `ParsingErrors` class (error collection and reporting)
+-   [x] Add `Locations` classes (`Location`, `RelativeLocation`, `Locations`)
+-   [x] Add `LocationBuilder` class with immutable builder pattern
