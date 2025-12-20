@@ -31,7 +31,7 @@
 #pragma once
 
 #include "Codebooks.h"
-#include "Locations.h"
+#include "LocationBuilder.h"
 #include "ParsingErrors.h"
 #include "VisVersions.h"
 
