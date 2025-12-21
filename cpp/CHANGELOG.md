@@ -25,6 +25,8 @@
 -   `VIS::locations()` method with lazy loading and caching
 -   `LocationBuilder` class with immutable builder pattern for constructing Location instances
 -   `ImoNumber` class for IMO number validation with checksum verification
+-   `GmodNodeMetadata` class for Gmod node descriptive information (category, type, name, optional fields)
+-   `GmodNode` class for Gmod tree hierarchy with code, location, metadata, and parent/child navigation
 
 ### Changed
 
