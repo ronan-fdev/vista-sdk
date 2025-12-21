@@ -49,6 +49,9 @@ namespace dnv::vista::sdk
 {
 	namespace internal
 	{
+		static std::unordered_map<VisVersion, Gmod> gmodCache;
+		static std::shared_mutex gmodMutex;
+
 		static std::unordered_map<VisVersion, Codebooks> codebooksCache;
 		static std::shared_mutex codebooksMutex;
 
@@ -76,6 +79,41 @@ namespace dnv::vista::sdk
 		}();
 
 		return versions;
+	}
+
+	const Gmod& VIS::gmod( VisVersion visVersion ) const
+	{
+		// Fast path: read-only access
+		{
+			std::shared_lock lock( internal::gmodMutex );
+			auto it = internal::gmodCache.find( visVersion );
+			if ( it != internal::gmodCache.end() )
+			{
+				return it->second;
+			}
+		}
+
+		// Slow path: load and cache
+		std::unique_lock lock( internal::gmodMutex );
+
+		// Double-check (another thread might have loaded it)
+		auto it = internal::gmodCache.find( visVersion );
+		if ( it != internal::gmodCache.end() )
+		{
+			return it->second;
+		}
+
+		// Load from embedded resource
+		auto versionStr = VisVersions::toString( visVersion );
+		auto dto = EmbeddedResource::gmod( versionStr );
+
+		if ( !dto.has_value() )
+		{
+			throw std::out_of_range{ "Gmod not available for version: " + std::string{ versionStr } };
+		}
+
+		auto [inserted, _] = internal::gmodCache.emplace( visVersion, Gmod{ visVersion, *dto } );
+		return inserted->second;
 	}
 
 	const Codebooks& VIS::codebooks( VisVersion visVersion ) const
