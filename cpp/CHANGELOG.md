@@ -29,6 +29,9 @@
 -   `GmodNode` class for Gmod tree hierarchy with code, location, metadata, and parent/child navigation
 -   `Gmod` class for Generic Product Model representation with tree navigation and node lookup
 -   `VIS::gmod()` method with lazy loading and caching for version-specific Gmod access
+-   CLI tools: `codebooks-cli` for interactive codebook exploration
+-   CLI tools: `locations-cli` for location lookup and validation
+-   `GmodPath` class for GMOD path representation with short and full path parsing
 
 ### Changed
 

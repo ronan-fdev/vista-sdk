@@ -14,6 +14,7 @@ list(APPEND private_sources
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/Codebooks.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/Gmod.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/GmodNode.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/GmodPath.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/ImoNumber.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/LocationBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/Locations.cpp

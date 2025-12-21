@@ -80,4 +80,73 @@ namespace dnv::vista::sdk
 	{
 		return m_nodeMap.cend();
 	}
+
+	template <typename TState>
+	inline bool Gmod::traverse( TState& state, TraverseHandlerWithState<TState> handler, TraversalOptions options ) const
+	{
+		return traverse( state, *m_rootNode, handler, options );
+	}
+
+	template <typename TState>
+	inline bool Gmod::traverse( TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, TraversalOptions options ) const
+	{
+		std::vector<GmodNode> parents;
+		std::unordered_map<std::string, int> occurrences;
+
+		std::function<TraversalHandlerResult( const GmodNode& )> traverseNode;
+		traverseNode = [&]( const GmodNode& node ) -> TraversalHandlerResult {
+			auto result = handler( state, parents, node );
+			if ( result == TraversalHandlerResult::Stop || result == TraversalHandlerResult::SkipSubtree )
+			{
+				return result;
+			}
+
+			const GmodNode* lastParent = parents.empty() ? nullptr : &parents.back();
+			bool skipOccurrenceCheck = isProductSelectionAssignment( lastParent, &node );
+
+			if ( !skipOccurrenceCheck )
+			{
+				auto it = occurrences.find( std::string{ node.code() } );
+				int occ = ( it != occurrences.end() ) ? it->second : 0;
+
+				if ( occ == options.maxTraversalOccurrence )
+				{
+					return TraversalHandlerResult::SkipSubtree;
+				}
+				if ( occ > options.maxTraversalOccurrence )
+				{
+					throw std::runtime_error( "Invalid state - node occurred more than expected" );
+				}
+			}
+
+			parents.push_back( node );
+			occurrences[std::string{ node.code() }]++;
+
+			for ( const auto* child : node.children() )
+			{
+				result = traverseNode( *child );
+				if ( result == TraversalHandlerResult::Stop )
+				{
+					parents.pop_back();
+					auto occIt = occurrences.find( std::string{ node.code() } );
+					if ( occIt != occurrences.end() && --occIt->second == 0 )
+					{
+						occurrences.erase( occIt );
+					}
+					return result;
+				}
+			}
+
+			parents.pop_back();
+			auto occIt = occurrences.find( std::string{ node.code() } );
+			if ( occIt != occurrences.end() && --occIt->second == 0 )
+			{
+				occurrences.erase( occIt );
+			}
+
+			return TraversalHandlerResult::Continue;
+		};
+
+		return traverseNode( rootNode ) == TraversalHandlerResult::Continue;
+	}
 } // namespace dnv::vista::sdk

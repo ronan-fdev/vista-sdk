@@ -59,6 +59,7 @@ set(benchmark_sources)
 list(APPEND benchmark_sources
 	BM_CodebooksLookup.cpp
 	BM_Gmod.cpp
+	BM_GmodPathParse.cpp
 	BM_StringBuilder.cpp
 	BM_VISCacheEfficiency.cpp
 )
