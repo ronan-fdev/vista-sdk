@@ -62,11 +62,14 @@ function(configure_target target_name)
 
 	target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:EmbeddedResource>)
 
-	target_link_libraries(${target_name} PRIVATE
-		$<BUILD_INTERFACE:zlib-ng>
-		$<BUILD_INTERFACE:nfx-serialization::static>
-		$<BUILD_INTERFACE:nfx-stringbuilder::static>
-		$<BUILD_INTERFACE:nfx-stringutils::nfx-stringutils>
+	target_link_libraries(${target_name}
+		PUBLIC
+			$<BUILD_INTERFACE:nfx-containers::nfx-containers>
+		PRIVATE
+			$<BUILD_INTERFACE:zlib-ng>
+			$<BUILD_INTERFACE:nfx-serialization::static>
+			$<BUILD_INTERFACE:nfx-stringbuilder::static>
+			$<BUILD_INTERFACE:nfx-stringutils::nfx-stringutils>
 	)
 
 	# --- Properties ---

@@ -27,6 +27,8 @@
 -   `ImoNumber` class for IMO number validation with checksum verification
 -   `GmodNodeMetadata` class for Gmod node descriptive information (category, type, name, optional fields)
 -   `GmodNode` class for Gmod tree hierarchy with code, location, metadata, and parent/child navigation
+-   `Gmod` class for Generic Product Model representation with tree navigation and node lookup
+-   `VIS::gmod()` method with lazy loading and caching for version-specific Gmod access
 
 ### Changed
 

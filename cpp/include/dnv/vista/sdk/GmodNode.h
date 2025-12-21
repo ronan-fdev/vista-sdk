@@ -94,7 +94,7 @@ namespace dnv::vista::sdk
 
 	public:
 		/** @brief Default constructor */
-		GmodNodeMetadata() = delete;
+		GmodNodeMetadata() = default;
 
 		/** @brief Copy constructor */
 		GmodNodeMetadata( const GmodNodeMetadata& ) = default;
@@ -208,6 +208,8 @@ namespace dnv::vista::sdk
 	 */
 	class GmodNode final
 	{
+		friend class Gmod;
+
 	private:
 		/**
 		 * @brief Internal constructor - creates GmodNode from DTO
@@ -218,7 +220,7 @@ namespace dnv::vista::sdk
 
 	public:
 		/** @brief Default constructor */
-		GmodNode() = delete;
+		GmodNode() = default;
 
 		/** @brief Copy constructor */
 		GmodNode( const GmodNode& ) = default;

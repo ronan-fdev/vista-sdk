@@ -106,6 +106,8 @@ This project is licensed under the MIT License.
     -   **[nlohmann/json](https://github.com/nlohmann/json)**: JSON for Modern C++ (MIT License)
 -   **[nfx-stringbuilder](https://github.com/nfx-libs/nfx-stringbuilder)**: String builder library for C++ (MIT License)
 -   **[nfx-stringutils](https://github.com/nfx-libs/nfx-stringutils)**: String utilities library (MIT License)
+-   **[nfx-containers](https://github.com/nfx-libs/nfx-containers)**: Perfect hash map and container library (MIT License)
+    -   **[nfx-hashing](https://github.com/nfx-libs/nfx-hashing)**: Hash function library (MIT License)
 
 ### Development Dependencies
 

@@ -22,6 +22,7 @@ set(VISTA_SDK_CPP_ZLIB_NG_VERSION                "2.3.1")
 set(VISTA_SDK_CPP_DEPS_NFX_SERIALIZATION_VERSION "0.3.0")
 set(VISTA_SDK_CPP_DEPS_NFX_STRINGBUILDER_VERSION "0.4.1")
 set(VISTA_SDK_CPP_DEPS_NFX_STRINGUTILS_VERSION   "0.3.0")
+set(VISTA_SDK_CPP_DEPS_NFX_CONTAINERS_VERSION    "0.1.1")
 
 #----------------------------------------------
 # FetchContent dependencies
@@ -156,6 +157,32 @@ endif()
 
 if(NOT nfx-stringutils_FOUND)
 	FetchContent_MakeAvailable(nfx-stringutils)
+endif()
+
+# --- nfx-containers ---
+find_package(nfx-containers ${VISTA_SDK_CPP_DEPS_NFX_CONTAINERS_VERSION} EXACT QUIET)
+if(NOT nfx-containers_FOUND)
+	set(NFX_CONTAINERS_BUILD_TESTS         OFF CACHE BOOL "Build tests"                 FORCE)
+	set(NFX_CONTAINERS_BUILD_SAMPLES       OFF CACHE BOOL "Build samples"               FORCE)
+	set(NFX_CONTAINERS_BUILD_BENCHMARKS    OFF CACHE BOOL "Build benchmarks"            FORCE)
+	set(NFX_CONTAINERS_BUILD_DOCUMENTATION OFF CACHE BOOL "Build Doxygen documentation" FORCE)
+	set(NFX_CONTAINERS_INSTALL_PROJECT     OFF CACHE BOOL "Install project"             FORCE)
+	set(NFX_CONTAINERS_PACKAGE_SOURCE      OFF CACHE BOOL "Enable source package"       FORCE)
+	set(NFX_CONTAINERS_PACKAGE_ARCHIVE     OFF CACHE BOOL "Enable archive package"      FORCE)
+	set(NFX_CONTAINERS_PACKAGE_DEB         OFF CACHE BOOL "Enable DEB package"          FORCE)
+	set(NFX_CONTAINERS_PACKAGE_RPM         OFF CACHE BOOL "Enable RPM package"          FORCE)
+	set(NFX_CONTAINERS_PACKAGE_WIX         OFF CACHE BOOL "Enable WIX package"          FORCE)
+
+	FetchContent_Declare(
+		nfx-containers
+		GIT_REPOSITORY https://github.com/nfx-libs/nfx-containers
+		GIT_TAG        ${VISTA_SDK_CPP_DEPS_NFX_CONTAINERS_VERSION}
+		GIT_SHALLOW    TRUE
+	)
+endif()
+
+if(NOT nfx-containers_FOUND)
+	FetchContent_MakeAvailable(nfx-containers)
 endif()
 
 #----------------------------------------------
