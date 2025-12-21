@@ -37,6 +37,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `Sample_Codebooks`
     -   [x] Add `Sample_Locations`
     -   [x] Add `Sample_ImoNumber`
+    -   [x] Add `Sample_Gmod`
 
 ### Done ✓
 
