@@ -13,6 +13,7 @@ option(VISTA_SDK_CPP_BUILD_STATIC        "Build static library"               ON
 option(VISTA_SDK_CPP_BUILD_SHARED        "Build shared library"               OFF)
 
 # --- Build components ---
+option(VISTA_SDK_CPP_BUILD_TOOLS         "Build tools"                        OFF)
 option(VISTA_SDK_CPP_BUILD_TESTS         "Build tests"                        OFF)
 option(VISTA_SDK_CPP_BUILD_SAMPLES       "Build samples"                      OFF)
 option(VISTA_SDK_CPP_BUILD_BENCHMARKS    "Build benchmarks"                   OFF)
@@ -77,6 +78,7 @@ vista-sdk/cpp/
 ├── samples/                # Usage examples
 ├── src/                    # Implementation files
 ├── test/                   # Unit tests with GoogleTest
+├── tools/                  # Command-line utilities for VIS exploration
 ├── CHANGELOG.md            # Version history and changes
 ├── CMakeLists.txt          # Main CMake build configuration
 ├── README.md               # This documentation file
@@ -118,4 +120,4 @@ All dependencies are automatically fetched via CMake FetchContent when building 
 
 ---
 
-_Updated on December 20, 2025_
+_Updated on December 21, 2025_
