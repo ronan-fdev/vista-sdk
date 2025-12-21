@@ -39,6 +39,7 @@ option(VISTA_SDK_CPP_BUILD_STATIC        "Build static library"               OF
 option(VISTA_SDK_CPP_BUILD_SHARED        "Build shared library"               OFF)
 
 # --- Build components ---
+option(VISTA_SDK_CPP_BUILD_TOOLS         "Build tools"                        OFF)
 option(VISTA_SDK_CPP_BUILD_TESTS         "Build tests"                        OFF)
 option(VISTA_SDK_CPP_BUILD_SAMPLES       "Build samples"                      OFF)
 option(VISTA_SDK_CPP_BUILD_BENCHMARKS    "Build benchmarks"                   OFF)
@@ -89,6 +90,7 @@ include(dnvVistaSdkCppVisVersionsGenerator)
 # Targets
 #----------------------------------------------
 
+add_subdirectory(tools)
 add_subdirectory(test)
 add_subdirectory(samples)
 add_subdirectory(benchmark)
