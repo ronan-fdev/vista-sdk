@@ -144,4 +144,25 @@ namespace dnv::vista::sdk
 		return child->isProductSelection();
 	}
 
+	bool Gmod::traverse( TraverseHandler handler, TraversalOptions options ) const
+	{
+		return traverse( *m_rootNode, handler, options );
+	}
+
+	bool Gmod::traverse( const GmodNode& rootNode, TraverseHandler handler, TraversalOptions options ) const
+	{
+		struct DummyState
+		{
+		};
+
+		DummyState state;
+
+		TraverseHandlerWithState<DummyState> wrappedHandler =
+			[handler]( DummyState&, const std::vector<const GmodNode*>& parents, const GmodNode& node )
+			-> TraversalHandlerResult {
+			return handler( parents, node );
+		};
+
+		return traverse( state, rootNode, wrappedHandler, options );
+	}
 } // namespace dnv::vista::sdk

@@ -75,6 +75,7 @@ list(APPEND test_sources
 	SDK/TESTS_CodebookNames.cpp
 	SDK/TESTS_Codebooks.cpp
 	SDK/TESTS_Gmod.cpp
+	SDK/TESTS_GmodPath.cpp
 	SDK/TESTS_ImoNumber.cpp
 	SDK/TESTS_Locations.cpp
 	SDK/TESTS_ParsingErrors.cpp

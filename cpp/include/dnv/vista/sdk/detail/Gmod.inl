@@ -80,4 +80,60 @@ namespace dnv::vista::sdk
 	{
 		return m_nodeMap.cend();
 	}
+
+	template <typename TState>
+	inline bool Gmod::traverse( TState& state, TraverseHandlerWithState<TState> handler, TraversalOptions options ) const
+	{
+		return traverse( state, *m_rootNode, handler, options );
+	}
+
+	template <typename TState>
+	inline bool Gmod::traverse( TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, TraversalOptions options ) const
+	{
+		TraversalParents parents;
+
+		std::function<TraversalHandlerResult( const GmodNode& )> traverseNode;
+		traverseNode = [&]( const GmodNode& node ) -> TraversalHandlerResult {
+			auto result = handler( state, parents.asList(), node );
+			if ( result == TraversalHandlerResult::Stop || result == TraversalHandlerResult::SkipSubtree )
+			{
+				return result;
+			}
+
+			const GmodNode* lastParent = parents.lastOrDefault();
+			bool skipOccurrenceCheck = isProductSelectionAssignment( lastParent, &node );
+
+			if ( !skipOccurrenceCheck )
+			{
+				int occ = parents.occurrences( node );
+
+				if ( occ == options.maxTraversalOccurrence )
+				{
+					return TraversalHandlerResult::SkipSubtree;
+				}
+				if ( occ > options.maxTraversalOccurrence )
+				{
+					throw std::runtime_error( "Invalid state - node occurred more than expected" );
+				}
+			}
+
+			parents.push( &node );
+
+			for ( const auto* child : node.children() )
+			{
+				result = traverseNode( *child );
+				if ( result == TraversalHandlerResult::Stop )
+				{
+					parents.pop();
+					return result;
+				}
+			}
+
+			parents.pop();
+
+			return TraversalHandlerResult::Continue;
+		};
+
+		return traverseNode( rootNode ) == TraversalHandlerResult::Continue;
+	}
 } // namespace dnv::vista::sdk
