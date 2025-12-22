@@ -5,6 +5,66 @@
 > **⚠️ WARNING: API NOT STABLE - LIBRARY UNDER ACTIVE DEVELOPMENT**
 > This library is in active development and the API may change without notice. Use with caution in production environments.
 
+## API Overview
+
+The vista-sdk-cpp provides a comprehensive C++ API for working with the DNV Vessel Information Structure (VIS) standard:
+
+### Core Components
+
+-   **`VIS`** - Singleton entry point providing access to versioned VIS data
+    -   Access to Gmod, Codebooks, and Locations for all VIS versions
+    -   Version management and latest version queries
+    -   See [Sample_Codebooks.cpp](samples/simple/Sample_Codebooks.cpp) for usage examples
+-   **`Gmod`** (Generic Product Model) - Equipment hierarchy and product tree
+    -   Fast node lookup via operator[]
+    -   Tree traversal with customizable handlers
+    -   Product type and selection navigation
+    -   See [Sample_Gmod.cpp](samples/simple/Sample_Gmod.cpp) for usage examples
+-   **`GmodPath`** - Validated paths through the Gmod tree
+    -   Parse short paths (e.g., "411.1-1P") with tree search
+    -   Parse full paths (e.g., "VE/400a/410/411/411i/411.1-1P") for direct resolution
+    -   Location-based individualization for equipment mapping
+    -   Path comparison and format conversion
+    -   See [Sample_GmodPath.cpp](samples/simple/Sample_GmodPath.cpp) for usage examples
+-   **`Codebooks`** - Metadata tag validation and creation
+    -   11 codebook types: Quantity, Content, Calculation, State, Command, Type, Position, etc.
+    -   Value validation with standard and custom tag support
+    -   Position codebook with special grouping validation
+    -   See [Sample_Codebooks.cpp](samples/simple/Sample_Codebooks.cpp) for usage examples
+-   **`Locations`** - Physical location representation and validation
+    -   Parse and validate location strings (e.g., "1PS", "14C")
+    -   Location components: Number, Side, Vertical, Transverse, Longitudinal
+    -   Fluent builder API via `LocationBuilder`
+    -   See [Sample_Locations.cpp](samples/simple/Sample_Locations.cpp) for usage examples
+-   **`ImoNumber`** - IMO ship identification numbers
+    -   Parse from string or integer formats
+    -   See [Sample_ImoNumber.cpp](samples/simple/Sample_ImoNumber.cpp) for usage examples
+
+### Quick Start
+
+```cpp
+#include <dnv/vista/sdk/VIS.h>
+
+using namespace dnv::vista::sdk;
+
+// Get VIS singleton and access versioned data
+const auto& vis = VIS::instance();
+const auto& gmod = vis.gmod(vis.latest());
+const auto& locations = vis.locations(vis.latest());
+
+// Parse a GMOD path
+auto path = GmodPath::fromString("411.1-1P", gmod, locations);
+if (path.has_value()) {
+    std::cout << "Full path: " << path->toFullPathString() << "\n";
+}
+
+// Validate a location
+auto location = locations.parse("1PS");
+if (location.has_value()) {
+    std::cout << "Valid location: " << location->value() << "\n";
+}
+```
+
 ## CMake Integration
 
 ```cmake
@@ -83,6 +143,61 @@ vista-sdk/cpp/
 ├── CMakeLists.txt          # Main CMake build configuration
 ├── README.md               # This documentation file
 └── TODO.md                 # Project roadmap and task tracking
+```
+
+## Samples
+
+The SDK includes comprehensive usage examples in `samples/simple/`:
+
+-   **[Sample_Codebooks.cpp](samples/simple/Sample_Codebooks.cpp)** - VIS version management, codebook access, value validation, metadata tag creation
+-   **[Sample_Gmod.cpp](samples/simple/Sample_Gmod.cpp)** - Generic Product Model navigation, node metadata, product types/selections
+-   **[Sample_GmodPath.cpp](samples/simple/Sample_GmodPath.cpp)** - Path parsing (short/full), error handling, individualization, comparison
+-   **[Sample_Locations.cpp](samples/simple/Sample_Locations.cpp)** - Location parsing, validation, LocationBuilder fluent API
+-   **[Sample_ImoNumber.cpp](samples/simple/Sample_ImoNumber.cpp)** - IMO number creation, validation, checksum verification
+
+Build samples with:
+
+```bash
+cmake -B build -DVISTA_SDK_CPP_BUILD_SAMPLES=ON
+cmake --build build
+./build/bin/samples/Sample_GmodPath  # Run an example
+```
+
+## Command-Line Tools
+
+The SDK includes CLI utilities for exploring VIS data interactively:
+
+### codebooks-cli - VIS Codebooks Explorer
+
+Browse and search VIS codebook standard values:
+
+```bash
+codebooks-cli                       # List all codebooks (latest version)
+codebooks-cli --version 3-4a        # Use specific VIS version
+codebooks-cli --codebook qty        # Show Quantity codebook values
+codebooks-cli --search temperature  # Search across all codebooks
+codebooks-cli --help                # Show all options
+```
+
+### locations-cli - VIS Location Codes Explorer
+
+Explore VIS location codes and definitions:
+
+```bash
+locations-cli                       # List all location codes (latest version)
+locations-cli --version 3-4a        # Use specific VIS version
+locations-cli --code P              # Show details for location 'P' (Port)
+locations-cli --search starboard    # Search location names/definitions
+locations-cli --help                # Show all options
+```
+
+Build tools with:
+
+```bash
+cmake -B build -DVISTA_SDK_CPP_BUILD_TOOLS=ON
+cmake --build build
+./build/bin/tools/codebooks-cli --search pressure
+./build/bin/tools/locations-cli --code S
 ```
 
 ## Performance
