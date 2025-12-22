@@ -88,7 +88,6 @@ namespace dnv::vista::sdk
 			ParseContext&,
 			const std::vector<GmodNode>&,
 			const GmodNode& );
-
 	} // namespace internal
 
 	/**
@@ -134,8 +133,8 @@ namespace dnv::vista::sdk
 			std::unordered_map<std::string, std::string, StringHash, std::equal_to<>> normalAssignmentNames = {} ) noexcept;
 
 	public:
-		/** @brief Default constructor */
-		GmodNodeMetadata() = delete;
+		/** @brief Default constructor - creates empty metadata (required for container storage) */
+		GmodNodeMetadata() = default;
 
 		/** @brief Copy constructor */
 		GmodNodeMetadata( const GmodNodeMetadata& ) = default;
@@ -264,8 +263,8 @@ namespace dnv::vista::sdk
 		explicit GmodNode( VisVersion version, const GmodNodeDto& dto ) noexcept;
 
 	public:
-		/** @brief Default constructor */
-		GmodNode() = delete;
+		/** @brief Default constructor - creates empty node (required for container storage) */
+		GmodNode() = default;
 
 		/** @brief Copy constructor */
 		GmodNode( const GmodNode& ) = default;

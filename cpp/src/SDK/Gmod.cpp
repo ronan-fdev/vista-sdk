@@ -40,61 +40,77 @@ namespace dnv::vista::sdk
 		: m_visVersion{ version },
 		  m_rootNode{ nullptr }
 	{
-		for ( const auto& nodeDto : dto.items )
+		const auto& items = dto.items;
+		std::vector<std::pair<std::string, GmodNode>> nodePairs;
+		nodePairs.reserve( items.size() );
+
+		for ( const auto& nodeDto : items )
 		{
-			m_nodeMap.emplace( nodeDto.code, GmodNode{ version, nodeDto } );
+			nodePairs.emplace_back( std::string{ nodeDto.code }, GmodNode{ version, nodeDto } );
 		}
+
+		m_nodeMap = nfx::containers::PerfectHashMap<std::string, GmodNode, uint32_t>( std::move( nodePairs ) );
 
 		for ( const auto& relation : dto.relations )
 		{
-			if ( relation.size() < 2 )
+			/*
+			 * Each relation defines a parent-child relationship and must contain at least 2 elements:
+			 * relation[0] = parent node code (e.g., "VE", "400", "410")
+			 * relation[1] = child node code (e.g., "400", "410", "411")
+			 * We need both parent and child codes to establish the bidirectional relationship.
+			 * Relations with < 2 elements are malformed and would cause array access errors.
+			 */
+			const auto* parentNodePtr = m_nodeMap.find( relation[0] );
+			if ( !parentNodePtr )
 			{
-				continue;
+				throw std::runtime_error( "Parent node not found in GMOD" );
 			}
-
-			const auto& parentCode = relation[0];
-			const auto& childCode = relation[1];
-
-			auto parentIt = m_nodeMap.find( parentCode );
-			auto childIt = m_nodeMap.find( childCode );
-
-			if ( parentIt != m_nodeMap.end() && childIt != m_nodeMap.end() )
+			const auto* childNodePtr = m_nodeMap.find( relation[1] );
+			if ( !childNodePtr )
 			{
-				parentIt->second.addChild( &childIt->second );
-				childIt->second.addParent( &parentIt->second );
+				throw std::runtime_error( "Child node not found in GMOD" );
 			}
+			auto& parentNode = const_cast<GmodNode&>( *parentNodePtr );
+			auto& childNode = const_cast<GmodNode&>( *childNodePtr );
+			parentNode.addChild( &childNode );
+			childNode.addParent( &parentNode );
 		}
 
-		for ( auto& [code, node] : m_nodeMap )
+		for ( auto& [key, node] : m_nodeMap )
 		{
-			node.trim();
+			const_cast<GmodNode&>( node ).trim();
 		}
 
-		auto rootIt = m_nodeMap.find( "VE" );
-		if ( rootIt != m_nodeMap.end() )
-		{
-			m_rootNode = &rootIt->second;
-		}
-	}
-
-	Gmod::Gmod( VisVersion version, const std::unordered_map<std::string, GmodNode, StringHash, std::equal_to<>>& nodeMap )
-		: m_visVersion{ version },
-		  m_nodeMap{ nodeMap }
-	{
-		for ( auto& [code, node] : m_nodeMap )
-		{
-			node.trim();
-		}
-
-		auto rootIt = m_nodeMap.find( "VE" );
-		if ( rootIt != m_nodeMap.end() )
-		{
-			m_rootNode = &rootIt->second;
-		}
-		else
+		const auto* rootPtr = m_nodeMap.find( "VE" );
+		if ( !rootPtr )
 		{
 			throw std::runtime_error( "Root node 'VE' not found in GMOD" );
 		}
+		m_rootNode = const_cast<GmodNode*>( rootPtr );
+	}
+
+	Gmod::Gmod( VisVersion version, const std::unordered_map<std::string, GmodNode, StringHash, std::equal_to<>>& nodeMap )
+		: m_visVersion{ version }
+	{
+		std::vector<std::pair<std::string, GmodNode>> pairs;
+		pairs.reserve( nodeMap.size() );
+		for ( const auto& [code, node] : nodeMap )
+		{
+			pairs.emplace_back( code, node );
+		}
+		m_nodeMap = nfx::containers::PerfectHashMap<std::string, GmodNode, uint32_t>( std::move( pairs ) );
+
+		for ( auto& [key, node] : m_nodeMap )
+		{
+			const_cast<GmodNode&>( node ).trim();
+		}
+
+		const auto* rootPtr = m_nodeMap.find( "VE" );
+		if ( !rootPtr )
+		{
+			throw std::runtime_error( "Root node 'VE' not found in GMOD" );
+		}
+		m_rootNode = const_cast<GmodNode*>( rootPtr );
 	}
 
 	bool Gmod::isPotentialParent( std::string_view type ) noexcept

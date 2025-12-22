@@ -32,10 +32,10 @@ namespace dnv::vista::sdk
 {
 	inline const GmodNode& Gmod::operator[]( std::string_view key ) const
 	{
-		auto it = m_nodeMap.find( key );
-		if ( it != m_nodeMap.end() )
+		auto* nodePtr = m_nodeMap.find( key );
+		if ( nodePtr != nullptr )
 		{
-			return it->second;
+			return *nodePtr;
 		}
 
 		throw std::out_of_range{ "Key not found in Gmod node map: " + std::string{ key } };
@@ -53,10 +53,10 @@ namespace dnv::vista::sdk
 
 	inline std::optional<const GmodNode*> Gmod::node( std::string_view code ) const noexcept
 	{
-		auto it = m_nodeMap.find( code );
-		if ( it != m_nodeMap.end() )
+		auto* nodePtr = m_nodeMap.find( code );
+		if ( nodePtr != nullptr )
 		{
-			return &it->second;
+			return nodePtr;
 		}
 		return std::nullopt;
 	}

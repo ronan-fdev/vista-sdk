@@ -108,6 +108,8 @@ This project is licensed under the MIT License.
     -   **[nlohmann/json](https://github.com/nlohmann/json)**: JSON for Modern C++ (MIT License)
 -   **[nfx-stringbuilder](https://github.com/nfx-libs/nfx-stringbuilder)**: String builder library for C++ (MIT License)
 -   **[nfx-stringutils](https://github.com/nfx-libs/nfx-stringutils)**: String utilities library (MIT License)
+-   **[nfx-containers](https://github.com/nfx-libs/nfx-containers)**: Perfect hash map and container library (MIT License)
+    -   **[nfx-hashing](https://github.com/nfx-libs/nfx-hashing)**: Hash function library (MIT License)
 
 ### Development Dependencies
 
@@ -118,4 +120,4 @@ All dependencies are automatically fetched via CMake FetchContent when building 
 
 ---
 
-_Updated on December 21, 2025_
+_Updated on December 22, 2025_

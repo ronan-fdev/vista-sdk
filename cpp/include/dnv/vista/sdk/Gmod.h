@@ -35,6 +35,8 @@
 #include "GmodNode.h"
 #include "VisVersions.h"
 
+#include <nfx/Containers.h>
+
 #include <cstdint>
 #include <functional>
 #include <optional>
@@ -266,9 +268,9 @@ namespace dnv::vista::sdk
 		template <typename TState>
 		bool traverse( TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, TraversalOptions options ) const;
 
-		VisVersion m_visVersion;														  ///< VIS version for this Gmod
-		GmodNode* m_rootNode;															  ///< Pointer to root node ("VE") in m_nodeMap
-		std::unordered_map<std::string, GmodNode, StringHash, std::equal_to<>> m_nodeMap; ///< All nodes indexed by code (owns all nodes, transparent hash)
+		VisVersion m_visVersion;													///< VIS version for this Gmod
+		GmodNode* m_rootNode;														///< Pointer to root node ("VE") in m_nodeMap
+		nfx::containers::PerfectHashMap<std::string, GmodNode, uint32_t> m_nodeMap; ///< All nodes indexed by code (owns all nodes, transparent hash)
 	};
 } // namespace dnv::vista::sdk
 
