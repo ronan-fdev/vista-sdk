@@ -191,6 +191,20 @@ locations-cli --search starboard    # Search location names/definitions
 locations-cli --help                # Show all options
 ```
 
+### gmodexplorer-cli - VIS GMOD Tree Explorer
+
+Navigate and explore the Generic Product Model hierarchy:
+
+```bash
+gmodexplorer-cli                    # Show tree overview (latest version)
+gmodexplorer-cli --version 3-4a     # Use specific VIS version
+gmodexplorer-cli --code 411.1       # Show node details
+gmodexplorer-cli --search engine    # Search nodes by name/definition
+gmodexplorer-cli --tree 400a 2      # Show subtree (depth 2)
+gmodexplorer-cli --path "411.1-1P"  # Parse and validate GMOD path
+gmodexplorer-cli --help             # Show all options
+```
+
 Build tools with:
 
 ```bash
@@ -198,6 +212,7 @@ cmake -B build -DVISTA_SDK_CPP_BUILD_TOOLS=ON
 cmake --build build
 ./build/bin/tools/codebooks-cli --search pressure
 ./build/bin/tools/locations-cli --code S
+./build/bin/tools/gmodexplorer-cli --search "engine"
 ```
 
 ## Performance

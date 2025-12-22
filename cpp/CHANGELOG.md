@@ -32,6 +32,7 @@
 -   CLI tools: `codebooks-cli` for interactive codebook exploration
 -   CLI tools: `locations-cli` for location lookup and validation
 -   `GmodPath` class for GMOD path representation with short and full path parsing
+-   CLI tools: `gmodexplorer-cli-cli` for location lookup and validation
 
 ### Changed
 
