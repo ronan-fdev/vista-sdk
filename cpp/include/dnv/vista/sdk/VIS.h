@@ -34,6 +34,7 @@
 #include "Gmod.h"
 #include "GmodPath.h"
 #include "ImoNumber.h"
+#include "LocalId.h"
 #include "LocationBuilder.h"
 #include "ParsingErrors.h"
 #include "VisVersions.h"
