@@ -30,6 +30,7 @@
 
 #pragma once
 
+#include "mqtt/LocalId.h"
 #include "Codebooks.h"
 #include "Gmod.h"
 #include "GmodPath.h"

@@ -35,6 +35,8 @@
 -   CLI tools: `gmodexplorer-cli-cli` for location lookup and validation
 -   `LocalId` class for VIS Local ID representation with primary/secondary items and metadata tags
 -   `LocalIdBuilder` class with immutable builder pattern for constructing LocalId instances with verbose mode support
+-   `mqtt::LocalId` class for MQTT-compatible LocalId with underscore-separated paths and placeholder formatting
+
 
 ### Changed
 

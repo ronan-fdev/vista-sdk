@@ -66,7 +66,7 @@ namespace dnv::vista::sdk
 		/** @brief Naming rule identifier for LocalId */
 		static constexpr const char* NamingRule = "dnv-v2";
 
-	private:
+	protected:
 		/**
 		 * @brief Construct LocalId from builder
 		 * @param builder LocalIdBuilder with validated state
@@ -84,8 +84,8 @@ namespace dnv::vista::sdk
 		/** @brief Move constructor */
 		LocalId( LocalId&& ) noexcept = default;
 
-		/** @brief Destructor */
-		~LocalId() = default;
+		/** @brief Virtual destructor for inheritance */
+		virtual ~LocalId() = default;
 
 		/**
 		 * @brief Copy assignment operator
@@ -207,7 +207,7 @@ namespace dnv::vista::sdk
 		 * @brief Convert to string representation
 		 * @return String representation of the LocalId in dnv-v2 format
 		 */
-		[[nodiscard]] std::string toString() const;
+		[[nodiscard]] virtual std::string toString() const;
 
 		/**
 		 * @brief Create LocalId from string representation
@@ -228,7 +228,7 @@ namespace dnv::vista::sdk
 		[[nodiscard]] static std::optional<LocalId> fromString( std::string_view localIdStr,
 			ParsingErrors& errors ) noexcept;
 
-	private:
+	protected:
 		LocalIdBuilder m_builder; ///< Internal builder containing all state
 	};
 } // namespace dnv::vista::sdk

@@ -111,6 +111,22 @@ namespace dnv::vista::sdk::test
 			"/dnv-v2/vis-3-4a/511.11-21O/C101.67/S208/meta/qty-pressure/cnt-air/state-low" };
 	}
 
+	static std::vector<LocalIdTestCase> validMqttTestData()
+	{
+		return {
+			// Test case 1: Primary item with metadata tags
+			{ LocalIdInput{ "411.1/C101.31-2", std::nullopt, "temperature", "exhaust.gas", "inlet" },
+				"dnv-v2/vis-3-4a/411.1_C101.31-2/_/qty-temperature/cnt-exhaust.gas/_/_/_/_/pos-inlet/_" },
+
+			// Test case 2: Primary item with location
+			{ LocalIdInput{ "411.1/C101.63/S206", std::nullopt, "temperature", "exhaust.gas", "inlet" },
+				"dnv-v2/vis-3-4a/411.1_C101.63_S206/_/qty-temperature/cnt-exhaust.gas/_/_/_/_/pos-inlet/_" },
+
+			// Test case 3: With secondary item
+			{ LocalIdInput{ "411.1/C101.63/S206", "411.1/C101.31-5", "temperature", "exhaust.gas", "inlet" },
+				"dnv-v2/vis-3-4a/411.1_C101.63_S206/411.1_C101.31-5/qty-temperature/cnt-exhaust.gas/_/_/_/_/pos-inlet/_" } };
+	}
+
 	//=====================================================================
 	// LocalId tests
 	//=====================================================================
@@ -368,6 +384,83 @@ namespace dnv::vista::sdk::test
 		LocalIdTests,
 		LocalIdParsingTest,
 		::testing::ValuesIn( validParsingData() ) );
+
+	//----------------------------------------------
+	// MQTT LocalId tests
+	//----------------------------------------------
+
+	class MqttLocalIdBuildValidTest : public ::testing::TestWithParam<LocalIdTestCase>
+	{
+	};
+
+	TEST_P( MqttLocalIdBuildValidTest, Test_Mqtt_LocalId_Build_Valid )
+	{
+		auto testCase = GetParam();
+		const auto& input = testCase.input;
+
+		const auto& vis = VIS::instance();
+		const auto& gmod = vis.gmod( input.visVersion );
+		const auto& codebooks = vis.codebooks( input.visVersion );
+
+		// Parse primary and secondary items
+		ParsingErrors primaryErrors;
+		auto primaryItem = GmodPath::fromString( input.primaryItem, gmod, vis.locations( input.visVersion ), primaryErrors );
+		ASSERT_TRUE( primaryItem.has_value() ) << "Failed to parse primary item: " << input.primaryItem;
+
+		std::optional<GmodPath> secondaryItem;
+		if ( input.secondaryItem.has_value() )
+		{
+			ParsingErrors secondaryErrors;
+			secondaryItem = GmodPath::fromString( *input.secondaryItem, gmod, vis.locations( input.visVersion ), secondaryErrors );
+			ASSERT_TRUE( secondaryItem.has_value() ) << "Failed to parse secondary item: " << *input.secondaryItem;
+		}
+
+		// Build LocalIdBuilder
+		auto builder = LocalIdBuilder::create( input.visVersion ).withPrimaryItem( *primaryItem );
+
+		if ( input.verbose )
+		{
+			builder = builder.withVerboseMode( true );
+		}
+
+		if ( secondaryItem.has_value() )
+		{
+			builder = builder.withSecondaryItem( *secondaryItem );
+		}
+
+		if ( input.quantity.has_value() )
+		{
+			auto tag = codebooks[CodebookName::Quantity].createTag( *input.quantity );
+			ASSERT_TRUE( tag.has_value() );
+			builder = builder.withMetadataTag( *tag );
+		}
+
+		if ( input.content.has_value() )
+		{
+			auto tag = codebooks[CodebookName::Content].createTag( *input.content );
+			ASSERT_TRUE( tag.has_value() );
+			builder = builder.withMetadataTag( *tag );
+		}
+
+		if ( input.position.has_value() )
+		{
+			auto tag = codebooks[CodebookName::Position].createTag( *input.position );
+			ASSERT_TRUE( tag.has_value() );
+			builder = builder.withMetadataTag( *tag );
+		}
+
+		// Build MQTT LocalId
+		auto mqttLocalId = mqtt::LocalId{ builder };
+
+		// Verify MQTT output
+		auto mqttLocalIdStr = mqttLocalId.toString();
+		EXPECT_EQ( testCase.expectedOutput, mqttLocalIdStr );
+	}
+
+	INSTANTIATE_TEST_SUITE_P(
+		LocalIdTests,
+		MqttLocalIdBuildValidTest,
+		::testing::ValuesIn( validMqttTestData() ) );
 
 	//----------------------------------------------
 	// Simple parsing test

@@ -26,7 +26,7 @@
  * @file Sample_LocalId.cpp
  * @brief Demonstrates usage of vista-sdk-cpp LocalId and LocalIdBuilder APIs
  * @details This sample shows how to build LocalIds, parse LocalId strings,
- *          work with metadata tags and use verbose mode.
+ *          work with metadata tags, use verbose mode, and handle MQTT formatting
  */
 
 #include <dnv/vista/sdk/VIS.h>
@@ -361,7 +361,42 @@ int main()
 	}
 
 	//=====================================================================
-	// 10. LocalIdBuilder: Custom metadata tags
+	// 10. mqtt::LocalId: MQTT-compatible formatting
+	//=====================================================================
+	{
+		std::cout << "10. mqtt::LocalId: MQTT-compatible formatting\n";
+		std::cout << "------------------------------------------------\n";
+
+		const auto& vis = VIS::instance();
+		const auto& gmod = vis.gmod( vis.latest() );
+		const auto& locations = vis.locations( vis.latest() );
+		const auto& codebooks = vis.codebooks( vis.latest() );
+
+		auto primaryItem = GmodPath::fromString( "411.1/C101.31-2", gmod, locations );
+		auto qtyTag = codebooks[CodebookName::Quantity].createTag( "temperature" );
+
+		auto builder = LocalIdBuilder::create( vis.latest() )
+						   .withPrimaryItem( *primaryItem )
+						   .withMetadataTag( *qtyTag );
+
+		// Standard LocalId
+		auto standardLocalId = builder.build();
+		std::cout << "Standard LocalId: " << standardLocalId.toString() << "\n";
+
+		// MQTT LocalId
+		auto mqttLocalId = mqtt::LocalId{ builder };
+		std::cout << "MQTT LocalId:     " << mqttLocalId.toString() << "\n";
+		std::cout << "  Differences:\n";
+		std::cout << "    - No leading '/'\n";
+		std::cout << "    - Underscores instead of slashes in paths\n";
+		std::cout << "    - No 'meta/' section\n";
+		std::cout << "    - More compact for MQTT topics\n";
+
+		std::cout << "\n";
+	}
+
+	//=====================================================================
+	// 11. LocalIdBuilder: Custom metadata tags
 	//=====================================================================
 	{
 		std::cout << "11. LocalIdBuilder: Custom metadata tags\n";
@@ -391,7 +426,7 @@ int main()
 	}
 
 	//=====================================================================
-	// 11. LocalIdBuilder: Validation
+	// 12. LocalIdBuilder: Validation
 	//=====================================================================
 	{
 		std::cout << "12. LocalIdBuilder: Validation\n";

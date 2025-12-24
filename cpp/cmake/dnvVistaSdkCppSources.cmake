@@ -9,6 +9,7 @@
 set(private_sources)
 
 list(APPEND private_sources
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/mqtt/LocalId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/parsing/LocalIdParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/parsing/LocationParsingErrorBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/Codebook.cpp
