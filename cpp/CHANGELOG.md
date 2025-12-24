@@ -33,6 +33,8 @@
 -   CLI tools: `locations-cli` for location lookup and validation
 -   `GmodPath` class for GMOD path representation with short and full path parsing
 -   CLI tools: `gmodexplorer-cli-cli` for location lookup and validation
+-   `LocalId` class for VIS Local ID representation with primary/secondary items and metadata tags
+-   `LocalIdBuilder` class with immutable builder pattern for constructing LocalId instances with verbose mode support
 
 ### Changed
 
