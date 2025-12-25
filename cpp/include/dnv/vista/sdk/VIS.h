@@ -38,6 +38,7 @@
 #include "LocalId.h"
 #include "LocationBuilder.h"
 #include "ParsingErrors.h"
+#include "UniversalId.h"
 #include "VisVersions.h"
 
 #include <vector>

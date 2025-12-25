@@ -36,6 +36,8 @@
 -   `LocalId` class for VIS Local ID representation with primary/secondary items and metadata tags
 -   `LocalIdBuilder` class with immutable builder pattern for constructing LocalId instances with verbose mode support
 -   `mqtt::LocalId` class for MQTT-compatible LocalId with underscore-separated paths and placeholder formatting
+-   `UniversalId` class for globally unique VIS identifier combining IMO number with LocalId
+-   `UniversalIdBuilder` class with immutable builder pattern for constructing UniversalId instances
 
 
 ### Changed

@@ -80,6 +80,7 @@ list(APPEND test_sources
 	SDK/TESTS_LocalId.cpp
 	SDK/TESTS_Locations.cpp
 	SDK/TESTS_ParsingErrors.cpp
+	SDK/TESTS_UniversalId.cpp
 	SDK/TESTS_VIS.cpp
 	SDK/TESTS_VisVersions.cpp
 
