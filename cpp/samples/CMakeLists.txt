@@ -21,7 +21,9 @@ list(APPEND sample_sources
 	simple/Sample_Gmod.cpp
 	simple/Sample_GmodPath.cpp
 	simple/Sample_ImoNumber.cpp
+	simple/Sample_LocalId.cpp
 	simple/Sample_Locations.cpp
+	simple/Sample_UniversalId.cpp
 )
 
 if(NOT sample_sources)
