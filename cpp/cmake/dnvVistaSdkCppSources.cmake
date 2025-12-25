@@ -25,5 +25,7 @@ list(APPEND private_sources
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/MetadataTag.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/ParsingErrors.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/StringBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/UniversalId.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/UniversalIdBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/VIS.cpp
 )
