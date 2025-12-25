@@ -36,14 +36,17 @@
 #include "dto/GmodDto.h"
 #include "dto/GmodVersioningDto.h"
 #include "dto/LocationsDto.h"
+#include "versioning/GmodVersioning.h"
 #include "VisVersionsExtensions.h"
 
 #include <EmbeddedResource/EmbeddedResource.h>
 
+#include <memory>
 #include <mutex>
 #include <shared_mutex>
 #include <stdexcept>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace dnv::vista::sdk
 {
@@ -57,6 +60,34 @@ namespace dnv::vista::sdk
 
 		static std::unordered_map<VisVersion, Locations> locationsCache;
 		static std::shared_mutex locationsMutex;
+
+		static std::unique_ptr<internal::GmodVersioning> gmodVersioningCache;
+		static std::mutex gmodVersioningMutex;
+
+		const GmodVersioning& gmodVersioning()
+		{
+			if ( gmodVersioningCache )
+			{
+				return *gmodVersioningCache;
+			}
+
+			std::lock_guard lock( gmodVersioningMutex );
+
+			if ( gmodVersioningCache )
+			{
+				return *gmodVersioningCache;
+			}
+
+			auto dto = EmbeddedResource::gmodVersioning();
+
+			if ( !dto.has_value() )
+			{
+				throw std::invalid_argument{ "Invalid state" };
+			}
+
+			gmodVersioningCache = std::make_unique<GmodVersioning>( *dto );
+			return *gmodVersioningCache;
+		}
 	} // namespace internal
 
 	const VIS& VIS::instance()
@@ -184,5 +215,107 @@ namespace dnv::vista::sdk
 
 		auto [inserted, _] = internal::locationsCache.emplace( visVersion, Locations{ visVersion, *dto } );
 		return inserted->second;
+	}
+
+	std::optional<GmodNode> VIS::convertNode( VisVersion sourceVersion, const GmodNode& sourceNode, VisVersion targetVersion ) const
+	{
+		return internal::gmodVersioning().convertNode( sourceVersion, sourceNode, targetVersion );
+	}
+
+	std::optional<GmodNode> VIS::convertNode( const GmodNode& sourceNode, VisVersion targetVersion, [[maybe_unused]] const GmodNode* sourceParent ) const
+	{
+		return convertNode( sourceNode.version(), sourceNode, targetVersion );
+	}
+
+	std::optional<GmodPath> VIS::convertPath( VisVersion sourceVersion, const GmodPath& sourcePath, VisVersion targetVersion ) const
+	{
+		return internal::gmodVersioning().convertPath( sourceVersion, sourcePath, targetVersion );
+	}
+
+	std::optional<GmodPath> VIS::convertPath( const GmodPath& sourcePath, VisVersion targetVersion ) const
+	{
+		return convertPath( sourcePath.version(), sourcePath, targetVersion );
+	}
+
+	std::optional<LocalIdBuilder> VIS::convertLocalId( const LocalIdBuilder& sourceLocalId, VisVersion targetVersion ) const
+	{
+		return internal::gmodVersioning().convertLocalId( sourceLocalId, targetVersion );
+	}
+
+	std::optional<LocalId> VIS::convertLocalId( const LocalId& sourceLocalId, VisVersion targetVersion ) const
+	{
+		return internal::gmodVersioning().convertLocalId( sourceLocalId, targetVersion );
+	}
+
+	std::unordered_map<VisVersion, const Gmod&> VIS::gmodsMap( const std::vector<VisVersion>& visVersions ) const
+	{
+		for ( const auto& version : visVersions )
+		{
+			auto versionStr = VisVersions::toString( version );
+			if ( versionStr.empty() )
+			{
+				throw std::invalid_argument( "Invalid VIS version provided" );
+			}
+		}
+
+		std::unordered_set<VisVersion> uniqueVersions( visVersions.begin(), visVersions.end() );
+
+		std::unordered_map<VisVersion, const Gmod&> result;
+		result.reserve( uniqueVersions.size() );
+
+		for ( const auto& version : uniqueVersions )
+		{
+			result.emplace( version, gmod( version ) );
+		}
+
+		return result;
+	}
+
+	std::unordered_map<VisVersion, const Codebooks&> VIS::codebooksMap( const std::vector<VisVersion>& visVersions ) const
+	{
+		for ( const auto& version : visVersions )
+		{
+			auto versionStr = VisVersions::toString( version );
+			if ( versionStr.empty() )
+			{
+				throw std::invalid_argument( "Invalid VIS version provided" );
+			}
+		}
+
+		std::unordered_set<VisVersion> uniqueVersions( visVersions.begin(), visVersions.end() );
+
+		std::unordered_map<VisVersion, const Codebooks&> result;
+		result.reserve( uniqueVersions.size() );
+
+		for ( const auto& version : uniqueVersions )
+		{
+			result.emplace( version, codebooks( version ) );
+		}
+
+		return result;
+	}
+
+	std::unordered_map<VisVersion, const Locations&> VIS::locationsMap( const std::vector<VisVersion>& visVersions ) const
+	{
+		for ( const auto& version : visVersions )
+		{
+			auto versionStr = VisVersions::toString( version );
+			if ( versionStr.empty() )
+			{
+				throw std::invalid_argument( "Invalid VIS version provided" );
+			}
+		}
+
+		std::unordered_set<VisVersion> uniqueVersions( visVersions.begin(), visVersions.end() );
+
+		std::unordered_map<VisVersion, const Locations&> result;
+		result.reserve( uniqueVersions.size() );
+
+		for ( const auto& version : uniqueVersions )
+		{
+			result.emplace( version, locations( version ) );
+		}
+
+		return result;
 	}
 } // namespace dnv::vista::sdk
