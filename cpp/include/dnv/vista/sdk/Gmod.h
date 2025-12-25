@@ -35,6 +35,8 @@
 #include "GmodNode.h"
 #include "VisVersions.h"
 
+#include "StringHash.h"
+
 #include <nfx/Containers.h>
 
 #include <cstdint>
@@ -43,6 +45,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <vector>
 
 namespace dnv::vista::sdk
 {
@@ -86,6 +89,7 @@ namespace dnv::vista::sdk
 	class Gmod final
 	{
 		friend class VIS;
+		friend class internal::GmodVersioning;
 		friend internal::GmodParsePathResult internal::parseGmodPath( std::string_view, const Gmod&, const Locations& ) noexcept;
 
 	private:
@@ -267,6 +271,15 @@ namespace dnv::vista::sdk
 		 */
 		template <typename TState>
 		bool traverse( TState& state, const GmodNode& rootNode, TraverseHandlerWithState<TState> handler, TraversalOptions options ) const;
+
+		/**
+		 * @brief Check if a path exists from a given path to a target node
+		 * @param fromPath Current path of parent nodes
+		 * @param to Target node to reach
+		 * @param[out] remainingParents Remaining parent nodes in the path to target
+		 * @return True if path exists, false otherwise
+		 */
+		bool pathExistsBetween( const std::vector<const GmodNode*>& fromPath, const GmodNode& to, std::vector<const GmodNode*>& remainingParents ) const;
 
 		VisVersion m_visVersion;													///< VIS version for this Gmod
 		GmodNode* m_rootNode;														///< Pointer to root node ("VE") in m_nodeMap

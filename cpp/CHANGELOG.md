@@ -38,7 +38,11 @@
 -   `mqtt::LocalId` class for MQTT-compatible LocalId with underscore-separated paths and placeholder formatting
 -   `UniversalId` class for globally unique VIS identifier combining IMO number with LocalId
 -   `UniversalIdBuilder` class with immutable builder pattern for constructing UniversalId instances
-
+-   `GmodVersioning` internal implementation for cross-version conversion system
+-   `VIS::convertNode()` method for converting individual Gmod nodes between VIS versions
+-   `VIS::convertPath()` method for converting Gmod paths between VIS versions with depth changes
+-   `VIS::convertLocalId()` method for converting LocalIds between VIS versions
+-   `VIS::gmodsMap()`, `VIS::codebooksMap()`, `VIS::locationsMap()` batch loading methods with validation and deduplication
 
 ### Changed
 

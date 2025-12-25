@@ -59,6 +59,9 @@ namespace dnv::vista::sdk
 		struct GmodParsePathResult;
 		struct ParseContext;
 
+		class GmodVersioning;
+		class LocationSetsVisitor;
+
 		/**
 		 * @brief Parse a short GMOD path string with detailed error reporting
 		 * @return GmodParsePathResult containing either the parsed GmodPath or detailed error message
@@ -250,6 +253,8 @@ namespace dnv::vista::sdk
 	{
 		friend class Gmod;
 		friend class GmodPath;
+		friend class internal::GmodVersioning;
+		friend class internal::LocationSetsVisitor;
 		friend internal::GmodParsePathResult internal::parseGmodPath( std::string_view, const Gmod&, const Locations& ) noexcept;
 		friend internal::GmodParsePathResult internal::parseFullGmodPath( std::string_view, const Gmod&, const Locations& ) noexcept;
 		friend TraversalHandlerResult internal::parseHandler( internal::ParseContext&, const std::vector<const GmodNode*>&, const GmodNode& );

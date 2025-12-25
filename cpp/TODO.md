@@ -5,7 +5,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 ### Todo
 
 -   [ ] Add Transport layer (ISO-19848 `DataChannel` and `TimeSeriesData` classes)
--   [ ] Add `GmodVersioning` (cross-version conversion system)
 -   [ ] Add `LocalIdQuery` / `LocalIdQueryBuilder` (fluent query API for LocalIds)
 -   [ ] Add `GmodPathQuery` (query API for GmodPaths)
 -   [ ] Add `MetadataTagsQuery` (query API for metadata tags)
@@ -28,6 +27,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `TESTS_GmodPath`
     -   [x] Add `TESTS_LocalId`
     -   [x] Add `TESTS_UniversalId`
+    -   [x] Add `TESTS_GmodVersioning`
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
@@ -43,6 +43,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `Sample_GmodPath`
     -   [x] Add `Sample_LocalId`
     -   [x] Add `Sample_UniversalId`
+    -   [x] Add `Sample_GmodVersioning`
 
 ### Done ✓
 
@@ -68,3 +69,4 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add`GmodPath` class (path representation, parsing, and individualization)
 -   [x] Add `LocalId` class and `LocalIdBuilder`
 -   [x] Add `UniversalId` class and `UniversalIdBuilder`
+-   [x] Add `GmodVersioning` (cross-version conversion system)

@@ -60,6 +60,8 @@ list(APPEND benchmark_sources
 	BM_CodebooksLookup.cpp
 	BM_Gmod.cpp
 	BM_GmodPathParse.cpp
+	BM_GmodTraversal.cpp
+	BM_GmodVersioningConvertPath.cpp
 	BM_StringBuilder.cpp
 	BM_VISCacheEfficiency.cpp
 )
@@ -85,6 +87,11 @@ foreach(benchmark_source ${benchmark_sources})
 			benchmark::benchmark
 			vista-sdk-cpp::static
 			nfx-stringbuilder::static
+			nfx-serialization::static
+		)
+
+		target_include_directories(${benchmark_target_name} PRIVATE
+			${VISTA_SDK_CPP_SOURCE_DIR}
 		)
 
 		#----------------------------------------------

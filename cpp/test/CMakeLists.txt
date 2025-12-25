@@ -76,6 +76,7 @@ list(APPEND test_sources
 	SDK/TESTS_Codebooks.cpp
 	SDK/TESTS_Gmod.cpp
 	SDK/TESTS_GmodPath.cpp
+	SDK/TESTS_GmodVersioning.cpp
 	SDK/TESTS_ImoNumber.cpp
 	SDK/TESTS_LocalId.cpp
 	SDK/TESTS_Locations.cpp
@@ -106,6 +107,10 @@ foreach(test_source ${test_sources})
 			EmbeddedTestData
 			vista-sdk-cpp::static
 			nfx-serialization::static
+		)
+
+		target_include_directories(${test_target_name} PRIVATE
+			${VISTA_SDK_CPP_SOURCE_DIR}
 		)
 
 		#----------------------------------------------

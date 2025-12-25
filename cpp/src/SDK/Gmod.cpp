@@ -32,6 +32,8 @@
 
 #include "dto/GmodDto.h"
 
+#include <nfx/string/Utils.h>
+
 #include <stdexcept>
 
 namespace dnv::vista::sdk
@@ -164,5 +166,125 @@ namespace dnv::vista::sdk
 		};
 
 		return traverse( state, rootNode, wrappedHandler, options );
+	}
+
+	//----------------------------------------------
+	// Traversal methods
+	//----------------------------------------------
+
+	bool Gmod::pathExistsBetween( const std::vector<const GmodNode*>& fromPath, const GmodNode& to,
+		std::vector<const GmodNode*>& remainingParents ) const
+	{
+		remainingParents.clear();
+
+		const GmodNode* lastAssetFunction = nullptr;
+		size_t assetFunctionIndex = std::numeric_limits<size_t>::max();
+		for ( size_t i = fromPath.size(); i > 0; --i )
+		{
+			size_t idx = i - 1;
+			if ( fromPath[idx]->isAssetFunctionNode() )
+			{
+				lastAssetFunction = fromPath[idx];
+				assetFunctionIndex = idx;
+				break;
+			}
+		}
+
+		const GmodNode& startNode = lastAssetFunction
+										? *lastAssetFunction
+										: rootNode();
+
+		struct PathExistsState
+		{
+			const GmodNode& targetNode;
+			const std::vector<const GmodNode*>& fromPath;
+			std::vector<const GmodNode*>& remainingParents;
+			size_t assetFunctionIndex;
+			bool found = false;
+
+			PathExistsState( const GmodNode& target, const std::vector<const GmodNode*>& from,
+				std::vector<const GmodNode*>& remaining, size_t afIndex )
+				: targetNode{ target },
+				  fromPath{ from },
+				  remainingParents{ remaining },
+				  assetFunctionIndex{ afIndex }
+			{
+			}
+
+			PathExistsState( const PathExistsState& ) = delete;
+			PathExistsState( PathExistsState&& ) = delete;
+			PathExistsState& operator=( const PathExistsState& ) = delete;
+			PathExistsState& operator=( PathExistsState&& ) = delete;
+		};
+
+		PathExistsState state( to, fromPath, remainingParents, assetFunctionIndex );
+
+		auto handler = [this]( PathExistsState& s, const std::vector<const GmodNode*>& parents,
+						   const GmodNode& node ) -> TraversalHandlerResult {
+			if ( !nfx::string::equals( node.code(), s.targetNode.code() ) )
+			{
+				return TraversalHandlerResult::Continue;
+			}
+
+			std::vector<const GmodNode*> completePath;
+			completePath.reserve( parents.size() );
+
+			for ( const GmodNode* parent : parents )
+			{
+				if ( !parent->isRoot() )
+				{
+					completePath.push_back( parent );
+				}
+			}
+
+			size_t startIndex = 0;
+
+			if ( s.assetFunctionIndex != std::numeric_limits<size_t>::max() )
+			{
+				startIndex = s.assetFunctionIndex;
+			}
+
+			size_t requiredNodes = s.fromPath.size() - startIndex;
+			if ( completePath.size() < requiredNodes )
+			{
+				return TraversalHandlerResult::Continue;
+			}
+
+			bool match = true;
+			for ( size_t i = 0; i < requiredNodes; ++i )
+			{
+				size_t fromPathIdx = startIndex + i;
+				if ( fromPathIdx >= s.fromPath.size() || i >= completePath.size() )
+				{
+					match = false;
+					break;
+				}
+				if ( !nfx::string::equals( completePath[i]->code(), s.fromPath[fromPathIdx]->code() ) )
+				{
+					match = false;
+					break;
+				}
+			}
+
+			if ( match )
+			{
+				for ( size_t i = requiredNodes; i < completePath.size(); ++i )
+				{
+					s.remainingParents.push_back( completePath[i] );
+				}
+				s.found = true;
+				return TraversalHandlerResult::Stop;
+			}
+
+			return TraversalHandlerResult::Continue;
+		};
+
+		auto wrappedHandler = [&state, &handler]( const std::vector<const GmodNode*>& parents, const GmodNode& node ) -> TraversalHandlerResult {
+			return handler( state, parents, node );
+		};
+
+		traverse( startNode, wrappedHandler, TraversalOptions{} );
+
+		return state.found;
 	}
 } // namespace dnv::vista::sdk
