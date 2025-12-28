@@ -20,6 +20,7 @@ list(APPEND tools_sources
 	codebooks-cli.cpp
 	gmodexplorer-cli.cpp
 	json-validator-cli.cpp
+	localid-cli.cpp
 	locations-cli.cpp
 )
 
