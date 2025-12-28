@@ -18,12 +18,15 @@ list(APPEND private_sources
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/Gmod.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/GmodNode.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/GmodPath.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/GmodPathQuery.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/ImoNumber.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/LocalId.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/LocalIdBuilder.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/LocalIdQuery.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/LocationBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/Locations.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/MetadataTag.cpp
+	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/MetadataTagsQuery.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/ParsingErrors.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/StringBuilder.cpp
 	${VISTA_SDK_CPP_SOURCE_DIR}/SDK/UniversalId.cpp

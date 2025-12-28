@@ -43,6 +43,13 @@
 -   `VIS::convertPath()` method for converting Gmod paths between VIS versions with depth changes
 -   `VIS::convertLocalId()` method for converting LocalIds between VIS versions
 -   `VIS::gmodsMap()`, `VIS::codebooksMap()`, `VIS::locationsMap()` batch loading methods with validation and deduplication
+-   `MetadataTagsQuery` class for immutable query matching of LocalId metadata tags
+-   `MetadataTagsQueryBuilder` class with fluent API for building metadata tag queries with exact/subset matching modes
+-   `GmodPathQuery` class for immutable query matching of GmodPath instances
+-   `GmodPathQueryBuilder::Path` class for building queries from existing GmodPath with node modifications
+-   `GmodPathQueryBuilder::Nodes` class for building queries from individual GmodNode specifications
+-   `LocalIdQuery` class for immutable query matching of LocalId instances orchestrating GmodPathQuery and MetadataTagsQuery
+-   `LocalIdQueryBuilder` class with fluent API for building LocalId queries with primary/secondary item and metadata tags matching
 
 ### Changed
 

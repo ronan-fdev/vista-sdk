@@ -5,9 +5,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 ### Todo
 
 -   [ ] Add Transport layer (ISO-19848 `DataChannel` and `TimeSeriesData` classes)
--   [ ] Add `LocalIdQuery` / `LocalIdQueryBuilder` (fluent query API for LocalIds)
--   [ ] Add `GmodPathQuery` (query API for GmodPaths)
--   [ ] Add `MetadataTagsQuery` (query API for metadata tags)
 
 ### In Progress
 
@@ -28,6 +25,7 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `TESTS_LocalId`
     -   [x] Add `TESTS_UniversalId`
     -   [x] Add `TESTS_GmodVersioning`
+    -   [x] Add `TESTS_LocalIdQuery`
 -   [ ] Add benchmark suite
     -   [x] Add `BM_StringBuilder`
     -   [x] Add `BM_VISCacheEfficiency`
@@ -39,11 +37,11 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
     -   [x] Add `Sample_Locations`
     -   [x] Add `Sample_ImoNumber`
     -   [x] Add `Sample_Gmod`
-    -   [x] Add `Sample_Gmod
     -   [x] Add `Sample_GmodPath`
     -   [x] Add `Sample_LocalId`
     -   [x] Add `Sample_UniversalId`
     -   [x] Add `Sample_GmodVersioning`
+    -   [x] Add `Sample_Queries`
 
 ### Done ✓
 
@@ -70,3 +68,6 @@ Project roadmap and task tracking for the vista-sdk-cpp library.
 -   [x] Add `LocalId` class and `LocalIdBuilder`
 -   [x] Add `UniversalId` class and `UniversalIdBuilder`
 -   [x] Add `GmodVersioning` (cross-version conversion system)
+-   [x] Add `MetadataTagsQuery` / `MetadataTagsQueryBuilder` (query API for metadata tags)
+-   [x] Add `GmodPathQuery` (query API for GmodPaths)
+-   [x] Add `LocalIdQuery` / `LocalIdQueryBuilder` (fluent query API for LocalIds)

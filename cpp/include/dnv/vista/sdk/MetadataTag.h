@@ -49,6 +49,7 @@ namespace dnv::vista::sdk
 	class MetadataTag final
 	{
 		friend class Codebook;
+		friend class MetadataTagsQueryBuilder;
 
 	private:
 		/**

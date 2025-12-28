@@ -79,6 +79,7 @@ list(APPEND test_sources
 	SDK/TESTS_GmodVersioning.cpp
 	SDK/TESTS_ImoNumber.cpp
 	SDK/TESTS_LocalId.cpp
+	SDK/TESTS_LocalIdQuery.cpp
 	SDK/TESTS_Locations.cpp
 	SDK/TESTS_ParsingErrors.cpp
 	SDK/TESTS_UniversalId.cpp
