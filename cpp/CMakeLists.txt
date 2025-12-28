@@ -83,6 +83,7 @@ include(dnvVistaSdkCppPackaging)
 
 include(dnvVistaSdkCppResourceGenerator)
 include(dnvVistaSdkCppEmbeddedResource)
+include(dnvVistaSdkCppEmbeddedSchemas)
 include(dnvVistaSdkCppEmbeddedTestData)
 include(dnvVistaSdkCppVisVersionsGenerator)
 

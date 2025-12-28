@@ -19,6 +19,7 @@ set(tools_sources)
 list(APPEND tools_sources
 	codebooks-cli.cpp
 	gmodexplorer-cli.cpp
+	json-validator-cli.cpp
 	locations-cli.cpp
 )
 
@@ -42,6 +43,16 @@ foreach(tools_source ${tools_sources})
 
 		target_link_libraries(${tool_target_name} PRIVATE
 			vista-sdk-cpp::static
+			nfx-serialization::static
+			$<TARGET_OBJECTS:EmbeddedSchemas>
+		)
+
+		#----------------------------------------------
+		# Include directories
+		#----------------------------------------------
+
+		target_include_directories(${tool_target_name} PRIVATE
+			${VISTA_SDK_CPP_SOURCE_DIR}
 		)
 
 		#----------------------------------------------

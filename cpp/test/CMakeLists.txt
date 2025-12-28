@@ -166,4 +166,5 @@ endforeach()
 #----------------------------------------------
 
 add_subdirectory(EmbeddedResource)
+add_subdirectory(EmbeddedSchemas)
 add_subdirectory(EmbeddedTestData)

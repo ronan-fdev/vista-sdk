@@ -60,7 +60,10 @@ function(configure_target target_name)
 			${VISTA_SDK_CPP_SOURCE_DIR}
 	)
 
-	target_sources(${target_name} PRIVATE $<TARGET_OBJECTS:EmbeddedResource>)
+	target_sources(${target_name}
+		PRIVATE
+			$<TARGET_OBJECTS:EmbeddedResource>
+	)
 
 	target_link_libraries(${target_name}
 		PUBLIC
